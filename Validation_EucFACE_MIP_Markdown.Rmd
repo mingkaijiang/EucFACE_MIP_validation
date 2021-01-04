@@ -1,0 +1,57 @@
+---
+title: "EucFACE Simulation Output Validation"
+author: "Mingkai Jiang"
+date: "1/4/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+#### clear wk space
+rm(list=ls(all=TRUE))
+
+#### Source functions and packages
+source("prepare.R")
+
+#### select the model abbreviation
+#### options are:
+####             GDAYN: GDAY, CN version
+####             GDAYP: GDAY, CNP version
+####             QUNIC: QUINCY
+####             OCHDP: ORCHIDEE, CNP version
+####             OCHDN: ORCHIDEE, CN version
+####             LPJGN: LPJ-Guess, CN version
+####             LPJGP: LPJ-Guess, CNP version
+####             CABLP: CABLE-POP, CNP version
+####             ELMXX: ELM, CNP version
+
+mod.abb <- "GDAYP"
+
+
+```
+
+## Introduction
+
+This is an R Markdown document to compare simulation results against validation dataset for the new EucFACE multi-model intercomparison project (MIP). 
+
+To use this Markdown, please create two folders within this repository and place the relevant data files into each folder. 
+
+- Create a folder "simulation_output", and place the model simulation results into this folder (note, only ambient treatment over the period of 2012 - 2019).
+
+- Create a folder "validation_dataset", and place the validation datasets into this folder (data can be obtained via the CloudStor link sent previously).
+
+
+This script will firstly check time-averaged (or time-invariant) parameters, flux and stock values, and then check the time-series data. 
+
+
+
+## Checking parameters
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

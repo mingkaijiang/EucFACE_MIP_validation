@@ -1,10 +1,6 @@
-plot_historic_validation <- function() {
-    ### purpose: 
-    ### plot 1750 - to 2069 to just smoothness of the re-start breaks,
-    ### and the magnitude of some key response variables
-    
-    ### historic df
-    histDF <- read.csv("outputs/EUC_amb_equilib.csv",skip=1)
+plot_historic_validation <- function(mod.abb) {
+
+    ### purpose: read simulation results and validation dataset, and make comparison
     
     ### obs
     obsDF <- read.csv("outputs/EUC_simulated_DRY_AMB_2012_2019.csv", skip=1)
