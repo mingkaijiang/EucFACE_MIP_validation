@@ -45,13 +45,42 @@ To use this Markdown, please create two folders within this repository and place
 This script will firstly check time-averaged (or time-invariant) parameters, flux and stock values, and then check the time-series data. 
 
 
+#### Variables checked in this script:
+The following variables are checked in this script (time scale stated in brackets)
+
+    - Canopy vegetation aboveground C pool
+    - Canopy vegetation total C pool
+    - 
+
+    - Soil P concentration and pool
+    - Microbial P concentration and pool
+    - Mycorrhizal P concentration and pool
+    - Canopy P concentration, production and pool
+    - Wood P concentration, production and pool
+    - Fineroot P concentration, production and pool
+    - Coarse root P concentration, production and pool
+    - Litterfall P concentration and production
+    - P mineralization rate
+    - Frass P concentration and production
+    - Understorey P concentration, production and pool
+    - Standing P stock
+    - Plant P requirement
+    - Total P retranslocation 
+    - Leaf P retranslocation coefficient
+    - Plant P uptake rate
+    
+    
+
 
 ## Checking parameters
 
 You can also embed plots, for example:
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+
+
+
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
