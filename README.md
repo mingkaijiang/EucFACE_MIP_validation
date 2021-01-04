@@ -1,3 +1,3 @@
-# EucFACE Multi-model Intercomparison Model Simulation Evaluation
+# EucFACE Multi-model Intercomparison Project Model Simulation Evaluation
 
 to be added
