@@ -3,10 +3,13 @@ title: "EucFACE Simulation Output Validation"
 author: "Mingkai Jiang"
 date: "1/4/2021"
 output: pdf_document
+#fig_width: 3 
+#fig_height: 2 
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, fig.width=6, fig.height=4)
+
 
 #### clear wk space
 rm(list=ls(all=TRUE))
@@ -69,6 +72,25 @@ for (i in 2012:2019) {
 modDF$Date <- as.Date(modDF$Date)
 
 
+
+### revise the GDAY output names following output protocol (delete this once GDAY output is properly set)
+names(modDF)[names(modDF) == "lai"] <- "LAI"
+names(modDF)[names(modDF) == "hetero_resp"] <- "RHET"
+
+### add extra column where GDAY simulation doesn't output for now
+# coarse root respiration
+modDF$RCR <- 0.0
+
+# fine root respiration
+modDF$RFR <- 0.0
+
+
+### convert unit from current GDAY default of t ha-1 to whatever is defined in the output protocol
+modDF$RHET <- with(modDF, RHET * 100)
+modDF$RFR <- with(modDF, RFR * 100)
+modDF$RCR <- with(modDF, RCR * 100)
+
+
 ```
 
 
@@ -82,8 +104,9 @@ More to be added. Do parameters first.
 
 
 
-
 ## Checking time-invariant parameters, fluxes and stocks against validation data
+
+
 
 
 ## Checking time-varying variables against validation data
@@ -103,7 +126,7 @@ laiDF$Date <- as.Date(as.character(laiDF$Date))
 
 ### simulated LAI, subset
 subDF <- subset(modDF, year <= 2016)
-subDF <- subDF[,c("year", "doy", "Date", "lai")]
+subDF <- subDF[,c("year", "doy", "Date", "LAI")]
 subDF$Date <- as.Date(as.character(subDF$Date))
 
 ### merge the two dataset
@@ -111,9 +134,9 @@ testDF1 <- merge(subDF, laiDF, by="Date", all=T)
 
 ### plot all data
 p1 <- ggplot(testDF1, aes(x=Date)) +
-        geom_errorbar(aes(ymin=lai.y-laiSD,
-                        ymax=lai.y+laiSD, color="lai.y"))+
-        geom_line(aes(y=lai.x, color="lai.x"), lwd = 1) +
+        geom_errorbar(aes(ymin=lai-laiSD,
+                        ymax=lai+laiSD, color="obs"))+
+        geom_line(aes(y=LAI, color="sim"), lwd = 1) +
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
               axis.title.x = element_text(size=14), 
@@ -127,8 +150,8 @@ p1 <- ggplot(testDF1, aes(x=Date)) +
               legend.position="right")+
         ylab("LAI")+
         scale_colour_manual("", 
-                            values = c("lai.x"="red2", "lai.y"="black"),
-                            labels = c("Simulated", "Observed"))
+                            values = c("obs"="black", "sim"="red2"),
+                            labels = c("Observed", "Simulated"))
 
     plot(p1)
     
@@ -140,13 +163,13 @@ Now we can check the goodness-of-fit of all days where observation is available.
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 
 ### subset only days where observations are available
-testDF2 <- testDF1[complete.cases(testDF1$lai.y),]
+testDF2 <- testDF1[complete.cases(testDF1$lai),]
 
-lm.fit <- lm(testDF2$lai.y~testDF2$lai.x)
+lm.fit <- lm(testDF2$LAI~testDF2$lai)
 
 
 ### plot all data
-p1 <- ggplot(testDF2, aes(x=lai.y, y=lai.x)) +
+p1 <- ggplot(testDF2, aes(x=lai, y=LAI)) +
         geom_point()+
         theme_linedraw() +
         geom_smooth(method="lm")+
@@ -176,5 +199,77 @@ print(paste0("intercept = ", round(coef(lm.fit)[1], 2)))
 
 ```
 
+
+
+#### Soil respiration
+The measured soil respiration rate represents both root and soil heterotrophic respiration flux. It was up-scaled from the LICOR chambers by averaging all measurements within the same treatment. It was a model product, in that we used DAMM model to establish relationship with soil temperature, and then obtained the daily rate throughout the year. Nevertheless, we expect modelers to provide a good match simulation to this dataset. 
+
+Note that we didn't ask the modelers to output soil respiration flux in the output protocol. Please add heterotrophic respiration and root respiration to obtain soil respiration flux. Also, please note that, the unit for all carbon fluxes is given in the output protocol, as gC m-2 d-1. 
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+### validation Rsoil
+rsoilDF <- read.csv("validation_dataset/EucFACE_daily_soil_respiration_flux_2013_2015.csv")
+rsoilDF <- rsoilDF[rsoilDF$Trt=="aCO2",]
+rsoilDF$Date <- as.Date(as.character(rsoilDF$Date))
+
+### convert unit, from mg m-2 d-1 to g m-2 d-1
+rsoilDF$Rsoil_g_m2_d <- rsoilDF$Rsoil_mg_m2_d / 1000.0
+rsoilDF$RsoilSD_g <- rsoilDF$RsoilSD / 1000.0
+
+
+### simulated Rsoil, subset
+subDF <- subset(modDF, year <= 2015 & year > 2012)
+subDF <- subDF[,c("year", "doy", "Date", "RHET", "RCR", "RFR")]
+subDF$Date <- as.Date(as.character(subDF$Date))
+subDF$Rsoil_sim <- with(subDF, RHET+RCR+RFR)
+
+
+
+### merge the two dataset
+testDF1 <- merge(subDF, rsoilDF, by="Date", all=T)
+
+### plot all data
+p1 <- ggplot(testDF1, aes(x=Date)) +
+        geom_errorbar(aes(ymin=Rsoil_g_m2_d-RsoilSD_g,
+                        ymax=Rsoil_g_m2_d+RsoilSD_g, color="obs"))+
+        geom_line(aes(y=Rsoil_sim, color="sim"), lwd = 1) +
+        theme_linedraw() +
+        theme(panel.grid.minor=element_blank(),
+              axis.title.x = element_text(size=14), 
+              axis.text.x = element_text(size=12),
+              axis.text.y=element_text(size=12),
+              axis.title.y=element_text(size=14),
+              legend.text=element_text(size=12),
+              legend.title=element_text(size=12),
+              panel.grid.major=element_blank(),
+              plot.title = element_text(size = 10, face = "bold"),
+              legend.position="right")+
+        ylab("Soil respiration flux")+
+        scale_colour_manual("", 
+                            values = c("obs"="black", "sim"="red2"),
+                            labels = c("Observed", "Simulated"))
+
+    plot(p1)
+    
+
+
+```
+
+
+#### Soil water content
+Soil water content is more complex and non-linear, depending on many model-specific settings. The validation dataset only serves as a guidance to evaluate your model performance. 
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+### validation Rsoil
+swcDF <- read.csv("validation_dataset/EucFACE_SWC_2012_2019.csv")
+
+### more to be filled. 
+
+
+```
 
 End. 
