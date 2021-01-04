@@ -33,53 +33,97 @@ mod.abb <- "GDAYP"
 
 ## Introduction
 
-This is an R Markdown document to compare simulation results against validation dataset for the new EucFACE multi-model intercomparison project (MIP). 
+This is an R Markdown document to evaluate the model simulation results for the new EucFACE multi-model intercomparison project, based on mass balance checks and validation datasets. 
 
 To use this Markdown, please create two folders within this repository and place the relevant data files into each folder. 
 
-- Create a folder "simulation_output", and place the model simulation results into this folder (note, only ambient treatment over the period of 2012 - 2019).
+- Create a folder "simulation_output", and place the model simulation results into this folder (note, only the file containing ambient treatment over the period of 2012 - 2019).
 
 - Create a folder "validation_dataset", and place the validation datasets into this folder (data can be obtained via the CloudStor link sent previously).
 
 
-This script will firstly check time-averaged (or time-invariant) parameters, flux and stock values, and then check the time-series data. 
+This script will firstly check some basic mass balances, the compare the simulation results against some time-invariant parameters provided in the parameter list, and finally check several time-series variables. All checks are performed for ambient CO2 treatment only. 
 
 
-#### Variables checked in this script:
-The following variables are checked in this script (time scale stated in brackets)
-
-    - Canopy vegetation aboveground C pool
-    - Canopy vegetation total C pool
-    - 
-
-    - Soil P concentration and pool
-    - Microbial P concentration and pool
-    - Mycorrhizal P concentration and pool
-    - Canopy P concentration, production and pool
-    - Wood P concentration, production and pool
-    - Fineroot P concentration, production and pool
-    - Coarse root P concentration, production and pool
-    - Litterfall P concentration and production
-    - P mineralization rate
-    - Frass P concentration and production
-    - Understorey P concentration, production and pool
-    - Standing P stock
-    - Plant P requirement
-    - Total P retranslocation 
-    - Leaf P retranslocation coefficient
-    - Plant P uptake rate
-    
-    
-
-
-## Checking parameters
-
-You can also embed plots, for example:
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
+### read in simulation results and get it in shape for comparison.
+### the naming of the file follows rules identified in the output protocol. 
+### Note that this is the daily file. 
+modDF <- read.csv(paste0("simulation_output/EUC_", mod.abb, "_OBS_VAR_AMB_NOP_D.csv"),
+                  skip=1)
+
+### checking number of column in the original dataframe
+ncol <- ncol(modDF)
+#print(paste0("no. of columns is ", ncol))
+
+### add date to the dataset
+for (i in 2012:2019) {
+    
+    date.list <- as.Date((modDF$doy[modDF$year==i]-1), 
+                                           origin = paste0(i, "-01-01"))
+    
+    modDF$Date[modDF$year == i] <- as.character(date.list)
+}
+
+modDF$Date <- as.Date(modDF$Date)
+
+
+```
+
+
+## Checking mass balance
+
+#### Net Ecosystem Production (NEP)
+
+We define NEP as: NEP = GPP - Reco - Offsite C losses
+
+More to be added. Do parameters first. 
 
 
 
+
+## Checking time-invariant parameters, fluxes and stocks against validation data
+
+
+## Checking time-varying variables against validation data
+
+#### Leaf area index
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+### validation LAI
+laiDF <- read.csv("validation_dataset/EucFACE_LAI_2012_2016.csv")
+laiDF <- laiDF[laiDF$Trt=="aCO2",]
+laiDF$Date <- as.Date(as.character(laiDF$Date))
+
+### simulated LAI, subset
+subDF <- subset(modDF, year <= 2016)
+subDF <- subDF[,c("year", "doy", "Date", "lai")]
+subDF$Date <- as.Date(as.character(subDF$Date))
+
+### merge the two dataset
+testDF1 <- merge(subDF, laiDF, by="Date", all=T)
+testDF2 <- testDF1[complete.cases(testDF1$lai.y),]
+
+### plot all data
+p1 <- ggplot(testDF1, aes(Date, lai.x),col="black") +
+        geom_errorbar(aes(x=Date, ymin=lai.y-laiSD,
+                        ymax=lai.y+laiSD), col="red")+
+        geom_line(lwd = 1) +
+        theme_linedraw() +
+        theme(panel.grid.minor=element_blank(),
+              axis.title.x = element_text(size=14), 
+              axis.text.x = element_text(size=12),
+              axis.text.y=element_text(size=12),
+              axis.title.y=element_text(size=14),
+              legend.text=element_text(size=12),
+              legend.title=element_text(size=12),
+              panel.grid.major=element_blank(),
+              plot.title = element_text(size = 10, face = "bold"))+
+        ylab("LAI")
+
+    plot(p1)
+    
 
 ```
 
