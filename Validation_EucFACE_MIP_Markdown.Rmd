@@ -113,6 +113,12 @@ names(modDF)[names(modDF) == "ppleaf"] <- "PGL"
 names(modDF)[names(modDF) == "pproot"] <- "PGFR"
 names(modDF)[names(modDF) == "ppcroot"] <- "PGCR"
 
+names(modDF)[names(modDF) == "nep"] <- "NEP"
+names(modDF)[names(modDF) == "gpp"] <- "GPP"
+names(modDF)[names(modDF) == "npp"] <- "NPP"
+names(modDF)[names(modDF) == "auto_resp"] <- "RAU"
+
+
 
 ### add extra column where GDAY simulation doesn't output for now
 # coarse root respiration
@@ -135,7 +141,6 @@ modDF$CSTOR <- 0.0
 
 # merge all soil pools together to create total soil
 modDF$CSOIL <- with(modDF, activesoil+slowsoil+passivesoil)
-
 
 
 
@@ -189,6 +194,10 @@ modDF$PGW <- with(modDF, PGW * 100)
 modDF$PGFR <- with(modDF, PGFR * 100)
 modDF$PGCR <- with(modDF, PGCR * 100)
 
+modDF$NEP <- with(modDF, NEP * 100)
+modDF$GPP <- with(modDF, GPP * 100)
+modDF$NPP <- with(modDF, NPP * 100)
+modDF$RAU <- with(modDF, RAU * 100)
 
 
 
@@ -250,6 +259,74 @@ vegDF$simulated[vegDF$Variable=="CCR"] <- round(poolDF$CCR[poolDF$year=="2016"],
 vegDF$simulated[vegDF$Variable=="CSOIL"] <- round(poolDF$CSOIL[poolDF$year=="2016"], 0)
 
 knitr::kable(vegDF, caption = "Validation of major carbon pools")
+
+```
+
+
+#### Allocation coefficients
+
+Allocation coefficients are calculated different comparing the data and the model. In the EucFACE data, allocation to leaf includes allocation to overstorey and understorey leaves, and allocation to root includes allocation to overstorey and understorey roots. In the data, there is also an additional allocation coefficient to Mycorrhizae, which can be grouped with allocation to root as total belowground allocation. This total belowground allocation is comparable to allocation coefficient to root in the model. 
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+### create a DF to store observation data for allocation coefficients
+allocDF <- data.frame(c("leaf", "wood", "root", "mycorrhizae", "belowground"), NA, NA)
+colnames(allocDF) <- c("Variable", 
+                        "observed",
+                        "simulated")
+
+allocDF$observed[allocDF$Variable=="leaf"] <- "0.48 ± 0.04"
+allocDF$observed[allocDF$Variable=="wood"] <- "0.20 ± 0.03"
+allocDF$observed[allocDF$Variable=="root"] <- "0.22 ± 0.05"
+allocDF$observed[allocDF$Variable=="mycorrhizae"] <- "0.10 ± 0.07"
+allocDF$observed[allocDF$Variable=="belowground"] <- "0.32"
+
+
+### calcualte annual means in the simulated data
+subDF <- subset(modDF, year <= 2016 & year > 2012)
+
+fluxDF <- summaryBy(GPP+NEP+NPP+CGL+CGW+CGFR+CGCR+RAU~year, data=subDF, FUN=sum, na.rm=T, keep.names=T)
+
+### assign values
+allocDF$simulated[allocDF$Variable=="leaf"] <- round(mean(fluxDF$CGL/fluxDF$NPP),2)
+allocDF$simulated[allocDF$Variable=="wood"] <- round(mean(fluxDF$CGW/fluxDF$NPP),2)
+allocDF$simulated[allocDF$Variable=="belowground"] <- round(mean(fluxDF$CGFR/fluxDF$NPP),2)
+
+knitr::kable(allocDF, caption = "Validation of major carbon pools")
+
+```
+
+
+
+#### Major carbon fluxes
+
+We now summarize major carbon fluxes (e.g. GPP, NPP, NEP, CUE).
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+### create a DF to store observation data for allocation coefficients
+outDF <- data.frame(c("NEP", "GPP", "NPP", "CUE", "RAU"), NA, NA)
+colnames(outDF) <- c("Variable", 
+                     "observed",
+                     "simulated")
+
+outDF$observed[outDF$Variable=="NEP"] <- "-73 to 28"
+outDF$observed[outDF$Variable=="GPP"] <- "1563 ± 200"
+outDF$observed[outDF$Variable=="NPP"] <- "484 ± 63"
+outDF$observed[outDF$Variable=="CUE"] <- "0.31 ± 0.03"
+outDF$observed[outDF$Variable=="RAU"] <- "1079 ± 140"
+
+
+### these fluxes were calculated above already
+### assign values
+outDF$simulated[outDF$Variable=="NEP"] <- round(mean(fluxDF$NEP),2)
+outDF$simulated[outDF$Variable=="GPP"] <- round(mean(fluxDF$GPP),2)
+outDF$simulated[outDF$Variable=="NPP"] <- round(mean(fluxDF$NPP),2)
+outDF$simulated[outDF$Variable=="CUE"] <- round(mean(fluxDF$NPP/fluxDF$GPP),2)
+outDF$simulated[outDF$Variable=="RAU"] <- round(mean(fluxDF$RAU),2)
+
+knitr::kable(outDF, caption = "Validation of major carbon fluxes")
 
 ```
 
@@ -365,7 +442,7 @@ knitr::kable(stDF, caption = "Validation of key stoichiometry")
 
 #### Nutreint retranslocation coefficients
 
-Using live and litter nutrient pools, we can infer plant nutrient retranslocation coefficients. 
+We only asked for the leaf N and P retranslocation flux in the output protocol. To obtain the coefficient, we will need the production flux. 
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 
