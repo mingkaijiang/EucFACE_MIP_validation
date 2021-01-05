@@ -1,10 +1,9 @@
 ---
 title: "EucFACE Simulation Output Validation"
 author: "Mingkai Jiang"
-date: "1/4/2021"
+date: "`r Sys.Date()`"
 output: pdf_document
-#fig_width: 3 
-#fig_height: 2 
+
 ---
 
 ```{r setup, include=FALSE}
@@ -33,6 +32,9 @@ mod.abb <- "GDAYP"
 
 
 ```
+
+
+
 
 ## Introduction
 
@@ -210,7 +212,10 @@ modDF$RAU <- with(modDF, RAU * 100)
 
 We define NEP as: NEP = GPP - Reco - Offsite C losses
 
-More to be added. Do parameters first. 
+More to be added. 
+
+
+Do parameters first. 
 
 
 
