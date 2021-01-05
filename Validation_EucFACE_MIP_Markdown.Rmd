@@ -72,10 +72,26 @@ for (i in 2012:2019) {
 modDF$Date <- as.Date(modDF$Date)
 
 
-
 ### revise the GDAY output names following output protocol (delete this once GDAY output is properly set)
 names(modDF)[names(modDF) == "lai"] <- "LAI"
 names(modDF)[names(modDF) == "hetero_resp"] <- "RHET"
+names(modDF)[names(modDF) == "shoot"] <- "CL"
+names(modDF)[names(modDF) == "root"] <- "CFR"
+names(modDF)[names(modDF) == "croot"] <- "CCR"
+
+names(modDF)[names(modDF) == "pmineralisation"] <- "PMIN"
+names(modDF)[names(modDF) == "inorglabp"] <- "PLAB"
+names(modDF)[names(modDF) == "nmineralisation"] <- "NMIN"
+
+names(modDF)[names(modDF) == "soiln"] <- "NSOIL"
+names(modDF)[names(modDF) == "soilp"] <- "PSOIL"
+names(modDF)[names(modDF) == "shootn"] <- "NL"
+names(modDF)[names(modDF) == "rootn"] <- "NFR"
+names(modDF)[names(modDF) == "crootn"] <- "NCR"
+names(modDF)[names(modDF) == "shootp"] <- "PL"
+names(modDF)[names(modDF) == "rootp"] <- "PFR"
+names(modDF)[names(modDF) == "crootp"] <- "PCR"
+
 
 ### add extra column where GDAY simulation doesn't output for now
 # coarse root respiration
@@ -84,12 +100,45 @@ modDF$RCR <- 0.0
 # fine root respiration
 modDF$RFR <- 0.0
 
+# merge branch and stem together to create wood
+modDF$CW <- modDF$branch + modDF$stem
+modDF$NW <- modDF$branchn + modDF$stemn
+modDF$PW <- modDF$branchp + modDF$stemp
+
+# add storage pool
+modDF$CSTOR <- 0.0
+
+# merge all soil pools together to create total soil
+modDF$CSOIL <- with(modDF, activesoil+slowsoil+passivesoil)
+
+
+
 
 ### convert unit from current GDAY default of t ha-1 to whatever is defined in the output protocol
 modDF$RHET <- with(modDF, RHET * 100)
 modDF$RFR <- with(modDF, RFR * 100)
 modDF$RCR <- with(modDF, RCR * 100)
+modDF$CL <- with(modDF, CL * 100)
+modDF$CW <- with(modDF, CW * 100)
+modDF$CFR <- with(modDF, CFR * 100)
+modDF$CCR <- with(modDF, CCR * 100)
 
+modDF$CSOIL <- with(modDF, CSOIL * 100)
+modDF$NSOIL <- with(modDF, NSOIL * 100)
+modDF$PSOIL <- with(modDF, PSOIL * 100)
+
+modDF$PMIN <- with(modDF, PMIN * 100)
+modDF$PLAB <- with(modDF, PLAB * 100)
+modDF$NMIN <- with(modDF, NMIN * 100)
+
+modDF$NL <- with(modDF, NL * 100)
+modDF$NW <- with(modDF, NW * 100)
+modDF$NFR <- with(modDF, NFR * 100)
+modDF$NCR <- with(modDF, NCR * 100)
+modDF$PL <- with(modDF, PL * 100)
+modDF$PW <- with(modDF, PW * 100)
+modDF$PFR <- with(modDF, PFR * 100)
+modDF$PCR <- with(modDF, PCR * 100)
 
 ```
 
@@ -106,6 +155,155 @@ More to be added. Do parameters first.
 
 ## Checking time-invariant parameters, fluxes and stocks against validation data
 
+
+#### Major carbon pools
+
+Firstly we will check the major carbon pools, as these data are provided in Table 1 in the parameter file. 
+
+Note that:
+      
+    - CFR combines fineroot (< 2 mm in diameter) and intermediate root (2-3 mm) in the observation;
+    - CSOIL is for top 10 cm of soil in the observation;
+    - CL includes overstorey leaf only in the observation;
+    - CW includes branch and stem in the model simulation.
+
+
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+### create a DF to store observation data for vegetation carbon stocks
+vegDF <- data.frame(c("CL", "CW", "CFR", "CCR", "CSOIL"), NA, NA)
+colnames(vegDF) <- c("Variable", 
+                     "observed",
+                     "simulated")
+
+vegDF$observed[vegDF$Variable=="CL"] <- "151 ± 14"
+vegDF$observed[vegDF$Variable=="CW"] <- "4558 ± 321"
+vegDF$observed[vegDF$Variable=="CFR"] <- "227 ± 5"
+vegDF$observed[vegDF$Variable=="CCR"] <- "606 ± 60"
+vegDF$observed[vegDF$Variable=="CSOIL"] <- "2183 ± 280"
+
+
+### calcualte annual means in the simulated data
+poolDF <- subset(modDF, year <= 2016 & year > 2012)
+
+poolDF <- summaryBy(CL+CW+CFR+CCR+CSOIL~year, data=poolDF, FUN=mean, na.rm=T, keep.names=T)
+
+### assign values
+vegDF$simulated[vegDF$Variable=="CL"] <- round(poolDF$CL[poolDF$year=="2016"], 0)
+vegDF$simulated[vegDF$Variable=="CW"] <- round(poolDF$CW[poolDF$year=="2016"], 0)
+vegDF$simulated[vegDF$Variable=="CFR"] <- round(poolDF$CFR[poolDF$year=="2016"], 0)
+vegDF$simulated[vegDF$Variable=="CCR"] <- round(poolDF$CCR[poolDF$year=="2016"], 0)
+vegDF$simulated[vegDF$Variable=="CSOIL"] <- round(poolDF$CSOIL[poolDF$year=="2016"], 0)
+
+knitr::kable(vegDF, caption = "Validation of major carbon pools")
+
+```
+
+
+
+#### Major nutrient pools and fluxes
+
+Below we provide two variables to help constrain the phosphorus cycle in the model, namely labile inorganic P pool (PLAB) and soil P net mineralization rate (PMIN). We did not include total soil P pool, because its size could be misleading given that the majority of the P in the soil is stored as occluded form unavailable for plants. Note that in the table below, simulated results are for top 30 cm of the soil, but observed data are for top 10 cm only. 
+    
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+### create a DF to store observation data for vegetation carbon stocks
+pDF <- data.frame(c("PLAB", "PMIN", "NMIN"), NA, NA)
+colnames(pDF) <- c("Variable", 
+                     "observed",
+                     "simulated")
+
+pDF$observed[pDF$Variable=="PLAB"] <- "0.17 ± 0.05"
+pDF$observed[pDF$Variable=="PMIN"] <- "0.3 ± 0.08"
+pDF$observed[pDF$Variable=="NMIN"] <- "8.81 ± 1.65"
+
+
+### calcualte annual means in the simulated data
+subDF <- subset(modDF, year <= 2016 & year > 2012)
+
+poolDF <- summaryBy(PLAB~year, data=subDF, FUN=mean, na.rm=T, keep.names=T)
+fluxDF <- summaryBy(PMIN+NMIN~year, data=subDF, FUN=sum, na.rm=T, keep.names=T)
+
+### assign values
+pDF$simulated[pDF$Variable=="PLAB"] <- round(poolDF$PLAB[poolDF$year=="2016"], 3)
+pDF$simulated[pDF$Variable=="PMIN"] <- round(mean(fluxDF$PMIN), 3)
+pDF$simulated[pDF$Variable=="NMIN"] <- round(mean(fluxDF$NMIN), 3)
+
+knitr::kable(pDF, caption = "Validation of key nutrient cycle variables")
+
+```
+
+
+
+#### Stoichiometry
+
+Below we check major C:N, C:P, and N:P ratios. 
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+### create a DF to store observation data 
+stDF <- data.frame(c("leaf", "sapwood", "wood", "fineroot", "soil"),
+                   NA, NA, NA, NA, NA, NA)
+colnames(stDF) <- c("Variable", "obsCN", "simCN", 
+                    "obsCP", "simCP", "obsNP", "simNP")
+
+stDF$obsCN[stDF$Variable=="leaf"] <- "35.5 ± 2.7"
+stDF$obsCN[stDF$Variable=="sapwood"] <- "101.6 ± 14.7"
+stDF$obsCN[stDF$Variable=="wood"] <- "110.2 ± 30.3"
+stDF$obsCN[stDF$Variable=="fineroot"] <- "56.9 ± 4.6"
+stDF$obsCN[stDF$Variable=="soil"] <- "13.8 ± 1.0"
+
+stDF$obsCP[stDF$Variable=="leaf"] <- "722 ± 33"
+stDF$obsCP[stDF$Variable=="sapwood"] <- "3705 ± 702"
+stDF$obsCP[stDF$Variable=="wood"] <- "7696 ± 982"
+stDF$obsCP[stDF$Variable=="fineroot"] <- "1626 ± 81"
+stDF$obsCP[stDF$Variable=="soil"] <- "224 ± 39"
+
+stDF$obsNP[stDF$Variable=="leaf"] <- "22.9 ± 0.1"
+stDF$obsNP[stDF$Variable=="sapwood"] <- "35.6 ± 2.1"
+stDF$obsNP[stDF$Variable=="wood"] <- "33.7 ± 2.7"
+stDF$obsNP[stDF$Variable=="fineroot"] <- "28.7 ± 3.3"
+stDF$obsNP[stDF$Variable=="soil"] <- "16.4 ± 3.4"
+
+
+### create a DF to store simulated stocks
+tmpDF <- data.frame(c("CL", "CW", "CFR", "CSOIL",
+                     "NL", "NW", "NFR", "NSOIL",
+                     "PL", "PW", "PFR", "PSOIL"), NA, NA)
+colnames(tmpDF) <- c("Variable", 
+                     "observed",
+                     "simulated")
+
+### calcualte annual means in the simulated data
+poolDF <- subset(modDF, year <= 2016 & year > 2012)
+
+poolDF <- summaryBy(CL+CW+CFR+CSOIL+NL+NW+NFR+NSOIL+PL+PW+PFR+PSOIL~year, data=poolDF, FUN=mean, na.rm=T, keep.names=T)
+
+### assign values
+stDF$simCN[stDF$Variable=="leaf"] <- round(poolDF$CL[poolDF$year=="2016"]/poolDF$NL[poolDF$year=="2016"], 1)
+stDF$simCN[stDF$Variable=="wood"] <- round(poolDF$CW[poolDF$year=="2016"]/poolDF$NW[poolDF$year=="2016"], 1)
+stDF$simCN[stDF$Variable=="fineroot"] <- round(poolDF$CFR[poolDF$year=="2016"]/poolDF$NFR[poolDF$year=="2016"], 1)
+stDF$simCN[stDF$Variable=="soil"] <- round(poolDF$CSOIL[poolDF$year=="2016"]/poolDF$NSOIL[poolDF$year=="2016"], 1)
+
+
+stDF$simCP[stDF$Variable=="leaf"] <- round(poolDF$CL[poolDF$year=="2016"]/poolDF$PL[poolDF$year=="2016"], 1)
+stDF$simCP[stDF$Variable=="wood"] <- round(poolDF$CW[poolDF$year=="2016"]/poolDF$PW[poolDF$year=="2016"], 1)
+stDF$simCP[stDF$Variable=="fineroot"] <- round(poolDF$CFR[poolDF$year=="2016"]/poolDF$PFR[poolDF$year=="2016"], 1)
+stDF$simCP[stDF$Variable=="soil"] <- round(poolDF$CSOIL[poolDF$year=="2016"]/poolDF$PSOIL[poolDF$year=="2016"], 1)
+
+
+stDF$simNP[stDF$Variable=="leaf"] <- round(poolDF$NL[poolDF$year=="2016"]/poolDF$PL[poolDF$year=="2016"], 1)
+stDF$simNP[stDF$Variable=="wood"] <- round(poolDF$NW[poolDF$year=="2016"]/poolDF$PW[poolDF$year=="2016"], 1)
+stDF$simNP[stDF$Variable=="fineroot"] <- round(poolDF$NFR[poolDF$year=="2016"]/poolDF$PFR[poolDF$year=="2016"], 1)
+stDF$simNP[stDF$Variable=="soil"] <- round(poolDF$NSOIL[poolDF$year=="2016"]/poolDF$PSOIL[poolDF$year=="2016"], 1)
+
+knitr::kable(stDF, caption = "Validation of key stoichiometry")
+
+```
 
 
 
