@@ -146,18 +146,23 @@ names(modDF)[names(modDF) == "litterc"] <- "CFLIT"
 names(modDF)[names(modDF) == "littercag"] <- "CFLITA"
 names(modDF)[names(modDF) == "littercbg"] <- "CFLITB"
 
-names(modDF)[names(modDF) == "littern"] <- "NFLIT"
+#names(modDF)[names(modDF) == "littern"] <- "NFLIT"
 names(modDF)[names(modDF) == "litternag"] <- "NFLITA"
 names(modDF)[names(modDF) == "litternbg"] <- "NFLITB"
 
-names(modDF)[names(modDF) == "litterp"] <- "PFLIT"
+#names(modDF)[names(modDF) == "litterp"] <- "PFLIT"
 names(modDF)[names(modDF) == "litterpag"] <- "PFLITA"
 names(modDF)[names(modDF) == "litterpbg"] <- "PFLITB"
 
+names(modDF)[names(modDF) == "et"] <- "ET"
 names(modDF)[names(modDF) == "transpiration"] <- "Transpiration"
 names(modDF)[names(modDF) == "soil_evap"] <- "ES"
 names(modDF)[names(modDF) == "canopy_evap"] <- "EC"
 names(modDF)[names(modDF) == "runoff"] <- "RO"
+
+names(modDF)[names(modDF) == "ngross"] <- "NGMIN"
+names(modDF)[names(modDF) == "pgross"] <- "PGMIN"
+names(modDF)[names(modDF) == "p_slow_biochemical"] <- "PBIOCHMIN"
 
 
 
@@ -279,20 +284,20 @@ modDF$CFLIT <- modDF$CFLIT * 100
 modDF$CFLITA <- modDF$CFLITA * 100
 modDF$CFLITB <- modDF$CFLITB * 100
 
-modDF$NFLIT <- modDF$NFLIT * 100
+#modDF$NFLIT <- modDF$NFLIT * 100
 modDF$NFLITA <- modDF$NFLITA * 100
 modDF$NFLITB <- modDF$NFLITB * 100
 
-modDF$PFLIT <- modDF$PFLIT * 100
+#modDF$PFLIT <- modDF$PFLIT * 100
 modDF$PFLITA <- modDF$PFLITA * 100
 modDF$PFLITB <- modDF$PFLITB * 100
 
-modDF$Transpiration <- modDF$Transpiration * 100
-modDF$ET <- modDF$ET * 100
-modDF$ES <- modDF$ES * 100
-modDF$EC <- modDF$EC * 100
-modDF$RO <- modDF$RO * 100
-modDF$DRAIN <- modDF$DRAIN * 100
+modDF$Transpiration <- modDF$Transpiration * 100 / 1000 # kg H2O m2 d-1
+modDF$ET <- modDF$ET * 100 / 1000 # kg H2O m2 d-1
+modDF$ES <- modDF$ES * 100 / 1000 # kg H2O m2 d-1
+modDF$EC <- modDF$EC * 100 / 1000 # kg H2O m2 d-1
+modDF$RO <- modDF$RO * 100 / 1000 # kg H2O m2 d-1
+modDF$DRAIN <- modDF$DRAIN * 100 / 1000 # kg H2O m2 d-1
 
 modDF$CCLITB <- modDF$CCLITB * 100
 modDF$NCLITB <- modDF$NCLITB * 100
@@ -307,6 +312,9 @@ modDF$RL <- modDF$RL * 100
 modDF$RW <- modDF$RW * 100
 modDF$RGR <- modDF$RGR * 100
 
+modDF$NGMIN <- modDF$NGMIN * 100
+modDF$PGMIN <- modDF$PGMIN * 100
+modDF$PBIOCHMIN <- modDF$PBIOCHMIN * 100
 
 
 
@@ -322,8 +330,39 @@ We will need to check mass balance for major variables first before validating t
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 
 ### summarize all fluxes first to obain annual rate
+fluxDF <- summaryBy(ET+Transpiration+ES+EC+RO+DRAIN+NEP+GPP+NPP+RHET+RAU+CGL+CGFR+CGCR+CGW+NGL+NGFR+NGCR+NGW+PGL+PGFR+PGCR+PGW+NUP+NGMIN+NMIN+NLEACH+PUP+PGMIN+PMIN+PLEACH+PBIOCHMIN+NLRETR+PLRETR+RCR+RFR+RCR+RFR+CREPR+CEX+CVOC+RL+RW+RGR~year, data=modDF, FUN=sum, keep.names=T, na.rm=T)
 
 
+### subset first day of all pools
+poolDF <- modDF[,c("year", "doy", "CL","LAI","CW","CFR","CCR","NL","NW","NFR","NCR","PL","PW","PFR","PCR","CSTOR","NSTOR","PSTOR",
+                   "CSOIL","NSOIL","PSOIL","NPMIN","PPMIN","PLAB","PSEC","POCC","PPAR","CFLIT","CFLITA","CFLITB",
+                   "NFLITA","NFLITB","PFLITA","PFLITB","CCLITB","NCLITB","PCLITB")]
+
+poolDF <- subset(poolDF, doy==1)
+
+### calculate change in pools for mass balance
+deltaDF <- poolDF[poolDF$year < 2019,]
+
+l <- dim(deltaDF)[2]
+
+for (i in c(2012:2018)) {
+    deltaDF[deltaDF$year==i,3:l] <- poolDF[poolDF$year==(i+1),3:l]-poolDF[poolDF$year==i,3:l]
+}
+
+
+### calculate annual maximum for some variables
+maxDF <- summaryBy(LAI+CL+CFR+CSTOR+NL+NFR+NSTOR+PL+NFR+PSTOR~year, data=modDF, keep.names=T, na.rm=T)
+
+
+require(lattice)
+p1<-xyplot(I(NPP+RAU)~GPP,fluxDF,
+           main='NPP+RAU~GPP',auto.key=T,
+           scales=list(relation='free'),
+           panel=function(...){
+             panel.xyplot(...)
+             panel.abline(a=0,b=1)}) 
+
+plot(p1)
 
 
 ```

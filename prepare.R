@@ -1,14 +1,14 @@
 #### prepare
 #### Create data folder
-output.folders <- c("outputs",
-                    "outputs")
+#output.folders <- c("outputs",
+#                    "outputs")
 
 #### Create output folder
-for (y in output.folders) {
-    if(!dir.exists(y)) {
-        dir.create(y, showWarnings = FALSE)
-    }
-}
+#for (y in output.folders) {
+#    if(!dir.exists(y)) {
+#        dir.create(y, showWarnings = FALSE)
+#    }
+#}
 
 
 #### Install packages
