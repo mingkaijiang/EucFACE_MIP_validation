@@ -62,6 +62,12 @@ modDF <- read.csv(paste0("simulation_output/EUC_", mod.abb, "_OBS_VAR_AMB_NOP_D.
 ncol <- ncol(modDF)
 #print(paste0("no. of columns is ", ncol))
 
+# check length of frames, need to be TRUE, otherwise you have too many or little days
+# 8 years with 365 days plus 2 years with a leap day! (for those models that do not model leap days, please repeat Feb 28 to fill Feb 29)
+if (nrow(modDF)!=(8*365)+2) 
+  {print(paste("number of rows of model output does not match, all further results unreliable!!"))}
+
+
 ### add date to the dataset
 for (i in 2012:2019) {
     
@@ -75,6 +81,8 @@ modDF$Date <- as.Date(modDF$Date)
 
 
 ### revise the GDAY output names following output protocol (delete this once GDAY output is properly set)
+### the rest of the codes in this chunk only applies to GDAY.
+### other models may need to modify this section to continue.
 names(modDF)[names(modDF) == "lai"] <- "LAI"
 names(modDF)[names(modDF) == "hetero_resp"] <- "RHET"
 names(modDF)[names(modDF) == "shoot"] <- "CL"
@@ -85,8 +93,10 @@ names(modDF)[names(modDF) == "pmineralisation"] <- "PMIN"
 names(modDF)[names(modDF) == "inorglabp"] <- "PLAB"
 names(modDF)[names(modDF) == "nmineralisation"] <- "NMIN"
 
+names(modDF)[names(modDF) == "soilc"] <- "CSOIL"
 names(modDF)[names(modDF) == "soiln"] <- "NSOIL"
 names(modDF)[names(modDF) == "soilp"] <- "PSOIL"
+
 names(modDF)[names(modDF) == "shootn"] <- "NL"
 names(modDF)[names(modDF) == "rootn"] <- "NFR"
 names(modDF)[names(modDF) == "crootn"] <- "NCR"
@@ -121,6 +131,35 @@ names(modDF)[names(modDF) == "npp"] <- "NPP"
 names(modDF)[names(modDF) == "auto_resp"] <- "RAU"
 
 
+### change all other column names
+names(modDF)[names(modDF) == "cstore"] <- "CSTOR"
+names(modDF)[names(modDF) == "nstore"] <- "NSTOR"
+names(modDF)[names(modDF) == "pstore"] <- "PSTOR"
+
+names(modDF)[names(modDF) == "inorgn"] <- "NPMIN"
+names(modDF)[names(modDF) == "inorgp"] <- "PPMIN"
+
+names(modDF)[names(modDF) == "inorgoccp"] <- "POCC"
+names(modDF)[names(modDF) == "inorgparp"] <- "PPAR"
+
+names(modDF)[names(modDF) == "litterc"] <- "CFLIT"
+names(modDF)[names(modDF) == "littercag"] <- "CFLITA"
+names(modDF)[names(modDF) == "littercbg"] <- "CFLITB"
+
+names(modDF)[names(modDF) == "littern"] <- "NFLIT"
+names(modDF)[names(modDF) == "litternag"] <- "NFLITA"
+names(modDF)[names(modDF) == "litternbg"] <- "NFLITB"
+
+names(modDF)[names(modDF) == "litterp"] <- "PFLIT"
+names(modDF)[names(modDF) == "litterpag"] <- "PFLITA"
+names(modDF)[names(modDF) == "litterpbg"] <- "PFLITB"
+
+names(modDF)[names(modDF) == "transpiration"] <- "Transpiration"
+names(modDF)[names(modDF) == "soil_evap"] <- "ES"
+names(modDF)[names(modDF) == "canopy_evap"] <- "EC"
+names(modDF)[names(modDF) == "runoff"] <- "RO"
+
+
 
 ### add extra column where GDAY simulation doesn't output for now
 # coarse root respiration
@@ -128,6 +167,33 @@ modDF$RCR <- 0.0
 
 # fine root respiration
 modDF$RFR <- 0.0
+
+### reproduction growth
+modDF$CREPR <- 0.0
+
+### coarse litter
+modDF$CCLITB <- 0.0
+modDF$NCLITB <- 0.0
+modDF$PCLITB <- 0.0
+
+### drainage
+modDF$DRAIN <- 0.0
+
+### C exudation
+modDF$CEX <- 0.0
+
+### CVOC
+modDF$CVOC <- 0.0
+
+### leaf respiration
+modDF$RL <- 0.0
+
+### wood respiration
+modDF$RW <- 0.0
+
+### growth respiration
+modDF$RGR <- 0.0
+
 
 # merge branch and stem together to create wood
 modDF$CW <- modDF$branch + modDF$stem
@@ -138,11 +204,9 @@ modDF$CGW <- modDF$cpbranch + modDF$cpstem
 modDF$NGW <- modDF$npbranch + modDF$npstemimm
 modDF$PGW <- modDF$ppbranch + modDF$ppstemimm
 
-# add storage pool
-modDF$CSTOR <- 0.0
 
-# merge all soil pools together to create total soil
-modDF$CSOIL <- with(modDF, activesoil+slowsoil+passivesoil)
+### merge sorb and strongly sorbed P as secondary P
+modDF$PSEC <- modDF$inorgsorbp + modDF$inorgssorbp
 
 
 
@@ -201,6 +265,49 @@ modDF$GPP <- with(modDF, GPP * 100)
 modDF$NPP <- with(modDF, NPP * 100)
 modDF$RAU <- with(modDF, RAU * 100)
 
+modDF$CSTOR <- modDF$CSTOR * 100
+modDF$NSTOR <- modDF$NSTOR * 100
+modDF$PSTOR <- modDF$PSTOR * 100
+
+modDF$NPMIN <- modDF$NPMIN * 100
+modDF$PPMIN <- modDF$PPMIN * 100
+
+modDF$POCC <- modDF$POCC * 100
+modDF$PPAR <- modDF$PPAR * 100
+
+modDF$CFLIT <- modDF$CFLIT * 100
+modDF$CFLITA <- modDF$CFLITA * 100
+modDF$CFLITB <- modDF$CFLITB * 100
+
+modDF$NFLIT <- modDF$NFLIT * 100
+modDF$NFLITA <- modDF$NFLITA * 100
+modDF$NFLITB <- modDF$NFLITB * 100
+
+modDF$PFLIT <- modDF$PFLIT * 100
+modDF$PFLITA <- modDF$PFLITA * 100
+modDF$PFLITB <- modDF$PFLITB * 100
+
+modDF$Transpiration <- modDF$Transpiration * 100
+modDF$ET <- modDF$ET * 100
+modDF$ES <- modDF$ES * 100
+modDF$EC <- modDF$EC * 100
+modDF$RO <- modDF$RO * 100
+modDF$DRAIN <- modDF$DRAIN * 100
+
+modDF$CCLITB <- modDF$CCLITB * 100
+modDF$NCLITB <- modDF$NCLITB * 100
+modDF$PCLITB <- modDF$PCLITB * 100
+
+modDF$PSEC <- modDF$PSEC * 100
+
+modDF$CEX <- modDF$CEX * 100
+modDF$CVOC <- modDF$CVOC * 100
+
+modDF$RL <- modDF$RL * 100
+modDF$RW <- modDF$RW * 100
+modDF$RGR <- modDF$RGR * 100
+
+
 
 
 ```
@@ -208,14 +315,26 @@ modDF$RAU <- with(modDF, RAU * 100)
 
 ## Checking mass balance
 
+
+We will need to check mass balance for major variables first before validating the simulation results with observations. The mass balance check is performed at annual timestep. 
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+### summarize all fluxes first to obain annual rate
+
+
+
+
+```
+
+
+
+
+
 #### Net Ecosystem Production (NEP)
 
 We define NEP as: NEP = GPP - Reco - Offsite C losses
-
-More to be added. 
-
-
-Do parameters first. 
 
 
 
@@ -232,7 +351,6 @@ Note that:
     - CSOIL is for top 10 cm of soil in the observation;
     - CL includes overstorey leaf only in the observation;
     - CW includes branch and stem in the model simulation.
-
 
 
 

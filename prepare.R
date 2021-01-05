@@ -25,7 +25,8 @@ pacman::p_load(dplyr,
                RColorBrewer,
                ncdf4,
                plantecophys,
-               zoo)    
+               lattice,
+               reshape2)    
 
 #### Sourcing all R files in the modules subdirectory
 sourcefiles <- dir("scripts", pattern="[.]R$", recursive = TRUE, full.names = TRUE)
