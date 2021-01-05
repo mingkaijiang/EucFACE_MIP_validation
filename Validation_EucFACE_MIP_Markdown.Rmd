@@ -315,7 +315,7 @@ A time series LAI data over the period of 2012 - 2016 was provided for validatio
 
 The temporal pattern based on all available data is provided in the figure below:
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
+```{r, fig.cap = "Time-varying LAI plot", fig.align="center", echo=FALSE, message=FALSE, warning=FALSE}
 
 ### validation LAI
 laiDF <- read.csv("validation_dataset/EucFACE_LAI_2012_2016.csv")
@@ -358,7 +358,7 @@ p1 <- ggplot(testDF1, aes(x=Date)) +
 
 Now we can check the goodness-of-fit of all days where observation is available. A perfect fit should have slope of 1 and intercept of 0. 
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
+```{r, fig.cap = "Goodness of fit for LAI plot", fig.align="center", echo=FALSE, message=FALSE, warning=FALSE}
 
 ### subset only days where observations are available
 testDF2 <- testDF1[complete.cases(testDF1$lai),]
@@ -405,7 +405,7 @@ The measured soil respiration rate represents both root and soil heterotrophic r
 Note that we didn't ask the modelers to output soil respiration flux in the output protocol. Please add heterotrophic respiration and root respiration to obtain soil respiration flux. Also, please note that, the unit for all carbon fluxes is given in the output protocol, as gC m-2 d-1. 
 
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
+```{r, fig.cap = "Time-varying soil respiration plot", fig.align="center", echo=FALSE, message=FALSE, warning=FALSE}
 
 ### validation Rsoil
 rsoilDF <- read.csv("validation_dataset/EucFACE_daily_soil_respiration_flux_2013_2015.csv")
