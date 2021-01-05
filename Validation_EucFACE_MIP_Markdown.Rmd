@@ -92,6 +92,27 @@ names(modDF)[names(modDF) == "shootp"] <- "PL"
 names(modDF)[names(modDF) == "rootp"] <- "PFR"
 names(modDF)[names(modDF) == "crootp"] <- "PCR"
 
+names(modDF)[names(modDF) == "leafretransn"] <- "NLRETR"
+names(modDF)[names(modDF) == "leafretransp"] <- "PLRETR"
+
+names(modDF)[names(modDF) == "nloss"] <- "NLEACH"
+names(modDF)[names(modDF) == "ploss"] <- "PLEACH"
+
+names(modDF)[names(modDF) == "nuptake"] <- "NUP"
+names(modDF)[names(modDF) == "puptake"] <- "PUP"
+
+names(modDF)[names(modDF) == "cpleaf"] <- "CGL"
+names(modDF)[names(modDF) == "cproot"] <- "CGFR"
+names(modDF)[names(modDF) == "cpcroot"] <- "CGCR"
+
+names(modDF)[names(modDF) == "npleaf"] <- "NGL"
+names(modDF)[names(modDF) == "nproot"] <- "NGFR"
+names(modDF)[names(modDF) == "npcroot"] <- "NGCR"
+
+names(modDF)[names(modDF) == "ppleaf"] <- "PGL"
+names(modDF)[names(modDF) == "pproot"] <- "PGFR"
+names(modDF)[names(modDF) == "ppcroot"] <- "PGCR"
+
 
 ### add extra column where GDAY simulation doesn't output for now
 # coarse root respiration
@@ -104,6 +125,10 @@ modDF$RFR <- 0.0
 modDF$CW <- modDF$branch + modDF$stem
 modDF$NW <- modDF$branchn + modDF$stemn
 modDF$PW <- modDF$branchp + modDF$stemp
+
+modDF$CGW <- modDF$cpbranch + modDF$cpstem
+modDF$NGW <- modDF$npbranch + modDF$npstemimm
+modDF$PGW <- modDF$ppbranch + modDF$ppstemimm
 
 # add storage pool
 modDF$CSTOR <- 0.0
@@ -139,6 +164,33 @@ modDF$PL <- with(modDF, PL * 100)
 modDF$PW <- with(modDF, PW * 100)
 modDF$PFR <- with(modDF, PFR * 100)
 modDF$PCR <- with(modDF, PCR * 100)
+
+modDF$NLRETR <- with(modDF, NLRETR * 100)
+modDF$PLRETR <- with(modDF, PLRETR * 100)
+
+modDF$NLEACH <- with(modDF, NLEACH * 100)
+modDF$PLEACH <- with(modDF, PLEACH * 100)
+
+modDF$NUP <- with(modDF, NUP * 100)
+modDF$PUP <- with(modDF, PUP * 100)
+
+modDF$CGL <- with(modDF, CGL * 100)
+modDF$CGW <- with(modDF, CGW * 100)
+modDF$CGFR <- with(modDF, CGFR * 100)
+modDF$CGCR <- with(modDF, CGCR * 100)
+
+modDF$NGL <- with(modDF, NGL * 100)
+modDF$NGW <- with(modDF, NGW * 100)
+modDF$NGFR <- with(modDF, NGFR * 100)
+modDF$NGCR <- with(modDF, NGCR * 100)
+
+modDF$PGL <- with(modDF, PGL * 100)
+modDF$PGW <- with(modDF, PGW * 100)
+modDF$PGFR <- with(modDF, PGFR * 100)
+modDF$PGCR <- with(modDF, PGCR * 100)
+
+
+
 
 ```
 
@@ -205,13 +257,14 @@ knitr::kable(vegDF, caption = "Validation of major carbon pools")
 
 #### Major nutrient pools and fluxes
 
-Below we provide two variables to help constrain the phosphorus cycle in the model, namely labile inorganic P pool (PLAB) and soil P net mineralization rate (PMIN). We did not include total soil P pool, because its size could be misleading given that the majority of the P in the soil is stored as occluded form unavailable for plants. Note that in the table below, simulated results are for top 30 cm of the soil, but observed data are for top 10 cm only. 
+Below we provide several variables to help constrain the nutrient cycles in the model, namely labile inorganic P pool (PLAB), soil net N and P mineralization rate (NMIN and PMIN), plant N and P uptake (NUP and PUP), and soil N and P leaching (NLEACH and PLEACH). We did not include total soil P pool, because its size could be misleading given that the majority of the P in the soil is stored as occluded form unavailable for plants. Note that in the table below, simulated results are for top 30 cm of the soil, but observed data are for top 10 cm only. 
     
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 
 ### create a DF to store observation data for vegetation carbon stocks
-pDF <- data.frame(c("PLAB", "PMIN", "NMIN"), NA, NA)
+pDF <- data.frame(c("PLAB", "PMIN", "NMIN", "NUP", "PUP",
+                    "NLEACH", "PLEACH"), NA, NA)
 colnames(pDF) <- c("Variable", 
                      "observed",
                      "simulated")
@@ -225,12 +278,16 @@ pDF$observed[pDF$Variable=="NMIN"] <- "8.81 ± 1.65"
 subDF <- subset(modDF, year <= 2016 & year > 2012)
 
 poolDF <- summaryBy(PLAB~year, data=subDF, FUN=mean, na.rm=T, keep.names=T)
-fluxDF <- summaryBy(PMIN+NMIN~year, data=subDF, FUN=sum, na.rm=T, keep.names=T)
+fluxDF <- summaryBy(PMIN+NMIN+NLEACH+PLEACH+NUP+PUP~year, data=subDF, FUN=sum, na.rm=T, keep.names=T)
 
 ### assign values
 pDF$simulated[pDF$Variable=="PLAB"] <- round(poolDF$PLAB[poolDF$year=="2016"], 3)
 pDF$simulated[pDF$Variable=="PMIN"] <- round(mean(fluxDF$PMIN), 3)
 pDF$simulated[pDF$Variable=="NMIN"] <- round(mean(fluxDF$NMIN), 3)
+pDF$simulated[pDF$Variable=="PLEACH"] <- round(mean(fluxDF$PLEACH), 3)
+pDF$simulated[pDF$Variable=="NLEACH"] <- round(mean(fluxDF$NLEACH), 3)
+pDF$simulated[pDF$Variable=="PUP"] <- round(mean(fluxDF$PUP), 3)
+pDF$simulated[pDF$Variable=="NUP"] <- round(mean(fluxDF$NUP), 3)
 
 knitr::kable(pDF, caption = "Validation of key nutrient cycle variables")
 
@@ -304,6 +361,41 @@ stDF$simNP[stDF$Variable=="soil"] <- round(poolDF$NSOIL[poolDF$year=="2016"]/poo
 knitr::kable(stDF, caption = "Validation of key stoichiometry")
 
 ```
+
+
+#### Nutreint retranslocation coefficients
+
+Using live and litter nutrient pools, we can infer plant nutrient retranslocation coefficients. 
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+### subset and calculate
+subDF <- subset(modDF, year <= 2016 & year > 2012)
+
+tmpDF <- summaryBy(NGL+PGL+NLRETR+PLRETR~year, data=subDF, FUN=sum, keep.names=T, na.rm=T)
+
+
+### create DF for output
+rtDF <- data.frame(c("leafN", "leafP"), NA, NA)
+colnames(rtDF) <- c("Variable", "observed", "simulated")
+
+### assign values
+rtDF$observed[rtDF$Variable=="leafN"] <- "0.31 ± 0.04"
+rtDF$observed[rtDF$Variable=="leafP"] <- "0.53 ± 0.04"
+
+rtDF$simulated[rtDF$Variable=="leafN"] <- round(mean(tmpDF$NLRETR/tmpDF$NGL),2)
+rtDF$simulated[rtDF$Variable=="leafP"] <- round(mean(tmpDF$PLRETR/tmpDF$PGL),2)
+
+
+knitr::kable(rtDF, caption = "Validation of leaf retranslocation coefficients")
+
+
+
+
+```
+
+
+
 
 
 
