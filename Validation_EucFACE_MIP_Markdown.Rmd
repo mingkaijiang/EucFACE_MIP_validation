@@ -63,8 +63,9 @@ Finally, please note that, all checks are performed for the ambient CO2 treatmen
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 ### read in simulation results and get it in shape for comparison.
-### the naming of the file follows rules identified in the output protocol. 
+### the naming of the file follows the output protocol. 
 ### Note that this is the daily file. 
+### You can modify this path to read in different files. 
 modDF <- read.csv(paste0("simulation_output/EUC_", mod.abb, "_OBS_VAR_AMB_NOP_D.csv"),
                   skip=1)
 
@@ -74,11 +75,12 @@ ncol <- ncol(modDF)
 
 # check length of frames, need to be TRUE, otherwise you have too many or little days
 # 8 years with 365 days plus 2 years with a leap day! (for those models that do not model leap days, please repeat Feb 28 to fill Feb 29)
-if (nrow(modDF)!=(8*365)+2) 
-  {print(paste("number of rows of model output does not match, all further results unreliable!!"))}
+if (nrow(modDF)!=(8*365)+2) {
+  print(paste("number of rows of model output does not match, all further results unreliable!!"))
+}
 
 
-### add date to the dataset
+### add date to the dataset to help with the plotting
 for (i in 2012:2019) {
     
     date.list <- as.Date((modDF$doy[modDF$year==i]-1), 
@@ -90,9 +92,10 @@ for (i in 2012:2019) {
 modDF$Date <- as.Date(modDF$Date)
 
 
-### revise the GDAY output names following output protocol (delete this once GDAY output is properly set)
-### the rest of the codes in this chunk only applies to GDAY.
-### other models may need to modify this section to continue.
+########################################################################################################
+### revise the model output names following output protocol 
+### Note that the following lines of code in this chunk only apply to GDAY output
+### other models may need to modify this section as they see appropriate
 names(modDF)[names(modDF) == "lai"] <- "LAI"
 names(modDF)[names(modDF) == "hetero_resp"] <- "RHET"
 names(modDF)[names(modDF) == "shoot"] <- "CL"
@@ -140,8 +143,6 @@ names(modDF)[names(modDF) == "gpp"] <- "GPP"
 names(modDF)[names(modDF) == "npp"] <- "NPP"
 names(modDF)[names(modDF) == "auto_resp"] <- "RAU"
 
-
-### change all other column names
 names(modDF)[names(modDF) == "cstore"] <- "CSTOR"
 names(modDF)[names(modDF) == "nstore"] <- "NSTOR"
 names(modDF)[names(modDF) == "pstore"] <- "PSTOR"
@@ -185,7 +186,11 @@ names(modDF)[names(modDF) == "deadrootp"] <- "PFRLIN"
 names(modDF)[names(modDF) == "deadcrootp"] <- "PCRLIN"
 
 
-### add extra column where GDAY simulation doesn't output for now
+########################################################################################################
+### add extra column where GDAY simulation doesn't output 
+### Note that the following lines of code in this chunk only apply to GDAY output
+### other models may need to modify this section as they see appropriate
+
 # coarse root respiration
 modDF$RCR <- 0.0
 
@@ -271,8 +276,11 @@ modDF$PPORG <- modDF$activesoilp+modDF$slowsoilp+modDF$passivesoilp
 modDF$PWEA <- 0.0
 
 
-
+########################################################################################################
 ### convert unit from current GDAY default of t ha-1 to whatever is defined in the output protocol (gC m-2)
+### Note that the following lines of code in this chunk only apply to GDAY output
+### other models may need to modify this section as they see appropriate
+
 modDF$RHET <- with(modDF, RHET * 100)
 modDF$RECO <- with(modDF, RECO * 100)
 modDF$RFR <- with(modDF, RFR * 100)
@@ -401,6 +409,7 @@ modDF$PPORG <- modDF$PPORG * 100
 modDF$PWEA <- modDF$PWEA * 100
 
 
+### End model-specific revisions
 
 ```
 
