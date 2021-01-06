@@ -254,6 +254,21 @@ modDF$PFRRETR <- 0.0
 modDF$NFLIT <- modDF$NFLITA + modDF$NFLITB
 modDF$PFLIT <- modDF$PFLITA + modDF$PFLITB
 
+### N fixation
+modDF$NFIX <- 0.0
+modDF$NVOL <- 0.0
+
+### N and P deposition
+modDF$NDEP <- 2.25/1000/100/365
+modDF$PDEP <- 0.093/1000/100/365
+
+### N and P in organic form
+modDF$NPORG <- modDF$activesoiln+modDF$slowsoiln+modDF$passivesoiln
+modDF$PPORG <- modDF$activesoilp+modDF$slowsoilp+modDF$passivesoilp
+
+### P weathering rate
+modDF$PWEA <- 0.0
+
 
 
 ### convert unit from current GDAY default of t ha-1 to whatever is defined in the output protocol (gC m-2)
@@ -376,6 +391,15 @@ modDF$PWLIN <- modDF$PWLIN * 100
 modDF$NFLIT <- modDF$NFLIT * 100
 modDF$PFLIT <- modDF$PFLIT * 100
 
+modDF$NDEP <- modDF$NDEP * 100
+modDF$PDEP <- modDF$PDEP * 100
+
+modDF$NPORG <- modDF$NPORG * 100
+modDF$PPORG <- modDF$PPORG * 100
+
+modDF$PWEA <- modDF$PWEA * 100
+
+
 
 ```
 
@@ -393,13 +417,13 @@ Note that, I assume that many models may not output some of these variables, and
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 
 ### summarize all fluxes first to obain annual rate
-fluxDF <- summaryBy(ET+Transpiration+ES+EC+RO+DRAIN+NEP+GPP+NPP+RHET+RAU+RECO+CGL+CGFR+CGCR+CGW+NGL+NGFR+NGCR+NGW+PGL+PGFR+PGCR+PGW+NUP+NGMIN+NMIN+NLEACH+PUP+PGMIN+PMIN+PLEACH+PBIOCHMIN+NLRETR+PLRETR+RCR+RFR+RCR+RFR+CREPR+CEX+CVOC+RL+RW+RGR+CLITIN+CCRLIN+CFRLIN+CWLIN+NLITIN+NCRLIN+NFRLIN+NWLIN+PLITIN+PCRLIN+PFRLIN+PWLIN+NWRETR+PWRETR+NCRRETR+PCRRETR+NFRRETR+PFRRETR+NFLIT+PFLIT~year, data=modDF, FUN=sum, keep.names=T, na.rm=T)
+fluxDF <- summaryBy(ET+Transpiration+ES+EC+RO+DRAIN+NEP+GPP+NPP+RHET+RAU+RECO+CGL+CGFR+CGCR+CGW+NGL+NGFR+NGCR+NGW+PGL+PGFR+PGCR+PGW+NUP+NGMIN+NMIN+NLEACH+PUP+PGMIN+PMIN+PLEACH+PBIOCHMIN+NLRETR+PLRETR+RCR+RFR+CREPR+CEX+CVOC+RL+RW+RGR+CLITIN+CCRLIN+CFRLIN+CWLIN+NLITIN+NCRLIN+NFRLIN+NWLIN+PLITIN+PCRLIN+PFRLIN+PWLIN+NWRETR+PWRETR+NCRRETR+PCRRETR+NFRRETR+PFRRETR+NDEP+NFIX+NVOL+PDEP+PWEA~year, data=modDF, FUN=sum, keep.names=T, na.rm=T)
 
 
 ### subset first day of all pools
 poolDF <- modDF[,c("year", "doy", "CL","LAI","CW","CFR","CCR","NL","NW","NFR","NCR","PL","PW","PFR","PCR","CSTOR","NSTOR","PSTOR",
                    "CSOIL","NSOIL","PSOIL","NPMIN","PPMIN","PLAB","PSEC","POCC","PPAR","CFLIT","CFLITA","CFLITB",
-                   "NFLITA","NFLITB","PFLITA","PFLITB","CCLITB","NCLITB","PCLITB")]
+                   "NFLITA","NFLITB","PFLITA","PFLITB","CCLITB","NCLITB","PCLITB","NFLIT","PFLIT", "NPORG", "PPORG")]
 
 poolDF <- subset(poolDF, doy==1)
 
