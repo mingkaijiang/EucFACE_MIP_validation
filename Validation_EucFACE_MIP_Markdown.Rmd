@@ -231,6 +231,21 @@ modDF$NWLIN <- modDF$deadbranchn + modDF$deadstemn
 modDF$PWLIN <- modDF$deadbranchp + modDF$deadstemp
 
 
+### add retranslocation for wood and root
+modDF$NWRETR <- 0.0
+modDF$PWRETR <- 0.0
+
+modDF$NCRRETR <- 0.0
+modDF$NFRRETR <- 0.0
+
+modDF$PCRRETR <- 0.0
+modDF$PFRRETR <- 0.0
+
+### N and P FLIT flux
+modDF$NFLIT <- modDF$NFLITA + modDF$NFLITB
+modDF$PFLIT <- modDF$PFLITA + modDF$PFLITB
+
+
 
 ### convert unit from current GDAY default of t ha-1 to whatever is defined in the output protocol (gC m-2)
 modDF$RHET <- with(modDF, RHET * 100)
@@ -349,6 +364,9 @@ modDF$PFRLIN <- modDF$PFRLIN * 100
 modDF$PCRLIN <- modDF$PCRLIN * 100
 modDF$PWLIN <- modDF$PWLIN * 100
 
+modDF$NFLIT <- modDF$NFLIT * 100
+modDF$PFLIT <- modDF$PFLIT * 100
+
 
 ```
 
@@ -361,7 +379,7 @@ We will need to check mass balance for major variables first before validating t
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 
 ### summarize all fluxes first to obain annual rate
-fluxDF <- summaryBy(ET+Transpiration+ES+EC+RO+DRAIN+NEP+GPP+NPP+RHET+RAU+RECO+CGL+CGFR+CGCR+CGW+NGL+NGFR+NGCR+NGW+PGL+PGFR+PGCR+PGW+NUP+NGMIN+NMIN+NLEACH+PUP+PGMIN+PMIN+PLEACH+PBIOCHMIN+NLRETR+PLRETR+RCR+RFR+RCR+RFR+CREPR+CEX+CVOC+RL+RW+RGR+CLITIN+CCRLIN+CFRLIN+CWLIN+NLITIN+NCRLIN+NFRLIN+NWLIN+PLITIN+PCRLIN+PFRLIN+PWLIN~year, data=modDF, FUN=sum, keep.names=T, na.rm=T)
+fluxDF <- summaryBy(ET+Transpiration+ES+EC+RO+DRAIN+NEP+GPP+NPP+RHET+RAU+RECO+CGL+CGFR+CGCR+CGW+NGL+NGFR+NGCR+NGW+PGL+PGFR+PGCR+PGW+NUP+NGMIN+NMIN+NLEACH+PUP+PGMIN+PMIN+PLEACH+PBIOCHMIN+NLRETR+PLRETR+RCR+RFR+RCR+RFR+CREPR+CEX+CVOC+RL+RW+RGR+CLITIN+CCRLIN+CFRLIN+CWLIN+NLITIN+NCRLIN+NFRLIN+NWLIN+PLITIN+PCRLIN+PFRLIN+PWLIN+NWRETR+PWRETR+NCRRETR+PCRRETR+NFRRETR+PFRRETR+NFLIT+PFLIT~year, data=modDF, FUN=sum, keep.names=T, na.rm=T)
 
 
 ### subset first day of all pools
@@ -645,34 +663,131 @@ plot(p1)
 
 
 
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on delta NW", fig.align="center"}
+
+p1<-xyplot(I(NGW-NWLIN-NWRETR)~deltaNW,annDF,
+           main='I(NGW-NWLIN-NWRETR)~deltaNW',auto.key=T,
+           scales=list(relation='free'),
+           panel=function(...){
+             panel.xyplot(...)
+             panel.abline(a=0,b=1)}) 
+
+plot(p1)
+
+
+```
 
 
 
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on delta NFR", fig.align="center"}
+
+p1<-xyplot(I(NGFR-NFRLIN-NFRRETR)~deltaNFR,annDF,
+           main='I(NGFR-NFRLIN-NFRRETR)~deltaNFR',auto.key=T,
+           scales=list(relation='free'),
+           panel=function(...){
+             panel.xyplot(...)
+             panel.abline(a=0,b=1)}) 
+
+plot(p1)
+
+
+```
 
 
 
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on delta NCR", fig.align="center"}
+
+p1<-xyplot(I(NGCR-NCRLIN-NCRRETR)~deltaNCR,annDF,
+           main='I(NGCR-NCRLIN-NCRRETR)~deltaNCR',auto.key=T,
+           scales=list(relation='free'),
+           panel=function(...){
+             panel.xyplot(...)
+             panel.abline(a=0,b=1)}) 
+
+plot(p1)
+
+
+```
 
 
 
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on NFLIT", fig.align="center"}
+
+p1<-xyplot(I(NFLITA+NFLITB)~NFLIT,annDF,
+           main='I(NFLITA+NFLITB)~NFLIT',auto.key=T,
+           scales=list(relation='free'),
+           panel=function(...){
+             panel.xyplot(...)
+             panel.abline(a=0,b=1)}) 
+
+plot(p1)
+
+
+```
 
 
 
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on N input and output", fig.align="center"}
+
+p1<-xyplot(I(NUP+NLRETR+NWRETR+NFRRETR+NCRRETR)~I(NGL+NGFR+NGCR+NGW),annDF,
+           main='I(NUP+NLRETR+NWRETR+NFRRETR+NCRRETR)~I(NGL+NGFR+NGCR+NGW)',auto.key=T,
+           scales=list(relation='free'),
+           panel=function(...){
+             panel.xyplot(...)
+             panel.abline(a=0,b=1)}) 
+
+plot(p1)
+
+
+```
 
 
 
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on delta NSTOR", fig.align="center"}
+
+p1<-xyplot(I(NUP+NLRETR+NWRETR+NFRRETR+NCRRETR-NGL-NGFR-NGCR-NGW)~deltaNSTOR,annDF,
+           main='I(NUP+NLRETR+NWRETR+NFRRETR+NCRRETR-NGL-NGFR-NGCR-NGW)~deltaNSTOR',auto.key=T,
+           scales=list(relation='free'),
+           panel=function(...){
+             panel.xyplot(...)
+             panel.abline(a=0,b=1)}) 
+
+plot(p1)
+
+
+```
 
 
 
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on delta NSTOR", fig.align="center"}
+
+p1<-xyplot(I(NUP+NLRETR+NWRETR+NFRRETR+NCRRETR-NGL-NGFR-NGCR-NGW)~deltaNSTOR,annDF,
+           main='I(NUP+NLRETR+NWRETR+NFRRETR+NCRRETR-NGL-NGFR-NGCR-NGW)~deltaNSTOR',auto.key=T,
+           scales=list(relation='free'),
+           panel=function(...){
+             panel.xyplot(...)
+             panel.abline(a=0,b=1)}) 
+
+plot(p1)
+
+
+```
 
 
 
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on N input and output", fig.align="center"}
+
+#p1<-xyplot(I(NFIX+NUP+NLRETR+NWRETR+NFRRETR+NCRRETR)~I(NGL+NGFR+NGCR+NGW),annDF,
+#           main='I(NFIX+NUP+NLRETR+NWRETR+NFRRETR+NCRRETR)~I(NGL+NGFR+NGCR+NGW)',auto.key=T,
+#           scales=list(relation='free'),
+#           panel=function(...){
+#             panel.xyplot(...)
+#             panel.abline(a=0,b=1)}) 
+#
+#plot(p1)
 
 
-
-
-
-
-
+```
 
 
 
