@@ -5,10 +5,11 @@ date: "`r Sys.Date()`"
 output:
   html_document:
     df_print: paged
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, fig.width=4, fig.height=3)
+knitr::opts_chunk$set(echo = TRUE, fig.width=3, fig.height=2)
 
 
 #### clear wk space
@@ -430,7 +431,7 @@ Note that, I assume that many models may not output some of these variables, and
 fluxDF <- summaryBy(ET+Transpiration+ES+EC+RO+DRAIN+NEP+GPP+NPP+RHET+RAU+RECO+CGL+CGFR+CGCR+CGW+NGL+NGFR+NGCR+NGW+PGL+PGFR+PGCR+PGW+NUP+NGMIN+NMIN+NLEACH+PUP+PGMIN+PMIN+PLEACH+PBIOCHMIN+NLRETR+PLRETR+RCR+RFR+CREPR+CEX+CVOC+RL+RW+RGR+CLITIN+CCRLIN+CFRLIN+CWLIN+NLITIN+NCRLIN+NFRLIN+NWLIN+PLITIN+PCRLIN+PFRLIN+PWLIN+NWRETR+PWRETR+NCRRETR+PCRRETR+NFRRETR+PFRRETR+NDEP+NFIX+NVOL+PDEP+PWEA~year, data=modDF, FUN=sum, keep.names=T, na.rm=T)
 
 
-### subset first day of all pools
+### subset first day within a year of all pools
 poolDF <- modDF[,c("year", "doy", "CL","LAI","CW","CFR","CCR","NL","NW","NFR","NCR","PL","PW","PFR","PCR","CSTOR","NSTOR","PSTOR",
                    "CSOIL","NSOIL","PSOIL","NPMIN","PPMIN","PLAB","PSEC","POCC","PPAR","CFLIT","CFLITA","CFLITB",
                    "NFLITA","NFLITB","PFLITA","PFLITB","CCLITB","NCLITB","PCLITB","NFLIT","PFLIT", "NPORG", "PPORG")]
@@ -464,10 +465,15 @@ maxDF <- summaryBy(LAI+CL+CFR+CSTOR+NL+NFR+NSTOR+PL+NFR+PSTOR~year, data=modDF, 
 
 #### 2.1 Carbon balance
 
-Now we plot carbon-related mass balance results. 
+Now we plot carbon-related mass balance results. We check major carbon fluxes (e.g. GPP) and changes in pools.
+
+Firstly, we can whether NPP + RAU = GPP. All models should get this right, but note that some models may assume a simple CUE relationship. 
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on GPP", fig.align="center"}
 
+### NPP + RAU = GPP
+### all models should get this right,
+### but note that some models may simply assume a fixed CUE to get RAU (e.g. GDAY)
 p1<-xyplot(I(NPP+RAU)~GPP,fluxDF,
            main='NPP+RAU~GPP',auto.key=T,
            scales=list(relation='free'),
@@ -480,8 +486,11 @@ plot(p1)
 ```
 
 
+This is an alternative way to check mass balance for GPP, that is, NEP + RECO = GPP. 
+
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on GPP", fig.align="center"}
 
+### NEP + RECO = GPP
 p1<-xyplot(I(NEP+RECO)~GPP,fluxDF,
            main='NEP+RECO~GPP',auto.key=T,
            scales=list(relation='free'),
@@ -493,9 +502,11 @@ plot(p1)
 
 ```
 
+Ecosystem respiration (RECO) should be the sum of autotrophic and heterotrophic respiration. 
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on RECO", fig.align="center"}
 
+### RHET + RAU = RECO
 p1<-xyplot(I(RHET+RAU)~RECO,fluxDF,
            main='RHET+RAUTO~RECO',auto.key=T,
            scales=list(relation='free'),
@@ -508,9 +519,13 @@ plot(p1)
 ```
 
 
+This is to sum all autotrophic respiration fluxes. Note that some models may not explicitly similate individual respiratory fluxes. Hence, this mass balance check may not be closed for some models. 
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on RAU", fig.align="center"}
 
+### sum of all autotrophic respiration fluxes
+### Some models may not explicitly simulate individual respiratory fluxes (e.g. GDAY)
+### Hence, this mass balance check may not be closed for all models. 
 p1<-xyplot(I(RL+RW+RCR+RFR+RGR)~RAU,fluxDF,
            main='RL+RW+RCR+RFR+RGR~RAU',auto.key=T,
            scales=list(relation='free'),
@@ -523,9 +538,12 @@ plot(p1)
 ```
 
 
+This is not a strict mass balance check, but rather, to see how LAI scales with leaf carbon pool. Given that we provided SLA, one can and should practically close the mass balance by modifying the equation in the code. 
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Scaling of LAI with CL", fig.align="center"}
 
+### This is not a mass balance check, but rather, to see how LAI scales with leaf carbon pool.
+### Given that we provided SLA, we can use
 p1<-xyplot(LAI~CL,poolDF,
            main='LAI~CL',auto.key=T,
            scales=list(relation='free'),
@@ -538,6 +556,7 @@ plot(p1)
 ```
 
 
+This is to check the mass balance on change in leaf carbon pool. $Delta$CL should equals influx - outflux. 
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on delta CL", fig.align="center"}
 

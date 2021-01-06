@@ -26,7 +26,8 @@ pacman::p_load(dplyr,
                ncdf4,
                plantecophys,
                lattice,
-               reshape2)    
+               reshape2,
+               tinytex)    
 
 #### Sourcing all R files in the modules subdirectory
 sourcefiles <- dir("scripts", pattern="[.]R$", recursive = TRUE, full.names = TRUE)
