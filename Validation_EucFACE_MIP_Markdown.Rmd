@@ -556,7 +556,7 @@ plot(p1)
 ```
 
 
-This is to check the mass balance on change in leaf carbon pool. $Delta$CL should equals influx - outflux. 
+This is to check the mass balance on change in leaf carbon pool. $\Delta$CL should equals influx - outflux. Same expectation for $\Delta$CW, $\Delta$CFR, and $\Delta$CCR.
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on delta CL", fig.align="center"}
 
@@ -617,6 +617,7 @@ plot(p1)
 ```
 
 
+GPP should in theory equals to production flux and respiratory flux. Here we include reproduction flux as well, which some models don't simulate. 
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on GPP", fig.align="center"}
 
@@ -632,6 +633,7 @@ plot(p1)
 ```
 
 
+Similarly, NPP should equal to all growth fluxes. 
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on NPP", fig.align="center"}
 
@@ -647,6 +649,7 @@ plot(p1)
 ```
 
 
+This is a different way to check mass balance for NPP, in that in includes $\Delta$CSTOR. Some models don't explictly simulate CSTOR, so this mass balance may not apply. 
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on NPP", fig.align="center"}
 
@@ -663,6 +666,8 @@ plot(p1)
 
 
 
+The total fine litterfall flux should be the sum of aboveground and belowground fluxes. 
+
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on CFLIT", fig.align="center"}
 
 p1<-xyplot(I(CFLITA+CFLITB)~CFLIT,annDF,
@@ -677,6 +682,7 @@ plot(p1)
 ```
 
 
+This mass balance equation checks the net of total influx litter and heterotrophic respiration. In theory, the net difference of these two flues should equal to the change in soil + litter pool. 
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on delta soil", fig.align="center"}
 
@@ -695,7 +701,7 @@ plot(p1)
 
 #### 2.2. Water balance
 
-Next we plot some very basic water balance checks. More will be added later. 
+The water budget will need to be closed in order to investigate the CO2 x water interaction. Firstly, the total evapotranspiration flux should equal to total transpiration + evaporation flux. More checks to be added. 
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on ET", fig.align="center"}
 
@@ -714,7 +720,7 @@ plot(p1)
 
 #### 2.3. Nitrogen balance
 
-Now we plot some nitrogen balance checks. 
+Now we plot some nitrogen balance checks. Firstly, we check $\Delta$NL, $\Delta$NW, $\Delta$NFR and $\Delta$NCR. Then we will check litterfall fluxes and changes in soil pools.  
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on delta NL", fig.align="center"}
 
@@ -829,14 +835,14 @@ plot(p1)
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on N input and output", fig.align="center"}
 
-#p1<-xyplot(I(NFIX+NUP+NLRETR+NWRETR+NFRRETR+NCRRETR)~I(NGL+NGFR+NGCR+NGW),annDF,
-#           main='I(NFIX+NUP+NLRETR+NWRETR+NFRRETR+NCRRETR)~I(NGL+NGFR+NGCR+NGW)',auto.key=T,
-#           scales=list(relation='free'),
-#           panel=function(...){
-#             panel.xyplot(...)
-#             panel.abline(a=0,b=1)}) 
-#
-#plot(p1)
+p1<-xyplot(I(NFIX+NUP+NLRETR+NWRETR+NFRRETR+NCRRETR)~I(NGL+NGFR+NGCR+NGW),annDF,
+           main='I(NFIX+NUP+NLRETR+NWRETR+NFRRETR+NCRRETR)~I(NGL+NGFR+NGCR+NGW)',auto.key=T,
+           scales=list(relation='free'),
+           panel=function(...){
+             panel.xyplot(...)
+             panel.abline(a=0,b=1)}) 
+
+plot(p1)
 
 
 ```
@@ -845,14 +851,14 @@ plot(p1)
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on N input and output", fig.align="center"}
 
-#p1<-xyplot(I(NFIX+NUP+NLRETR+NWRETR+NFRRETR+NCRRETR-NGL-NGFR-NGCR-NGW)~deltaNSTOR,annDF,
-#           main='I(NFIX+NUP+NLRETR+NWRETR+NFRRETR+NCRRETR-NGL-NGFR-NGCR-NGW)~deltaNSTOR',auto.key=T,
-#           scales=list(relation='free'),
-#           panel=function(...){
-#             panel.xyplot(...)
-#             panel.abline(a=0,b=1)}) 
-#
-#plot(p1)
+p1<-xyplot(I(NFIX+NUP+NLRETR+NWRETR+NFRRETR+NCRRETR-NGL-NGFR-NGCR-NGW)~deltaNSTOR,annDF,
+           main='I(NFIX+NUP+NLRETR+NWRETR+NFRRETR+NCRRETR-NGL-NGFR-NGCR-NGW)~deltaNSTOR',auto.key=T,
+           scales=list(relation='free'),
+           panel=function(...){
+             panel.xyplot(...)
+             panel.abline(a=0,b=1)}) 
+
+plot(p1)
 
 
 ```
