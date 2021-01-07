@@ -710,7 +710,7 @@ plot(p1)
 \
 This mass balance equation checks the net of total influx litter and heterotrophic respiration. In theory, the net difference of these two flues should equal to the change in soil + litter pool. The full equation is: 
 
-CLITIN+CWLIN+CFRLIN+CCRLIN+CREPR-RHET = $\Delta$CSOIL+$\Delta$CCLITB+$\Delta$CFLIT
+<center> CLITIN+CWLIN+CFRLIN+CCRLIN+CREPR-RHET = $\Delta$CSOIL+$\Delta$CCLITB+$\Delta$CFLIT </center>
 
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on delta soil", fig.align="center"}
@@ -846,7 +846,9 @@ plot(p1)
 \
 Now, we check mass balance of total N required to support the new growth, which should euqal to the sum of nitrogen uptake and total retranslocation fluxes. The full equation is written as:
 
+<center> 
 NUP+NLRETR+NWRETR+NFRRETR+NCRRETR = NGL+NGFR+NGCR+NGW
+</center> 
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on vegetation N requirement", fig.align="center"}
 
@@ -885,7 +887,9 @@ plot(p1)
 \
 N fixation could also be added to plant directly. So here we are checking its effect. Full equation is: 
 
+<center> 
 NFIX+NUP+NLRETR+NWRETR+NFRRETR+NCRRETR = NGL+NGFR+NGCR+NGW
+</center> 
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on N input and output", fig.align="center"}
 
@@ -923,8 +927,9 @@ plot(p1)
 \
 Now we are checking the whole ecosystem N input and output. Full equation is:
 
+<center> 
 NDEP+NFIX-NLEACH-NVOL = $\Delta$NL+$\Delta$NW+$\Delta$NCR+$\Delta$NFR+$\Delta$NSOIL+$\Delta$NFLIT+$\Delta$NCLITB
-
+</center> 
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on ecosystem N", fig.align="center"}
 
@@ -944,7 +949,9 @@ plot(p1)
 \
 A different way to check whole ecosystem N budget, as:
 
+<center> 
 NDEP+NFIX+NLITIN+NWLIN+NCRLIN+NFRLIN-NUP-NLEACH-NVOL = $\Delta$NSOIL+$\Delta$NFLIT+$\Delta$NCLITB
+</center> 
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on ecosystem N", fig.align="center"}
 
@@ -964,8 +971,9 @@ plot(p1)
 \
 Another way to check ecosystem N budget, by excluding NFIX:
 
+<center> 
 NDEP+NLITIN+NWLIN+NCRLIN+NFRLIN-NUP-NLEACH-NVOL = $\Delta$NSOIL+$\Delta$NFLIT+$\Delta$NCLITB
-
+</center> 
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on ecosystem N", fig.align="center"}
 
@@ -1007,8 +1015,9 @@ plot(p1)
 \
 Finally, we plot the phosphorus balance checks. The net influx - outflux should equal to the change in all ecosystem P pools: 
 
+<center> 
 PDEP+PWEA-PLEACH = $\Delta$PL+$\Delta$PW+$\Delta$PCR+$\Delta$PFR+$\Delta$PSOIL+$\Delta$PFLIT+$\Delta$PCLITB
-
+</center> 
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on P input and output", fig.align="center"}
 
@@ -1111,7 +1120,10 @@ plot(p1)
 \
 Now we check the total P required to make new vegetation: 
 
+<center> 
 PUP+PLRETR+PWRETR+PFRRETR+PCRRETR=PGL+PGFR+PGCR+PGW
+</center> 
+
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on P storage", fig.align="center"}
 
@@ -1149,7 +1161,9 @@ plot(p1)
 \
 This is to check whole ecosystem P flux, which means that total in - out = net change:
 
+<center> 
 PDEP+PWEA+PLITIN+PWLIN+PCRLIN+PFRLIN-PUP-PLEACH = $\Delta$PSOIL+$\Delta$FLIT+$\Delta$PCLITB
+</center> 
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on P storage", fig.align="center"}
 
