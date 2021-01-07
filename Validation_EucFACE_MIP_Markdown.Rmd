@@ -9,7 +9,8 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, fig.width=3, fig.height=2)
+knitr::opts_chunk$set(echo = TRUE, 
+                      out.height="50%")
 
 
 #### clear wk space
@@ -40,10 +41,10 @@ mod.abb <- "GDAYP"
 
 ## 1. Introduction
 
+\
 This is an R Markdown document to evaluate the model simulation results for the new EucFACE multi-model intercomparison project, based on mass balance checks and validation datasets. 
 
-
-
+\
 To use this Markdown, please create two folders within this repository and place the relevant data files into each folder. 
 
 - Create a folder "simulation_output", and place the model simulation results into this folder (note, only the file containing ambient treatment over the period of 2012 - 2019).
@@ -51,13 +52,14 @@ To use this Markdown, please create two folders within this repository and place
 - Create a folder "validation_dataset", and place the validation datasets into this folder (data can be obtained via the CloudStor link sent previously).
 
 
-
+\
 This output of this script is organized in the following order:
 
 * Step 2: Checking mass balance. This section will check mass balance of model output, including major carbon, water, nitrogen and phosphorus cycle variables.  
 * Step 3: Checking time-invariance variables against validation data. This section will check some key pools and fluxes against the validation dataset. All validation data are provided in the EucFACE parameter list file. Note that the data are either averaged over time, or one fixed value measured at one point. 
 * Step 4: Checking time-varying variables against some validation data. This section will check some temporal patterns of the simulation results against some validation datasets. 
-    
+
+\
 Finally, please note that, all checks are performed for the ambient CO2 treatment only, over the period where observations are available (i.e. 2012 - 2019). For the validation against observation dataset, please also use simulation results under the no P addition and variable climate forcing scenario. 
 
 
@@ -415,12 +417,16 @@ modDF$PWEA <- modDF$PWEA * 100
 ```
 
 
+
 ## 2. Checking mass balance
 
+\
 We will need to check mass balance for major variables first before validating the simulation results with observations. The mass balance check is performed at annual timestep. 
 
+\
 Below we check the mass balance for carbon, water, nitrogen and phopshorus variables, each with a plot. 
 
+\
 Note that, I assume that many models may not output some of these variables, and as such, the mass balance may not close without the inclusion model-specific variables. For those that are relevant, please modify the script with additional/alternative variables to try to close the mass balance. Otherwise, please indicate the reasons as to why your model does not have mass balance closure.
 
 
@@ -463,11 +469,15 @@ maxDF <- summaryBy(LAI+CL+CFR+CSTOR+NL+NFR+NSTOR+PL+NFR+PSTOR~year, data=modDF, 
 ```
 
 
+
 #### 2.1 Carbon balance
 
+\
 Now we plot carbon-related mass balance results. We check major carbon fluxes (e.g. GPP) and changes in pools.
 
+\
 Firstly, we can whether NPP + RAU = GPP. All models should get this right, but note that some models may assume a simple CUE relationship. 
+
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on GPP", fig.align="center"}
 
@@ -475,7 +485,8 @@ Firstly, we can whether NPP + RAU = GPP. All models should get this right, but n
 ### all models should get this right,
 ### but note that some models may simply assume a fixed CUE to get RAU (e.g. GDAY)
 p1<-xyplot(I(NPP+RAU)~GPP,fluxDF,
-           main='NPP+RAU~GPP',auto.key=T,
+           #main='NPP+RAU~GPP',
+           auto.key=T,
            scales=list(relation='free'),
            panel=function(...){
              panel.xyplot(...)
@@ -486,13 +497,15 @@ plot(p1)
 ```
 
 
+\
 This is an alternative way to check mass balance for GPP, that is, NEP + RECO = GPP. 
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on GPP", fig.align="center"}
 
 ### NEP + RECO = GPP
 p1<-xyplot(I(NEP+RECO)~GPP,fluxDF,
-           main='NEP+RECO~GPP',auto.key=T,
+           #main='NEP+RECO~GPP',
+           auto.key=T,
            scales=list(relation='free'),
            panel=function(...){
              panel.xyplot(...)
@@ -502,13 +515,15 @@ plot(p1)
 
 ```
 
-Ecosystem respiration (RECO) should be the sum of autotrophic and heterotrophic respiration. 
+\
+Ecosystem respiration (RECO) should be the sum of autotrophic (RAU) and heterotrophic respiration (RHET). 
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on RECO", fig.align="center"}
 
 ### RHET + RAU = RECO
 p1<-xyplot(I(RHET+RAU)~RECO,fluxDF,
-           main='RHET+RAUTO~RECO',auto.key=T,
+           #main='RHET+RAUTO~RECO',
+           auto.key=T,
            scales=list(relation='free'),
            panel=function(...){
              panel.xyplot(...)
@@ -518,8 +533,8 @@ plot(p1)
 
 ```
 
-
-This is to sum all autotrophic respiration fluxes. Note that some models may not explicitly similate individual respiratory fluxes. Hence, this mass balance check may not be closed for some models. 
+\
+This is to sum all autotrophic respiration fluxes, including RL, RW, RCR, RFR, and RGR. Note that some models may not explicitly simulate some individual respiratory fluxes. Hence, this mass balance check may not be closed for some models. 
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on RAU", fig.align="center"}
 
@@ -527,7 +542,8 @@ This is to sum all autotrophic respiration fluxes. Note that some models may not
 ### Some models may not explicitly simulate individual respiratory fluxes (e.g. GDAY)
 ### Hence, this mass balance check may not be closed for all models. 
 p1<-xyplot(I(RL+RW+RCR+RFR+RGR)~RAU,fluxDF,
-           main='RL+RW+RCR+RFR+RGR~RAU',auto.key=T,
+           #main='RL+RW+RCR+RFR+RGR~RAU',
+           auto.key=T,
            scales=list(relation='free'),
            panel=function(...){
              panel.xyplot(...)
@@ -538,6 +554,7 @@ plot(p1)
 ```
 
 
+\
 This is not a strict mass balance check, but rather, to see how LAI scales with leaf carbon pool. Given that we provided SLA, one can and should practically close the mass balance by modifying the equation in the code. 
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Scaling of LAI with CL", fig.align="center"}
@@ -545,7 +562,8 @@ This is not a strict mass balance check, but rather, to see how LAI scales with 
 ### This is not a mass balance check, but rather, to see how LAI scales with leaf carbon pool.
 ### Given that we provided SLA, we can use
 p1<-xyplot(LAI~CL,poolDF,
-           main='LAI~CL',auto.key=T,
+           #main='LAI~CL',
+           auto.key=T,
            scales=list(relation='free'),
            panel=function(...){
              panel.xyplot(...)
@@ -555,13 +573,14 @@ plot(p1)
 
 ```
 
-
-This is to check the mass balance on change in leaf carbon pool. $\Delta$CL should equals influx - outflux. Same expectation for $\Delta$CW, $\Delta$CFR, and $\Delta$CCR.
+\
+This is to check the mass balance on change in leaf carbon pool (i.e. $\Delta$CL). $\Delta$CL should equals influx - outflux, in this case, CGL+CLITIN. Same expectation for $\Delta$CW, $\Delta$CFR, and $\Delta$CCR.
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on delta CL", fig.align="center"}
 
 p1<-xyplot(I(CGL-CLITIN)~deltaCL,annDF,
-           main='CGL-CLITIN~deltaCL',auto.key=T,
+           #main='CGL-CLITIN~deltaCL',
+           auto.key=T,
            scales=list(relation='free'),
            panel=function(...){
              panel.xyplot(...)
@@ -576,7 +595,8 @@ plot(p1)
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on delta CW", fig.align="center"}
 
 p1<-xyplot(I(CGW-CWLIN)~deltaCW,annDF,
-           main='CGW-CWLIN~deltaCW',auto.key=T,
+           #main='CGW-CWLIN~deltaCW',
+           auto.key=T,
            scales=list(relation='free'),
            panel=function(...){
              panel.xyplot(...)
@@ -591,7 +611,8 @@ plot(p1)
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on delta CFR", fig.align="center"}
 
 p1<-xyplot(I(CGFR-CFRLIN)~deltaCFR,annDF,
-           main='CGFR-CFRLIN~deltaCFR',auto.key=T,
+           #main='CGFR-CFRLIN~deltaCFR',
+           auto.key=T,
            scales=list(relation='free'),
            panel=function(...){
              panel.xyplot(...)
@@ -606,7 +627,8 @@ plot(p1)
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on delta CCR", fig.align="center"}
 
 p1<-xyplot(I(CGCR-CCRLIN)~deltaCCR,annDF,
-           main='CGCR-CCRLIN~deltaCCR',auto.key=T,
+           #main='CGCR-CCRLIN~deltaCCR',
+           auto.key=T,
            scales=list(relation='free'),
            panel=function(...){
              panel.xyplot(...)
@@ -616,13 +638,14 @@ plot(p1)
 
 ```
 
-
-GPP should in theory equals to production flux and respiratory flux. Here we include reproduction flux as well, which some models don't simulate. 
+\
+GPP should in theory equals to individual production fluxes and respiratory flux. Here production fluxes include: CGL, CGFR, CGCR, CGW and CREPR, and the respiratory flux is RAU.
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on GPP", fig.align="center"}
 
 p1<-xyplot(I(RAU+CGL+CGFR+CGCR+CGW+CREPR)~GPP,annDF,
-           main='I(RAU+CGL+CGFR+CGCR+CGW+CREPR)~GPP',auto.key=T,
+           #main='I(RAU+CGL+CGFR+CGCR+CGW+CREPR)~GPP',
+           auto.key=T,
            scales=list(relation='free'),
            panel=function(...){
              panel.xyplot(...)
@@ -632,13 +655,14 @@ plot(p1)
 
 ```
 
-
-Similarly, NPP should equal to all growth fluxes. 
+\
+Similarly, NPP should equal to all growth fluxes, that is, the sum of CGL, CGFR, CGCR, CGW and CREPR.
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on NPP", fig.align="center"}
 
 p1<-xyplot(I(CGW+CGL+CGFR+CGCR+CREPR)~NPP,annDF,
-           main='I(CGW+CGL+CGFR+CGCR+CREPR)~NPP',auto.key=T,
+           #main='I(CGW+CGL+CGFR+CGCR+CREPR)~NPP',
+           auto.key=T,
            scales=list(relation='free'),
            panel=function(...){
              panel.xyplot(...)
@@ -648,13 +672,14 @@ plot(p1)
 
 ```
 
-
-This is a different way to check mass balance for NPP, in that in includes $\Delta$CSTOR. Some models don't explictly simulate CSTOR, so this mass balance may not apply. 
+\
+This is a different way to check mass balance for NPP, in that it includes $\Delta$CSTOR in addition to those growth fluxes included in the previous figure. Some models don't explictly simulate CSTOR, so this mass balance may not apply. 
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on NPP", fig.align="center"}
 
 p1<-xyplot(I(CGW+CGL+CGFR+CGCR+CREPR+deltaCSTOR)~NPP,annDF,
-           main='I(CGW+CGL+CGFR+CGCR+CREPR+deltaCSTOR)~NPP',auto.key=T,
+           #main='I(CGW+CGL+CGFR+CGCR+CREPR+deltaCSTOR)~NPP',
+           auto.key=T,
            scales=list(relation='free'),
            panel=function(...){
              panel.xyplot(...)
@@ -665,13 +690,14 @@ plot(p1)
 ```
 
 
-
-The total fine litterfall flux should be the sum of aboveground and belowground fluxes. 
+\
+Here, CFLIT = CFLITA + CFLITB. 
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on CFLIT", fig.align="center"}
 
 p1<-xyplot(I(CFLITA+CFLITB)~CFLIT,annDF,
-           main='CFLITA+CFLITB~CFLIT',auto.key=T,
+           #main='CFLITA+CFLITB~CFLIT',
+           auto.key=T,
            scales=list(relation='free'),
            panel=function(...){
              panel.xyplot(...)
@@ -681,13 +707,17 @@ plot(p1)
 
 ```
 
+\
+This mass balance equation checks the net of total influx litter and heterotrophic respiration. In theory, the net difference of these two flues should equal to the change in soil + litter pool. The full equation is: 
 
-This mass balance equation checks the net of total influx litter and heterotrophic respiration. In theory, the net difference of these two flues should equal to the change in soil + litter pool. 
+CLITIN+CWLIN+CFRLIN+CCRLIN+CREPR-RHET = $\Delta$CSOIL+$\Delta$CCLITB+$\Delta$CFLIT
+
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on delta soil", fig.align="center"}
 
 p1<-xyplot(I(CLITIN+CWLIN+CFRLIN+CCRLIN+CREPR-RHET)~I(deltaCSOIL+deltaCCLITB+deltaCFLIT),annDF,
-           main='I(CLITIN+CWLIN+CFRLIN+CCRLIN+CREPR-RHET)~I(deltaCSOIL+deltaCCLITB+deltaCFLIT)',auto.key=T,
+           #main='I(CLITIN+CWLIN+CFRLIN+CCRLIN+CREPR-RHET)~I(deltaCSOIL+deltaCCLITB+deltaCFLIT)',
+           auto.key=T,
            scales=list(relation='free'),
            panel=function(...){
              panel.xyplot(...)
@@ -701,12 +731,17 @@ plot(p1)
 
 #### 2.2. Water balance
 
-The water budget will need to be closed in order to investigate the CO2 x water interaction. Firstly, the total evapotranspiration flux should equal to total transpiration + evaporation flux. More checks to be added. 
+\
+The water budget will need to be closed in order to investigate the CO2 x water interaction. Firstly, the total evapotranspiration flux (ET) should equal to total transpiration (T) + evaporation fluxes (ES + EC). 
+
+\
+More water balance checks to be added. 
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on ET", fig.align="center"}
 
 p1<-xyplot(I(ES+EC+Transpiration)~ET,fluxDF,
-           main='ES+EC+T~ET',auto.key=T,
+           #main='ES+EC+T~ET',
+           auto.key=T,
            scales=list(relation='free'),
            panel=function(...){
              panel.xyplot(...)
@@ -720,12 +755,15 @@ plot(p1)
 
 #### 2.3. Nitrogen balance
 
-Now we plot some nitrogen balance checks. Firstly, we check $\Delta$NL, $\Delta$NW, $\Delta$NFR and $\Delta$NCR. Then we will check litterfall fluxes and changes in soil pools.  
+\
+Now we plot some nitrogen balance checks. Firstly, we check $\Delta$NL, $\Delta$NW, $\Delta$NFR and $\Delta$NCR. Here, $\Delta$NL = NGL + NLITIN - NLRETR, where NLRETR is the retranslocation flux. 
+
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on delta NL", fig.align="center"}
 
 p1<-xyplot(I(NGL-NLITIN-NLRETR)~deltaNL,annDF,
-           main='I(NGL-NLITIN-NLRETR)~deltaNL',auto.key=T,
+           #main='I(NGL-NLITIN-NLRETR)~deltaNL',
+           auto.key=T,
            scales=list(relation='free'),
            panel=function(...){
              panel.xyplot(...)
@@ -741,7 +779,8 @@ plot(p1)
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on delta NW", fig.align="center"}
 
 p1<-xyplot(I(NGW-NWLIN-NWRETR)~deltaNW,annDF,
-           main='I(NGW-NWLIN-NWRETR)~deltaNW',auto.key=T,
+           #main='I(NGW-NWLIN-NWRETR)~deltaNW',
+           auto.key=T,
            scales=list(relation='free'),
            panel=function(...){
              panel.xyplot(...)
@@ -757,7 +796,8 @@ plot(p1)
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on delta NFR", fig.align="center"}
 
 p1<-xyplot(I(NGFR-NFRLIN-NFRRETR)~deltaNFR,annDF,
-           main='I(NGFR-NFRLIN-NFRRETR)~deltaNFR',auto.key=T,
+           #main='I(NGFR-NFRLIN-NFRRETR)~deltaNFR',
+           auto.key=T,
            scales=list(relation='free'),
            panel=function(...){
              panel.xyplot(...)
@@ -773,7 +813,8 @@ plot(p1)
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on delta NCR", fig.align="center"}
 
 p1<-xyplot(I(NGCR-NCRLIN-NCRRETR)~deltaNCR,annDF,
-           main='I(NGCR-NCRLIN-NCRRETR)~deltaNCR',auto.key=T,
+           #main='I(NGCR-NCRLIN-NCRRETR)~deltaNCR',
+           auto.key=T,
            scales=list(relation='free'),
            panel=function(...){
              panel.xyplot(...)
@@ -784,12 +825,14 @@ plot(p1)
 
 ```
 
-
+\
+This is to check finelitter influx. Total NFLIT = NFLITA + NFLITB. 
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on NFLIT", fig.align="center"}
 
 p1<-xyplot(I(NFLITA+NFLITB)~NFLIT,annDF,
-           main='I(NFLITA+NFLITB)~NFLIT',auto.key=T,
+           #main='I(NFLITA+NFLITB)~NFLIT',
+           auto.key=T,
            scales=list(relation='free'),
            panel=function(...){
              panel.xyplot(...)
@@ -800,12 +843,16 @@ plot(p1)
 
 ```
 
+\
+Now, we check mass balance of total N required to support the new growth, which should euqal to the sum of nitrogen uptake and total retranslocation fluxes. The full equation is written as:
 
+NUP+NLRETR+NWRETR+NFRRETR+NCRRETR = NGL+NGFR+NGCR+NGW
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on N input and output", fig.align="center"}
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on vegetation N requirement", fig.align="center"}
 
 p1<-xyplot(I(NUP+NLRETR+NWRETR+NFRRETR+NCRRETR)~I(NGL+NGFR+NGCR+NGW),annDF,
-           main='I(NUP+NLRETR+NWRETR+NFRRETR+NCRRETR)~I(NGL+NGFR+NGCR+NGW)',auto.key=T,
+           #main='I(NUP+NLRETR+NWRETR+NFRRETR+NCRRETR)~I(NGL+NGFR+NGCR+NGW)',
+           auto.key=T,
            scales=list(relation='free'),
            panel=function(...){
              panel.xyplot(...)
@@ -816,12 +863,15 @@ plot(p1)
 
 ```
 
+\
+Some models could have a NSTOR pool, so not all nitrogen available for plant is used for growth. Here we are looking at $\Delta$NSTOR to see if it helps to close the mass balance if the figure above doesn't close its mass balance. 
 
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on delta NSTOR", fig.align="center"}
 
 p1<-xyplot(I(NUP+NLRETR+NWRETR+NFRRETR+NCRRETR-NGL-NGFR-NGCR-NGW)~deltaNSTOR,annDF,
-           main='I(NUP+NLRETR+NWRETR+NFRRETR+NCRRETR-NGL-NGFR-NGCR-NGW)~deltaNSTOR',auto.key=T,
+           #main='I(NUP+NLRETR+NWRETR+NFRRETR+NCRRETR-NGL-NGFR-NGCR-NGW)~deltaNSTOR',
+           auto.key=T,
            scales=list(relation='free'),
            panel=function(...){
              panel.xyplot(...)
@@ -832,11 +882,16 @@ plot(p1)
 
 ```
 
+\
+N fixation could also be added to plant directly. So here we are checking its effect. Full equation is: 
+
+NFIX+NUP+NLRETR+NWRETR+NFRRETR+NCRRETR = NGL+NGFR+NGCR+NGW
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on N input and output", fig.align="center"}
 
 p1<-xyplot(I(NFIX+NUP+NLRETR+NWRETR+NFRRETR+NCRRETR)~I(NGL+NGFR+NGCR+NGW),annDF,
-           main='I(NFIX+NUP+NLRETR+NWRETR+NFRRETR+NCRRETR)~I(NGL+NGFR+NGCR+NGW)',auto.key=T,
+           #main='I(NFIX+NUP+NLRETR+NWRETR+NFRRETR+NCRRETR)~I(NGL+NGFR+NGCR+NGW)',
+           auto.key=T,
            scales=list(relation='free'),
            panel=function(...){
              panel.xyplot(...)
@@ -847,12 +902,14 @@ plot(p1)
 
 ```
 
-
+\
+Similar to the above figure, we are checking if $\Delta$NSTOR helps to close the budget. 
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on N input and output", fig.align="center"}
 
 p1<-xyplot(I(NFIX+NUP+NLRETR+NWRETR+NFRRETR+NCRRETR-NGL-NGFR-NGCR-NGW)~deltaNSTOR,annDF,
-           main='I(NFIX+NUP+NLRETR+NWRETR+NFRRETR+NCRRETR-NGL-NGFR-NGCR-NGW)~deltaNSTOR',auto.key=T,
+           #main='I(NFIX+NUP+NLRETR+NWRETR+NFRRETR+NCRRETR-NGL-NGFR-NGCR-NGW)~deltaNSTOR',
+           auto.key=T,
            scales=list(relation='free'),
            panel=function(...){
              panel.xyplot(...)
@@ -863,12 +920,17 @@ plot(p1)
 
 ```
 
+\
+Now we are checking the whole ecosystem N input and output. Full equation is:
+
+NDEP+NFIX-NLEACH-NVOL = $\Delta$NL+$\Delta$NW+$\Delta$NCR+$\Delta$NFR+$\Delta$NSOIL+$\Delta$NFLIT+$\Delta$NCLITB
 
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on ecosystem N", fig.align="center"}
 
 p1<-xyplot(I(NDEP+NFIX-NLEACH-NVOL)~(I(deltaNL+deltaNW+deltaNCR+deltaNFR+deltaNSOIL+deltaNFLIT+deltaNCLITB)),annDF,
-           main='I(NDEP+NFIX-NLEACH-NVOL)~(I(deltaNL+deltaNW+deltaNCR+deltaNFR+deltaNSOIL+deltaNFLIT+deltaNCLITB))',auto.key=T,
+           #main='I(NDEP+NFIX-NLEACH-NVOL)~(I(deltaNL+deltaNW+deltaNCR+deltaNFR+deltaNSOIL+deltaNFLIT+deltaNCLITB))',
+           auto.key=T,
            scales=list(relation='free'),
            panel=function(...){
              panel.xyplot(...)
@@ -879,11 +941,16 @@ plot(p1)
 
 ```
 
+\
+A different way to check whole ecosystem N budget, as:
+
+NDEP+NFIX+NLITIN+NWLIN+NCRLIN+NFRLIN-NUP-NLEACH-NVOL = $\Delta$NSOIL+$\Delta$NFLIT+$\Delta$NCLITB
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on ecosystem N", fig.align="center"}
 
 p1<-xyplot(I(NDEP+NFIX+NLITIN+NWLIN+NCRLIN+NFRLIN-NUP-NLEACH-NVOL)~I(deltaNSOIL+deltaNFLIT+deltaNCLITB),annDF,
-           main='I(NDEP+NFIX+NLITIN+NWLIN+NCRLIN+NFRLIN-NUP-NLEACH-NVOL)~I(deltaNSOIL+deltaNFLIT+deltaNCLITB)',auto.key=T,
+           #main='I(NDEP+NFIX+NLITIN+NWLIN+NCRLIN+NFRLIN-NUP-NLEACH-NVOL)~I(deltaNSOIL+deltaNFLIT+deltaNCLITB)',
+           auto.key=T,
            scales=list(relation='free'),
            panel=function(...){
              panel.xyplot(...)
@@ -893,12 +960,18 @@ plot(p1)
 
 
 ```
+
+\
+Another way to check ecosystem N budget, by excluding NFIX:
+
+NDEP+NLITIN+NWLIN+NCRLIN+NFRLIN-NUP-NLEACH-NVOL = $\Delta$NSOIL+$\Delta$NFLIT+$\Delta$NCLITB
 
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on ecosystem N", fig.align="center"}
 
 p1<-xyplot(I(NDEP+NLITIN+NWLIN+NCRLIN+NFRLIN-NUP-NLEACH-NVOL)~I(deltaNSOIL+deltaNFLIT+deltaNCLITB),annDF,
-           main='I(NDEP+NLITIN+NWLIN+NCRLIN+NFRLIN-NUP-NLEACH-NVOL)~I(deltaNSOIL+deltaNFLIT+deltaNCLITB)',auto.key=T,
+           #main='I(NDEP+NLITIN+NWLIN+NCRLIN+NFRLIN-NUP-NLEACH-NVOL)~I(deltaNSOIL+deltaNFLIT+deltaNCLITB)',
+           auto.key=T,
            scales=list(relation='free'),
            panel=function(...){
              panel.xyplot(...)
@@ -909,11 +982,14 @@ plot(p1)
 
 ```
 
+\
+We now check the mass balance for NSOIL, which should equal to total organic and inorganic pools. 
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on soil N", fig.align="center"}
 
 p1<-xyplot(I(NPMIN+NPORG)~NSOIL,annDF,
-           main='I(NPMIN+NPORG)~NSOIL',auto.key=T,
+           #main='I(NPMIN+NPORG)~NSOIL',
+           auto.key=T,
            scales=list(relation='free'),
            panel=function(...){
              panel.xyplot(...)
@@ -928,13 +1004,17 @@ plot(p1)
 
 #### 2.4 Phosphorus balance
 
-Finally, we plot the phosphorus balance checks. 
+\
+Finally, we plot the phosphorus balance checks. The net influx - outflux should equal to the change in all ecosystem P pools: 
+
+PDEP+PWEA-PLEACH = $\Delta$PL+$\Delta$PW+$\Delta$PCR+$\Delta$PFR+$\Delta$PSOIL+$\Delta$PFLIT+$\Delta$PCLITB
 
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on P input and output", fig.align="center"}
 
 p1<-xyplot(I(PDEP+PWEA-PLEACH)~(I(deltaPL+deltaPW+deltaPCR+deltaPFR+deltaPSOIL+deltaPFLIT+deltaPCLITB)),annDF,
-           main='I(PDEP+PWEA-PLEACH)~(I(deltaPL+deltaPW+deltaPCR+deltaPFR+deltaPSOIL+deltaPFLIT+deltaPCLITB))',auto.key=T,
+           #main='I(PDEP+PWEA-PLEACH)~(I(deltaPL+deltaPW+deltaPCR+deltaPFR+deltaPSOIL+deltaPFLIT+deltaPCLITB))',
+           auto.key=T,
            scales=list(relation='free'),
            panel=function(...){
              panel.xyplot(...)
@@ -945,11 +1025,14 @@ plot(p1)
 
 ```
 
+\
+Next, we check changes in major vegetation P pools. It should equal to production flux - retranslocation flux - litterfall. 
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on delta PL", fig.align="center"}
 
 p1<-xyplot(I(PGL-PLITIN-PLRETR)~deltaPL,annDF,
-           main='I(PGL-PLITIN-PLRETR)~deltaPL',auto.key=T,
+           #main='I(PGL-PLITIN-PLRETR)~deltaPL',
+           auto.key=T,
            scales=list(relation='free'),
            panel=function(...){
              panel.xyplot(...)
@@ -964,7 +1047,8 @@ plot(p1)
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on delta PW", fig.align="center"}
 
 p1<-xyplot(I(PGW-PWLIN-PWRETR)~deltaPW,annDF,
-           main='I(PGW-PWLIN-PWRETR)~deltaPW',auto.key=T,
+           #main='I(PGW-PWLIN-PWRETR)~deltaPW',
+           auto.key=T,
            scales=list(relation='free'),
            panel=function(...){
              panel.xyplot(...)
@@ -979,7 +1063,8 @@ plot(p1)
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on delta PFR", fig.align="center"}
 
 p1<-xyplot(I(PGFR-PFRLIN-PFRRETR)~deltaPFR,annDF,
-           main='I(PGFR-PFRLIN-PFRRETR)~deltaPFR',auto.key=T,
+           #main='I(PGFR-PFRLIN-PFRRETR)~deltaPFR',
+           auto.key=T,
            scales=list(relation='free'),
            panel=function(...){
              panel.xyplot(...)
@@ -993,7 +1078,8 @@ plot(p1)
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on delta PCR", fig.align="center"}
 
 p1<-xyplot(I(PGCR-PCRLIN-PCRRETR)~deltaPCR,annDF,
-           main='I(PGCR-PCRLIN-PCRRETR)~deltaPCR',auto.key=T,
+           #main='I(PGCR-PCRLIN-PCRRETR)~deltaPCR',
+           auto.key=T,
            scales=list(relation='free'),
            panel=function(...){
              panel.xyplot(...)
@@ -1003,11 +1089,15 @@ plot(p1)
 
 
 ```
+
+\
+This is to check P litter flux. 
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on PFLIT", fig.align="center"}
 
 p1<-xyplot(I(PFLITA+PFLITB)~PFLIT,annDF,
-           main='I(PFLITA+PFLITB)~PFLIT',auto.key=T,
+           #main='I(PFLITA+PFLITB)~PFLIT',
+           auto.key=T,
            scales=list(relation='free'),
            panel=function(...){
              panel.xyplot(...)
@@ -1017,11 +1107,17 @@ plot(p1)
 
 
 ```
+
+\
+Now we check the total P required to make new vegetation: 
+
+PUP+PLRETR+PWRETR+PFRRETR+PCRRETR=PGL+PGFR+PGCR+PGW
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on P storage", fig.align="center"}
 
 p1<-xyplot(I(PUP+PLRETR+PWRETR+PFRRETR+PCRRETR)~I(PGL+PGFR+PGCR+PGW),annDF,
-           main='I(PUP+PLRETR+PWRETR+PFRRETR+PCRRETR)~I(PGL+PGFR+PGCR+PGW)',auto.key=T,
+           #main='I(PUP+PLRETR+PWRETR+PFRRETR+PCRRETR)~I(PGL+PGFR+PGCR+PGW)',
+           auto.key=T,
            scales=list(relation='free'),
            panel=function(...){
              panel.xyplot(...)
@@ -1031,11 +1127,15 @@ plot(p1)
 
 
 ```
+
+\
+This is to consider the effect of $\Delta$PSTOR. 
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on P storage", fig.align="center"}
 
 p1<-xyplot(I(PUP+PLRETR+PWRETR+PFRRETR+PCRRETR-PGL-PGFR-PGCR-PGW)~deltaPSTOR,annDF,
-           main='I(PUP+PLRETR+PWRETR+PFRRETR+PCRRETR-PGL-PGFR-PGCR-PGW)~deltaPSTOR',auto.key=T,
+           #main='I(PUP+PLRETR+PWRETR+PFRRETR+PCRRETR-PGL-PGFR-PGCR-PGW)~deltaPSTOR',
+           auto.key=T,
            scales=list(relation='free'),
            panel=function(...){
              panel.xyplot(...)
@@ -1045,11 +1145,17 @@ plot(p1)
 
 
 ```
+
+\
+This is to check whole ecosystem P flux, which means that total in - out = net change:
+
+PDEP+PWEA+PLITIN+PWLIN+PCRLIN+PFRLIN-PUP-PLEACH = $\Delta$PSOIL+$\Delta$FLIT+$\Delta$PCLITB
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on P storage", fig.align="center"}
 
 p1<-xyplot(I(PDEP+PWEA+PLITIN+PWLIN+PCRLIN+PFRLIN-PUP-PLEACH)~I(deltaPSOIL+deltaPFLIT+deltaPCLITB),annDF,
-           main='I(PDEP+PWEA+PLITIN+PWLIN+PCRLIN+PFRLIN-PUP-PLEACH)~I(deltaPSOIL+deltaPFLIT+deltaPCLITB)',auto.key=T,
+           #main='I(PDEP+PWEA+PLITIN+PWLIN+PCRLIN+PFRLIN-PUP-PLEACH)~I(deltaPSOIL+deltaPFLIT+deltaPCLITB)',
+           auto.key=T,
            scales=list(relation='free'),
            panel=function(...){
              panel.xyplot(...)
@@ -1059,11 +1165,15 @@ plot(p1)
 
 
 ```
+
+\
+Now to check a basic mass balance on soil P. 
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on P soil", fig.align="center"}
 
 p1<-xyplot(I(PPMIN+PPORG)~PSOIL,annDF,
-           main='I(PPMIN+PPORG)~PSOIL',auto.key=T,
+           #main='I(PPMIN+PPORG)~PSOIL',
+           auto.key=T,
            scales=list(relation='free'),
            panel=function(...){
              panel.xyplot(...)
@@ -1073,11 +1183,16 @@ plot(p1)
 
 
 ```
+
+\
+Inorganic P pool in soils: PLAB+PSEC+POCC+PPAR=PPMIN
+
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on inorganic P", fig.align="center"}
 
 p1<-xyplot(I(PLAB+PSEC+POCC+PPAR)~PPMIN,annDF,
-           main='I(PLAB+PSEC+POCC+PPAR)~PPMIN',auto.key=T,
+           #main='I(PLAB+PSEC+POCC+PPAR)~PPMIN',
+           auto.key=T,
            scales=list(relation='free'),
            panel=function(...){
              panel.xyplot(...)
@@ -1088,10 +1203,15 @@ plot(p1)
 
 ```
 
+
+\
+A different way to check PSOIL. 
+
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on inorganic P", fig.align="center"}
 
 p1<-xyplot(I(PLAB+PSEC+POCC+PPAR+PPORG)~PSOIL,annDF,
-           main='I(PLAB+PSEC+POCC+PPAR+PPORG)~PSOIL',auto.key=T,
+           #main='I(PLAB+PSEC+POCC+PPAR+PPORG)~PSOIL',
+           auto.key=T,
            scales=list(relation='free'),
            panel=function(...){
              panel.xyplot(...)
@@ -1109,8 +1229,10 @@ plot(p1)
 
 #### Major carbon pools
 
+\
 Firstly we will check the major carbon pools, as these data are provided in Table 1 in the parameter file. 
 
+\
 Note that:
       
 * CFR combines fineroot (< 2 mm in diameter) and intermediate root (2-3 mm) in the observation;
@@ -1118,8 +1240,9 @@ Note that:
 * CL includes overstorey leaf only in the observation;
 * CW includes branch and stem in the model simulation.
 
-
+\
 Now we make the tables to compare simulation results with observation data.
+
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 
@@ -1155,6 +1278,7 @@ knitr::kable(vegDF, caption = "Validation of major carbon pools")
 
 #### Allocation coefficients
 
+\
 Allocation coefficients are calculated different comparing the data and the model. In the EucFACE data, allocation to leaf includes allocation to overstorey and understorey leaves, and allocation to root includes allocation to overstorey and understorey roots. In the data, there is also an additional allocation coefficient to Mycorrhizae, which can be grouped with allocation to root as total belowground allocation. This total belowground allocation is comparable to allocation coefficient to root in the model. 
 
 
@@ -1191,6 +1315,7 @@ knitr::kable(allocDF, caption = "Validation of major carbon pools")
 
 #### Major carbon fluxes
 
+\
 We now summarize major carbon fluxes (e.g. GPP, NPP, NEP, CUE).
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
@@ -1224,6 +1349,7 @@ knitr::kable(outDF, caption = "Validation of major carbon fluxes")
 
 #### Major nutrient pools and fluxes
 
+\
 Below we provide several variables to help constrain the nutrient cycles in the model, namely labile inorganic P pool (PLAB), soil net N and P mineralization rate (NMIN and PMIN), plant N and P uptake (NUP and PUP), and soil N and P leaching (NLEACH and PLEACH). We did not include total soil P pool, because its size could be misleading given that the majority of the P in the soil is stored as occluded form unavailable for plants. Note that in the table below, simulated results are for top 30 cm of the soil, but observed data are for top 10 cm only. 
     
 
@@ -1264,6 +1390,7 @@ knitr::kable(pDF, caption = "Validation of key nutrient cycle variables")
 
 #### Stoichiometry
 
+\
 Below we check major C:N, C:P, and N:P ratios. 
 
 
@@ -1330,8 +1457,9 @@ knitr::kable(stDF, caption = "Validation of key stoichiometry")
 ```
 
 
-#### Nutreint retranslocation coefficients
+#### Nutrient retranslocation coefficients
 
+\
 We only asked for the leaf N and P retranslocation flux in the output protocol. To obtain the coefficient, we will need the production flux. 
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
@@ -1364,14 +1492,14 @@ knitr::kable(rtDF, caption = "Validation of leaf retranslocation coefficients")
 
 
 
-
-
 ## Checking time-varying variables against validation data
 
 #### Leaf area index
 
+\
 A time series LAI data over the period of 2012 - 2016 was provided for validation purpose. Models should aim to match the magnitude of LAI as well as its temporal patterns. 
 
+\
 The temporal pattern based on all available data is provided in the figure below:
 
 ```{r, fig.cap = "Time-varying LAI plot", fig.align="center", echo=FALSE, message=FALSE, warning=FALSE}
@@ -1415,6 +1543,7 @@ p1 <- ggplot(testDF1, aes(x=Date)) +
 
 ```
 
+\
 Now we can check the goodness-of-fit of all days where observation is available. A perfect fit should have slope of 1 and intercept of 0. 
 
 ```{r, fig.cap = "Goodness of fit for LAI plot", fig.align="center", echo=FALSE, message=FALSE, warning=FALSE}
@@ -1448,6 +1577,7 @@ p1 <- ggplot(testDF2, aes(x=lai, y=LAI)) +
 
 ```
 
+\
 The linear fit results are: 
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
@@ -1459,8 +1589,11 @@ print(paste0("intercept = ", round(coef(lm.fit)[1], 2)))
 
 
 #### Soil respiration
+
+\
 The measured soil respiration rate represents both root and soil heterotrophic respiration flux. It was up-scaled from the LICOR chambers by averaging all measurements within the same treatment. It was a model product, in that we used DAMM model to establish relationship with soil temperature, and then obtained the daily rate throughout the year. Nevertheless, we expect modelers to provide a good match simulation to this dataset. 
 
+\
 Note that we didn't ask the modelers to output soil respiration flux in the output protocol. Please add heterotrophic respiration and root respiration to obtain soil respiration flux. Also, please note that, the unit for all carbon fluxes is given in the output protocol, as gC m-2 d-1. 
 
 
@@ -1516,6 +1649,8 @@ p1 <- ggplot(testDF1, aes(x=Date)) +
 
 
 #### Soil water content
+
+\
 Soil water content is more complex and non-linear, depending on many model-specific settings. The validation dataset only serves as a guidance to evaluate your model performance. 
 
 
