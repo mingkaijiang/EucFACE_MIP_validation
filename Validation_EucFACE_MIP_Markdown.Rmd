@@ -61,7 +61,7 @@ This output of this script is organized in the following order:
 
 \
 Finally, please note that, all checks are performed for the ambient CO2 treatment only, over the period where observations are available (i.e. 2012 - 2019). For the validation against observation dataset, please also use simulation results under the no P addition and variable climate forcing scenario. 
-
+\
 
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
@@ -428,7 +428,7 @@ Below we check the mass balance for carbon, water, nitrogen and phopshorus varia
 
 \
 Note that, I assume that many models may not output some of these variables, and as such, the mass balance may not close without the inclusion model-specific variables. For those that are relevant, please modify the script with additional/alternative variables to try to close the mass balance. Otherwise, please indicate the reasons as to why your model does not have mass balance closure.
-
+\
 
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
