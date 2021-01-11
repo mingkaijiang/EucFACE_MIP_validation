@@ -98,7 +98,7 @@ translate_GDAY_simulation_into_EucFACE_MIP_format <- function(met.path,
     myDF$cproot <- myDF$cproot * tonnes_per_ha_to_g_m2
     myDF$cpcroot <- myDF$cpcroot * tonnes_per_ha_to_g_m2
     
-    
+    myDF$root_exc <- myDF$root_exc * tonnes_per_ha_to_g_m2
     
     # nitrogen pools and fluxes
     myDF$shootn <- myDF$shootn * tonnes_per_ha_to_g_m2
@@ -236,8 +236,8 @@ translate_GDAY_simulation_into_EucFACE_MIP_format <- function(met.path,
     names(myDF)[names(myDF) == "auto_resp"] <- "RAU"
     names(myDF)[names(myDF) == "hetero_resp"] <- "RHET"
     
-    myDF$CEX <- NA # replace
-
+    names(myDF)[names(myDF) == "root_exc"] <- "CEX"
+    
     myDF$RECO <- myDF$RAU + myDF$RHET
     myDF$CVOC <- 0.0
     myDF$RL <- 0.0
@@ -316,7 +316,7 @@ translate_GDAY_simulation_into_EucFACE_MIP_format <- function(met.path,
     names(myDF)[names(myDF) == "nproot"] <- "NGFR"
     names(myDF)[names(myDF) == "npcroot"] <- "NGCR"
     
-    myDF$NGW <- myDF$npbranch + myDF$npstemimm + myDF$npstemmob  # replace 
+    myDF$NGW <- myDF$npbranch + myDF$npstemimm + myDF$npstemmob  
 
     names(myDF)[names(myDF) == "deadleafn"] <- "NLITIN"
     names(myDF)[names(myDF) == "deadcrootn"] <- "NCRLIN"
@@ -361,7 +361,7 @@ translate_GDAY_simulation_into_EucFACE_MIP_format <- function(met.path,
     names(myDF)[names(myDF) == "pproot"] <- "PGFR"
     names(myDF)[names(myDF) == "ppcroot"] <- "PGCR"
     
-    myDF$PGW <- myDF$ppbranch + myDF$ppstemimm + myDF$ppstemmob  # replace 
+    myDF$PGW <- myDF$ppbranch + myDF$ppstemimm + myDF$ppstemmob  
     
     names(myDF)[names(myDF) == "deadleafp"] <- "PLITIN"
     names(myDF)[names(myDF) == "deadcrootp"] <- "PCRLIN"
