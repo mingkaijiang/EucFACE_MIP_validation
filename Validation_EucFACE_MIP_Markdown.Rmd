@@ -1380,7 +1380,42 @@ Soil water content is more complex and non-linear, depending on many model-speci
 ### validation Rsoil
 swcDF <- read.csv("validation_dataset/EucFACE_SWC_2012_2019.csv")
 
-### more to be filled. 
+### convert unit from VWC to kg H2O m-2
+swcDF$WC_kg_m3 <- swcDF$VWC * swcDF$Bulk.den
+
+swcDF$multiplier <- ifelse(swcDF$Depth%in%c(25,50,75,100,125,150), 0.25, 0.5)
+
+swcDF$WC_kg_m2 <- swcDF$WC_kg_m3 * swcDF$multiplier
+
+sumDF <- summaryBy(WC_kg_m2~Location+Date, FUN=sum, data=swcDF, keep.names=T, na.rm=T)
+
+### process simulation data
+subDF <- modDF[,c("YEAR", "DOY", "Date", "SW", "SWPA")]
+
+plotDF <- merge(subDF, sumDF, by="Date", all=T)
+
+
+### plot all data
+p1 <- ggplot(plotDF, aes(x=Date)) +
+        geom_point(aes(y=WC_kg_m2, color="obs"))+
+        geom_point(aes(y=SWPA, color="sim"), lwd = 1) +
+        theme_linedraw() +
+        theme(panel.grid.minor=element_blank(),
+              axis.title.x = element_text(size=14), 
+              axis.text.x = element_text(size=12),
+              axis.text.y=element_text(size=12),
+              axis.title.y=element_text(size=14),
+              legend.text=element_text(size=12),
+              legend.title=element_text(size=12),
+              panel.grid.major=element_blank(),
+              plot.title = element_text(size = 10, face = "bold"),
+              legend.position="right")+
+        ylab("Soil water (kg m-2 d-1)")+
+        scale_colour_manual("", 
+                            values = c("obs"="black", "sim"="red2"),
+                            labels = c("Observed", "Simulated"))
+
+    plot(p1)
 
 
 ```
