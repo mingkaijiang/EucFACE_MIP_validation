@@ -17,6 +17,11 @@ translate_GDAY_simulation_into_EucFACE_MIP_format <- function(met.path,
     sim.path <- "/Users/mingkaijiang/Documents/Research/Projects/EucFACE_Modeling/GDAY-EucFACE/outputs"
     out.path <- "simulation_output"
     
+    ### prepare a dataframe to assign correct file naming
+    #namDF <- data.frame()
+    
+    
+    
     ### read in met file
     metDF <- read.csv(paste0(met.path, "/EUC_met_DRY_AMB_daily_2012_2019.csv"), skip=4)
     names(metDF)[1] <- "year"
@@ -178,11 +183,6 @@ translate_GDAY_simulation_into_EucFACE_MIP_format <- function(met.path,
     myDF$ploss <- myDF$ploss * tonnes_per_ha_to_g_m2
     myDF$p_slow_biochemical <- myDF$p_slow_biochemical * tonnes_per_ha_to_g_m2
 
-    myDF$structsurfp <- myDF$structsurfp * tonnes_per_ha_to_g_m2
-    myDF$structsoilp <- myDF$structsoilp * tonnes_per_ha_to_g_m2
-    myDF$metabsurfp <- myDF$metabsurfp * tonnes_per_ha_to_g_m2
-    myDF$metabsoilp <- myDF$metabsoilp * tonnes_per_ha_to_g_m2
-    myDF$plittrelease <- myDF$plittrelease * tonnes_per_ha_to_g_m2
     
     myDF$leafretransp <- myDF$leafretransp * tonnes_per_ha_to_g_m2
     
@@ -215,23 +215,179 @@ translate_GDAY_simulation_into_EucFACE_MIP_format <- function(met.path,
     names(myDF)[names(myDF) == "tair"] <- "TAIR"
     names(myDF)[names(myDF) == "tsoil"] <- "TSOIL"
     names(myDF)[names(myDF) == "vpd"] <- "VPD"
-    names(myDF)[names(myDF) == "pawater_root"] <- "SW"
+    myDF$SW <- myDF$pawater_root
     names(myDF)[names(myDF) == "pawater_root"] <- "SWPA"
     names(myDF)[names(myDF) == "ndep"] <- "NDEP"
     names(myDF)[names(myDF) == "nfix"] <- "NFIX"
     names(myDF)[names(myDF) == "pdep"] <- "PDEP"
     names(myDF)[names(myDF) == "pfert"] <- "PFERT"
     
+
+    myDF$LE <- NA # replace 
+    myDF$SH <- NA # replace 
+    names(myDF)[names(myDF) == "apar"] <- "APARd"
+
+    
     
     ## carbon variables
     names(myDF)[names(myDF) == "nep"] <- "NEP"
     names(myDF)[names(myDF) == "gpp"] <- "GPP"
     names(myDF)[names(myDF) == "npp"] <- "NPP"
-    #names(myDF)[names(myDF) == "cex"] <- "CEX"
-    #names(myDF)[names(myDF) == "cvoc"] <- "CVOC"
+    names(myDF)[names(myDF) == "auto_resp"] <- "RAU"
+    names(myDF)[names(myDF) == "hetero_resp"] <- "RHET"
+    
+    myDF$CEX <- NA # replace
+
+    myDF$RECO <- myDF$RAU + myDF$RHET
+    myDF$CVOC <- 0.0
+    myDF$RL <- 0.0
+    myDF$RW <- 0.0
+    myDF$RCR <- 0.0
+    myDF$RFR <- 0.0
+    myDF$RGR <- 0.0
+    
+    names(myDF)[names(myDF) == "shoot"] <- "CL"
+    names(myDF)[names(myDF) == "root"] <- "CFR"
+    names(myDF)[names(myDF) == "croot"] <- "CCR"
+    
+    myDF$CW <- myDF$branch + myDF$stem
+    names(myDF)[names(myDF) == "cstore"] <- "CSTOR"
+    
+    names(myDF)[names(myDF) == "litterc"] <- "CFLIT"
+    names(myDF)[names(myDF) == "littercag"] <- "CFLITA"
+    names(myDF)[names(myDF) == "littercbg"] <- "CFLITB"
+    
+    myDF$CCLITB <- 0.0
+    
+    names(myDF)[names(myDF) == "soilc"] <- "CSOIL"
+    
+    names(myDF)[names(myDF) == "cpleaf"] <- "CGL"
+    names(myDF)[names(myDF) == "cproot"] <- "CGFR"
+    names(myDF)[names(myDF) == "cpcroot"] <- "CGCR"
+    
+    myDF$CGW <- myDF$cpbranch + myDF$cpstem
+    myDF$CREPR <- 0.0
+    
+    names(myDF)[names(myDF) == "deadleaves"] <- "CLITIN"
+    names(myDF)[names(myDF) == "deadcroots"] <- "CCRLIN"
+    names(myDF)[names(myDF) == "deadroots"] <- "CFRLIN"
+    
+    myDF$CWLIN <- myDF$deadbranch + myDF$deadstems
+    
+    names(myDF)[names(myDF) == "lai"] <- "LAI"
+    myDF$LMA <- myDF$CL / myDF$LAI
+    
+    
+    ## water variables
+    names(myDF)[names(myDF) == "et"] <- "ET"
+    names(myDF)[names(myDF) == "transpiration"] <- "TRANS"
+    names(myDF)[names(myDF) == "soil_evap"] <- "ES"
+    names(myDF)[names(myDF) == "canopy_evap"] <- "EC"
+    names(myDF)[names(myDF) == "runoff"] <- "RO"
+    myDF$DRAIN <- 0.0
+    
+    names(myDF)[names(myDF) == "gs_mol_m2_sec"] <- "GCd"
+    names(myDF)[names(myDF) == "ga_mol_m2_sec"] <- "GAd"
+    
+    myDF$GBd <- NA  # replace 
+    
+    names(myDF)[names(myDF) == "wtfac_root"] <- "Betad"
     
     
     
+    
+    ## nitrogen variables
+    names(myDF)[names(myDF) == "shootn"] <- "NL"
+    names(myDF)[names(myDF) == "rootn"] <- "NFR"
+    names(myDF)[names(myDF) == "crootn"] <- "NCR"
+    
+    myDF$NW <- myDF$branchn + myDF$stemn
+    names(myDF)[names(myDF) == "nstore"] <- "NSTOR"
+    
+    names(myDF)[names(myDF) == "litternag"] <- "NFLITA"
+    names(myDF)[names(myDF) == "litternbg"] <- "NFLITB"
+    myDF$NFLIT <- myDF$NFLITA + myDF$NFLITB
+    
+    myDF$NCLITB <- 0.0
+    
+    names(myDF)[names(myDF) == "soiln"] <- "NSOIL"
+    
+    names(myDF)[names(myDF) == "npleaf"] <- "NGL"
+    names(myDF)[names(myDF) == "nproot"] <- "NGFR"
+    names(myDF)[names(myDF) == "npcroot"] <- "NGCR"
+    
+    myDF$NGW <- myDF$npbranch + myDF$npstemimm + myDF$npstemmob  # replace 
+
+    names(myDF)[names(myDF) == "deadleafn"] <- "NLITIN"
+    names(myDF)[names(myDF) == "deadcrootn"] <- "NCRLIN"
+    names(myDF)[names(myDF) == "deadrootn"] <- "NFRLIN"
+    
+    myDF$NWLIN <- myDF$deadbranchn + myDF$deadstemn
+    
+    myDF$NCON <- NA  # replace 
+    
+    names(myDF)[names(myDF) == "inorgn"] <- "NPMIN"
+    myDF$NPORG <- myDF$activesoiln + myDF$slowsoiln + myDF$passivesoiln
+    
+    names(myDF)[names(myDF) == "nuptake"] <- "NUP"
+    names(myDF)[names(myDF) == "ngross"] <- "NGMIN"
+    names(myDF)[names(myDF) == "nmineralisation"] <- "NMIN"
+    myDF$NVOL <- 0.0
+    names(myDF)[names(myDF) == "nloss"] <- "NLEACH"
+    names(myDF)[names(myDF) == "leafretransn"] <- "NLRETR"
+    myDF$NWRETR <- 0.0
+    myDF$NCRRETR <- 0.0
+    myDF$NFRRETR <- 0.0
+    
+    
+    ## phosphorus variables
+    names(myDF)[names(myDF) == "shootp"] <- "PL"
+    names(myDF)[names(myDF) == "rootp"] <- "PFR"
+    names(myDF)[names(myDF) == "crootp"] <- "PCR"
+    
+    myDF$PW <- myDF$branchp + myDF$stemp
+    names(myDF)[names(myDF) == "pstore"] <- "PSTOR"
+    
+    names(myDF)[names(myDF) == "litterpag"] <- "PFLITA"
+    names(myDF)[names(myDF) == "litterpbg"] <- "PFLITB"
+    myDF$PFLIT <- myDF$PFLITA + myDF$PFLITB
+    
+    myDF$PCLITB <- 0.0
+    
+    names(myDF)[names(myDF) == "soilp"] <- "PSOIL"
+    
+    
+    names(myDF)[names(myDF) == "ppleaf"] <- "PGL"
+    names(myDF)[names(myDF) == "pproot"] <- "PGFR"
+    names(myDF)[names(myDF) == "ppcroot"] <- "PGCR"
+    
+    myDF$PGW <- myDF$ppbranch + myDF$ppstemimm + myDF$ppstemmob  # replace 
+    
+    names(myDF)[names(myDF) == "deadleafp"] <- "PLITIN"
+    names(myDF)[names(myDF) == "deadcrootp"] <- "PCRLIN"
+    names(myDF)[names(myDF) == "deadrootp"] <- "PFRLIN"
+    
+    myDF$PWLIN <- myDF$deadbranchp + myDF$deadstemp
+    
+    names(myDF)[names(myDF) == "inorgp"] <- "PPMIN"
+    myDF$PPORG <- myDF$activesoilp + myDF$slowsoilp + myDF$passivesoilp
+    
+    names(myDF)[names(myDF) == "puptake"] <- "PUP"
+    names(myDF)[names(myDF) == "pgross"] <- "PGMIN"
+    names(myDF)[names(myDF) == "pmineralisation"] <- "PMIN"
+    names(myDF)[names(myDF) == "p_slow_biochemical"] <- "PBIOCHMIN"
+    
+    names(myDF)[names(myDF) == "ploss"] <- "PLEACH"
+    names(myDF)[names(myDF) == "leafretransp"] <- "PLRETR"
+    myDF$PWRETR <- 0.0
+    myDF$PCRRETR <- 0.0
+    myDF$PFRRETR <- 0.0
+    
+    names(myDF)[names(myDF) == "inorglabp"] <- "PLAB"
+    myDF$PSEC <- myDF$inorgsorbp + myDF$inorgssorbp
+    names(myDF)[names(myDF) == "inorgoccp"] <- "POCC"
+    names(myDF)[names(myDF) == "inorgparp"] <- "PPAR"
+
     
     ### end changing variable names
     ############################################
@@ -240,7 +396,31 @@ translate_GDAY_simulation_into_EucFACE_MIP_format <- function(met.path,
     # empty
     # empty
     # empty
+    ############################################
+    ### start preparing output
     
+    outDF <- myDF[,c("YEAR","DOY","CO2","PREC","PAR","TAIR","TSOIL","VPD","SW",
+                     "SWPA","NDEP","NEP","GPP","NPP","CEX","CVOC","RECO","RAU",
+                     "RL","RW","RCR","RFR","RGR","RHET","ET","TRANS","ES","EC",
+                     "RO","DRAIN","LE","SH","CL","CW","CCR","CFR","CSTOR","CFLIT",
+                     "CFLITA","CFLITB","CCLITB","CSOIL","CGL","CGW","CGCR","CGFR",
+                     "CREPR","CLITIN","CCRLIN","CFRLIN","CWLIN","LAI","LMA","NCON",
+                     "NL","NW","NCR","NFR","NSTOR","NFLIT","NFLITA","NFLITB","NCLITB",
+                     "NSOIL","NPMIN","NPORG","NFIX","NGL","NGW","NGCR","NGFR","NLITIN",
+                     "NCRLIN","NFRLIN","NWLIN","NUP","NGMIN","NMIN","NVOL","NLEACH",
+                     "NLRETR","NWRETR","NCRRETR","NFRRETR","APARd","GCd","GAd","GBd",
+                     "Betad","PL","PW","PCR","PFR","PSTOR","PFLIT","PFLITA","PFLITB",
+                     "PCLITB","PSOIL","PLAB","PSEC","POCC","PPAR","PPMIN","PPORG",
+                     "PLITIN","PCRLIN","PFRLIN","PWLIN","PUP","PGMIN","PMIN",
+                     "PBIOCHMIN","PLEACH","PGL","PGW","PGCR","PGFR","PLRETR","PWRETR",
+                     "PCRRETR","PFRRETR","PDEP","PFERT")]
+    
+    write.csv(outDF, paste0(out.path, "/EUC_GDAYP_OBS_VAR_AMB_NOP_D.csv"),
+              row.names=F)
+    
+    
+    ### end preparing output
+    ############################################
     
     
     ### End
