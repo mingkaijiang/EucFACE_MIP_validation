@@ -13,11 +13,11 @@ translate_GDAY_simulation_into_EucFACE_MIP_format <- function(met.path,
     #######################################################################################################
     
     ### set-up paths locally
-    met.path <- "/Users/mingkaijiang/Documents/Research/Projects/EucFACE_Modeling/GDAY-EucFACE/met_data"
-    sim.path <- "/Users/mingkaijiang/Documents/Research/Projects/EucFACE_Modeling/GDAY-EucFACE/outputs"
-    out.path <- "simulation_output"
+    #met.path <- "/Users/mingkaijiang/Documents/Research/Projects/EucFACE_Modeling/GDAY-EucFACE/met_data"
+    #sim.path <- "/Users/mingkaijiang/Documents/Research/Projects/EucFACE_Modeling/GDAY-EucFACE/outputs"
+    #out.path <- "simulation_output"
     
-    ### prepare a dataframe to assign correct file naming
+    ### prepare a dataframe to assign correct file names - to be added
     #namDF <- data.frame()
     
     
