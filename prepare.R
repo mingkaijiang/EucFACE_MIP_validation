@@ -1,13 +1,13 @@
 #### prepare
 #### Create data folder
-#output.folders <- c("outputs",
-#                    "outputs")
+#output.folders <- c(paste0(getwd(), "/validation_output"),
+#                    paste0(getwd(), "/validation_output"))
 
 #### Create output folder
 #for (y in output.folders) {
-#    if(!dir.exists(y)) {
-#        dir.create(y, showWarnings = FALSE)
-#    }
+    if(!dir.exists(paste0(getwd(), "/validation_output"))) {
+        dir.create(paste0(getwd(), "/validation_output"), showWarnings = FALSE)
+    }
 #}
 
 
