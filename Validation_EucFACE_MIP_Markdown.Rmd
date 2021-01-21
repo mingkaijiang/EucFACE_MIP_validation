@@ -1222,7 +1222,7 @@ knitr::kable(rtDF, caption = "Validation of leaf retranslocation coefficients")
 #### Leaf area index
 
 \
-A time series LAI data over the period of 2012 - 2016 was provided for validation purpose. Models should aim to match the magnitude of LAI as well as its temporal patterns. 
+A time series LAI data over the period of 2012 - 2016 was provided for validation purpose. Models should aim to match the magnitude of LAI as well as its temporal patterns. Note that in the observed dataset, the LAI data is really indicative of the vegetation structure as well as canopy leaf area. 
 
 \
 The temporal pattern based on all available data is provided in the figure below:

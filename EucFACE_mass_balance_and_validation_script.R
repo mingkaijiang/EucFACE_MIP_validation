@@ -1108,11 +1108,178 @@ for (i in 1:9) {
 dev.off()
 
 
-
-################# allocation coefficient  ####################
 ##########################################################################
 #### Step 4. Time-varying validation
 
+#### Leaf area index
+### A time series LAI data over the period of 2012 - 2016 was provided for validation purpose. 
+### Models should aim to match the magnitude of LAI as well as its temporal patterns. 
+### Note that in the observed dataset, the LAI data is really indicative of the vegetation structure as well as canopy leaf area. 
+### validation LAI
+laiDF <- read.csv("validation_dataset/EucFACE_LAI_2012_2016.csv")
+laiDF <- laiDF[laiDF$Trt=="aCO2",]
+laiDF$Date <- as.Date(as.character(laiDF$Date))
+
+### simulated LAI, subset
+subDF <- subset(modDF, YEAR <= 2016)
+subDF <- subDF[,c("YEAR", "DOY", "Date", "LAI")]
+subDF$Date <- as.Date(as.character(subDF$Date))
+
+### merge the two dataset
+testDF1 <- merge(subDF, laiDF, by="Date", all=T)
+
+### plot all data
+p1 <- ggplot(testDF1, aes(x=Date)) +
+    geom_errorbar(aes(ymin=lai-laiSD,
+                      ymax=lai+laiSD, color="obs"))+
+    geom_line(aes(y=LAI, color="sim"), lwd = 1) +
+    theme_linedraw() +
+    theme(panel.grid.minor=element_blank(),
+          axis.title.x = element_text(size=14), 
+          axis.text.x = element_text(size=12),
+          axis.text.y=element_text(size=12),
+          axis.title.y=element_text(size=14),
+          legend.text=element_text(size=12),
+          legend.title=element_text(size=12),
+          panel.grid.major=element_blank(),
+          plot.title = element_text(size = 10, face = "bold"),
+          legend.position="right")+
+    ylab("LAI")+
+    scale_colour_manual("", 
+                        values = c("obs"="black", "sim"="red2"),
+                        labels = c("Observed", "Simulated"))
+
+### Now we can check the goodness-of-fit of all days where observation is available. 
+### A perfect fit should have slope of 1 and intercept of 0. 
+### subset only days where observations are available
+testDF2 <- testDF1[complete.cases(testDF1$lai),]
+
+lm.fit <- lm(testDF2$LAI~testDF2$lai)
+
+### plot all data
+p2 <- ggplot(testDF2, aes(x=lai, y=LAI)) +
+    geom_point()+
+    theme_linedraw() +
+    geom_smooth(method="lm")+
+    theme(panel.grid.minor=element_blank(),
+          axis.title.x = element_text(size=14), 
+          axis.text.x = element_text(size=12),
+          axis.text.y=element_text(size=12),
+          axis.title.y=element_text(size=14),
+          legend.text=element_text(size=12),
+          legend.title=element_text(size=12),
+          panel.grid.major=element_blank(),
+          plot.title = element_text(size = 10, face = "bold"),
+          legend.position="right")+
+    ylab("simulated LAI")+
+    xlab("observed LAI")
+
+
+#### Soil respiration
+### The measured soil respiration rate represents both root 
+### and soil heterotrophic respiration flux. 
+### It was up-scaled from the LICOR chambers by averaging 
+### all measurements within the same treatment. 
+### It was a model product, 
+### in that we used DAMM model to establish relationship with soil temperature, 
+### and then obtained the daily rate throughout the year. 
+### Nevertheless, we expect modelers to provide a good match simulation to this dataset. 
+
+### Note that we didn't ask the modelers to output soil respiration flux in the output protocol. 
+### Please add heterotrophic respiration and root respiration to obtain soil respiration flux. 
+### Also, please note that, the unit for all carbon fluxes is given in the output protocol, as gC m-2 d-1. 
+### validation Rsoil
+rsoilDF <- read.csv("validation_dataset/EucFACE_daily_soil_respiration_flux_2013_2015.csv")
+rsoilDF <- rsoilDF[rsoilDF$Trt=="aCO2",]
+rsoilDF$Date <- as.Date(as.character(rsoilDF$Date))
+
+### convert unit, from mg m-2 d-1 to g m-2 d-1
+rsoilDF$Rsoil_g_m2_d <- rsoilDF$Rsoil_mg_m2_d / 1000.0
+rsoilDF$RsoilSD_g <- rsoilDF$RsoilSD / 1000.0
+
+
+### simulated Rsoil, subset
+subDF <- subset(modDF, YEAR <= 2015 & YEAR > 2012)
+subDF <- subDF[,c("YEAR", "DOY", "Date", "RHET", "RCR", "RFR")]
+subDF$Date <- as.Date(as.character(subDF$Date))
+subDF$Rsoil_sim <- with(subDF, RHET+RCR+RFR)
+
+
+
+### merge the two dataset
+testDF1 <- merge(subDF, rsoilDF, by="Date", all=T)
+
+### plot all data
+p3 <- ggplot(testDF1, aes(x=Date)) +
+    geom_errorbar(aes(ymin=Rsoil_g_m2_d-RsoilSD_g,
+                      ymax=Rsoil_g_m2_d+RsoilSD_g, color="obs"))+
+    geom_line(aes(y=Rsoil_sim, color="sim"), lwd = 1) +
+    theme_linedraw() +
+    theme(panel.grid.minor=element_blank(),
+          axis.title.x = element_text(size=14), 
+          axis.text.x = element_text(size=12),
+          axis.text.y=element_text(size=12),
+          axis.title.y=element_text(size=14),
+          legend.text=element_text(size=12),
+          legend.title=element_text(size=12),
+          panel.grid.major=element_blank(),
+          plot.title = element_text(size = 10, face = "bold"),
+          legend.position="right")+
+    ylab("Soil respiration flux")+
+    scale_colour_manual("", 
+                        values = c("obs"="black", "sim"="red2"),
+                        labels = c("Observed", "Simulated"))
+
+
+#### Soil water content
+### Soil water content is more complex and non-linear, 
+### depending on many model-specific settings. 
+### The validation dataset only serves as a guidance to evaluate your model performance. 
+### validation Rsoil
+swcDF <- read.csv("validation_dataset/EucFACE_SWC_2012_2019.csv")
+
+### convert unit from VWC to kg H2O m-2
+swcDF$WC_kg_m3 <- swcDF$VWC * swcDF$Bulk.den
+
+swcDF$multiplier <- ifelse(swcDF$Depth%in%c(25,50,75,100,125,150), 0.25, 0.5)
+
+swcDF$WC_kg_m2 <- swcDF$WC_kg_m3 * swcDF$multiplier
+
+sumDF <- summaryBy(WC_kg_m2~Location+Date, FUN=sum, data=swcDF, keep.names=T, na.rm=T)
+
+### process simulation data
+subDF <- modDF[,c("YEAR", "DOY", "Date", "SW", "SWPA")]
+
+plotDF <- merge(subDF, sumDF, by="Date", all=T)
+
+
+### plot all data
+p4 <- ggplot(plotDF, aes(x=Date)) +
+    geom_point(aes(y=WC_kg_m2, color="obs"))+
+    geom_point(aes(y=SWPA, color="sim"), lwd = 1) +
+    theme_linedraw() +
+    theme(panel.grid.minor=element_blank(),
+          axis.title.x = element_text(size=14), 
+          axis.text.x = element_text(size=12),
+          axis.text.y=element_text(size=12),
+          axis.title.y=element_text(size=14),
+          legend.text=element_text(size=12),
+          legend.title=element_text(size=12),
+          panel.grid.major=element_blank(),
+          plot.title = element_text(size = 10, face = "bold"),
+          legend.position="right")+
+    ylab("Soil water (kg m-2 d-1)")+
+    scale_colour_manual("", 
+                        values = c("obs"="black", "sim"="red2"),
+                        labels = c("Observed", "Simulated"))
+
+
+### print plots to file, change numbering if needed
+pdf(paste0(out.dir, '/QC_Time_varying_validation_',mod.abb,'.pdf',sep=''),width=10,height=8)
+for (i in 1:4) {
+    print(get(paste("p",i,sep="")))
+}
+dev.off()
 
 ##########################################################################
 
