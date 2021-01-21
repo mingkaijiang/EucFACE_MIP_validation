@@ -604,36 +604,380 @@ dev.off()
 ### * CW includes branch and stem in the model simulation.
 
 ### create a DF to store observation data for vegetation carbon stocks
-vegDF <- data.frame(c("CL", "CW", "CFR", "CCR", "CSOIL"), NA, NA)
+vegDF <- data.frame(rep(c("CL", "CW", "CFR", "CCR", "CSOIL"), 2), 
+                    rep(c("obs", "sim"), each=5), NA, NA)
 colnames(vegDF) <- c("Variable", 
-                     "observed",
-                     "simulated")
+                     "Group",
+                     "meanvalue",
+                     "sevalue")
 
-vegDF$observed[vegDF$Variable=="CL"] <- "151 ± 14"
-vegDF$observed[vegDF$Variable=="CW"] <- "4558 ± 321"
-vegDF$observed[vegDF$Variable=="CFR"] <- "227 ± 5"
-vegDF$observed[vegDF$Variable=="CCR"] <- "606 ± 60"
-vegDF$observed[vegDF$Variable=="CSOIL"] <- "2183 ± 280"
+vegDF$meanvalue[vegDF$Group=="obs"&vegDF$Variable=="CL"] <- 151
+vegDF$meanvalue[vegDF$Group=="obs"&vegDF$Variable=="CW"] <- 4558
+vegDF$meanvalue[vegDF$Group=="obs"&vegDF$Variable=="CFR"] <- 227
+vegDF$meanvalue[vegDF$Group=="obs"&vegDF$Variable=="CCR"] <- 606
+vegDF$meanvalue[vegDF$Group=="obs"&vegDF$Variable=="CSOIL"] <- 2183
+
+vegDF$sevalue[vegDF$Group=="obs"&vegDF$Variable=="CL"] <- 14
+vegDF$sevalue[vegDF$Group=="obs"&vegDF$Variable=="CW"] <- 321
+vegDF$sevalue[vegDF$Group=="obs"&vegDF$Variable=="CFR"] <- 5
+vegDF$sevalue[vegDF$Group=="obs"&vegDF$Variable=="CCR"] <- 60
+vegDF$sevalue[vegDF$Group=="obs"&vegDF$Variable=="CSOIL"] <- 280
 
 
 ### calcualte annual means in the simulated data
-poolDF <- subset(modDF, YEAR <= 2016 & YEAR > 2012)
-
-poolDF <- summaryBy(CL+CW+CFR+CCR+CSOIL~YEAR, data=poolDF, FUN=mean, na.rm=T, keep.names=T)
+poolDF <- subset(modDF, YEAR <= 2016 & YEAR > 2012 & DOY == 1)
 
 ### assign values
-vegDF$simulated[vegDF$Variable=="CL"] <- round(poolDF$CL[poolDF$YEAR=="2016"], 0)
-vegDF$simulated[vegDF$Variable=="CW"] <- round(poolDF$CW[poolDF$YEAR=="2016"], 0)
-vegDF$simulated[vegDF$Variable=="CFR"] <- round(poolDF$CFR[poolDF$YEAR=="2016"], 0)
-vegDF$simulated[vegDF$Variable=="CCR"] <- round(poolDF$CCR[poolDF$YEAR=="2016"], 0)
-vegDF$simulated[vegDF$Variable=="CSOIL"] <- round(poolDF$CSOIL[poolDF$YEAR=="2016"], 0)
+vegDF$meanvalue[vegDF$Group=="sim"&vegDF$Variable=="CL"] <- mean(poolDF$CL, na.rm=T)
+vegDF$meanvalue[vegDF$Group=="sim"&vegDF$Variable=="CW"] <- mean(poolDF$CW, na.rm=T)
+vegDF$meanvalue[vegDF$Group=="sim"&vegDF$Variable=="CFR"] <- mean(poolDF$CFR, na.rm=T)
+vegDF$meanvalue[vegDF$Group=="sim"&vegDF$Variable=="CCR"] <- mean(poolDF$CCR, na.rm=T)
+vegDF$meanvalue[vegDF$Group=="sim"&vegDF$Variable=="CSOIL"] <- mean(poolDF$CSOIL, na.rm=T)
+
+vegDF$sevalue[vegDF$Group=="sim"&vegDF$Variable=="CL"] <- se(poolDF$CL, na.rm=T)
+vegDF$sevalue[vegDF$Group=="sim"&vegDF$Variable=="CW"] <- se(poolDF$CW, na.rm=T)
+vegDF$sevalue[vegDF$Group=="sim"&vegDF$Variable=="CFR"] <- se(poolDF$CFR, na.rm=T)
+vegDF$sevalue[vegDF$Group=="sim"&vegDF$Variable=="CCR"] <- se(poolDF$CCR, na.rm=T)
+vegDF$sevalue[vegDF$Group=="sim"&vegDF$Variable=="CSOIL"] <- se(poolDF$CSOIL, na.rm=T)
+
 
 ### Plotting
-p1 <- ggplot(vegDF,)
+p1 <- ggplot(data=vegDF, 
+             aes(Group, meanvalue)) +
+    geom_bar(stat = "identity", aes(fill=Variable), 
+             position="stack", col="black") +
+    #geom_errorbar(aes(x=Group, ymin=meanvalue-sevalue, 
+    #                  ymax=meanvalue+sevalue), 
+    #              position="dodge", width=0.2) +
+    ggtitle("Major ecosystem carbon pools")+
+    theme_linedraw() +
+    theme(panel.grid.minor=element_blank(),
+          axis.text.x=element_text(size=12),
+          axis.title.x=element_text(size=14),
+          axis.text.y=element_text(size=12),
+          axis.title.y=element_text(size=14),
+          legend.text=element_text(size=12),
+          legend.title=element_text(size=14),
+          panel.grid.major=element_blank(),
+          legend.position="right",
+          legend.box = 'horizontal',
+          legend.box.just = 'left',
+          plot.title = element_text(size=14, face="bold.italic", 
+                                    hjust = 0.5))+
+    ylab(expression(paste("Carbon pools (g C " * m^2*")")))
+
+
+
+################# allocation coefficient  ####################
+### Allocation coefficients are calculated different comparing the data and the model. 
+### In the EucFACE data, allocation to leaf includes allocation to overstorey and understorey leaves, 
+### and allocation to root includes allocation to overstorey and understorey roots. 
+### In the data, there is also an additional allocation coefficient to Mycorrhizae, 
+### which can be grouped with allocation to root as total belowground allocation. 
+### This total belowground allocation is comparable to allocation coefficient to root in the model. 
+
+### create a DF to store observation data for allocation coefficients
+allocDF <- data.frame(rep(c("leaf", "wood", #"root", "mycorrhizae", 
+                            "belowground"), 2),
+                      rep(c("obs", "sim"), each = 3), NA)
+colnames(allocDF) <- c("Variable", 
+                       "Group",
+                       "meanvalue")
+
+allocDF$meanvalue[allocDF$Group=="obs"&allocDF$Variable=="leaf"] <- 0.48
+allocDF$meanvalue[allocDF$Group=="obs"&allocDF$Variable=="wood"] <- 0.20
+#allocDF$meanvalue[allocDF$Group=="obs"&allocDF$Variable=="root"] <- 0.22
+#allocDF$meanvalue[allocDF$Group=="obs"&allocDF$Variable=="mycorrhizae"] <- 0.10
+allocDF$meanvalue[allocDF$Group=="obs"&allocDF$Variable=="belowground"] <- 0.32
+
+
+### calcualte annual means in the simulated data
+subDF <- subset(modDF, YEAR <= 2016 & YEAR > 2012)
+
+fluxDF <- summaryBy(GPP+NEP+NPP+CGL+CGW+CGFR+CGCR+RAU~YEAR, data=subDF, FUN=sum, na.rm=T, keep.names=T)
+
+### assign values
+allocDF$meanvalue[allocDF$Group=="sim"&allocDF$Variable=="leaf"] <- mean(fluxDF$CGL/fluxDF$NPP)
+allocDF$meanvalue[allocDF$Group=="sim"&allocDF$Variable=="wood"] <- round(mean(fluxDF$CGW/fluxDF$NPP),2)
+allocDF$meanvalue[allocDF$Group=="sim"&allocDF$Variable=="belowground"] <- round(mean(fluxDF$CGFR/fluxDF$NPP),2)
+
+### Plotting
+p2 <- ggplot(data=allocDF, 
+             aes(Group, meanvalue)) +
+    geom_bar(stat = "identity", aes(fill=Variable), 
+             position="stack", col="black") +
+    ggtitle("Allocation coefficient")+
+    theme_linedraw() +
+    theme(panel.grid.minor=element_blank(),
+          axis.text.x=element_text(size=12),
+          axis.title.x=element_text(size=14),
+          axis.text.y=element_text(size=12),
+          axis.title.y=element_text(size=14),
+          legend.text=element_text(size=12),
+          legend.title=element_text(size=14),
+          panel.grid.major=element_blank(),
+          legend.position="right",
+          legend.box = 'horizontal',
+          legend.box.just = 'left',
+          plot.title = element_text(size=14, face="bold.italic", 
+                                    hjust = 0.5))+
+    ylab("allocation coefficients")
+
+
+################# Major carbon fluxes  ####################
+### create a DF to store observation data for allocation coefficients
+outDF <- data.frame(rep(c("NEP", "GPP", "NPP", "CUE", "RAU"), 2), 
+                    rep(c("obs", "sim"), each = 5), NA)
+colnames(outDF) <- c("Variable", 
+                     "Group",
+                     "meanvalue")
+
+outDF$meanvalue[outDF$Group=="obs"&outDF$Variable=="NEP"] <- -8
+outDF$meanvalue[outDF$Group=="obs"&outDF$Variable=="GPP"] <- 1563
+outDF$meanvalue[outDF$Group=="obs"&outDF$Variable=="NPP"] <- 484
+outDF$meanvalue[outDF$Group=="obs"&outDF$Variable=="CUE"] <- 0.31
+outDF$meanvalue[outDF$Group=="obs"&outDF$Variable=="RAU"] <- 1079
+
+
+### these fluxes were calculated above already
+### assign values
+outDF$meanvalue[outDF$Group=="sim"&outDF$Variable=="NEP"] <- round(mean(fluxDF$NEP),2)
+outDF$meanvalue[outDF$Group=="sim"&outDF$Variable=="GPP"] <- round(mean(fluxDF$GPP),2)
+outDF$meanvalue[outDF$Group=="sim"&outDF$Variable=="NPP"] <- round(mean(fluxDF$NPP),2)
+outDF$meanvalue[outDF$Group=="sim"&outDF$Variable=="CUE"] <- round(mean(fluxDF$NPP/fluxDF$GPP),2)
+outDF$meanvalue[outDF$Group=="sim"&outDF$Variable=="RAU"] <- round(mean(fluxDF$RAU),2)
+
+### plotDF1
+plotDF1 <- outDF[outDF$Variable%in%c("GPP", "NPP", "RAU", "NEP"),]
+
+### plotting GPP, NPP, and RAU
+p3 <- ggplot(data=plotDF1, 
+             aes(Group, meanvalue)) +
+    geom_bar(stat = "identity", aes(fill=Variable), 
+             position="dodge", col="black") +
+    ggtitle("Major carbon fluxes")+
+    theme_linedraw() +
+    theme(panel.grid.minor=element_blank(),
+          axis.text.x=element_text(size=12),
+          axis.title.x=element_text(size=14),
+          axis.text.y=element_text(size=12),
+          axis.title.y=element_text(size=14),
+          legend.text=element_text(size=12),
+          legend.title=element_text(size=14),
+          panel.grid.major=element_blank(),
+          legend.position="right",
+          legend.box = 'horizontal',
+          legend.box.just = 'left',
+          plot.title = element_text(size=14, face="bold.italic", 
+                                    hjust = 0.5))+
+    ylab(expression(paste("Carbon fluxes (g C " * m^2 * " " * yr^-1 * ")")))
+
+
+################# Major nutrient pools  ####################
+### Below I provide several variables to help constrain the nutrient cycles in the model, 
+### namely labile inorganic P pool (PLAB), 
+### soil net N and P mineralization rate (NMIN and PMIN), 
+### plant N and P uptake (NUP and PUP), 
+### and soil N and P leaching (NLEACH and PLEACH). 
+### We did not include total soil P pool, 
+### because its size could be misleading given that 
+### the majority of the P in the soil is stored as occluded form unavailable for plants. 
+### Note that in the table below, simulated results are for top 30 cm of the soil, 
+### but observed data are for top 10 cm only. 
+
+### create a DF to store observation data for vegetation carbon stocks
+pDF <- data.frame(rep(c("PLAB", "PMIN", "NMIN", "NUP", "PUP",
+                    "NLEACH", "PLEACH"), 2), 
+                  rep(c("obs", "sim"), each = 7), NA)
+colnames(pDF) <- c("Variable", 
+                   "Group",
+                   "meanvalue")
+
+pDF$meanvalue[pDF$Group=="obs"&pDF$Variable=="PLAB"] <- 0.17
+pDF$meanvalue[pDF$Group=="obs"&pDF$Variable=="PMIN"] <- 0.3
+pDF$meanvalue[pDF$Group=="obs"&pDF$Variable=="NMIN"] <- 8.81
+
+
+### calcualte annual means in the simulated data
+subDF <- subset(modDF, YEAR <= 2016 & YEAR > 2012)
+
+poolDF <- summaryBy(PLAB~YEAR, data=subDF, FUN=mean, na.rm=T, keep.names=T)
+fluxDF <- summaryBy(PMIN+NMIN+NLEACH+PLEACH+NUP+PUP~YEAR, data=subDF, FUN=sum, na.rm=T, keep.names=T)
+
+### assign values
+pDF$meanvalue[pDF$Group=="sim"&pDF$Variable=="PLAB"] <- round(poolDF$PLAB[poolDF$YEAR=="2016"], 3)
+pDF$meanvalue[pDF$Group=="sim"&pDF$Variable=="PMIN"] <- round(mean(fluxDF$PMIN), 3)
+pDF$meanvalue[pDF$Group=="sim"&pDF$Variable=="NMIN"] <- round(mean(fluxDF$NMIN), 3)
+pDF$meanvalue[pDF$Group=="sim"&pDF$Variable=="PLEACH"] <- round(mean(fluxDF$PLEACH), 3)
+pDF$meanvalue[pDF$Group=="sim"&pDF$Variable=="NLEACH"] <- round(mean(fluxDF$NLEACH), 3)
+pDF$meanvalue[pDF$Group=="sim"&pDF$Variable=="PUP"] <- round(mean(fluxDF$PUP), 3)
+pDF$meanvalue[pDF$Group=="sim"&pDF$Variable=="NUP"] <- round(mean(fluxDF$NUP), 3)
+
+
+plotDF1 <- pDF[pDF$Variable%in%c("PLAB", "PMIN"),]
+plotDF2 <- pDF[pDF$Variable%in%c("NMIN"),]
+
+### plotting
+p4 <- ggplot(data=plotDF1, 
+             aes(Group, meanvalue)) +
+    geom_bar(stat = "identity", aes(fill=Variable), 
+             position="dodge", col="black") +
+    ggtitle("Major phosphorus pools")+
+    theme_linedraw() +
+    theme(panel.grid.minor=element_blank(),
+          axis.text.x=element_text(size=12),
+          axis.title.x=element_text(size=14),
+          axis.text.y=element_text(size=12),
+          axis.title.y=element_text(size=14),
+          legend.text=element_text(size=12),
+          legend.title=element_text(size=14),
+          panel.grid.major=element_blank(),
+          legend.position="right",
+          legend.box = 'horizontal',
+          legend.box.just = 'left',
+          plot.title = element_text(size=14, face="bold.italic", 
+                                    hjust = 0.5))+
+    ylab(expression(paste("Phosphorus pools (g P " * m^2 * ")")))
+
+
+p5 <- ggplot(data=plotDF2, 
+             aes(Group, meanvalue)) +
+    geom_bar(stat = "identity", aes(fill=Variable), 
+             position="dodge", col="black") +
+    ggtitle("Major nitrogen pool")+
+    theme_linedraw() +
+    theme(panel.grid.minor=element_blank(),
+          axis.text.x=element_text(size=12),
+          axis.title.x=element_text(size=14),
+          axis.text.y=element_text(size=12),
+          axis.title.y=element_text(size=14),
+          legend.text=element_text(size=12),
+          legend.title=element_text(size=14),
+          panel.grid.major=element_blank(),
+          legend.position="right",
+          legend.box = 'horizontal',
+          legend.box.just = 'left',
+          plot.title = element_text(size=14, face="bold.italic", 
+                                    hjust = 0.5))+
+    ylab(expression(paste("Nitrogen pool (g N " * m^2 * ")")))
+
+
+
+################# stoichiometry  ####################
+### create a DF to store observation data 
+stDF <- data.frame(rep(c("leaf", "sapwood", "wood", "fineroot", "soil"),2), 
+                   rep(c("obs", "sim"), each = 5), 
+                   NA, NA, NA, NA, NA, NA)
+colnames(stDF) <- c("Variable", "Group", 
+                    "CN.mean", "CP.mean",  "NP.mean",
+                    "CN.se", "CP.se",  "NP.se")
+
+stDF$CN.mean[stDF$Group=="obs"&stDF$Variable=="leaf"] <- 35.5
+stDF$CN.mean[stDF$Group=="obs"&stDF$Variable=="sapwood"] <- 101.6
+stDF$CN.mean[stDF$Group=="obs"&stDF$Variable=="wood"] <- 110.2 
+stDF$CN.mean[stDF$Group=="obs"&stDF$Variable=="fineroot"] <- 56.9
+stDF$CN.mean[stDF$Group=="obs"&stDF$Variable=="soil"] <- 13.8 
+
+stDF$CP.mean[stDF$Group=="obs"&stDF$Variable=="leaf"] <- 722 
+stDF$CP.mean[stDF$Group=="obs"&stDF$Variable=="sapwood"] <- 3705 
+stDF$CP.mean[stDF$Group=="obs"&stDF$Variable=="wood"] <- 7696 
+stDF$CP.mean[stDF$Group=="obs"&stDF$Variable=="fineroot"] <- 1626
+stDF$CP.mean[stDF$Group=="obs"&stDF$Variable=="soil"] <- 224
+
+stDF$NP.mean[stDF$Group=="obs"&stDF$Variable=="leaf"] <- 22.9 
+stDF$NP.mean[stDF$Group=="obs"&stDF$Variable=="sapwood"] <- 35.6
+stDF$NP.mean[stDF$Group=="obs"&stDF$Variable=="wood"] <- 33.7 
+stDF$NP.mean[stDF$Group=="obs"&stDF$Variable=="fineroot"] <- 28.7
+stDF$NP.mean[stDF$Group=="obs"&stDF$Variable=="soil"] <- 16.4 
+
+
+stDF$CN.se[stDF$Group=="obs"&stDF$Variable=="leaf"] <- 2.7
+stDF$CN.se[stDF$Group=="obs"&stDF$Variable=="sapwood"] <- 14.7
+stDF$CN.se[stDF$Group=="obs"&stDF$Variable=="wood"] <- 30.3
+stDF$CN.se[stDF$Group=="obs"&stDF$Variable=="fineroot"] <- 4.6
+stDF$CN.se[stDF$Group=="obs"&stDF$Variable=="soil"] <- 1.0
+
+stDF$CP.se[stDF$Group=="obs"&stDF$Variable=="leaf"] <- 33
+stDF$CP.se[stDF$Group=="obs"&stDF$Variable=="sapwood"] <- 702
+stDF$CP.se[stDF$Group=="obs"&stDF$Variable=="wood"] <- 982
+stDF$CP.se[stDF$Group=="obs"&stDF$Variable=="fineroot"] <- 81
+stDF$CP.se[stDF$Group=="obs"&stDF$Variable=="soil"] <- 39
+
+stDF$NP.se[stDF$Group=="obs"&stDF$Variable=="leaf"] <-  0.1
+stDF$NP.se[stDF$Group=="obs"&stDF$Variable=="sapwood"] <- 2.1
+stDF$NP.se[stDF$Group=="obs"&stDF$Variable=="wood"] <- 2.7
+stDF$NP.se[stDF$Group=="obs"&stDF$Variable=="fineroot"] <- 3.3
+stDF$NP.se[stDF$Group=="obs"&stDF$Variable=="soil"] <- 3.4
 
 
 
 
+### create a DF to store simulated stocks
+tmpDF <- data.frame(rep(c("CL", "CW", "CFR", "CSOIL",
+                      "NL", "NW", "NFR", "NSOIL",
+                      "PL", "PW", "PFR", "PSOIL"), 4), 
+                    rep(c(2013:2016), each = 12), NA)
+colnames(tmpDF) <- c("Variable", 
+                     "Year",
+                     "stock")
+
+### calcualte annual means in the simulated data
+poolDF <- subset(modDF, YEAR <= 2016 & YEAR > 2012 & DOY == 1)
+
+### tmpDF assignment
+for (i in 2013:2016) {
+    tmpDF$stock[tmpDF$Year==i&tmpDF$Variable=="CL"] <- poolDF$CL[poolDF$YEAR == i]
+    tmpDF$stock[tmpDF$Year==i&tmpDF$Variable=="CW"] <- poolDF$CW[poolDF$YEAR == i]
+    tmpDF$stock[tmpDF$Year==i&tmpDF$Variable=="CFR"] <- poolDF$CFR[poolDF$YEAR == i]
+    tmpDF$stock[tmpDF$Year==i&tmpDF$Variable=="CSOIL"] <- poolDF$CSOIL[poolDF$YEAR == i]
+    
+    tmpDF$stock[tmpDF$Year==i&tmpDF$Variable=="NL"] <- poolDF$NL[poolDF$YEAR == i]
+    tmpDF$stock[tmpDF$Year==i&tmpDF$Variable=="NW"] <- poolDF$NW[poolDF$YEAR == i]
+    tmpDF$stock[tmpDF$Year==i&tmpDF$Variable=="NFR"] <- poolDF$NFR[poolDF$YEAR == i]
+    tmpDF$stock[tmpDF$Year==i&tmpDF$Variable=="NSOIL"] <- poolDF$NSOIL[poolDF$YEAR == i]
+    
+    tmpDF$stock[tmpDF$Year==i&tmpDF$Variable=="PL"] <- poolDF$PL[poolDF$YEAR == i]
+    tmpDF$stock[tmpDF$Year==i&tmpDF$Variable=="PW"] <- poolDF$PW[poolDF$YEAR == i]
+    tmpDF$stock[tmpDF$Year==i&tmpDF$Variable=="PFR"] <- poolDF$PFR[poolDF$YEAR == i]
+    tmpDF$stock[tmpDF$Year==i&tmpDF$Variable=="PSOIL"] <- poolDF$PSOIL[poolDF$YEAR == i]
+    
+}
+
+
+### assign values
+stDF$simCN[stDF$Variable=="leaf"] <- round(poolDF$CL[poolDF$YEAR=="2016"]/poolDF$NL[poolDF$YEAR=="2016"], 1)
+stDF$simCN[stDF$Variable=="wood"] <- round(poolDF$CW[poolDF$YEAR=="2016"]/poolDF$NW[poolDF$YEAR=="2016"], 1)
+stDF$simCN[stDF$Variable=="fineroot"] <- round(poolDF$CFR[poolDF$YEAR=="2016"]/poolDF$NFR[poolDF$YEAR=="2016"], 1)
+stDF$simCN[stDF$Variable=="soil"] <- round(poolDF$CSOIL[poolDF$YEAR=="2016"]/poolDF$NSOIL[poolDF$YEAR=="2016"], 1)
+
+
+stDF$simCP[stDF$Variable=="leaf"] <- round(poolDF$CL[poolDF$YEAR=="2016"]/poolDF$PL[poolDF$YEAR=="2016"], 1)
+stDF$simCP[stDF$Variable=="wood"] <- round(poolDF$CW[poolDF$YEAR=="2016"]/poolDF$PW[poolDF$YEAR=="2016"], 1)
+stDF$simCP[stDF$Variable=="fineroot"] <- round(poolDF$CFR[poolDF$YEAR=="2016"]/poolDF$PFR[poolDF$YEAR=="2016"], 1)
+stDF$simCP[stDF$Variable=="soil"] <- round(poolDF$CSOIL[poolDF$YEAR=="2016"]/poolDF$PSOIL[poolDF$YEAR=="2016"], 1)
+
+
+stDF$simNP[stDF$Variable=="leaf"] <- round(poolDF$NL[poolDF$YEAR=="2016"]/poolDF$PL[poolDF$YEAR=="2016"], 1)
+stDF$simNP[stDF$Variable=="wood"] <- round(poolDF$NW[poolDF$YEAR=="2016"]/poolDF$PW[poolDF$YEAR=="2016"], 1)
+stDF$simNP[stDF$Variable=="fineroot"] <- round(poolDF$NFR[poolDF$YEAR=="2016"]/poolDF$PFR[poolDF$YEAR=="2016"], 1)
+stDF$simNP[stDF$Variable=="soil"] <- round(poolDF$NSOIL[poolDF$YEAR=="2016"]/poolDF$PSOIL[poolDF$YEAR=="2016"], 1)
+
+
+################# allocation coefficient  ####################
+
+
+
+
+################# allocation coefficient  ####################
+
+
+
+
+################# allocation coefficient  ####################
+
+
+
+################# allocation coefficient  ####################
 ##########################################################################
 #### Step 4. Time-varying validation
 
