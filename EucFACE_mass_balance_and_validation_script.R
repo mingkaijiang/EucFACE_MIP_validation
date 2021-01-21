@@ -913,67 +913,199 @@ stDF$NP.se[stDF$Group=="obs"&stDF$Variable=="soil"] <- 3.4
 
 
 ### create a DF to store simulated stocks
-tmpDF <- data.frame(rep(c("CL", "CW", "CFR", "CSOIL",
-                      "NL", "NW", "NFR", "NSOIL",
-                      "PL", "PW", "PFR", "PSOIL"), 4), 
-                    rep(c(2013:2016), each = 12), NA)
+tmpDF <- data.frame(rep(c("leaf", "wood", "fineroot", "soil"), 4), 
+                    rep(c(2013:2016), each = 4), NA, NA, NA)
 colnames(tmpDF) <- c("Variable", 
                      "Year",
-                     "stock")
+                     "Cstock",
+                     "Nstock", 
+                     "Pstock")
 
 ### calcualte annual means in the simulated data
 poolDF <- subset(modDF, YEAR <= 2016 & YEAR > 2012 & DOY == 1)
 
 ### tmpDF assignment
 for (i in 2013:2016) {
-    tmpDF$stock[tmpDF$Year==i&tmpDF$Variable=="CL"] <- poolDF$CL[poolDF$YEAR == i]
-    tmpDF$stock[tmpDF$Year==i&tmpDF$Variable=="CW"] <- poolDF$CW[poolDF$YEAR == i]
-    tmpDF$stock[tmpDF$Year==i&tmpDF$Variable=="CFR"] <- poolDF$CFR[poolDF$YEAR == i]
-    tmpDF$stock[tmpDF$Year==i&tmpDF$Variable=="CSOIL"] <- poolDF$CSOIL[poolDF$YEAR == i]
+    tmpDF$Cstock[tmpDF$Year==i&tmpDF$Variable=="leaf"] <- poolDF$CL[poolDF$YEAR == i]
+    tmpDF$Cstock[tmpDF$Year==i&tmpDF$Variable=="wood"] <- poolDF$CW[poolDF$YEAR == i]
+    tmpDF$Cstock[tmpDF$Year==i&tmpDF$Variable=="fineroot"] <- poolDF$CFR[poolDF$YEAR == i]
+    tmpDF$Cstock[tmpDF$Year==i&tmpDF$Variable=="soil"] <- poolDF$CSOIL[poolDF$YEAR == i]
     
-    tmpDF$stock[tmpDF$Year==i&tmpDF$Variable=="NL"] <- poolDF$NL[poolDF$YEAR == i]
-    tmpDF$stock[tmpDF$Year==i&tmpDF$Variable=="NW"] <- poolDF$NW[poolDF$YEAR == i]
-    tmpDF$stock[tmpDF$Year==i&tmpDF$Variable=="NFR"] <- poolDF$NFR[poolDF$YEAR == i]
-    tmpDF$stock[tmpDF$Year==i&tmpDF$Variable=="NSOIL"] <- poolDF$NSOIL[poolDF$YEAR == i]
+    tmpDF$Nstock[tmpDF$Year==i&tmpDF$Variable=="leaf"] <- poolDF$NL[poolDF$YEAR == i]
+    tmpDF$Nstock[tmpDF$Year==i&tmpDF$Variable=="wood"] <- poolDF$NW[poolDF$YEAR == i]
+    tmpDF$Nstock[tmpDF$Year==i&tmpDF$Variable=="fineroot"] <- poolDF$NFR[poolDF$YEAR == i]
+    tmpDF$Nstock[tmpDF$Year==i&tmpDF$Variable=="soil"] <- poolDF$NSOIL[poolDF$YEAR == i]
     
-    tmpDF$stock[tmpDF$Year==i&tmpDF$Variable=="PL"] <- poolDF$PL[poolDF$YEAR == i]
-    tmpDF$stock[tmpDF$Year==i&tmpDF$Variable=="PW"] <- poolDF$PW[poolDF$YEAR == i]
-    tmpDF$stock[tmpDF$Year==i&tmpDF$Variable=="PFR"] <- poolDF$PFR[poolDF$YEAR == i]
-    tmpDF$stock[tmpDF$Year==i&tmpDF$Variable=="PSOIL"] <- poolDF$PSOIL[poolDF$YEAR == i]
+    tmpDF$Pstock[tmpDF$Year==i&tmpDF$Variable=="leaf"] <- poolDF$PL[poolDF$YEAR == i]
+    tmpDF$Pstock[tmpDF$Year==i&tmpDF$Variable=="wood"] <- poolDF$PW[poolDF$YEAR == i]
+    tmpDF$Pstock[tmpDF$Year==i&tmpDF$Variable=="fineroot"] <- poolDF$PFR[poolDF$YEAR == i]
+    tmpDF$Pstock[tmpDF$Year==i&tmpDF$Variable=="soil"] <- poolDF$PSOIL[poolDF$YEAR == i]
     
 }
 
+tmpDF$CN <- with(tmpDF, Cstock/Nstock)
+tmpDF$CP <- with(tmpDF, Cstock/Pstock)
+tmpDF$NP <- with(tmpDF, Nstock/Pstock)
+
+tmpDF2 <- summaryBy(CN+CP+NP~Variable, FUN=c(mean, se), data=tmpDF, keep.names=T)
+
 
 ### assign values
-stDF$simCN[stDF$Variable=="leaf"] <- round(poolDF$CL[poolDF$YEAR=="2016"]/poolDF$NL[poolDF$YEAR=="2016"], 1)
-stDF$simCN[stDF$Variable=="wood"] <- round(poolDF$CW[poolDF$YEAR=="2016"]/poolDF$NW[poolDF$YEAR=="2016"], 1)
-stDF$simCN[stDF$Variable=="fineroot"] <- round(poolDF$CFR[poolDF$YEAR=="2016"]/poolDF$NFR[poolDF$YEAR=="2016"], 1)
-stDF$simCN[stDF$Variable=="soil"] <- round(poolDF$CSOIL[poolDF$YEAR=="2016"]/poolDF$NSOIL[poolDF$YEAR=="2016"], 1)
+stDF$CN.mean[stDF$Group=="sim"&stDF$Variable=="leaf"] <- tmpDF2$CN.mean[tmpDF2$Variable=="leaf"]
+stDF$CN.mean[stDF$Group=="sim"&stDF$Variable=="wood"] <-  tmpDF2$CN.mean[tmpDF2$Variable=="wood"]
+stDF$CN.mean[stDF$Group=="sim"&stDF$Variable=="fineroot"] <-  tmpDF2$CN.mean[tmpDF2$Variable=="fineroot"]
+stDF$CN.mean[stDF$Group=="sim"&stDF$Variable=="soil"] <-  tmpDF2$CN.mean[tmpDF2$Variable=="soil"]
 
 
-stDF$simCP[stDF$Variable=="leaf"] <- round(poolDF$CL[poolDF$YEAR=="2016"]/poolDF$PL[poolDF$YEAR=="2016"], 1)
-stDF$simCP[stDF$Variable=="wood"] <- round(poolDF$CW[poolDF$YEAR=="2016"]/poolDF$PW[poolDF$YEAR=="2016"], 1)
-stDF$simCP[stDF$Variable=="fineroot"] <- round(poolDF$CFR[poolDF$YEAR=="2016"]/poolDF$PFR[poolDF$YEAR=="2016"], 1)
-stDF$simCP[stDF$Variable=="soil"] <- round(poolDF$CSOIL[poolDF$YEAR=="2016"]/poolDF$PSOIL[poolDF$YEAR=="2016"], 1)
+stDF$CP.mean[stDF$Group=="sim"&stDF$Variable=="leaf"] <-  tmpDF2$CP.mean[tmpDF2$Variable=="leaf"]
+stDF$CP.mean[stDF$Group=="sim"&stDF$Variable=="wood"] <-  tmpDF2$CP.mean[tmpDF2$Variable=="wood"]
+stDF$CP.mean[stDF$Group=="sim"&stDF$Variable=="fineroot"] <- tmpDF2$CP.mean[tmpDF2$Variable=="fineroot"]
+stDF$CP.mean[stDF$Group=="sim"&stDF$Variable=="soil"] <-  tmpDF2$CP.mean[tmpDF2$Variable=="soil"]
 
-
-stDF$simNP[stDF$Variable=="leaf"] <- round(poolDF$NL[poolDF$YEAR=="2016"]/poolDF$PL[poolDF$YEAR=="2016"], 1)
-stDF$simNP[stDF$Variable=="wood"] <- round(poolDF$NW[poolDF$YEAR=="2016"]/poolDF$PW[poolDF$YEAR=="2016"], 1)
-stDF$simNP[stDF$Variable=="fineroot"] <- round(poolDF$NFR[poolDF$YEAR=="2016"]/poolDF$PFR[poolDF$YEAR=="2016"], 1)
-stDF$simNP[stDF$Variable=="soil"] <- round(poolDF$NSOIL[poolDF$YEAR=="2016"]/poolDF$PSOIL[poolDF$YEAR=="2016"], 1)
-
-
-################# allocation coefficient  ####################
+stDF$NP.mean[stDF$Group=="sim"&stDF$Variable=="leaf"] <- tmpDF2$NP.mean[tmpDF2$Variable=="leaf"]
+stDF$NP.mean[stDF$Group=="sim"&stDF$Variable=="wood"] <- tmpDF2$NP.mean[tmpDF2$Variable=="wood"]
+stDF$NP.mean[stDF$Group=="sim"&stDF$Variable=="fineroot"] <- tmpDF2$NP.mean[tmpDF2$Variable=="fineroot"]
+stDF$NP.mean[stDF$Group=="sim"&stDF$Variable=="soil"] <- tmpDF2$NP.mean[tmpDF2$Variable=="soil"]
 
 
 
+stDF$CN.se[stDF$Group=="sim"&stDF$Variable=="leaf"] <- tmpDF2$CN.se[tmpDF2$Variable=="leaf"]
+stDF$CN.se[stDF$Group=="sim"&stDF$Variable=="wood"] <-  tmpDF2$CN.se[tmpDF2$Variable=="wood"]
+stDF$CN.se[stDF$Group=="sim"&stDF$Variable=="fineroot"] <-  tmpDF2$CN.se[tmpDF2$Variable=="fineroot"]
+stDF$CN.se[stDF$Group=="sim"&stDF$Variable=="soil"] <-  tmpDF2$CN.se[tmpDF2$Variable=="soil"]
 
-################# allocation coefficient  ####################
+
+stDF$CP.se[stDF$Group=="sim"&stDF$Variable=="leaf"] <-  tmpDF2$CP.se[tmpDF2$Variable=="leaf"]
+stDF$CP.se[stDF$Group=="sim"&stDF$Variable=="wood"] <-  tmpDF2$CP.se[tmpDF2$Variable=="wood"]
+stDF$CP.se[stDF$Group=="sim"&stDF$Variable=="fineroot"] <- tmpDF2$CP.se[tmpDF2$Variable=="fineroot"]
+stDF$CP.se[stDF$Group=="sim"&stDF$Variable=="soil"] <- tmpDF2$CP.se[tmpDF2$Variable=="soil"]
+
+
+stDF$NP.se[stDF$Group=="sim"&stDF$Variable=="leaf"] <- tmpDF2$NP.se[tmpDF2$Variable=="leaf"]
+stDF$NP.se[stDF$Group=="sim"&stDF$Variable=="wood"] <- tmpDF2$NP.se[tmpDF2$Variable=="wood"]
+stDF$NP.se[stDF$Group=="sim"&stDF$Variable=="fineroot"] <- tmpDF2$NP.se[tmpDF2$Variable=="fineroot"]
+stDF$NP.se[stDF$Group=="sim"&stDF$Variable=="soil"] <- tmpDF2$NP.se[tmpDF2$Variable=="soil"]
+
+### plot
+p6 <- ggplot(data=stDF, 
+             aes(Group, CN.mean, group=Variable)) +
+    geom_bar(stat = "identity", aes(fill=Variable), 
+             position="dodge", col="black") +
+    #geom_errorbar(aes(x=Group, ymin=CN.mean-CN.se, 
+    #                  ymax=CN.mean+CN.se), 
+    #              position=position_dodge2(), width=0.2) +
+    ggtitle("CN stoichiometry")+
+    theme_linedraw() +
+    theme(panel.grid.minor=element_blank(),
+          axis.text.x=element_text(size=12),
+          axis.title.x=element_text(size=14),
+          axis.text.y=element_text(size=12),
+          axis.title.y=element_text(size=14),
+          legend.text=element_text(size=12),
+          legend.title=element_text(size=14),
+          panel.grid.major=element_blank(),
+          legend.position="right",
+          legend.box = 'horizontal',
+          legend.box.just = 'left',
+          plot.title = element_text(size=14, face="bold.italic", 
+                                    hjust = 0.5))+
+    ylab("CN stoichiometry")
+
+p7 <- ggplot(data=stDF, 
+             aes(Group, CP.mean, group=Variable)) +
+    geom_bar(stat = "identity", aes(fill=Variable), 
+             position="dodge", col="black") +
+    ggtitle("CP stoichiometry")+
+    theme_linedraw() +
+    theme(panel.grid.minor=element_blank(),
+          axis.text.x=element_text(size=12),
+          axis.title.x=element_text(size=14),
+          axis.text.y=element_text(size=12),
+          axis.title.y=element_text(size=14),
+          legend.text=element_text(size=12),
+          legend.title=element_text(size=14),
+          panel.grid.major=element_blank(),
+          legend.position="right",
+          legend.box = 'horizontal',
+          legend.box.just = 'left',
+          plot.title = element_text(size=14, face="bold.italic", 
+                                    hjust = 0.5))+
+    ylab("CP stoichiometry")
+
+
+p8 <- ggplot(data=stDF, 
+             aes(Group, NP.mean, group=Variable)) +
+    geom_bar(stat = "identity", aes(fill=Variable), 
+             position="dodge", col="black") +
+    ggtitle("NP stoichiometry")+
+    theme_linedraw() +
+    theme(panel.grid.minor=element_blank(),
+          axis.text.x=element_text(size=12),
+          axis.title.x=element_text(size=14),
+          axis.text.y=element_text(size=12),
+          axis.title.y=element_text(size=14),
+          legend.text=element_text(size=12),
+          legend.title=element_text(size=14),
+          panel.grid.major=element_blank(),
+          legend.position="right",
+          legend.box = 'horizontal',
+          legend.box.just = 'left',
+          plot.title = element_text(size=14, face="bold.italic", 
+                                    hjust = 0.5))+
+    ylab("NP stoichiometry")
 
 
 
+################# Nutrient retranslocation coefficients  ####################
 
-################# allocation coefficient  ####################
+### subset and calculate
+subDF <- subset(modDF, YEAR <= 2016 & YEAR > 2012)
+
+tmpDF <- summaryBy(NGL+PGL+NLRETR+PLRETR~YEAR, data=subDF, FUN=sum, keep.names=T, na.rm=T)
+
+
+### create DF for output
+rtDF <- data.frame(rep(c("leafN", "leafP"), 2), 
+                   rep(c("obs", "sim"), each = 2), NA)
+colnames(rtDF) <- c("Variable", "Group", "meanvalue")
+
+### assign values
+rtDF$meanvalue[rtDF$Group=="obs"&rtDF$Variable=="leafN"] <- 0.31
+rtDF$meanvalue[rtDF$Group=="obs"&rtDF$Variable=="leafP"] <- 0.53
+
+rtDF$meanvalue[rtDF$Group=="sim"&rtDF$Variable=="leafN"] <- round(mean(tmpDF$NLRETR/tmpDF$NGL),2)
+rtDF$meanvalue[rtDF$Group=="sim"&rtDF$Variable=="leafP"] <- round(mean(tmpDF$PLRETR/tmpDF$PGL),2)
+
+
+### plotting
+p9 <- ggplot(data=rtDF, 
+             aes(Group, meanvalue, group=Variable)) +
+    geom_bar(stat = "identity", aes(fill=Variable), 
+             position="dodge", col="black") +
+    ggtitle("Leaf retranslocation")+
+    theme_linedraw() +
+    theme(panel.grid.minor=element_blank(),
+          axis.text.x=element_text(size=12),
+          axis.title.x=element_text(size=14),
+          axis.text.y=element_text(size=12),
+          axis.title.y=element_text(size=14),
+          legend.text=element_text(size=12),
+          legend.title=element_text(size=14),
+          panel.grid.major=element_blank(),
+          legend.position="right",
+          legend.box = 'horizontal',
+          legend.box.just = 'left',
+          plot.title = element_text(size=14, face="bold.italic", 
+                                    hjust = 0.5))+
+    ylab("Leaf retranslocation")
+
+
+### print plots to file, change numbering if needed
+pdf(paste0(out.dir, '/QC_Time_averaged_validation_',mod.abb,'.pdf',sep=''),width=10,height=8)
+for (i in 1:9) {
+    print(get(paste("p",i,sep="")))
+}
+dev.off()
 
 
 
