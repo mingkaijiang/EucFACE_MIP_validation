@@ -95,11 +95,11 @@ modDF$PWEA <- 0.0
 ### Otherwise, please indicate the reasons as to why your model does not have mass balance closure.
 
 ### summarize all fluxes first to obain annual rate
-fluxDF <- summaryBy(ET+TRANS+ES+EC+RO+DRAIN+NEP+GPP+NPP+RHET+RAU+RECO+CGL+CGFR+CGCR+CGW+NGL+NGFR+NGCR+NGW+PGL+PGFR+PGCR+PGW+NUP+NGMIN+NMIN+NLEACH+PUP+PGMIN+PMIN+PLEACH+PBIOCHMIN+NLRETR+PLRETR+RCR+RFR+CREPR+CEX+CVOC+RL+RW+RGR+CLITIN+CCRLIN+CFRLIN+CWLIN+NLITIN+NCRLIN+NFRLIN+NWLIN+PLITIN+PCRLIN+PFRLIN+PWLIN+NWRETR+PWRETR+NCRRETR+PCRRETR+NFRRETR+PFRRETR+NDEP+NFIX+NVOL+PDEP+PWEA~YEAR, data=modDF, FUN=sum, keep.names=T, na.rm=T)
+fluxDF <- summaryBy(PREC+ET+TRANS+ES+EC+RO+DRAIN+NEP+GPP+NPP+RHET+RAU+RECO+CGL+CGFR+CGCR+CGW+NGL+NGFR+NGCR+NGW+PGL+PGFR+PGCR+PGW+NUP+NGMIN+NMIN+NLEACH+PUP+PGMIN+PMIN+PLEACH+PBIOCHMIN+NLRETR+PLRETR+RCR+RFR+CREPR+CEX+CVOC+RL+RW+RGR+CLITIN+CCRLIN+CFRLIN+CWLIN+NLITIN+NCRLIN+NFRLIN+NWLIN+PLITIN+PCRLIN+PFRLIN+PWLIN+NWRETR+PWRETR+NCRRETR+PCRRETR+NFRRETR+PFRRETR+NDEP+NFIX+NVOL+PDEP+PWEA~YEAR, data=modDF, FUN=sum, keep.names=T, na.rm=T)
 
 
 ### subset first day within a year of all pools
-poolDF <- modDF[,c("YEAR", "DOY", "CL","LAI","CW","CFR","CCR","NL","NW","NFR","NCR","PL","PW","PFR","PCR","CSTOR","NSTOR","PSTOR",
+poolDF <- modDF[,c("YEAR", "DOY", "SW","CL","LAI","CW","CFR","CCR","NL","NW","NFR","NCR","PL","PW","PFR","PCR","CSTOR","NSTOR","PSTOR",
                    "CSOIL","NSOIL","PSOIL","NPMIN","PPMIN","PLAB","PSEC","POCC","PPAR","CFLIT","CFLITA","CFLITB",
                    "NFLITA","NFLITB","PFLITA","PFLITB","CCLITB","NCLITB","PCLITB","NFLIT","PFLIT", "NPORG", "PPORG")]
 
@@ -297,11 +297,18 @@ p1<-xyplot(I(ES+EC+TRANS)~ET,fluxDF,
                panel.xyplot(...)
                panel.abline(a=0,b=1)}) 
 
+p2<-xyplot(I(PREC-(RO+DRAIN+ET))~deltaSW, annDF,
+           #main='PREC-RO-DRAIN-ET~deltaSW',
+           auto.key=T,
+           scales=list(relation='free'),
+           panel=function(...){
+               panel.xyplot(...)
+               panel.abline(a=0,b=1)})
 
 
 ### print plots to file, change numbering if needed
 pdf(paste0(out.dir, '/QC_Water_Balance_',mod.abb,'.pdf',sep=''),width=10,height=8)
-for (i in 1:1) {
+for (i in 1:2) {
     print(get(paste("p",i,sep="")))
 }
 dev.off()
