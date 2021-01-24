@@ -106,8 +106,6 @@ modDF$Date <- as.Date(modDF$Date)
 ########################################################################################################
 ### add other variables not defined in the protocol but are potentially important for this MIP
 
-# P weathering rate
-modDF$PWEA <- 0.0
 
 
 ########################################################################################################

@@ -388,6 +388,9 @@ translate_GDAY_simulation_into_EucFACE_MIP_format <- function(met.path,
     names(myDF)[names(myDF) == "inorgoccp"] <- "POCC"
     names(myDF)[names(myDF) == "inorgparp"] <- "PPAR"
 
+    # P weathering rate
+    myDF$PWEA <- 0.0
+    
     
     ### end changing variable names
     ############################################
@@ -413,7 +416,7 @@ translate_GDAY_simulation_into_EucFACE_MIP_format <- function(met.path,
                      "PCLITB","PSOIL","PLAB","PSEC","POCC","PPAR","PPMIN","PPORG",
                      "PLITIN","PCRLIN","PFRLIN","PWLIN","PUP","PGMIN","PMIN",
                      "PBIOCHMIN","PLEACH","PGL","PGW","PGCR","PGFR","PLRETR","PWRETR",
-                     "PCRRETR","PFRRETR","PDEP","PFERT")]
+                     "PCRRETR","PFRRETR","PWEA","PDEP","PFERT")]
     
     write.csv(outDF, paste0(out.path, "/EUC_GDAYP_OBS_VAR_AMB_NOP_D.csv"),
               row.names=F)
