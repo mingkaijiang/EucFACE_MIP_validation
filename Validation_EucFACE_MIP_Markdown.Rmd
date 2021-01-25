@@ -171,6 +171,9 @@ annDF <- merge(annDF, deltaDF, by="YEAR", all.x=T)
 maxDF <- summaryBy(LAI+CL+CFR+CSTOR+NL+NFR+NSTOR+PL+NFR+PSTOR~YEAR, data=modDF, keep.names=T, na.rm=T)
 
 
+### test script
+write.csv(annDF, "validation_output/annDF.csv",row.names=F)
+
 ```
 
 

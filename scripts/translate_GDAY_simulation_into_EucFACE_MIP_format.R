@@ -137,6 +137,10 @@ translate_GDAY_simulation_into_EucFACE_MIP_format <- function(met.path,
     myDF$nloss <- myDF$nloss * tonnes_per_ha_to_g_m2
     
     myDF$leafretransn <- myDF$leafretransn * tonnes_per_ha_to_g_m2
+    myDF$rootretransn <- myDF$rootretransn * tonnes_per_ha_to_g_m2
+    myDF$crootretransn <- myDF$crootretransn * tonnes_per_ha_to_g_m2
+    myDF$stemretransn <- myDF$stemretransn * tonnes_per_ha_to_g_m2
+    myDF$bramchretransn <- myDF$branchretransn * tonnes_per_ha_to_g_m2
     
     
     # phosphorus pools and fluxes
@@ -185,7 +189,10 @@ translate_GDAY_simulation_into_EucFACE_MIP_format <- function(met.path,
 
     
     myDF$leafretransp <- myDF$leafretransp * tonnes_per_ha_to_g_m2
-    
+    myDF$rootretransp <- myDF$rootretransp * tonnes_per_ha_to_g_m2
+    myDF$crootretransp <- myDF$crootretransp * tonnes_per_ha_to_g_m2
+    myDF$stemretransp <- myDF$stemretransp * tonnes_per_ha_to_g_m2
+    myDF$bramchretransp <- myDF$branchretransp * tonnes_per_ha_to_g_m2
     
     # water pools and fluxes
     myDF$et <- myDF$et # mm of water' are same value as kg/m2
@@ -335,9 +342,10 @@ translate_GDAY_simulation_into_EucFACE_MIP_format <- function(met.path,
     myDF$NVOL <- 0.0
     names(myDF)[names(myDF) == "nloss"] <- "NLEACH"
     names(myDF)[names(myDF) == "leafretransn"] <- "NLRETR"
-    myDF$NWRETR <- 0.0
-    myDF$NCRRETR <- 0.0
-    myDF$NFRRETR <- 0.0
+    names(myDF)[names(myDF) == "rootretransn"] <- "NFRRETR"
+    names(myDF)[names(myDF) == "crootretransn"] <- "NCRRETR"
+    
+    myDF$NWRETR <- myDF$branchretransn + myDF$stemretransn
     
     
     ## phosphorus variables
@@ -379,10 +387,11 @@ translate_GDAY_simulation_into_EucFACE_MIP_format <- function(met.path,
     
     names(myDF)[names(myDF) == "ploss"] <- "PLEACH"
     names(myDF)[names(myDF) == "leafretransp"] <- "PLRETR"
-    myDF$PWRETR <- 0.0
-    myDF$PCRRETR <- 0.0
-    myDF$PFRRETR <- 0.0
+    names(myDF)[names(myDF) == "rootretransp"] <- "PFRRETR"
+    names(myDF)[names(myDF) == "crootretransp"] <- "PCRRETR"
     
+    myDF$PWRETR <- myDF$branchretransp + myDF$stemretransp
+
     names(myDF)[names(myDF) == "inorglabp"] <- "PLAB"
     myDF$PSEC <- myDF$inorgsorbp + myDF$inorgssorbp
     names(myDF)[names(myDF) == "inorgoccp"] <- "POCC"
