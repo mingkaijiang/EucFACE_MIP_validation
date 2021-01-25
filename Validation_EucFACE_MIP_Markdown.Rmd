@@ -888,7 +888,7 @@ plot(p1)
 This is to check whole ecosystem P flux, which means that total in - out = net change:
 
 <center> 
-PDEP+PWEA+PLITIN+PWLIN+PCRLIN+PFRLIN-PUP-PLEACH = $\Delta$PSOIL+$\Delta$FLIT+$\Delta$PCLITB
+PDEP+PWEA+PLITIN+PWLIN+PCRLIN+PFRLIN-PUP-PLEACH = $\Delta$PSOIL+$\Delta$PFLIT+$\Delta$PCLITB
 </center> 
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Mass balance check on P storage", fig.align="center"}
