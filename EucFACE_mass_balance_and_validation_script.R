@@ -1275,7 +1275,7 @@ p4 <- ggplot(plotDF, aes(x=Date)) +
           panel.grid.major=element_blank(),
           plot.title = element_text(size = 10, face = "bold"),
           legend.position="right")+
-    ylab("Soil water (kg m-2 d-1)")+
+    ylab("Soil water (kg m-2)")+
     scale_colour_manual("", 
                         values = c("obs"="black", "sim"="red2"),
                         labels = c("Observed", "Simulated"))

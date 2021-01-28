@@ -186,7 +186,7 @@ translate_GDAY_simulation_into_EucFACE_MIP_format <- function(met.path,
     myDF$pmineralisation <- myDF$pmineralisation * tonnes_per_ha_to_g_m2
     myDF$ploss <- myDF$ploss * tonnes_per_ha_to_g_m2
     myDF$p_slow_biochemical <- myDF$p_slow_biochemical * tonnes_per_ha_to_g_m2
-    myDF$p_par_to_min <- myDF$p_par_to_min * tonnes_per_ha_to_g_m2
+    myDF$p_par_to_lab <- myDF$p_par_to_lab * tonnes_per_ha_to_g_m2
     
     myDF$leafretransp <- myDF$leafretransp * tonnes_per_ha_to_g_m2
     myDF$rootretransp <- myDF$rootretransp * tonnes_per_ha_to_g_m2
@@ -398,7 +398,7 @@ translate_GDAY_simulation_into_EucFACE_MIP_format <- function(met.path,
     names(myDF)[names(myDF) == "inorgparp"] <- "PPAR"
 
     # P weathering rate
-    names(myDF)[names(myDF) == "p_par_to_min"] <- "PWEA"
+    names(myDF)[names(myDF) == "p_par_to_lab"] <- "PWEA"
     
 
     ### end changing variable names
