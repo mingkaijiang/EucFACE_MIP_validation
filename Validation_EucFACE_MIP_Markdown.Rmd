@@ -1025,7 +1025,7 @@ Allocation coefficients are calculated different comparing the data and the mode
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 
 ### create a DF to store observation data for allocation coefficients
-allocDF <- data.frame(c("leaf", "wood", "root", "mycorrhizae", "belowground"), NA, NA)
+allocDF <- data.frame(c("leaf", "wood", "root", "exudation", "belowground"), NA, NA)
 colnames(allocDF) <- c("Variable", 
                         "observed",
                         "simulated")
@@ -1033,19 +1033,21 @@ colnames(allocDF) <- c("Variable",
 allocDF$observed[allocDF$Variable=="leaf"] <- "0.48 ± 0.04"
 allocDF$observed[allocDF$Variable=="wood"] <- "0.20 ± 0.03"
 allocDF$observed[allocDF$Variable=="root"] <- "0.22 ± 0.05"
-allocDF$observed[allocDF$Variable=="mycorrhizae"] <- "0.10 ± 0.07"
+allocDF$observed[allocDF$Variable=="exudation"] <- "0.10 ± 0.07"
 allocDF$observed[allocDF$Variable=="belowground"] <- "0.32"
 
 
 ### calcualte annual means in the simulated data
 subDF <- subset(modDF, YEAR <= 2016 & YEAR > 2012)
 
-fluxDF <- summaryBy(GPP+NEP+NPP+CGL+CGW+CGFR+CGCR+RAU~YEAR, data=subDF, FUN=sum, na.rm=T, keep.names=T)
+fluxDF <- summaryBy(GPP+NEP+NPP+CGL+CGW+CGFR+CGCR+CEX+RAU~YEAR, data=subDF, FUN=sum, na.rm=T, keep.names=T)
 
 ### assign values
 allocDF$simulated[allocDF$Variable=="leaf"] <- round(mean(fluxDF$CGL/fluxDF$NPP),2)
 allocDF$simulated[allocDF$Variable=="wood"] <- round(mean(fluxDF$CGW/fluxDF$NPP),2)
-allocDF$simulated[allocDF$Variable=="belowground"] <- round(mean(fluxDF$CGFR/fluxDF$NPP),2)
+allocDF$simulated[allocDF$Variable=="root"] <- round(mean((fluxDF$CGFR+fluxDF$CGCR)/fluxDF$NPP),2)
+allocDF$simulated[allocDF$Variable=="exudation"] <- round(mean((fluxDF$CEX)/fluxDF$NPP),2)
+allocDF$simulated[allocDF$Variable=="belowground"] <- round(mean((fluxDF$CGFR+fluxDF$CGCR+fluxDF$CEX)/fluxDF$NPP),2)
 
 knitr::kable(allocDF, caption = "Validation of major carbon pools")
 
