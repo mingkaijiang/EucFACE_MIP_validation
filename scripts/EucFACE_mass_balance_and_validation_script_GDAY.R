@@ -85,7 +85,7 @@ EucFACE_mass_balance_and_validation_script_GDAY <- function() {
     
     ### add other variables not defined in the protocol but are potentially important for this MIP
     # P weathering rate
-    modDF$PWEA <- 0.0
+    #modDF$PWEA <- 0.0
     
     
     ### The mass balance check is performed at annual timestep. 

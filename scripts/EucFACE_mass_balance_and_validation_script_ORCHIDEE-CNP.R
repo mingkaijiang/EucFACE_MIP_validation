@@ -1,4 +1,4 @@
-EucFACE_mass_balance_and_validation_script_ORCHIDEE-CNP <- function() {
+EucFACE_mass_balance_and_validation_script_ORCHIDEE_CNP <- function() {
     #### EucFACE mass balance and validation script
     #### Mingkai Jiang (m.jiang@westernsydney.edu.au)
     ####
@@ -728,32 +728,38 @@ EucFACE_mass_balance_and_validation_script_ORCHIDEE-CNP <- function() {
     ### This total belowground allocation is comparable to allocation coefficient to root in the model. 
     
     ### create a DF to store observation data for allocation coefficients
-    allocDF <- data.frame(rep(c("leaf", "wood", #"root", "mycorrhizae", 
+    allocDF <- data.frame(rep(c("leaf", "wood", "root", "exudation", "reproduction",
                                 "belowground"), 2),
-                          rep(c("obs", "sim"), each = 3), NA)
+                          rep(c("obs", "sim"), each = 6), NA)
     colnames(allocDF) <- c("Variable", 
                            "Group",
                            "meanvalue")
     
     allocDF$meanvalue[allocDF$Group=="obs"&allocDF$Variable=="leaf"] <- 0.48
     allocDF$meanvalue[allocDF$Group=="obs"&allocDF$Variable=="wood"] <- 0.20
-    #allocDF$meanvalue[allocDF$Group=="obs"&allocDF$Variable=="root"] <- 0.22
-    #allocDF$meanvalue[allocDF$Group=="obs"&allocDF$Variable=="mycorrhizae"] <- 0.10
+    allocDF$meanvalue[allocDF$Group=="obs"&allocDF$Variable=="root"] <- 0.22
+    allocDF$meanvalue[allocDF$Group=="obs"&allocDF$Variable=="exudation"] <- 0.10
     allocDF$meanvalue[allocDF$Group=="obs"&allocDF$Variable=="belowground"] <- 0.32
     
     
     ### calcualte annual means in the simulated data
     subDF <- subset(modDF, YEAR <= 2016 & YEAR > 2012)
     
-    fluxDF <- summaryBy(GPP+NEP+NPP+CGL+CGW+CGFR+CGCR+RAU~YEAR, data=subDF, FUN=sum, na.rm=T, keep.names=T)
+    fluxDF <- summaryBy(GPP+NEP+NPP+CGL+CGW+CGFR+CGCR+CEX+RAU~YEAR, data=subDF, FUN=sum, na.rm=T, keep.names=T)
     
     ### assign values
     allocDF$meanvalue[allocDF$Group=="sim"&allocDF$Variable=="leaf"] <- mean(fluxDF$CGL/fluxDF$NPP)
     allocDF$meanvalue[allocDF$Group=="sim"&allocDF$Variable=="wood"] <- round(mean(fluxDF$CGW/fluxDF$NPP),2)
-    allocDF$meanvalue[allocDF$Group=="sim"&allocDF$Variable=="belowground"] <- round(mean(fluxDF$CGFR/fluxDF$NPP),2)
+    allocDF$meanvalue[allocDF$Group=="sim"&allocDF$Variable=="root"] <- round(mean((fluxDF$CGFR+fluxDF$CGCR)/fluxDF$NPP),2)
+    allocDF$meanvalue[allocDF$Group=="sim"&allocDF$Variable=="exudation"] <- round(mean((fluxDF$CEX)/fluxDF$NPP),2)
+    allocDF$meanvalue[allocDF$Group=="sim"&allocDF$Variable=="reproduction"] <- round(mean((fluxDF$CREPR)/fluxDF$NPP),2)
+    allocDF$meanvalue[allocDF$Group=="sim"&allocDF$Variable=="belowground"] <- round(mean((fluxDF$CGFR+fluxDF$CGCR+fluxDF$CEX)/fluxDF$NPP),2)
+    
+    
+    allocDF2 <- allocDF[allocDF$Variable%in%c("leaf", "wood", "root", "exudation", "reproduction"),]
     
     ### Plotting
-    p2 <- ggplot(data=allocDF, 
+    p2 <- ggplot(data=allocDF2, 
                  aes(Group, meanvalue)) +
         geom_bar(stat = "identity", aes(fill=Variable), 
                  position="stack", col="black") +
