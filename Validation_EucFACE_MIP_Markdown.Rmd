@@ -172,7 +172,7 @@ maxDF <- summaryBy(LAI+CL+CFR+CSTOR+NL+NFR+NSTOR+PL+NFR+PSTOR~YEAR, data=modDF, 
 
 
 ### test script
-write.csv(annDF, "validation_output/annDF.csv",row.names=F)
+#write.csv(annDF, "validation_output/annDF.csv",row.names=F)
 
 ```
 
