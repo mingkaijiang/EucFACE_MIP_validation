@@ -10,7 +10,11 @@ rm(list=ls(all=TRUE))
 source("prepare.R")
 
 ##########################################################################
-### Step 2: Run individual model mass balance checks
+#### Step 2: Run individual model mass balance checks
 EucFACE_mass_balance_and_validation_script_ORCHIDEE_MIC()
 EucFACE_mass_balance_and_validation_script_ORCHIDEE_CNP()
 EucFACE_mass_balance_and_validation_script_GDAY()
+
+
+##########################################################################
+#### Step 3: Plot CO2 response ratios over observed period

@@ -1,0 +1,100 @@
+plot_CO2_response_ratio_over_obs_period <- function(source.dir, mod.abb, out.dir) {
+    
+    #### source directory
+    source.dir <- paste0(getwd(), "/simulation_output/ORCHIDEE")
+    
+    #### model abbreviation
+    mod.abb <- "OCHDP"
+    
+    #### setting out path to store the files
+    out.dir <- paste0(getwd(), "/analysis_output")
+    
+    ### ambient CO2, over observed period (2012-2019)
+    ambDF1 <- read.csv(paste0(source.dir, "/EUC_", mod.abb, "_OBS_VAR_AMB_NOP_D.csv"))  # dry
+    ambDF2 <- read.csv(paste0(source.dir, "/EUC_", mod.abb, "_OBS_FIX_AMB_NOP_D.csv"))  # wet
+    
+    ### elevated CO2, over observed period (2012-2019)
+    eleDF1 <- read.csv(paste0(source.dir, "/EUC_", mod.abb, "_OBS_VAR_ELE_NOP_D.csv"))  # dry
+    eleDF2 <- read.csv(paste0(source.dir, "/EUC_", mod.abb, "_OBS_VAR_ELE_NOP_D.csv"))  # wet
+    
+    ### obtain means, sums for stocks and fluxes
+    ambDF1 <- convert_into_annual(ambDF1)
+    ambDF2 <- convert_into_annual(ambDF2)
+    eleDF1 <- convert_into_annual(eleDF1)
+    eleDF2 <- convert_into_annual(eleDF2)
+    
+    ### get dimension
+    d <- dim(ambDF1)
+    n <- d[2]
+    
+    ### calculate CO2 response ratio
+    CO2DF1 <- CO2DF2 <- ambDF1
+    CO2DF1[,2:n] <- eleDF1[,3:n]/ambDF1[,3:n]  # var
+    CO2DF2[,2:n] <- eleDF2[,3:n]/ambDF2[,3:n]  # fix
+    
+    ### merge
+    CO2DF1$Trt <- "OBS_VAR"
+    CO2DF2$Trt <- "OBS_FIX"
+    
+    plotDF <- rbind(CO2DF1, CO2DF2)
+    
+    ### get column names
+    col.names <- names(plotDF)
+    
+    ### get dimension
+    d <- dim(plotDF)
+    n <- d[2]
+    
+    ### plot CO2 response ratio
+    pdf(paste0(out.dir, "/", mod.abb, "_current_future_trajectory_CO2_ratio_var.pdf"))
+    
+    for (i in 2:(n-1)) {
+        p1 <- ggplot(plotDF) +
+            geom_point(aes(x = YEAR, y = plotDF[,i], fill = Trt, pch = Trt), size=4)+
+            geom_line(aes(x = YEAR, y = plotDF[,i], col=Trt))+
+            theme_linedraw() +
+            theme(panel.grid.minor=element_blank(),
+                  axis.text.x=element_text(size=12),
+                  axis.title.x=element_blank(),
+                  axis.text.y=element_text(size=12),
+                  axis.title.y=element_text(size=14),
+                  legend.text=element_text(size=14),
+                  legend.title=element_text(size=16),
+                  panel.grid.major=element_blank(),
+                  legend.position="bottom",
+                  legend.box = 'horizontal',
+                  legend.box.just = 'left',
+                  plot.title = element_text(size=16, face="bold.italic", 
+                                            hjust = 0.5))+
+            ylab(paste0(colnames(plotDF)[i]))+
+            scale_color_manual(name="",
+                               limits=c("OBS_VAR", "OBS_FIX"),
+                               labels=c("OBS_VAR", "OBS_FIX"),
+                               values=c("orange", "cyan"),
+                               guide=guide_legend(nrow=4))+
+            scale_fill_manual(name="",
+                              limits=c("OBS_VAR", "OBS_FIX"),
+                              labels=c("OBS_VAR", "OBS_FIX"),
+                              values=c("orange", "cyan"),
+                              guide=guide_legend(nrow=4))+
+            scale_linetype_manual(name="",
+                                  limits=c("OBS_VAR", "OBS_FIX"),
+                                  labels=c("OBS_VAR", "OBS_FIX"),
+                                  values=c("solid", "dotted"),
+                                  guide=guide_legend(nrow=4))+
+            scale_shape_manual(name="",
+                               limits=c("OBS_VAR", "OBS_FIX"),
+                               labels=c("OBS_VAR", "OBS_FIX"),
+                               values=c(24,21),
+                               guide=guide_legend(nrow=4))+
+            ggtitle(colnames(plotDF)[i])+
+            xlab("Year")
+        
+        
+        plot(p1)
+    }
+    
+    dev.off()
+    
+    
+}
