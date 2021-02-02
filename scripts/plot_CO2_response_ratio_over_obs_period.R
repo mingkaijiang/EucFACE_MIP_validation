@@ -1,21 +1,12 @@
 plot_CO2_response_ratio_over_obs_period <- function(source.dir, mod.abb, out.dir) {
     
-    #### source directory
-    source.dir <- paste0(getwd(), "/simulation_output/ORCHIDEE")
-    
-    #### model abbreviation
-    mod.abb <- "OCHDP"
-    
-    #### setting out path to store the files
-    out.dir <- paste0(getwd(), "/analysis_output")
-    
     ### ambient CO2, over observed period (2012-2019)
     ambDF1 <- read.csv(paste0(source.dir, "/EUC_", mod.abb, "_OBS_VAR_AMB_NOP_D.csv"))  # dry
     ambDF2 <- read.csv(paste0(source.dir, "/EUC_", mod.abb, "_OBS_FIX_AMB_NOP_D.csv"))  # wet
     
     ### elevated CO2, over observed period (2012-2019)
     eleDF1 <- read.csv(paste0(source.dir, "/EUC_", mod.abb, "_OBS_VAR_ELE_NOP_D.csv"))  # dry
-    eleDF2 <- read.csv(paste0(source.dir, "/EUC_", mod.abb, "_OBS_VAR_ELE_NOP_D.csv"))  # wet
+    eleDF2 <- read.csv(paste0(source.dir, "/EUC_", mod.abb, "_OBS_FIX_ELE_NOP_D.csv"))  # wet
     
     ### obtain means, sums for stocks and fluxes
     ambDF1 <- convert_into_annual(ambDF1)
@@ -50,6 +41,7 @@ plot_CO2_response_ratio_over_obs_period <- function(source.dir, mod.abb, out.dir
     
     for (i in 2:(n-1)) {
         p1 <- ggplot(plotDF) +
+            geom_hline(yintercept=1)+
             geom_point(aes(x = YEAR, y = plotDF[,i], fill = Trt, pch = Trt), size=4)+
             geom_line(aes(x = YEAR, y = plotDF[,i], col=Trt))+
             theme_linedraw() +
