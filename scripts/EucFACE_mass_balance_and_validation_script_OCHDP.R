@@ -31,10 +31,10 @@ EucFACE_mass_balance_and_validation_script_OCHDP <- function() {
     ##########################################################################
     #### Step 1: basic set-up
     #### clear wk space
-    rm(list=ls(all=TRUE))
-    
-    #### Source functions and packages
-    source("prepare.R")
+    #rm(list=ls(all=TRUE))
+    #
+    ##### Source functions and packages
+    #source("prepare.R")
     
     #### select the model abbreviation
     #### options are:
@@ -50,7 +50,7 @@ EucFACE_mass_balance_and_validation_script_OCHDP <- function() {
     mod.abb <- "OCHDP"
     
     #### setting out path to store the files
-    out.dir <- paste0(getwd(), "/validation_output", mod.abb)
+    out.dir <- paste0(getwd(), "/validation_output/", mod.abb)
     
     ### create output folder
     if(!dir.exists(out.dir)) {
@@ -64,7 +64,7 @@ EucFACE_mass_balance_and_validation_script_OCHDP <- function() {
     ### the naming of the file follows the output protocol. 
     ### Note that this is the daily file. 
     ### You can modify this path to read in different files. 
-    modDF <- read.csv(paste0("simulation_output/ORCHIDEE/EUC_", mod.abb, "_OBS_VAR_AMB_NOP_D.csv"))
+    modDF <- read.csv(paste0("simulation_output/OCHDP/EUC_", mod.abb, "_OBS_VAR_AMB_NOP_D.csv"))
     
     ### checking number of column in the original dataframe
     ncol <- ncol(modDF)

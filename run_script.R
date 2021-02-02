@@ -13,14 +13,19 @@ rm(list=ls(all=TRUE))
 source("prepare.R")
 
 ##########################################################################
-#### Step 2: Run individual model mass balance checks
+#### Step 2: Conver model-specific output into requested MIP output format
 
 ### GDAY-CNP
-## convert model-specific output to MIP standard
 translate_GDAY_simulation_into_EucFACE_MIP_format(met.path ="/Users/mingkaijiang/Documents/Research/Projects/EucFACE_Modeling/GDAY-EucFACE/met_data",
                                                   sim.path = "/Users/mingkaijiang/Documents/Research/Projects/EucFACE_Modeling/GDAY-EucFACE/outputs",
                                                   out.path = "simulation_output")
 
+
+
+##########################################################################
+#### Step 3: Run individual model mass balance checks
+
+### GDAY-CNP
 EucFACE_mass_balance_and_validation_script_GDAYP()
 
 
@@ -33,7 +38,7 @@ EucFACE_mass_balance_and_validation_script_OCHDX()
 
 
 ##########################################################################
-#### Step 3: Plot CO2 response ratios over observed period
+#### Step 4: Plot CO2 response ratios over observed period
 
 ### ORCHIDEE-CNP
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/OCHDP"),
@@ -58,12 +63,37 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
 
 
 ##########################################################################
-#### Step 3: Plot CO2 response ratios over predicted period
+#### Step 5: compare observed period simulation results with observation data, focus on CO2 response
+
+
+
+
+##########################################################################
+#### Step 6: Plot CO2 response ratios over predicted period
 
 ### GDAY
+plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/GDAYP"),
+                                             mod.abb = "GDAYP",
+                                             out.dir = paste0(getwd(), "/analysis_output/GDAYP"),
+                                             sim.period = "PRD",
+                                             nutrient.trt = "NOP")
+
+plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/GDAYP"),
+                                             mod.abb = "GDAYP",
+                                             out.dir = paste0(getwd(), "/analysis_output/GDAYP"),
+                                             sim.period = "PRD",
+                                             nutrient.trt = "MDP")
+
+plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/GDAYP"),
+                                             mod.abb = "GDAYP",
+                                             out.dir = paste0(getwd(), "/analysis_output/GDAYP"),
+                                             sim.period = "PRD",
+                                             nutrient.trt = "HIP")
 
 
 
-
+##########################################################################
+####
 #### End.
 ####
+##########################################################################
