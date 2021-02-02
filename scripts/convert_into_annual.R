@@ -15,7 +15,11 @@ convert_into_annual <- function (inDF) {
     
     l <- dim(deltaDF)[2]
     
-    for (i in c(2012:2019)) {
+    ### get year
+    yr.start <- min(unique(poolDF$YEAR))
+    yr.end <- max(unique(poolDF$YEAR))
+    
+    for (i in c(yr.start:yr.end)) {
         deltaDF[deltaDF$YEAR==i,3:l] <- poolDF[poolDF$YEAR==i&poolDF$DOY==365,3:l]-poolDF[poolDF$YEAR==i&poolDF$DOY==1,3:l]
     }
     

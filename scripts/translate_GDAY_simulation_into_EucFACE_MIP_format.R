@@ -474,7 +474,7 @@ translate_GDAY_simulation_into_EucFACE_MIP_format <- function(met.path,
                          "PBIOCHMIN","PLEACH","PGL","PGW","PGCR","PGFR","PLRETR","PWRETR",
                          "PCRRETR","PFRRETR","PWEA","PDEP","PFERT")]
         
-        write.csv(outDF, paste0(out.path, "/GDAY/", sceDF$out.names[i], ".csv"),
+        write.csv(outDF, paste0(out.path, "/GDAYP/", sceDF$out.names[i], ".csv"),
                   row.names=F)
     }
     

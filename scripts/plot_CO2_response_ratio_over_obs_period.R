@@ -1,12 +1,21 @@
-plot_CO2_response_ratio_over_obs_period <- function(source.dir, mod.abb, out.dir) {
+plot_CO2_response_ratio_for_individual_model <- function(source.dir, 
+                                                         mod.abb, 
+                                                         out.dir,
+                                                         sim.period,
+                                                         nutrient.trt) {
+    
+    ### create output folder
+    if(!dir.exists(out.dir)) {
+        dir.create(out.dir, showWarnings = FALSE)
+    }
     
     ### ambient CO2, over observed period (2012-2019)
-    ambDF1 <- read.csv(paste0(source.dir, "/EUC_", mod.abb, "_OBS_VAR_AMB_NOP_D.csv"))  # dry
-    ambDF2 <- read.csv(paste0(source.dir, "/EUC_", mod.abb, "_OBS_FIX_AMB_NOP_D.csv"))  # wet
+    ambDF1 <- read.csv(paste0(source.dir, "/EUC_", mod.abb, "_", sim.period, "_VAR_AMB_", nutrient.trt, "_D.csv"))  # dry
+    ambDF2 <- read.csv(paste0(source.dir, "/EUC_", mod.abb, "_", sim.period, "_FIX_AMB_", nutrient.trt, "_D.csv"))  # wet
     
     ### elevated CO2, over observed period (2012-2019)
-    eleDF1 <- read.csv(paste0(source.dir, "/EUC_", mod.abb, "_OBS_VAR_ELE_NOP_D.csv"))  # dry
-    eleDF2 <- read.csv(paste0(source.dir, "/EUC_", mod.abb, "_OBS_FIX_ELE_NOP_D.csv"))  # wet
+    eleDF1 <- read.csv(paste0(source.dir, "/EUC_", mod.abb, "_", sim.period, "_VAR_ELE_", nutrient.trt, "_D.csv"))  # dry
+    eleDF2 <- read.csv(paste0(source.dir, "/EUC_", mod.abb, "_", sim.period, "_FIX_ELE_", nutrient.trt, "_D.csv"))  # wet
     
     ### obtain means, sums for stocks and fluxes
     ambDF1 <- convert_into_annual(ambDF1)
@@ -24,8 +33,8 @@ plot_CO2_response_ratio_over_obs_period <- function(source.dir, mod.abb, out.dir
     CO2DF2[,2:n] <- eleDF2[,3:n]/ambDF2[,3:n]  # fix
     
     ### merge
-    CO2DF1$Trt <- "OBS_VAR"
-    CO2DF2$Trt <- "OBS_FIX"
+    CO2DF1$Trt <- paste0(sim.period, "_VAR_", nutrient.trt)
+    CO2DF2$Trt <- paste0(sim.period, "_FIX_", nutrient.trt)
     
     plotDF <- rbind(CO2DF1, CO2DF2)
     
@@ -37,7 +46,7 @@ plot_CO2_response_ratio_over_obs_period <- function(source.dir, mod.abb, out.dir
     n <- d[2]
     
     ### plot CO2 response ratio
-    pdf(paste0(out.dir, "/", mod.abb, "_current_future_trajectory_CO2_ratio_var.pdf"))
+    pdf(paste0(out.dir, "/", mod.abb, "_", sim.period, "_", nutrient.trt, "_D_CO2_ratio.pdf"))
     
     for (i in 2:(n-1)) {
         p1 <- ggplot(plotDF) +

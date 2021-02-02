@@ -1,4 +1,4 @@
-EucFACE_mass_balance_and_validation_script_ORCHIDEE_MIC <- function() {
+EucFACE_mass_balance_and_validation_script_OCHDX <- function() {
     #### EucFACE mass balance and validation script
     #### Mingkai Jiang (m.jiang@westernsydney.edu.au)
     ####
@@ -50,7 +50,12 @@ EucFACE_mass_balance_and_validation_script_ORCHIDEE_MIC <- function() {
     mod.abb <- "OCHDX"
     
     #### setting out path to store the files
-    out.dir <- paste0(getwd(), "/validation_output")
+    out.dir <- paste0(getwd(), "/validation_output", mod.abb)
+    
+    ### create output folder
+    if(!dir.exists(out.dir)) {
+        dir.create(out.dir, showWarnings = FALSE)
+    }
     
     ##########################################################################
     #### Step 2. Mass balance checks
