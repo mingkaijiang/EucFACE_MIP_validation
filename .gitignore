@@ -42,7 +42,7 @@ vignettes/*.pdf
 *.csv
 *.txt
 *.pdf
-*.jpeg
+*.jpg
 *.nc
 *.html
 *.dat
