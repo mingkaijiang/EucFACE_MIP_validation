@@ -70,14 +70,22 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
 eucDF <- prepare_EucFACE_observation_dataset()
 
 ### GDAY
-source.dir=paste0(getwd(), "/simulation_output/GDAYP")
-mod.abb = "GDAYP"
-out.dir = paste0(getwd(), "/analysis_output/GDAYP")
 plot_CO2_response_comparison_against_data_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/GDAYP"),
                                                                mod.abb = "GDAYP",
                                                                out.dir = paste0(getwd(), "/analysis_output/GDAYP"),
                                                                eucDF = eucDF)
 
+### ORCHIDEE-CNP
+plot_CO2_response_comparison_against_data_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/OCHDP"),
+                                                               mod.abb = "OCHDP",
+                                                               out.dir = paste0(getwd(), "/analysis_output/OCHDP"),
+                                                               eucDF = eucDF)
+
+### ORCHIDEE-mic
+plot_CO2_response_comparison_against_data_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/OCHDX"),
+                                                               mod.abb = "OCHDX",
+                                                               out.dir = paste0(getwd(), "/analysis_output/OCHDX"),
+                                                               eucDF = eucDF)
 
 
 ##########################################################################
