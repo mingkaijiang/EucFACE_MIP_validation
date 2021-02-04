@@ -17,6 +17,13 @@ merge_simulation_and_observation_datasets <- function(eucDF, simDF) {
     ### merge
     outDF <- rbindlist(list(eucDF2, simDF2), fill = TRUE)    
     
+    ### organize colnames
+    tmp <- c("Source","Group", "Trt", dup.names)
+    iden.list <- c()
+    iden.list <- tmp[!duplicated(tmp)]
+    
+    outDF2 <- outDF[,paste0(iden.list[1])]
+    
     ### return
     return(outDF)
 }
