@@ -8,24 +8,14 @@ plot_CO2_response_comparison_against_data_for_individual_model <- function (sour
         dir.create(out.dir, showWarnings = FALSE)
     }
     
-    ### ambient CO2, over observed period (2012-2019)
-    simDF <- read.csv(paste0(source.dir, "/EUC_", mod.abb, "_", sim.period, "_VAR_AMB_", nutrient.trt, "_D.csv"))  # dry
     
-    ### obtain means, sums for stocks and fluxes
-    simDF <- convert_into_annual(simDF)
+    ### prepare simulation results
+    simDF <- prepare_simulation_results_for_comparison_against_data(source.dir, mod.abb)
     
-    ### get dimension
-    d <- dim(simDF)
-    n <- d[2]
+    ### merge simulation and observation datasets
+    myDF <- merge_simulation_and_observation_datasets(eucDF, simDF)
     
-    ### calculate CO2 response ratio
-    CO2DF1 <- CO2DF2 <- ambDF1
-    CO2DF1[,2:n] <- eleDF1[,3:n]/ambDF1[,3:n]  # var
-    CO2DF2[,2:n] <- eleDF2[,3:n]/ambDF2[,3:n]  # fix
     
-    ### merge
-    CO2DF1$Trt <- paste0(sim.period, "_VAR_", nutrient.trt)
-    CO2DF2$Trt <- paste0(sim.period, "_FIX_", nutrient.trt)
     
     plotDF <- rbind(CO2DF1, CO2DF2)
     
