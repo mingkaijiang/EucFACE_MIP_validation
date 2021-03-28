@@ -326,103 +326,100 @@ EucFACE_mass_balance_and_validation_script_CABLP <- function() {
     ##################### Nitrogen balance check ################################
     ### Firstly, we check Delta$NL, Delta$NW, Delta$NFR and Delta$NCR. 
     ### Here, Delta$NL = NGL + NLITIN - NLRETR, where NLRETR is the retranslocation flux. 
-    p1<-xyplot(I(NGL-NLITIN-NLRETR)~deltaNL,annDF,
-               #main='I(NGL-NLITIN-NLRETR)~deltaNL',
-               auto.key=T,
-               scales=list(relation='free'),
-               panel=function(...){
-                   panel.xyplot(...)
-                   panel.abline(a=0,b=1)}) 
+    #p1<-xyplot(I(NGL-NLITIN-NLRETR)~deltaNL,annDF,
+    #           #main='I(NGL-NLITIN-NLRETR)~deltaNL',
+    #           auto.key=T,
+    #           scales=list(relation='free'),
+    #           panel=function(...){
+    #               panel.xyplot(...)
+    #               panel.abline(a=0,b=1)}) 
     
-    p2<-xyplot(I(NGW-NWLIN-NWRETR)~deltaNW,annDF,
-               #main='I(NGW-NWLIN-NWRETR)~deltaNW',
-               auto.key=T,
-               scales=list(relation='free'),
-               panel=function(...){
-                   panel.xyplot(...)
-                   panel.abline(a=0,b=1)}) 
+    #p2<-xyplot(I(NGW-NWLIN-NWRETR)~deltaNW,annDF,
+    #           #main='I(NGW-NWLIN-NWRETR)~deltaNW',
+    #           auto.key=T,
+    #           scales=list(relation='free'),
+    #           panel=function(...){
+    #               panel.xyplot(...)
+    #               panel.abline(a=0,b=1)}) 
     
+    #p3<-xyplot(I(NGFR-NFRLIN-NFRRETR)~deltaNFR,annDF,
+    #           #main='I(NGFR-NFRLIN-NFRRETR)~deltaNFR',
+    #           auto.key=T,
+    #           scales=list(relation='free'),
+    #           panel=function(...){
+    #               panel.xyplot(...)
+    #               panel.abline(a=0,b=1)}) 
     
-    p3<-xyplot(I(NGFR-NFRLIN-NFRRETR)~deltaNFR,annDF,
-               #main='I(NGFR-NFRLIN-NFRRETR)~deltaNFR',
-               auto.key=T,
-               scales=list(relation='free'),
-               panel=function(...){
-                   panel.xyplot(...)
-                   panel.abline(a=0,b=1)}) 
-    
-    
-    p4<-xyplot(I(NGCR-NCRLIN-NCRRETR)~deltaNCR,annDF,
-               #main='I(NGCR-NCRLIN-NCRRETR)~deltaNCR',
-               auto.key=T,
-               scales=list(relation='free'),
-               panel=function(...){
-                   panel.xyplot(...)
-                   panel.abline(a=0,b=1)}) 
-    
+    #p4<-xyplot(I(NGCR-NCRLIN-NCRRETR)~deltaNCR,annDF,
+    #           #main='I(NGCR-NCRLIN-NCRRETR)~deltaNCR',
+    #           auto.key=T,
+    #           scales=list(relation='free'),
+    #           panel=function(...){
+    #               panel.xyplot(...)
+    #               panel.abline(a=0,b=1)}) 
     
     ### This is to check finelitter influx. Total NFLIT = NFLITA + NFLITB. 
-    p5<-xyplot(I(NFLITA+NFLITB)~NFLIT,annDF,
-               #main='I(NFLITA+NFLITB)~NFLIT',
-               auto.key=T,
-               scales=list(relation='free'),
-               panel=function(...){
-                   panel.xyplot(...)
-                   panel.abline(a=0,b=1)}) 
-    
+    #p5<-xyplot(I(NFLITA+NFLITB)~NFLIT,annDF,
+    #           #main='I(NFLITA+NFLITB)~NFLIT',
+    #           auto.key=T,
+    #           scales=list(relation='free'),
+    #           panel=function(...){
+    #               panel.xyplot(...)
+    #               panel.abline(a=0,b=1)}) 
+    #
     
     ### Now, we check mass balance of total N required to support the new growth, 
     ### which should euqal to the sum of nitrogen uptake and total retranslocation fluxes. 
     ### The full equation is written as:
     ### NUP+NLRETR+NWRETR+NFRRETR+NCRRETR = NGL+NGFR+NGCR+NGW
-    p6<-xyplot(I(NUP+NLRETR+NWRETR+NFRRETR+NCRRETR)~I(NGL+NGFR+NGCR+NGW),annDF,
-               #main='I(NUP+NLRETR+NWRETR+NFRRETR+NCRRETR)~I(NGL+NGFR+NGCR+NGW)',
-               auto.key=T,
-               scales=list(relation='free'),
-               panel=function(...){
-                   panel.xyplot(...)
-                   panel.abline(a=0,b=1)}) 
+    #p6<-xyplot(I(NUP+NLRETR+NWRETR+NFRRETR)~I(NL+NFR+NW),annDF,
+    #           #main='I(NUP+NLRETR+NWRETR+NFRRETR+NCRRETR)~I(NGL+NGFR+NGCR+NGW)',
+    #           auto.key=T,
+    #           scales=list(relation='free'),
+    #           panel=function(...){
+    #               panel.xyplot(...)
+    #               panel.abline(a=0,b=1)}) 
     
     ### Some models could have a NSTOR pool, 
     ### so not all nitrogen available for plant is used for growth. 
     ### Here we are looking at DeltaNSTOR 
     ### to see if it helps to close the mass balance if the figure above doesn't close its mass balance. 
-    p7<-xyplot(I(NUP+NLRETR+NWRETR+NFRRETR+NCRRETR-NGL-NGFR-NGCR-NGW)~deltaNSTOR,annDF,
-               #main='I(NUP+NLRETR+NWRETR+NFRRETR+NCRRETR-NGL-NGFR-NGCR-NGW)~deltaNSTOR',
-               auto.key=T,
-               scales=list(relation='free'),
-               panel=function(...){
-                   panel.xyplot(...)
-                   panel.abline(a=0,b=1)}) 
+    #p7<-xyplot(I(NUP+NLRETR+NWRETR+NFRRETR-NGL-NGFR-NGCR-NGW)~deltaNSTOR,annDF,
+    #           #main='I(NUP+NLRETR+NWRETR+NFRRETR+NCRRETR-NGL-NGFR-NGCR-NGW)~deltaNSTOR',
+    #           auto.key=T,
+    #           scales=list(relation='free'),
+    #           panel=function(...){
+    #               panel.xyplot(...)
+    #               panel.abline(a=0,b=1)}) 
     
     
     ### N fixation could also be added to plant directly. 
     ### So here we are checking its effect. Full equation is: 
     ### NFIX+NUP+NLRETR+NWRETR+NFRRETR+NCRRETR = NGL+NGFR+NGCR+NGW
-    p8<-xyplot(I(NFIX+NUP+NLRETR+NWRETR+NFRRETR+NCRRETR)~I(NGL+NGFR+NGCR+NGW),annDF,
-               #main='I(NFIX+NUP+NLRETR+NWRETR+NFRRETR+NCRRETR)~I(NGL+NGFR+NGCR+NGW)',
-               auto.key=T,
-               scales=list(relation='free'),
-               panel=function(...){
-                   panel.xyplot(...)
-                   panel.abline(a=0,b=1)}) 
-    
+    #p8<-xyplot(I(NFIX+NUP+NLRETR+NWRETR+NFRRETR+NCRRETR)~I(NGL+NGFR+NGCR+NGW),annDF,
+    #           #main='I(NFIX+NUP+NLRETR+NWRETR+NFRRETR+NCRRETR)~I(NGL+NGFR+NGCR+NGW)',
+    #           auto.key=T,
+    #           scales=list(relation='free'),
+    #           panel=function(...){
+    #               panel.xyplot(...)
+    #               panel.abline(a=0,b=1)}) 
+    #
     
     ### Similar to the above figure, we are checking if Delta$NSTOR helps to close the budget. 
-    p9<-xyplot(I(NFIX+NUP+NLRETR+NWRETR+NFRRETR+NCRRETR-NGL-NGFR-NGCR-NGW)~deltaNSTOR,annDF,
-               #main='I(NFIX+NUP+NLRETR+NWRETR+NFRRETR+NCRRETR-NGL-NGFR-NGCR-NGW)~deltaNSTOR',
-               auto.key=T,
-               scales=list(relation='free'),
-               panel=function(...){
-                   panel.xyplot(...)
-                   panel.abline(a=0,b=1)}) 
+    #p9<-xyplot(I(NFIX+NUP+NLRETR+NWRETR+NFRRETR+NCRRETR-NGL-NGFR-NGCR-NGW)~deltaNSTOR,annDF,
+    #           #main='I(NFIX+NUP+NLRETR+NWRETR+NFRRETR+NCRRETR-NGL-NGFR-NGCR-NGW)~deltaNSTOR',
+    #           auto.key=T,
+    #           scales=list(relation='free'),
+    #           panel=function(...){
+    #               panel.xyplot(...)
+    #               panel.abline(a=0,b=1)}) 
     
     
     ### Now we are checking the whole ecosystem N input and output. 
     ### Full equation is:
     ### NDEP+NFIX-NLEACH-NVOL = DeltaNL+DeltaNW+DeltaNCR+DeltaNFR+DeltaNSOIL+DeltaNFLIT+DeltaNCLITB
     
-    p10<-xyplot(I(NDEP+NFIX-NLEACH-NVOL)~(I(deltaNL+deltaNW+deltaNCR+deltaNFR+deltaNSOIL+deltaNFLIT+deltaNCLITB)),annDF,
+    p10<-xyplot(I(NDEP+NFIX-NLEACH-NVOL)~(I(deltaNL+deltaNW+deltaNCR+deltaNFR+deltaNSOIL+deltaNFLIT)),annDF,
                 #main='I(NDEP+NFIX-NLEACH-NVOL)~(I(deltaNL+deltaNW+deltaNCR+deltaNFR+deltaNSOIL+deltaNFLIT+deltaNCLITB))',
                 auto.key=T,
                 scales=list(relation='free'),
@@ -433,7 +430,7 @@ EucFACE_mass_balance_and_validation_script_CABLP <- function() {
     
     ### A different way to check whole ecosystem N budget, as:
     ### NDEP+NFIX+NLITIN+NWLIN+NCRLIN+NFRLIN-NUP-NLEACH-NVOL = DeltaNSOIL+DeltaNFLIT+DeltaNCLITB
-    p11<-xyplot(I(NDEP+NFIX+NLITIN+NWLIN+NCRLIN+NFRLIN-NUP-NLEACH-NVOL)~I(deltaNSOIL+deltaNFLIT+deltaNCLITB),annDF,
+    p11<-xyplot(I(NDEP+NFIX+NLITIN+NFRLIN-NUP-NLEACH-NVOL)~I(deltaNSOIL+deltaNFLIT),annDF,
                 #main='I(NDEP+NFIX+NLITIN+NWLIN+NCRLIN+NFRLIN-NUP-NLEACH-NVOL)~I(deltaNSOIL+deltaNFLIT+deltaNCLITB)',
                 auto.key=T,
                 scales=list(relation='free'),
@@ -444,7 +441,7 @@ EucFACE_mass_balance_and_validation_script_CABLP <- function() {
     
     ### Another way to check ecosystem N budget, by excluding NFIX:
     ### NDEP+NLITIN+NWLIN+NCRLIN+NFRLIN-NUP-NLEACH-NVOL = DeltaNSOIL+DeltaNFLIT+DeltaNCLITB
-    p12<-xyplot(I(NDEP+NLITIN+NWLIN+NCRLIN+NFRLIN-NUP-NLEACH-NVOL)~I(deltaNSOIL+deltaNFLIT+deltaNCLITB),annDF,
+    p12<-xyplot(I(NDEP+NLITIN+NFRLIN-NUP-NLEACH-NVOL)~I(deltaNSOIL+deltaNFLIT),annDF,
                 #main='I(NDEP+NLITIN+NWLIN+NCRLIN+NFRLIN-NUP-NLEACH-NVOL)~I(deltaNSOIL+deltaNFLIT+deltaNCLITB)',
                 auto.key=T,
                 scales=list(relation='free'),
@@ -466,7 +463,7 @@ EucFACE_mass_balance_and_validation_script_CABLP <- function() {
     
     ### print plots to file, change numbering if needed
     pdf(paste0(out.dir, '/QC_Nitrogen_Balance_',mod.abb,'.pdf',sep=''),width=10,height=8)
-    for (i in 1:13) {
+    for (i in 10:13) {
         print(get(paste("p",i,sep="")))
     }
     dev.off()
@@ -476,7 +473,7 @@ EucFACE_mass_balance_and_validation_script_CABLP <- function() {
     ##################### Phosphorus balance check ################################
     ### The net influx - outflux should equal to the change in all ecosystem P pools: 
     ### PDEP+PWEA-PLEACH = DeltaPL+DeltaPW+DeltaPCR+DeltaPFR+DeltaPSOIL+DeltaPFLIT+DeltaPCLITB
-    p1<-xyplot(I(PDEP+PWEA-PLEACH)~(I(deltaPL+deltaPW+deltaPCR+deltaPFR+deltaPSOIL+deltaPFLIT+deltaPCLITB)),annDF,
+    p1<-xyplot(I(PDEP+PWEA-PLEACH)~(I(deltaPL+deltaPW+deltaPCR+deltaPFR+deltaPSOIL+deltaPFLIT)),annDF,
                #main='I(PDEP+PWEA-PLEACH)~(I(deltaPL+deltaPW+deltaPCR+deltaPFR+deltaPSOIL+deltaPFLIT+deltaPCLITB))',
                auto.key=T,
                scales=list(relation='free'),
@@ -484,79 +481,87 @@ EucFACE_mass_balance_and_validation_script_CABLP <- function() {
                    panel.xyplot(...)
                    panel.abline(a=0,b=1)}) 
     
+    p2 <- plot.new()
+    p3 <- plot.new()
+    p4 <- plot.new()
+    p5 <- plot.new()
+    p6 <- plot.new()
+    p7 <- plot.new()
+    p8 <- plot.new()
+    p9 <- plot.new()
     
     ### Next, we check changes in major vegetation P pools. 
     ### It should equal to production flux - retranslocation flux - litterfall. 
-    p2<-xyplot(I(PGL-PLITIN-PLRETR)~deltaPL,annDF,
-               #main='I(PGL-PLITIN-PLRETR)~deltaPL',
-               auto.key=T,
-               scales=list(relation='free'),
-               panel=function(...){
-                   panel.xyplot(...)
-                   panel.abline(a=0,b=1)}) 
-    
-    
-    p3<-xyplot(I(PGW-PWLIN-PWRETR)~deltaPW,annDF,
-               #main='I(PGW-PWLIN-PWRETR)~deltaPW',
-               auto.key=T,
-               scales=list(relation='free'),
-               panel=function(...){
-                   panel.xyplot(...)
-                   panel.abline(a=0,b=1)}) 
-    
-    
-    p4<-xyplot(I(PGFR-PFRLIN-PFRRETR)~deltaPFR,annDF,
-               #main='I(PGFR-PFRLIN-PFRRETR)~deltaPFR',
-               auto.key=T,
-               scales=list(relation='free'),
-               panel=function(...){
-                   panel.xyplot(...)
-                   panel.abline(a=0,b=1)}) 
-    
-    
-    p6<-xyplot(I(PGCR-PCRLIN-PCRRETR)~deltaPCR,annDF,
-               #main='I(PGCR-PCRLIN-PCRRETR)~deltaPCR',
-               auto.key=T,
-               scales=list(relation='free'),
-               panel=function(...){
-                   panel.xyplot(...)
-                   panel.abline(a=0,b=1)}) 
-    
-    
-    ### This is to check P litter flux. 
-    p7<-xyplot(I(PFLITA+PFLITB)~PFLIT,annDF,
-               #main='I(PFLITA+PFLITB)~PFLIT',
-               auto.key=T,
-               scales=list(relation='free'),
-               panel=function(...){
-                   panel.xyplot(...)
-                   panel.abline(a=0,b=1)}) 
-    
-    ### Now we check the total P required to make new vegetation: 
-    ### PUP+PLRETR+PWRETR+PFRRETR+PCRRETR=PGL+PGFR+PGCR+PGW
-    p8<-xyplot(I(PUP+PLRETR+PWRETR+PFRRETR+PCRRETR)~I(PGL+PGFR+PGCR+PGW),annDF,
-               #main='I(PUP+PLRETR+PWRETR+PFRRETR+PCRRETR)~I(PGL+PGFR+PGCR+PGW)',
-               auto.key=T,
-               scales=list(relation='free'),
-               panel=function(...){
-                   panel.xyplot(...)
-                   panel.abline(a=0,b=1)}) 
-    
-    
-    ### This is to consider the effect of DeltaPSTOR. 
-    p9<-xyplot(I(PUP+PLRETR+PWRETR+PFRRETR+PCRRETR-PGL-PGFR-PGCR-PGW)~deltaPSTOR,annDF,
-               #main='I(PUP+PLRETR+PWRETR+PFRRETR+PCRRETR-PGL-PGFR-PGCR-PGW)~deltaPSTOR',
-               auto.key=T,
-               scales=list(relation='free'),
-               panel=function(...){
-                   panel.xyplot(...)
-                   panel.abline(a=0,b=1)}) 
-    
+   # p2<-xyplot(I(PGL-PLITIN-PLRETR)~deltaPL,annDF,
+   #            #main='I(PGL-PLITIN-PLRETR)~deltaPL',
+   #            auto.key=T,
+   #            scales=list(relation='free'),
+   #            panel=function(...){
+   #                panel.xyplot(...)
+   #                panel.abline(a=0,b=1)}) 
+   # 
+   # 
+   # p3<-xyplot(I(PGW-PWLIN-PWRETR)~deltaPW,annDF,
+   #            #main='I(PGW-PWLIN-PWRETR)~deltaPW',
+   #            auto.key=T,
+   #            scales=list(relation='free'),
+   #            panel=function(...){
+   #                panel.xyplot(...)
+   #                panel.abline(a=0,b=1)}) 
+   # 
+   # 
+   # p4<-xyplot(I(PGFR-PFRLIN-PFRRETR)~deltaPFR,annDF,
+   #            #main='I(PGFR-PFRLIN-PFRRETR)~deltaPFR',
+   #            auto.key=T,
+   #            scales=list(relation='free'),
+   #            panel=function(...){
+   #                panel.xyplot(...)
+   #                panel.abline(a=0,b=1)}) 
+   # 
+   # 
+   # p6<-xyplot(I(PGCR-PCRLIN-PCRRETR)~deltaPCR,annDF,
+   #            #main='I(PGCR-PCRLIN-PCRRETR)~deltaPCR',
+   #            auto.key=T,
+   #            scales=list(relation='free'),
+   #            panel=function(...){
+   #                panel.xyplot(...)
+   #                panel.abline(a=0,b=1)}) 
+   # 
+   # 
+   # ### This is to check P litter flux. 
+   # p7<-xyplot(I(PFLITA+PFLITB)~PFLIT,annDF,
+   #            #main='I(PFLITA+PFLITB)~PFLIT',
+   #            auto.key=T,
+   #            scales=list(relation='free'),
+   #            panel=function(...){
+   #                panel.xyplot(...)
+   #                panel.abline(a=0,b=1)}) 
+   # 
+   # ### Now we check the total P required to make new vegetation: 
+   # ### PUP+PLRETR+PWRETR+PFRRETR+PCRRETR=PGL+PGFR+PGCR+PGW
+   # p8<-xyplot(I(PUP+PLRETR+PWRETR+PFRRETR+PCRRETR)~I(PGL+PGFR+PGCR+PGW),annDF,
+   #            #main='I(PUP+PLRETR+PWRETR+PFRRETR+PCRRETR)~I(PGL+PGFR+PGCR+PGW)',
+   #            auto.key=T,
+   #            scales=list(relation='free'),
+   #            panel=function(...){
+   #                panel.xyplot(...)
+   #                panel.abline(a=0,b=1)}) 
+   # 
+   # 
+   # ### This is to consider the effect of DeltaPSTOR. 
+   # p9<-xyplot(I(PUP+PLRETR+PWRETR+PFRRETR+PCRRETR-PGL-PGFR-PGCR-PGW)~deltaPSTOR,annDF,
+   #            #main='I(PUP+PLRETR+PWRETR+PFRRETR+PCRRETR-PGL-PGFR-PGCR-PGW)~deltaPSTOR',
+   #            auto.key=T,
+   #            scales=list(relation='free'),
+   #            panel=function(...){
+   #                panel.xyplot(...)
+   #                panel.abline(a=0,b=1)}) 
+   # 
     
     ### This is to check whole ecosystem P flux, 
     ### which means that total in - out = net change:
     ### PDEP+PWEA+PLITIN+PWLIN+PCRLIN+PFRLIN-PUP-PLEACH = DeltaPSOIL+DeltaFLIT+DeltaPCLITB
-    p10<-xyplot(I(PDEP+PWEA+PLITIN+PWLIN+PCRLIN+PFRLIN-PUP-PLEACH)~I(deltaPSOIL+deltaPFLIT+deltaPCLITB),annDF,
+    p10<-xyplot(I(PDEP+PWEA+PLITIN+PFRLIN-PUP-PLEACH)~I(deltaPSOIL+deltaPFLIT),annDF,
                 #main='I(PDEP+PWEA+PLITIN+PWLIN+PCRLIN+PFRLIN-PUP-PLEACH)~I(deltaPSOIL+deltaPFLIT+deltaPCLITB)',
                 auto.key=T,
                 scales=list(relation='free'),
@@ -576,7 +581,7 @@ EucFACE_mass_balance_and_validation_script_CABLP <- function() {
     
     
     ### Inorganic P pool in soils: PLAB+PSEC+POCC+PPAR=PPMIN
-    p12<-xyplot(I(PLAB+PSEC+POCC+PPAR)~PPMIN,annDF,
+    p12<-xyplot(I(PLAB+PSEC+POCC)~PPMIN,annDF,
                 #main='I(PLAB+PSEC+POCC+PPAR)~PPMIN',
                 auto.key=T,
                 scales=list(relation='free'),
@@ -646,13 +651,13 @@ EucFACE_mass_balance_and_validation_script_CABLP <- function() {
     vegDF$meanvalue[vegDF$Group=="sim"&vegDF$Variable=="CL"] <- mean(poolDF$CL, na.rm=T)
     vegDF$meanvalue[vegDF$Group=="sim"&vegDF$Variable=="CW"] <- mean(poolDF$CW, na.rm=T)
     vegDF$meanvalue[vegDF$Group=="sim"&vegDF$Variable=="CFR"] <- mean(poolDF$CFR, na.rm=T)
-    vegDF$meanvalue[vegDF$Group=="sim"&vegDF$Variable=="CCR"] <- mean(poolDF$CCR, na.rm=T)
+    #vegDF$meanvalue[vegDF$Group=="sim"&vegDF$Variable=="CCR"] <- mean(poolDF$CCR, na.rm=T)
     vegDF$meanvalue[vegDF$Group=="sim"&vegDF$Variable=="CSOIL"] <- mean(poolDF$CSOIL, na.rm=T)
     
     vegDF$sevalue[vegDF$Group=="sim"&vegDF$Variable=="CL"] <- se(poolDF$CL, na.rm=T)
     vegDF$sevalue[vegDF$Group=="sim"&vegDF$Variable=="CW"] <- se(poolDF$CW, na.rm=T)
     vegDF$sevalue[vegDF$Group=="sim"&vegDF$Variable=="CFR"] <- se(poolDF$CFR, na.rm=T)
-    vegDF$sevalue[vegDF$Group=="sim"&vegDF$Variable=="CCR"] <- se(poolDF$CCR, na.rm=T)
+    #vegDF$sevalue[vegDF$Group=="sim"&vegDF$Variable=="CCR"] <- se(poolDF$CCR, na.rm=T)
     vegDF$sevalue[vegDF$Group=="sim"&vegDF$Variable=="CSOIL"] <- se(poolDF$CSOIL, na.rm=T)
     
     
@@ -714,9 +719,9 @@ EucFACE_mass_balance_and_validation_script_CABLP <- function() {
     ### assign values
     allocDF$meanvalue[allocDF$Group=="sim"&allocDF$Variable=="leaf"] <- mean(fluxDF$CGL/fluxDF$NPP)
     allocDF$meanvalue[allocDF$Group=="sim"&allocDF$Variable=="wood"] <- round(mean(fluxDF$CGW/fluxDF$NPP),2)
-    allocDF$meanvalue[allocDF$Group=="sim"&allocDF$Variable=="root"] <- round(mean((fluxDF$CGFR+fluxDF$CGCR)/fluxDF$NPP),2)
-    allocDF$meanvalue[allocDF$Group=="sim"&allocDF$Variable=="exudation"] <- round(mean((fluxDF$CEX)/fluxDF$NPP),2)
-    allocDF$meanvalue[allocDF$Group=="sim"&allocDF$Variable=="belowground"] <- round(mean((fluxDF$CGFR+fluxDF$CGCR+fluxDF$CEX)/fluxDF$NPP),2)
+    allocDF$meanvalue[allocDF$Group=="sim"&allocDF$Variable=="root"] <- round(mean((fluxDF$CGFR)/fluxDF$NPP),2)
+    #allocDF$meanvalue[allocDF$Group=="sim"&allocDF$Variable=="exudation"] <- round(mean((fluxDF$CEX)/fluxDF$NPP),2)
+    allocDF$meanvalue[allocDF$Group=="sim"&allocDF$Variable=="belowground"] <- round(mean((fluxDF$CGFR)/fluxDF$NPP),2)
     
     
     allocDF2 <- allocDF[allocDF$Variable%in%c("leaf", "wood", "root", "exudation"),]
@@ -1222,7 +1227,7 @@ EucFACE_mass_balance_and_validation_script_CABLP <- function() {
     subDF <- subset(modDF, YEAR <= 2015 & YEAR > 2012)
     subDF <- subDF[,c("YEAR", "DOY", "Date", "RHET", "RCR", "RFR")]
     subDF$Date <- as.Date(as.character(subDF$Date))
-    subDF$Rsoil_sim <- with(subDF, RHET+RCR+RFR)
+    subDF$Rsoil_sim <- with(subDF, RHET+RFR)
     
     
     
@@ -1268,7 +1273,7 @@ EucFACE_mass_balance_and_validation_script_CABLP <- function() {
     sumDF <- summaryBy(WC_kg_m2~Location+Date, FUN=sum, data=swcDF, keep.names=T, na.rm=T)
     
     ### process simulation data
-    subDF <- modDF[,c("YEAR", "DOY", "Date", "SW", "SWPA")]
+    subDF <- modDF[,c("YEAR", "DOY", "Date", "SW")]
     
     plotDF <- merge(subDF, sumDF, by="Date", all=T)
     
@@ -1276,7 +1281,7 @@ EucFACE_mass_balance_and_validation_script_CABLP <- function() {
     ### plot all data
     p4 <- ggplot(plotDF, aes(x=Date)) +
         geom_point(aes(y=WC_kg_m2, color="obs"))+
-        geom_point(aes(y=SWPA, color="sim"), lwd = 1) +
+        geom_point(aes(y=SW, color="sim"), lwd = 1) +
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
               axis.title.x = element_text(size=14), 
