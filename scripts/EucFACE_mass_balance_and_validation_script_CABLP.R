@@ -102,7 +102,7 @@ EucFACE_mass_balance_and_validation_script_CABLP <- function() {
     ### Otherwise, please indicate the reasons as to why your model does not have mass balance closure.
     
     ### summarize all fluxes first to obain annual rate
-    fluxDF <- summaryBy(PREC+ET+TRANS+ES+EC+RO+DRAIN+NEP+GPP+NPP+RHET+RAU+RECO+CGL+CGFR+CGCR+CGW+NGL+NGFR+NGCR+NGW+PGL+PGFR+PGCR+PGW+NUP+NGMIN+NMIN+NLEACH+PUP+PGMIN+PMIN+PLEACH+PBIOCHMIN+NLRETR+PLRETR+RCR+RFR+CREPR+CEX+CVOC+RL+RW+RGR+CLITIN+CCRLIN+CFRLIN+CWLIN+NLITIN+NCRLIN+NFRLIN+NWLIN+PLITIN+PCRLIN+PFRLIN+PWLIN+NWRETR+PWRETR+NCRRETR+PCRRETR+NFRRETR+PFRRETR+NDEP+NFIX+NVOL+PDEP+PWEA~YEAR, data=modDF, FUN=sum, keep.names=T, na.rm=T)
+    fluxDF <- summaryBy(PREC+ET+TRANS+ES+EC+RO+DRAIN+NEP+GPP+NPP+RHET+RAU+RECO+CGL+CGFR+CGCR+CGW+NGL+NGFR+NGCR+NGW+PGL+PGFR+PGCR+PGW+NUP+NGMIN+NMIN+NLEACH+PUP+PGMIN+PMIN+PLEACH+PBIOCHMIN+NLRETR+PLRETR+RCR+RFR+CREPR+CEX+CVOC+RL+RW+RGR+CLITIN+CCRLIN+CFRLIN+CWLIN+NLITIN+NCRLIN+NFRLIN+PLITIN+PCRLIN+PFRLIN+NWRETR+PWRETR+NCRRETR+PCRRETR+NFRRETR+PFRRETR+NDEP+NFIX+NVOL+PDEP+PWEA~YEAR, data=modDF, FUN=sum, keep.names=T, na.rm=T)
     
     
     ### subset first day within a year of all pools
@@ -131,7 +131,7 @@ EucFACE_mass_balance_and_validation_script_CABLP <- function() {
     annDF <- merge(annDF, deltaDF, by="YEAR", all.x=T)
     
     ### calculate annual maximum for some variables
-    maxDF <- summaryBy(LAI+CL+CFR+CSTOR+NL+NFR+NSTOR+PL+NFR+PSTOR~YEAR, data=modDF, keep.names=T, na.rm=T)
+    maxDF <- summaryBy(LAI+CL+CFR+CSTOR+NL+NFR+NSTOR+PL+PFR+PSTOR~YEAR, data=modDF, keep.names=T, na.rm=T)
     
     
     
@@ -171,7 +171,7 @@ EucFACE_mass_balance_and_validation_script_CABLP <- function() {
     ### sum of all autotrophic respiration fluxes
     ### Some models may not explicitly simulate individual respiratory fluxes (e.g. GDAY)
     ### Hence, this mass balance check may not be closed for all models. 
-    p4<-xyplot(I(RL+RW+RCR+RFR+RGR)~RAU,fluxDF,
+    p4<-xyplot(I(RL+RW+RFR+RGR)~RAU,fluxDF,
                #main='RL+RW+RCR+RFR+RGR~RAU',
                auto.key=T,
                scales=list(relation='free'),
@@ -231,7 +231,7 @@ EucFACE_mass_balance_and_validation_script_CABLP <- function() {
     ### Here production fluxes include: CGL, CGFR, CGCR, CGW and CREPR, 
     ### and the respiratory flux is RAU. 
     ### If there is an exudation flux, make it part of GPP too.
-    p10<-xyplot(I(RAU+CGL+CGFR+CGCR+CGW+CREPR+CEX)~GPP,annDF,
+    p10<-xyplot(I(RAU+CGL+CGFR+CGW)~GPP,annDF,
                 #main='I(RAU+CGL+CGFR+CGCR+CGW+CREPR)~GPP',
                 auto.key=T,
                 scales=list(relation='free'),
@@ -242,7 +242,7 @@ EucFACE_mass_balance_and_validation_script_CABLP <- function() {
     
     ### Similarly, NPP should equal to all growth fluxes, 
     ### that is, the sum of CGL, CGFR, CGCR, CGW, CREPR, and CEX.
-    p11<-xyplot(I(CGW+CGL+CGFR+CGCR+CREPR+CEX)~NPP,annDF,
+    p11<-xyplot(I(CGW+CGL+CGFR)~NPP,annDF,
                 auto.key=T,
                 scales=list(relation='free'),
                 panel=function(...){
@@ -253,7 +253,7 @@ EucFACE_mass_balance_and_validation_script_CABLP <- function() {
     ### This is a different way to check mass balance for NPP, 
     ### in that it includes Delta$CSTOR in addition to those growth fluxes included in the previous figure. 
     ### Some models don't explictly simulate CSTOR, so this mass balance may not apply. 
-    p12<-xyplot(I(CGW+CGL+CGFR+CGCR+CREPR+CEX+deltaCSTOR)~NPP,annDF,
+    p12<-xyplot(I(CGW+CGL+CGFR+deltaCSTOR)~NPP,annDF,
                 #main='I(CGW+CGL+CGFR+CGCR+CREPR+deltaCSTOR)~NPP',
                 auto.key=T,
                 scales=list(relation='free'),
@@ -262,21 +262,22 @@ EucFACE_mass_balance_and_validation_script_CABLP <- function() {
                     panel.abline(a=0,b=1)}) 
     
     
-    ### Here, CFLIT = CFLITA + CFLITB. 
-    p13<-xyplot(I(CFLITA+CFLITB)~CFLIT,annDF,
-                #main='CFLITA+CFLITB~CFLIT',
-                auto.key=T,
-                scales=list(relation='free'),
-                panel=function(...){
-                    panel.xyplot(...)
-                    panel.abline(a=0,b=1)}) 
+    ### Here, CFLIT = CFLITA + CFLITB.
+    p13 <- plot.new()
+    #p13<-xyplot(I(CFLITA+CFLITB)~CFLIT,annDF,
+    #            #main='CFLITA+CFLITB~CFLIT',
+    #            auto.key=T,
+    #            scales=list(relation='free'),
+    #            panel=function(...){
+    #                panel.xyplot(...)
+    #                panel.abline(a=0,b=1)}) 
     
     
     ### This mass balance equation checks the net of total influx litter and heterotrophic respiration. 
     ### In theory, the net difference of these two flues should equal to the change in soil + litter pool. 
     ### Note that CEX was included as an additional influx into the soil. The full equation is: 
     ### CLITIN+CWLIN+CFRLIN+CCRLIN+CREPR+CEX-RHET = Delta$CSOIL+Delta$CCLITB+Delta$CFLIT
-    p14<-xyplot(I(CEX+CLITIN+CWLIN+CFRLIN+CCRLIN+CREPR-RHET)~I(deltaCSOIL+deltaCCLITB+deltaCFLIT),annDF,
+    p14<-xyplot(I(CLITIN+CWLIN+CFRLIN-RHET)~I(deltaCSOIL+deltaCFLIT),annDF,
                 auto.key=T,
                 scales=list(relation='free'),
                 panel=function(...){

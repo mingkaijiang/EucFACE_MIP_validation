@@ -132,7 +132,7 @@ EucFACE_mass_balance_and_validation_script_OCHDX <- function() {
     annDF <- merge(annDF, deltaDF, by="YEAR", all.x=T)
     
     ### calculate annual maximum for some variables
-    maxDF <- summaryBy(LAI+CL+CFR+CSTOR+NL+NFR+NSTOR+PL+NFR+PSTOR~YEAR, data=modDF, keep.names=T, na.rm=T)
+    maxDF <- summaryBy(LAI+CL+CFR+CSTOR+NL+NFR+NSTOR+PL+PFR+PSTOR~YEAR, data=modDF, keep.names=T, na.rm=T)
     
     
     
