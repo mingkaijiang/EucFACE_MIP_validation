@@ -67,6 +67,9 @@ EucFACE_mass_balance_and_validation_script_CABLP <- function() {
     ### You can modify this path to read in different files. 
     modDF <- read.csv(paste0("simulation_output/", mod.abb, "/forest/EUC_", mod.abb, "_OBS_VAR_AMB_NOP_D.csv"))
     
+    ### precipitation data in the unit of mm/h, so need to convert it to unit of mm/d
+    modDF$PREC <- modDF$PREC * 24.0
+    
     ### checking number of column in the original dataframe
     ncol <- ncol(modDF)
     #print(paste0("no. of columns is ", ncol))
