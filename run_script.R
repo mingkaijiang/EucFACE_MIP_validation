@@ -35,7 +35,8 @@ EucFACE_mass_balance_and_validation_script_OCHDP()
 ### ORCHIDEE-MIC
 EucFACE_mass_balance_and_validation_script_OCHDX()
 
-
+### CABLE-POP
+EucFACE_mass_balance_and_validation_script_CABLP()
 
 ##########################################################################
 #### Step 4: Plot CO2 response ratios over observed period
