@@ -18,10 +18,18 @@ plot_CO2_response_ratio_for_individual_model <- function(source.dir,
     eleDF2 <- read.csv(paste0(source.dir, "/EUC_", mod.abb, "_", sim.period, "_FIX_ELE_", nutrient.trt, "_D.csv"))  # wet
     
     ### obtain means, sums for stocks and fluxes
-    ambDF1 <- convert_into_annual(ambDF1)
-    ambDF2 <- convert_into_annual(ambDF2)
-    eleDF1 <- convert_into_annual(eleDF1)
-    eleDF2 <- convert_into_annual(eleDF2)
+    if (mod.abb == "CABLP") {
+        ambDF1 <- convert_into_annual_CABLP(ambDF1)
+        ambDF2 <- convert_into_annual_CABLP(ambDF2)
+        eleDF1 <- convert_into_annual_CABLP(eleDF1)
+        eleDF2 <- convert_into_annual_CABLP(eleDF2)
+    } else {
+        ambDF1 <- convert_into_annual(ambDF1)
+        ambDF2 <- convert_into_annual(ambDF2)
+        eleDF1 <- convert_into_annual(eleDF1)
+        eleDF2 <- convert_into_annual(eleDF2)
+    }
+
     
     ### get dimension
     d <- dim(ambDF1)

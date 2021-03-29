@@ -6,8 +6,13 @@ prepare_simulation_results_for_comparison_against_data <- function(source.dir,
     simDF2 <- read.csv(paste0(source.dir, "/EUC_", mod.abb, "_OBS_VAR_ELE_NOP_D.csv"))  # dry
     
     ### obtain means, sums for stocks and fluxes
-    simDF1 <- convert_into_annual(simDF1)
-    simDF2 <- convert_into_annual(simDF2)
+    if (mod.abb == "CABLP") {
+        simDF1 <- convert_into_annual_CABLP(simDF1)
+        simDF2 <- convert_into_annual_CABLP(simDF2)
+    } else {
+        simDF1 <- convert_into_annual(simDF1)
+        simDF2 <- convert_into_annual(simDF2)
+    }
     
     ### calculate observed period means and sds
     simDF1 <- simDF1[simDF1$YEAR%in%c(2013, 2014, 2015, 2016),]

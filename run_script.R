@@ -41,6 +41,13 @@ EucFACE_mass_balance_and_validation_script_CABLP()
 ##########################################################################
 #### Step 4: Plot CO2 response ratios over observed period
 
+### GDAY
+plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/GDAYP"),
+                                             mod.abb = "GDAYP",
+                                             out.dir = paste0(getwd(), "/analysis_output/GDAYP"),
+                                             sim.period = "OBS",
+                                             nutrient.trt = "NOP")
+
 ### ORCHIDEE-CNP
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/OCHDP"),
                                              mod.abb = "OCHDP",
@@ -55,10 +62,11 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
                                              sim.period = "OBS",
                                              nutrient.trt = "NOP")
 
-### GDAY
-plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/GDAYP"),
-                                             mod.abb = "GDAYP",
-                                             out.dir = paste0(getwd(), "/analysis_output/GDAYP"),
+
+### CABLE-POP
+plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/CABLP/forest"),
+                                             mod.abb = "CABLP",
+                                             out.dir = paste0(getwd(), "/analysis_output/CABLP"),
                                              sim.period = "OBS",
                                              nutrient.trt = "NOP")
 
@@ -88,6 +96,12 @@ plot_CO2_response_comparison_against_data_for_individual_model(source.dir=paste0
                                                                out.dir = paste0(getwd(), "/analysis_output/OCHDX"),
                                                                eucDF = eucDF)
 
+### CABLE-POP
+plot_CO2_response_comparison_against_data_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/CABLP/forest"),
+                                                               mod.abb = "CABLP",
+                                                               out.dir = paste0(getwd(), "/analysis_output/CABLP"),
+                                                               eucDF = eucDF)
+
 
 ##########################################################################
 #### Step 6: Plot CO2 response ratios over predicted period
@@ -111,6 +125,68 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
                                              sim.period = "PRD",
                                              nutrient.trt = "HIP")
 
+
+
+### ORCHIDEE-CNP
+#plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/OCHDP"),
+#                                             mod.abb = "OCHDP",
+#                                             out.dir = paste0(getwd(), "/analysis_output/OCHDP"),
+#                                             sim.period = "PRD",
+#                                             nutrient.trt = "NOP")
+#
+#plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/OCHDP"),
+#                                             mod.abb = "OCHDP",
+#                                             out.dir = paste0(getwd(), "/analysis_output/OCHDP"),
+#                                             sim.period = "PRD",
+#                                             nutrient.trt = "MDP")
+#
+#plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/OCHDP"),
+#                                             mod.abb = "OCHDP",
+#                                             out.dir = paste0(getwd(), "/analysis_output/OCHDP"),
+#                                             sim.period = "PRD",
+#                                             nutrient.trt = "HIP")
+
+
+
+
+### ORCHIDEE-mic
+#plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/OCHDX"),
+#                                             mod.abb = "OCHDX",
+#                                             out.dir = paste0(getwd(), "/analysis_output/OCHDX"),
+#                                             sim.period = "PRD",
+#                                             nutrient.trt = "NOP")
+#
+#plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/OCHDX"),
+#                                             mod.abb = "OCHDX",
+#                                             out.dir = paste0(getwd(), "/analysis_output/OCHDX"),
+#                                             sim.period = "PRD",
+#                                             nutrient.trt = "MDP")
+#
+#plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/OCHDX"),
+#                                             mod.abb = "OCHDX",
+#                                             out.dir = paste0(getwd(), "/analysis_output/OCHDX"),
+#                                             sim.period = "PRD",
+#                                             nutrient.trt = "HIP")
+
+
+### CABLE-POP
+plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/CABLP/forest"),
+                                             mod.abb = "CABLP",
+                                             out.dir = paste0(getwd(), "/analysis_output/CABLP"),
+                                             sim.period = "PRD",
+                                             nutrient.trt = "NOP")
+
+plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/CABLP/forest"),
+                                             mod.abb = "CABLP",
+                                             out.dir = paste0(getwd(), "/analysis_output/CABLP"),
+                                             sim.period = "PRD",
+                                             nutrient.trt = "MDP")
+
+plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/CABLP/forest"),
+                                             mod.abb = "CABLP",
+                                             out.dir = paste0(getwd(), "/analysis_output/CABLP"),
+                                             sim.period = "PRD",
+                                             nutrient.trt = "HIP")
 
 ##########################################################################
 #### Plot drought effect over historic period
