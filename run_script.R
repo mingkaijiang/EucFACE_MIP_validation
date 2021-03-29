@@ -21,6 +21,10 @@ translate_GDAY_simulation_into_EucFACE_MIP_format(met.path ="/Users/mingkaijiang
                                                   out.path = "simulation_output")
 
 
+### CABLE-POP
+## current issue: unsure PFERT variable (current no variable made in the output)
+translate_CABLP_simulation_into_EucFACE_MIP_format(source.dir = paste0(getwd(), "/simulation_output/CABLP/forest"))
+
 
 ##########################################################################
 #### Step 3: Run individual model mass balance checks
