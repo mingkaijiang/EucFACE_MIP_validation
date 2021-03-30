@@ -196,6 +196,8 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
 #### Plot drought effect over historic period
 
 
+##########################################################################
+#### Cross-model comparison, and against data
 
 
 ##########################################################################
