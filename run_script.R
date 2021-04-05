@@ -132,45 +132,45 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
 
 
 ### ORCHIDEE-CNP
-#plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/OCHDP"),
-#                                             mod.abb = "OCHDP",
-#                                             out.dir = paste0(getwd(), "/analysis_output/OCHDP"),
-#                                             sim.period = "PRD",
-#                                             nutrient.trt = "NOP")
-#
-#plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/OCHDP"),
-#                                             mod.abb = "OCHDP",
-#                                             out.dir = paste0(getwd(), "/analysis_output/OCHDP"),
-#                                             sim.period = "PRD",
-#                                             nutrient.trt = "MDP")
-#
-#plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/OCHDP"),
-#                                             mod.abb = "OCHDP",
-#                                             out.dir = paste0(getwd(), "/analysis_output/OCHDP"),
-#                                             sim.period = "PRD",
-#                                             nutrient.trt = "HIP")
+plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/OCHDP"),
+                                             mod.abb = "OCHDP",
+                                             out.dir = paste0(getwd(), "/analysis_output/OCHDP"),
+                                             sim.period = "PRD",
+                                             nutrient.trt = "NOP")
+
+plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/OCHDP"),
+                                             mod.abb = "OCHDP",
+                                             out.dir = paste0(getwd(), "/analysis_output/OCHDP"),
+                                             sim.period = "PRD",
+                                             nutrient.trt = "MDP")
+
+plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/OCHDP"),
+                                             mod.abb = "OCHDP",
+                                             out.dir = paste0(getwd(), "/analysis_output/OCHDP"),
+                                             sim.period = "PRD",
+                                             nutrient.trt = "HIP")
 
 
 
 
 ### ORCHIDEE-mic
-#plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/OCHDX"),
-#                                             mod.abb = "OCHDX",
-#                                             out.dir = paste0(getwd(), "/analysis_output/OCHDX"),
-#                                             sim.period = "PRD",
-#                                             nutrient.trt = "NOP")
-#
-#plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/OCHDX"),
-#                                             mod.abb = "OCHDX",
-#                                             out.dir = paste0(getwd(), "/analysis_output/OCHDX"),
-#                                             sim.period = "PRD",
-#                                             nutrient.trt = "MDP")
-#
-#plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/OCHDX"),
-#                                             mod.abb = "OCHDX",
-#                                             out.dir = paste0(getwd(), "/analysis_output/OCHDX"),
-#                                             sim.period = "PRD",
-#                                             nutrient.trt = "HIP")
+plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/OCHDX"),
+                                             mod.abb = "OCHDX",
+                                             out.dir = paste0(getwd(), "/analysis_output/OCHDX"),
+                                             sim.period = "PRD",
+                                             nutrient.trt = "NOP")
+
+plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/OCHDX"),
+                                             mod.abb = "OCHDX",
+                                             out.dir = paste0(getwd(), "/analysis_output/OCHDX"),
+                                             sim.period = "PRD",
+                                             nutrient.trt = "MDP")
+
+plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/OCHDX"),
+                                             mod.abb = "OCHDX",
+                                             out.dir = paste0(getwd(), "/analysis_output/OCHDX"),
+                                             sim.period = "PRD",
+                                             nutrient.trt = "HIP")
 
 
 ### CABLE-POP
