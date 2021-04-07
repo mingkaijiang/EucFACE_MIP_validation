@@ -26,6 +26,8 @@ translate_GDAY_simulation_into_EucFACE_MIP_format(met.path ="/Users/mingkaijiang
 translate_CABLP_simulation_into_EucFACE_MIP_format(source.dir = paste0(getwd(), "/simulation_output/CABLP/forest"))
 
 
+### ORCHIDEE - no need for both models
+
 ##########################################################################
 #### Step 3: Run individual model mass balance checks
 
