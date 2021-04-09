@@ -1267,11 +1267,9 @@ EucFACE_mass_balance_and_validation_script_CABLP <- function() {
     swcDF <- read.csv("validation_dataset/EucFACE_SWC_2012_2019.csv")
     
     ### convert unit from VWC to kg H2O m-2
-    swcDF$WC_kg_m3 <- swcDF$VWC * swcDF$Bulk.den
-    
     swcDF$multiplier <- ifelse(swcDF$Depth%in%c(25,50,75,100,125,150), 0.25, 0.5)
     
-    swcDF$WC_kg_m2 <- swcDF$WC_kg_m3 * swcDF$multiplier
+    swcDF$WC_kg_m2 <- swcDF$VWC * swcDF$multiplier * 1000.0 / 100.0
     
     sumDF <- summaryBy(WC_kg_m2~Location+Date, FUN=sum, data=swcDF, keep.names=T, na.rm=T)
     
