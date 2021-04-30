@@ -37,8 +37,8 @@ plot_CO2_response_ratio_for_individual_model <- function(source.dir,
     
     ### calculate CO2 response ratio
     CO2DF1 <- CO2DF2 <- ambDF1
-    CO2DF1[,2:n] <- eleDF1[,3:n]/ambDF1[,3:n]  # var
-    CO2DF2[,2:n] <- eleDF2[,3:n]/ambDF2[,3:n]  # fix
+    CO2DF1[,2:n] <- eleDF1[,2:n]/ambDF1[,2:n]  # var
+    CO2DF2[,2:n] <- eleDF2[,2:n]/ambDF2[,2:n]  # fix
     
     ### merge
     CO2DF1$Trt <- paste0(sim.period, "_VAR_", nutrient.trt)
