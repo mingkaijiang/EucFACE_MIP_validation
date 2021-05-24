@@ -28,6 +28,9 @@ translate_CABLP_simulation_into_EucFACE_MIP_format(source.dir = paste0(getwd(), 
 
 ### ORCHIDEE - no need for both models
 
+
+### LPJ-GUESS-CNP
+
 ##########################################################################
 #### Step 3: Run individual model mass balance checks
 
@@ -43,6 +46,10 @@ EucFACE_mass_balance_and_validation_script_OCHDX()
 
 ### CABLE-POP
 EucFACE_mass_balance_and_validation_script_CABLP()
+
+### LPJ-GUESS-CNP
+EucFACE_mass_balance_and_validation_script_LPJGP()
+
 
 ##########################################################################
 #### Step 4: Plot CO2 response ratios over observed period
