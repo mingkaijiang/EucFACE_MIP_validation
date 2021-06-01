@@ -23,6 +23,11 @@ plot_CO2_response_ratio_for_individual_model <- function(source.dir,
         ambDF2 <- convert_into_annual_CABLP(ambDF2)
         eleDF1 <- convert_into_annual_CABLP(eleDF1)
         eleDF2 <- convert_into_annual_CABLP(eleDF2)
+    } else if (mod.abb == "LPJGP") {
+        ambDF1 <- convert_into_annual_LPJGP(ambDF1)
+        ambDF2 <- convert_into_annual_LPJGP(ambDF2)
+        eleDF1 <- convert_into_annual_LPJGP(eleDF1)
+        eleDF2 <- convert_into_annual_LPJGP(eleDF2)
     } else {
         ambDF1 <- convert_into_annual(ambDF1)
         ambDF2 <- convert_into_annual(ambDF2)

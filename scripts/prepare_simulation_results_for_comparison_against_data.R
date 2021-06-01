@@ -9,6 +9,9 @@ prepare_simulation_results_for_comparison_against_data <- function(source.dir,
     if (mod.abb == "CABLP") {
         simDF1 <- convert_into_annual_CABLP(simDF1)
         simDF2 <- convert_into_annual_CABLP(simDF2)
+    } else if (mod.abb == "LPJGP") {
+        simDF1 <- convert_into_annual_LPJGP(simDF1)
+        simDF2 <- convert_into_annual_LPJGP(simDF2)
     } else {
         simDF1 <- convert_into_annual(simDF1)
         simDF2 <- convert_into_annual(simDF2)

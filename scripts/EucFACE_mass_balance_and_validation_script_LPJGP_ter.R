@@ -127,7 +127,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP_ter <- function() {
                        "PPAR","CFLIT","CFLITA","CFLITB",
                        "NFLITA","NFLITB","PFLITA","PFLITB","CCLITB","NCLITB","PCLITB","NFLIT","PFLIT", "NPORG", "PPORG", 
                        "MAXNSTORE", "MAXPSTORE", "SWtot", "SWPAtot", "CSOILtot", "NSOILtot", "NPMINtot", ## model specific output
-                       "NPORGtot", "PSOILtot", "PPMINtot", "PPORGtot")]
+                       "NPORGtot", "PSOILtot", "PPMINtot", "PPORGtot")]                                  ## model specific output
     
     poolDF <- subset(poolDF, DOY==1)
     
