@@ -29,7 +29,8 @@ translate_CABLP_simulation_into_EucFACE_MIP_format(source.dir = paste0(getwd(), 
 ### ORCHIDEE - no need for both models
 
 
-### LPJ-GUESS-CNP
+### LPJ-GUESS-CNP - it seems that no need
+
 
 ##########################################################################
 #### Step 3: Run individual model mass balance checks
@@ -61,9 +62,9 @@ EucFACE_mass_balance_and_validation_script_LPJGP_ter()
 
 ### LPJ-GUESS-CN
 
-### QUINCY
+### QUINCY, i.e. QUINC
 
-### QUINCY-JSM
+### QUINCY-JSM, i.e. QUJSM
 
 
 ##########################################################################
