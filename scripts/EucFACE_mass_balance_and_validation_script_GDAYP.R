@@ -73,8 +73,14 @@ EucFACE_mass_balance_and_validation_script_GDAYP <- function() {
     
     # check length of frames, need to be TRUE, otherwise you have too many or little days
     # 8 years with 365 days plus 2 years with a leap day! (for those models that do not model leap days, please repeat Feb 28 to fill Feb 29)
-    if (nrow(modDF)!=(8*365)+2) {
-        print(paste("number of rows of model output does not match, all further results unreliable!!"))
+    if (nrow(modDF)==(8*365)) {
+        print(paste("number of rows of model output indicate no leap years, proceed further analysis..."))
+        
+    } else if (nrow(modDF)==(8*365)+2) {
+        print(paste("number of rows of model output indicate two leap years, proceed further analysis..."))
+    } else {
+        print(paste("number of rows of model output does not match correct number of days, all further results unreliable!!"))
+        
     }
     
     
