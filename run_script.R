@@ -50,6 +50,11 @@ EucFACE_mass_balance_and_validation_script_CABLP()
 ### LPJ-GUESS-CNP
 EucFACE_mass_balance_and_validation_script_LPJGP()
 
+EucFACE_mass_balance_and_validation_script_LPJGP_ter()
+
+
+### LPJ-GUESS-CN
+
 
 ##########################################################################
 #### Step 4: Plot CO2 response ratios over observed period
@@ -77,6 +82,14 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
 
 
 ### CABLE-POP
+plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/CABLP/forest"),
+                                             mod.abb = "CABLP",
+                                             out.dir = paste0(getwd(), "/analysis_output/CABLP"),
+                                             sim.period = "OBS",
+                                             nutrient.trt = "NOP")
+
+
+### LPJ-GUESS-CNP
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/CABLP/forest"),
                                              mod.abb = "CABLP",
                                              out.dir = paste0(getwd(), "/analysis_output/CABLP"),
