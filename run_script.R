@@ -109,6 +109,21 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
                                              sim.period = "OBS",
                                              nutrient.trt = "NOP")
 
+### QUINCY
+plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/QUINC"),
+                                             mod.abb = "QUINC",
+                                             out.dir = paste0(getwd(), "/analysis_output/QUINC"),
+                                             sim.period = "OBS",
+                                             nutrient.trt = "NOP")
+
+
+### QUINCY-JSM
+plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/QUJSM"),
+                                             mod.abb = "QUJSM",
+                                             out.dir = paste0(getwd(), "/analysis_output/QUJSM"),
+                                             sim.period = "OBS",
+                                             nutrient.trt = "NOP")
+
 
 ##########################################################################
 #### Step 5: compare observed period simulation results with observation data, focus on CO2 response
@@ -146,6 +161,20 @@ plot_CO2_response_comparison_against_data_for_individual_model(source.dir=paste0
 plot_CO2_response_comparison_against_data_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGP"),
                                                                mod.abb = "LPJGP",
                                                                out.dir = paste0(getwd(), "/analysis_output/LPJGP"),
+                                                               eucDF = eucDF)
+
+
+### QUINCY
+plot_CO2_response_comparison_against_data_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/QUINC"),
+                                                               mod.abb = "QUINC",
+                                                               out.dir = paste0(getwd(), "/analysis_output/QUINC"),
+                                                               eucDF = eucDF)
+
+
+### QUINCY-JSM
+plot_CO2_response_comparison_against_data_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/QUJSM"),
+                                                               mod.abb = "QUJSM",
+                                                               out.dir = paste0(getwd(), "/analysis_output/QUJSM"),
                                                                eucDF = eucDF)
 
 
@@ -251,6 +280,46 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGP"),
                                              mod.abb = "LPJGP",
                                              out.dir = paste0(getwd(), "/analysis_output/LPJGP"),
+                                             sim.period = "PRD",
+                                             nutrient.trt = "HIP")
+
+
+### QUINCY
+plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/QUINC"),
+                                             mod.abb = "QUINC",
+                                             out.dir = paste0(getwd(), "/analysis_output/QUINC"),
+                                             sim.period = "PRD",
+                                             nutrient.trt = "NOP")
+
+plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/QUINC"),
+                                             mod.abb = "QUINC",
+                                             out.dir = paste0(getwd(), "/analysis_output/QUINC"),
+                                             sim.period = "PRD",
+                                             nutrient.trt = "MDP")
+
+plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/QUINC"),
+                                             mod.abb = "QUINC",
+                                             out.dir = paste0(getwd(), "/analysis_output/QUINC"),
+                                             sim.period = "PRD",
+                                             nutrient.trt = "HIP")
+
+
+### QUINCY-JSM
+plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/QUJSM"),
+                                             mod.abb = "QUJSM",
+                                             out.dir = paste0(getwd(), "/analysis_output/QUJSM"),
+                                             sim.period = "PRD",
+                                             nutrient.trt = "NOP")
+
+plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/QUJSM"),
+                                             mod.abb = "QUJSM",
+                                             out.dir = paste0(getwd(), "/analysis_output/QUJSM"),
+                                             sim.period = "PRD",
+                                             nutrient.trt = "MDP")
+
+plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/QUJSM"),
+                                             mod.abb = "QUJSM",
+                                             out.dir = paste0(getwd(), "/analysis_output/QUJSM"),
                                              sim.period = "PRD",
                                              nutrient.trt = "HIP")
 

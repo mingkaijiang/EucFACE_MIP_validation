@@ -8,6 +8,15 @@ plot_CO2_response_comparison_against_data_for_individual_model <- function (sour
         dir.create(out.dir, showWarnings = FALSE)
     }
     
+    ### check for QUJSM
+    check.mod <- substr(source.dir, nchar(source.dir)-4, nchar(source.dir))
+    
+    if (check.mod == "QUJSM") {
+        print("QUJSM model")
+        mod.abb <- "QUINC"
+    } else {
+        print(paste0(mod.abb, " model"))
+    }
     
     ### prepare simulation results
     simDF <- prepare_simulation_results_for_comparison_against_data(source.dir, mod.abb)
@@ -34,6 +43,17 @@ plot_CO2_response_comparison_against_data_for_individual_model <- function (sour
     plotDF2$Group.y <- NULL
     
     colnames(plotDF1) <- colnames(plotDF2) <- c("Source", "Trt", "Variable", "meanv", "sd")
+    
+    
+    ## reivse the model abbreviation
+    if (check.mod == "QUJSM") {
+        print("QUJSM model")
+        mod.abb <- "QUJSM"
+    } else {
+        print(paste0(mod.abb, " model"))
+    }
+    
+    
     
     ### prepare plotting
     ### plot CO2 response ratio

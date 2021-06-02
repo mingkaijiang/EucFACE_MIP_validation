@@ -9,6 +9,16 @@ plot_CO2_response_ratio_for_individual_model <- function(source.dir,
         dir.create(out.dir, showWarnings = FALSE)
     }
     
+    ### check for QUJSM
+    check.mod <- substr(source.dir, nchar(source.dir)-4, nchar(source.dir))
+    
+    if (check.mod == "QUJSM") {
+        print("QUJSM model")
+        mod.abb <- "QUINC"
+    } else {
+        print(paste0(mod.abb, " model"))
+    }
+    
     ### ambient CO2, over observed period (2012-2019)
     ambDF1 <- read.csv(paste0(source.dir, "/EUC_", mod.abb, "_", sim.period, "_VAR_AMB_", nutrient.trt, "_D.csv"))  # dry
     ambDF2 <- read.csv(paste0(source.dir, "/EUC_", mod.abb, "_", sim.period, "_FIX_AMB_", nutrient.trt, "_D.csv"))  # wet
@@ -57,6 +67,14 @@ plot_CO2_response_ratio_for_individual_model <- function(source.dir,
     ### get dimension
     d <- dim(plotDF)
     n <- d[2]
+    
+    ## reivse the model abbreviation
+    if (check.mod == "QUJSM") {
+        print("QUJSM model")
+        mod.abb <- "QUJSM"
+    } else {
+        print(paste0(mod.abb, " model"))
+    }
     
     ### plot CO2 response ratio
     pdf(paste0(out.dir, "/", mod.abb, "_", sim.period, "_", nutrient.trt, "_D_CO2_ratio.pdf"))
