@@ -1,4 +1,4 @@
-EucFACE_mass_balance_and_validation_script_QUINC <- function() {
+EucFACE_mass_balance_and_validation_script_QUJSM <- function() {
     #### EucFACE mass balance and validation script
     #### Mingkai Jiang (m.jiang@westernsydney.edu.au)
     ####
@@ -47,7 +47,7 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
     ####             LPJGP: LPJ-Guess, CNP version
     ####             CABLP: CABLE-POP, CNP version
     ####             ELMXX: ELM, CNP version
-    mod.abb <- "QUINC"
+    mod.abb <- "QUJSM"
     
     #### setting out path to store the files
     out.dir <- paste0(getwd(), "/validation_output/", mod.abb)
@@ -66,7 +66,7 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
     ### Note that this is the daily file. 
     ### You can modify this path to read in different files. 
     modDF <- read.csv(paste0("simulation_output/", mod.abb, 
-                             "/EUC_", mod.abb, "_OBS_VAR_AMB_NOP_D.csv"))
+                             "/EUC_QUINC_OBS_VAR_AMB_NOP_D.csv"))
     
     ### checking number of column in the original dataframe
     ncol <- ncol(modDF)

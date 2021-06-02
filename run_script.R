@@ -66,6 +66,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP_ter()
 EucFACE_mass_balance_and_validation_script_QUINC()
 
 ### QUINCY-JSM, i.e. QUJSM
+EucFACE_mass_balance_and_validation_script_QUJSM()
 
 
 ##########################################################################
