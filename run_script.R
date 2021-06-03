@@ -81,10 +81,18 @@ EucFACE_mass_balance_and_validation_script_QUJSM()
 ##########################################################################
 #### Step 4: Plot CO2 response ratios over observed period
 
-### GDAY
+### GDAY-CNP
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/GDAYP"),
                                              mod.abb = "GDAYP",
                                              out.dir = paste0(getwd(), "/analysis_output/GDAYP"),
+                                             sim.period = "OBS",
+                                             nutrient.trt = "NOP")
+
+
+### GDAY-CN
+plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/GDAYN"),
+                                             mod.abb = "GDAYN",
+                                             out.dir = paste0(getwd(), "/analysis_output/GDAYN"),
                                              sim.period = "OBS",
                                              nutrient.trt = "NOP")
 
@@ -141,11 +149,18 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
 ### don't use any unpublished data to compromise upcoming data-based publications.
 eucDF <- prepare_EucFACE_observation_dataset()
 
-### GDAY
+### GDAY-CNP
 plot_CO2_response_comparison_against_data_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/GDAYP"),
                                                                mod.abb = "GDAYP",
                                                                out.dir = paste0(getwd(), "/analysis_output/GDAYP"),
                                                                eucDF = eucDF)
+
+### GDAY-CN
+plot_CO2_response_comparison_against_data_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/GDAYN"),
+                                                               mod.abb = "GDAYN",
+                                                               out.dir = paste0(getwd(), "/analysis_output/GDAYN"),
+                                                               eucDF = eucDF)
+
 
 ### ORCHIDEE-CNP
 plot_CO2_response_comparison_against_data_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/OCHDP"),
@@ -190,7 +205,7 @@ plot_CO2_response_comparison_against_data_for_individual_model(source.dir=paste0
 ##########################################################################
 #### Step 6: Plot CO2 response ratios over predicted period
 
-### GDAY
+### GDAY-CNP
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/GDAYP"),
                                              mod.abb = "GDAYP",
                                              out.dir = paste0(getwd(), "/analysis_output/GDAYP"),
@@ -209,6 +224,25 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
                                              sim.period = "PRD",
                                              nutrient.trt = "HIP")
 
+
+### GDAY-CN
+plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/GDAYN"),
+                                             mod.abb = "GDAYN",
+                                             out.dir = paste0(getwd(), "/analysis_output/GDAYN"),
+                                             sim.period = "PRD",
+                                             nutrient.trt = "NOP")
+
+plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/GDAYN"),
+                                             mod.abb = "GDAYN",
+                                             out.dir = paste0(getwd(), "/analysis_output/GDAYN"),
+                                             sim.period = "PRD",
+                                             nutrient.trt = "MDP")
+
+plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/GDAYN"),
+                                             mod.abb = "GDAYN",
+                                             out.dir = paste0(getwd(), "/analysis_output/GDAYN"),
+                                             sim.period = "PRD",
+                                             nutrient.trt = "HIP")
 
 
 ### ORCHIDEE-CNP

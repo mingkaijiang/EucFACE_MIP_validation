@@ -506,8 +506,8 @@ translate_GDAY_CN_simulation_into_EucFACE_MIP_format <- function(met.path,
         outDF$PGFR <- NA
         outDF$PLRETR <- NA
         outDF$PWRETR <- NA
-        outDF$PCRETR <- NA
-        outDF$PFRETR <- NA
+        outDF$PCRRETR <- NA
+        outDF$PFRRETR <- NA
         outDF$PWEA <- NA
         outDF$PDEP <- myDF$PDEP
         outDF$PFERT <- myDF$PFERT
