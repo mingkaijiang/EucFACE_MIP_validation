@@ -375,15 +375,14 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
 
 ##########################################################################
 ### to do list:
-### 1. Add GDAY CN, and possibly revise GDAY CNP
-### 2. Add LPJ-GUESS CN
-### 3. check mass balance with individual modelers: QUINCY, LPJ-GUESS
-### 4. Generate summary table on key model features
-### 5. Add CABLE-POP
-### 6. Include dynamic vegetation analysis: CABLE-POP and LPJ-GUESS
-### 7. Add ELM
-### 8. MIP figures on CO2 x P
-### 9. MIP figures on CO2 x drought
+### 1. Add LPJ-GUESS CN
+### 2. check mass balance with individual modelers: QUINCY, LPJ-GUESS
+### 3. Generate summary table on key model features
+### 4. Add CABLE-POP
+### 5. Include dynamic vegetation analysis: CABLE-POP and LPJ-GUESS
+### 6. Add ELM
+### 7. MIP figures on CO2 x P
+### 8. MIP figures on CO2 x drought
 
 
 ##########################################################################
