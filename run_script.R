@@ -21,6 +21,12 @@ translate_GDAY_simulation_into_EucFACE_MIP_format(met.path ="/Users/mingkaijiang
                                                   out.path = "simulation_output")
 
 
+### GDAY-CN
+translate_GDAY_CN_simulation_into_EucFACE_MIP_format(met.path ="/Users/mingkaijiang/Documents/Research/Projects/EucFACE_Modeling/GDAY-EucFACE/met_data",
+                                                     sim.path = "simulation_output/GDAYN/default_output",
+                                                     out.path = "simulation_output")
+
+
 ### CABLE-POP
 ## current issue: unsure PFERT variable (current no variable made in the output)
 translate_CABLP_simulation_into_EucFACE_MIP_format(source.dir = paste0(getwd(), "/simulation_output/CABLP/forest"))
@@ -37,6 +43,9 @@ translate_CABLP_simulation_into_EucFACE_MIP_format(source.dir = paste0(getwd(), 
 
 ### GDAY-CNP
 EucFACE_mass_balance_and_validation_script_GDAYP()
+
+### GDAY-CN
+EucFACE_mass_balance_and_validation_script_GDAYN()
 
 
 ### ORCHIDEE-CNP
