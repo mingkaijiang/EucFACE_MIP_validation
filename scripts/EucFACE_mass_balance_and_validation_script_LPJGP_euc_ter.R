@@ -1,4 +1,4 @@
-EucFACE_mass_balance_and_validation_script_LPJGP <- function() {
+EucFACE_mass_balance_and_validation_script_LPJGP_euc_ter <- function() {
     #### EucFACE mass balance and validation script
     #### Mingkai Jiang (m.jiang@westernsydney.edu.au)
     ####
@@ -65,8 +65,8 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function() {
     ### the naming of the file follows the output protocol. 
     ### Note that this is the daily file. 
     ### You can modify this path to read in different files. 
-    modDF <- read.csv(paste0("simulation_output/", mod.abb, 
-                             "/EUC_", mod.abb, "_OBS_VAR_AMB_NOP_D.csv"))
+    modDF <- read.csv(paste0("simulation_output/", mod.abb,
+                             "/euc_ter/EUC_", mod.abb, "_OBS_VAR_AMB_NOP_D_euc_ter.csv"))
     
     ### checking number of column in the original dataframe
     ncol <- ncol(modDF)
@@ -109,9 +109,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function() {
     modDF$Date <- as.Date(modDF$Date)
     
     ### add other variables not defined in the protocol but are potentially important for this MIP
-    # P weathering rate
-    #modDF$PWEA <- 0.0
-    
+
     
     ### The mass balance check is performed at annual timestep. 
     ### Note that, I assume that many models may not output some of these variables, 
@@ -130,7 +128,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function() {
                        "PPAR","CFLIT","CFLITA","CFLITB",
                        "NFLITA","NFLITB","PFLITA","PFLITB","CCLITB","NCLITB","PCLITB","NFLIT","PFLIT", "NPORG", "PPORG", 
                        "MAXNSTORE", "MAXPSTORE", "SWtot", "SWPAtot", "CSOILtot", "NSOILtot", "NPMINtot", ## model specific output
-                       "NPORGtot", "PSOILtot", "PPMINtot", "PPORGtot")]
+                       "NPORGtot", "PSOILtot", "PPMINtot", "PPORGtot")]                                  ## model specific output
     
     poolDF <- subset(poolDF, DOY==1)
     
@@ -314,7 +312,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function() {
     
     
     ### print plots to file, change numbering if needed
-    pdf(paste0(out.dir, '/QC_Carbon_Balance_',mod.abb,'.pdf',sep=''),width=10,height=8)
+    pdf(paste0(out.dir, '/QC_Carbon_Balance_',mod.abb,'_euc_ter.pdf',sep=''),width=10,height=8)
     for (i in 1:15) {
         print(get(paste("p",i,sep="")))
     }
@@ -361,7 +359,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function() {
     
     
     ### print plots to file, change numbering if needed
-    pdf(paste0(out.dir, '/QC_Water_Balance_',mod.abb,'.pdf',sep=''),width=10,height=8)
+    pdf(paste0(out.dir, '/QC_Water_Balance_',mod.abb,'_euc_ter.pdf',sep=''),width=10,height=8)
     for (i in 1:4) {
         print(get(paste("p",i,sep="")))
     }
@@ -545,7 +543,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function() {
     
     
     ### print plots to file, change numbering if needed
-    pdf(paste0(out.dir, '/QC_Nitrogen_Balance_',mod.abb,'.pdf',sep=''),width=10,height=8)
+    pdf(paste0(out.dir, '/QC_Nitrogen_Balance_',mod.abb,'_euc_ter.pdf',sep=''),width=10,height=8)
     for (i in 1:17) {
         print(get(paste("p",i,sep="")))
     }
@@ -725,7 +723,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function() {
     
     
     ### print plots to file, change numbering if needed
-    pdf(paste0(out.dir, '/QC_Phosphorus_Balance_',mod.abb,'.pdf',sep=''),width=10,height=8)
+    pdf(paste0(out.dir, '/QC_Phosphorus_Balance_',mod.abb,'_euc_ter.pdf',sep=''),width=10,height=8)
     for (i in 1:18) {
         print(get(paste("p",i,sep="")))
     }
@@ -1252,7 +1250,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function() {
     
     
     ### print plots to file, change numbering if needed
-    pdf(paste0(out.dir, '/QC_Time_averaged_validation_',mod.abb,'.pdf',sep=''),width=10,height=8)
+    pdf(paste0(out.dir, '/QC_Time_averaged_validation_',mod.abb,'_euc_ter.pdf',sep=''),width=10,height=8)
     for (i in 1:9) {
         print(get(paste("p",i,sep="")))
     }
@@ -1432,7 +1430,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function() {
     
     
     ### print plots to file, change numbering if needed
-    pdf(paste0(out.dir, '/QC_Time_varying_validation_',mod.abb,'.pdf',sep=''),width=10,height=8)
+    pdf(paste0(out.dir, '/QC_Time_varying_validation_',mod.abb,'_euc_ter.pdf',sep=''),width=10,height=8)
     for (i in 1:4) {
         print(get(paste("p",i,sep="")))
     }

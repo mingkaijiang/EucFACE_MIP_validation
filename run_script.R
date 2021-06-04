@@ -58,15 +58,15 @@ EucFACE_mass_balance_and_validation_script_OCHDX()
 ## forest
 EucFACE_mass_balance_and_validation_script_CABLP()
 
-## entire tile
+## tile_averaged
 
 
 ### LPJ-GUESS-CNP
-## tree
-EucFACE_mass_balance_and_validation_script_LPJGP()
+## euc_ter
+EucFACE_mass_balance_and_validation_script_LPJGP_euc_ter()
 
-## not sure what ter is, but included for now
-EucFACE_mass_balance_and_validation_script_LPJGP_ter()
+## all
+EucFACE_mass_balance_and_validation_script_LPJGP_all_pft()
 
 
 ### LPJ-GUESS-CN
