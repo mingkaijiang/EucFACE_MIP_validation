@@ -119,7 +119,20 @@ EucFACE_mass_balance_and_validation_script_LPJGP_euc_ter <- function() {
     ### Otherwise, please indicate the reasons as to why your model does not have mass balance closure.
     
     ### summarize all fluxes first to obain annual rate
-    fluxDF <- summaryBy(PREC+ET+TRANS+ES+EC+RO+DRAIN+NEP+GPP+GPPno+GPPns+NPP+RHET+RAU+RECO+CGL+CGFR+CGCR+CGW+NGL+NGFR+NGCR+NGW+PGL+PGFR+PGCR+PGW+NUP+NGMIN+NMIN+NLEACH+PUP+PGMIN+PMIN+PLEACH+PBIOCHMIN+NLRETR+PLRETR+RCR+RFR+CREPR+CEX+CVOC+RL+RW+RGR+CLITIN+CCRLIN+CFRLIN+CWLIN+NLITIN+NCRLIN+NFRLIN+NWLIN+PLITIN+PCRLIN+PFRLIN+PWLIN+NWRETR+PWRETR+NCRRETR+PCRRETR+NFRRETR+PFRRETR+NDEP+NFIX+NVOL+PDEP+PWEA~YEAR, data=modDF, FUN=sum, keep.names=T, na.rm=T)
+    fluxDF <- summaryBy(PREC+ET+TRANS+ES+EC+RO+DRAIN+NEP+
+                        GPP+GPPno+GPPns+NPP+
+                        CDEBT+CLEST+
+                        CWEST+CFREST+CDEBTEST+CEXCESS+
+                        CWLINDEBT+
+                        RHET+RAU+RECO+CGL+CGFR+CGCR+CGW+
+                        NGL+NGFR+NGCR+NGW+PGL+PGFR+PGCR+PGW+
+                        NUP+NGMIN+NMIN+NLEACH+PUP+PGMIN+PMIN+PLEACH+
+                        PBIOCHMIN+NLRETR+PLRETR+RCR+RFR+CREPR+CEX+CVOC+
+                        RL+RW+RGR+CLITIN+CCRLIN+CFRLIN+CWLIN+NLITIN+
+                        NCRLIN+NFRLIN+NWLIN+PLITIN+PCRLIN+PFRLIN+PWLIN+
+                        NWRETR+PWRETR+NCRRETR+PCRRETR+NFRRETR+PFRRETR+
+                        NDEP+NFIX+NVOL+PDEP+PWEA~YEAR, 
+                        data=modDF, FUN=sum, keep.names=T, na.rm=T)
     
     
     ### subset first day within a year of all pools

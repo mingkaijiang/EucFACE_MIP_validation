@@ -65,11 +65,14 @@ EucFACE_mass_balance_and_validation_script_CABLP()
 ## euc_ter
 EucFACE_mass_balance_and_validation_script_LPJGP_euc_ter()
 
-## all
+## all_pft
 EucFACE_mass_balance_and_validation_script_LPJGP_all_pft()
 
 
 ### LPJ-GUESS-CN
+
+
+
 
 ### QUINCY, i.e. QUINC
 EucFACE_mass_balance_and_validation_script_QUINC()
