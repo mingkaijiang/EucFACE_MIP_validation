@@ -1,28 +1,32 @@
 convert_into_annual_LPJGP <- function (inDF) {
     
-    ### revise a few LPJGP output variable names
-    names(inDF)[names(inDF)=="Year"]<-"YEAR"
-    names(inDF)[names(inDF)=="Day"]<-"DOY"
-    names(inDF)[names(inDF)=="T"]<-"TRANS"
-    names(inDF)[names(inDF)=="PWEAT"]<-"PWEA"
-    
-    
-    ### ignore lat and long
-    inDF$Lon <- NULL
-    inDF$Lat <- NULL
-    
     ### sum fluxes
-    fluxDF <- summaryBy(PREC+ET+TRANS+ES+EC+RO+DRAIN+NEP+GPP+GPPno+GPPns+NPP+RHET+RAU+RECO+CGL+CGFR+CGCR+CGW+NGL+NGFR+NGCR+NGW+PGL+PGFR+PGCR+PGW+NUP+NGMIN+NMIN+NLEACH+PUP+PGMIN+PMIN+PLEACH+PBIOCHMIN+NLRETR+PLRETR+RCR+RFR+CREPR+CEX+CVOC+RL+RW+RGR+CLITIN+CCRLIN+CFRLIN+CWLIN+NLITIN+NCRLIN+NFRLIN+NWLIN+PLITIN+PCRLIN+PFRLIN+PWLIN+NWRETR+PWRETR+NCRRETR+PCRRETR+NFRRETR+PFRRETR+NDEP+NFIX+NVOL+PDEP+PWEA~YEAR, 
+    ### summarize all fluxes first to obain annual rate
+    fluxDF <- summaryBy(PREC+ET+TRANS+ES+EC+RO+DRAIN+NEP+
+                            GPP+GPPno+ # no nutrient stress
+                            GPPns+     # nutrient stressed
+                            NPP+
+                            CLEST+
+                            CWEST+CFREST+CDEBTEST+CEXCESS+
+                            CWLINDEBT+
+                            RHET+RAU+RECO+CGL+CGFR+CGCR+CGW+
+                            NGL+NGFR+NGCR+NGW+PGL+PGFR+PGCR+PGW+
+                            NUP+NGMIN+NMIN+NLEACH+PUP+PGMIN+PMIN+PLEACH+
+                            PBIOCHMIN+NLRETR+PLRETR+RCR+RFR+CREPR+CEX+CVOC+
+                            RL+RW+RGR+CLITIN+CCRLIN+CFRLIN+CWLIN+NLITIN+
+                            NCRLIN+NFRLIN+NWLIN+PLITIN+PCRLIN+PFRLIN+PWLIN+
+                            NWRETR+PWRETR+NCRRETR+PCRRETR+NFRRETR+PFRRETR+
+                            NDEP+NFIX+NVOL+PDEP+PWEA+CLEACH+NNEP+PNEP+PHENL+PHENFR+PGOCL~YEAR, 
                         data=inDF, FUN=sum, keep.names=T, na.rm=T)
     
     
     ### subset first day within a year of all pools
     poolDF <- inDF[,c("YEAR", "DOY", "SW","CL","LAI","CW","CFR","CCR","NL","NW","NFR","NCR","PL","PW","PFR","PCR","CSTOR","NSTOR","PSTOR",
-                      "CSOIL","NSOIL","PSOIL","NPMIN","PPMIN","PLAB","PSEC","POCC",
-                      "PPAR","CFLIT","CFLITA","CFLITB",
-                      "NFLITA","NFLITB","PFLITA","PFLITB","CCLITB","NCLITB","PCLITB","NFLIT","PFLIT", "NPORG", "PPORG", 
-                      "MAXNSTORE", "MAXPSTORE", "SWtot", "SWPAtot", "CSOILtot", "NSOILtot", "NPMINtot", ## model specific output
-                      "NPORGtot", "PSOILtot", "PPMINtot", "PPORGtot")]
+                       "CSOIL","NSOIL","PSOIL","NPMIN","PPMIN","PLAB","PSEC","POCC",
+                       "PPAR","CFLIT","CFLITA","CFLITB",
+                       "NFLITA","NFLITB","PFLITA","PFLITB","CCLITB","NCLITB","PCLITB","NFLIT","PFLIT", "NPORG", "PPORG", 
+                       "MAXNSTORE", "MAXPSTORE", "SWtot", "SWPAtot", "CSOILtot", "NSOILtot", "NPMINtot", ## model specific output
+                       "NPORGtot", "PSOILtot", "PPMINtot", "PPORGtot", "CDEBT")]                                  ## model specific output
     
     ### calculate change in pools for mass balance
     deltaDF <- subset(poolDF, DOY==1)

@@ -66,7 +66,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP_euc_ter <- function() {
     ### Note that this is the daily file. 
     ### You can modify this path to read in different files. 
     modDF <- read.csv(paste0("simulation_output/", mod.abb,
-                             "/euc_ter/EUC_", mod.abb, "_OBS_VAR_AMB_NOP_D_euc_ter.csv"))
+                             "/euc_ter/EUC_", mod.abb, "_OBS_VAR_AMB_NOP_D.csv"))
     
     ### checking number of column in the original dataframe
     ncol <- ncol(modDF)
@@ -83,18 +83,6 @@ EucFACE_mass_balance_and_validation_script_LPJGP_euc_ter <- function() {
             print(paste("number of rows of model output does not match correct number of days, all further results unreliable!!"))
             
     }
-    
-    ### revise a few LPJGP output variable names
-    names(modDF)[names(modDF)=="Year"]<-"YEAR"
-    names(modDF)[names(modDF)=="Day"]<-"DOY"
-    names(modDF)[names(modDF)=="T"]<-"TRANS"
-    names(modDF)[names(modDF)=="PWEAT"]<-"PWEA"
-    
-    
-    ### ignore lat and long
-    modDF$Lon <- NULL
-    modDF$Lat <- NULL
-    
     
     
     ### add date to the dataset to help with the plotting

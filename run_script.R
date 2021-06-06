@@ -26,16 +26,20 @@ translate_GDAY_CN_simulation_into_EucFACE_MIP_format(met.path ="/Users/mingkaiji
                                                      sim.path = "simulation_output/GDAYN/default_output",
                                                      out.path = "simulation_output")
 
+### ORCHIDEE - no need for both models
+
 
 ### CABLE-POP
 ## current issue: unsure PFERT variable (current no variable made in the output)
 translate_CABLP_simulation_into_EucFACE_MIP_format(source.dir = paste0(getwd(), "/simulation_output/CABLP/forest"))
 
 
-### ORCHIDEE - no need for both models
-
 
 ### LPJ-GUESS-CNP - it seems that no need
+translate_LPJGP_simulation_into_EucFACE_MIP_format(source.dir = paste0(getwd(), "/simulation_output/LPJGP/"))
+
+
+### QUINCY - some unit conversions
 
 
 ##########################################################################
@@ -122,10 +126,18 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
                                              nutrient.trt = "NOP")
 
 
-### LPJ-GUESS-CNP
-plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGP"),
+### LPJ-GUESS-CNP - eucalyptus trees only
+plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGP/euc_ter"),
                                              mod.abb = "LPJGP",
-                                             out.dir = paste0(getwd(), "/analysis_output/LPJGP"),
+                                             out.dir = paste0(getwd(), "/analysis_output/LPJGP/euc_ter"),
+                                             sim.period = "OBS",
+                                             nutrient.trt = "NOP")
+
+
+### LPJ-GUESS-CNP all pft
+plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGP/all_pft"),
+                                             mod.abb = "LPJGP",
+                                             out.dir = paste0(getwd(), "/analysis_output/LPJGP/all_pft"),
                                              sim.period = "OBS",
                                              nutrient.trt = "NOP")
 
