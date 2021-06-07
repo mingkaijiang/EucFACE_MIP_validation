@@ -67,7 +67,7 @@ translate_LPJGP_simulation_into_EucFACE_MIP_format <- function(source.dir) {
         
         
         ### save new file
-        write.csv(outDF, paste0(euc.path, all.file.names[i], ".csv"),
+        write.csv(myDF, paste0(euc.path, all.file.names[i], ".csv"),
                   row.names=F)
         
         ### delete original file
@@ -97,7 +97,7 @@ translate_LPJGP_simulation_into_EucFACE_MIP_format <- function(source.dir) {
         
         
         ### save new file
-        write.csv(outDF, paste0(all.path, all.file.names[i], ".csv"),
+        write.csv(myDF, paste0(all.path, all.file.names[i], ".csv"),
                   row.names=F)
         
     }

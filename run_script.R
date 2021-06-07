@@ -39,7 +39,7 @@ translate_CABLP_simulation_into_EucFACE_MIP_format(source.dir = paste0(getwd(), 
 translate_LPJGP_simulation_into_EucFACE_MIP_format(source.dir = paste0(getwd(), "/simulation_output/LPJGP/"))
 
 
-### QUINCY - some unit conversions
+### QUINCY - some unit conversions are needed
 
 
 ##########################################################################
@@ -196,10 +196,17 @@ plot_CO2_response_comparison_against_data_for_individual_model(source.dir=paste0
                                                                eucDF = eucDF)
 
 
-### LPJ-GUESS-POP
-plot_CO2_response_comparison_against_data_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGP"),
+### LPJ-GUESS-POP - eucalyptus trees
+plot_CO2_response_comparison_against_data_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGP/euc_ter"),
                                                                mod.abb = "LPJGP",
-                                                               out.dir = paste0(getwd(), "/analysis_output/LPJGP"),
+                                                               out.dir = paste0(getwd(), "/analysis_output/LPJGP/euc_ter"),
+                                                               eucDF = eucDF)
+
+
+### LPJ-GUESS-POP - all pft
+plot_CO2_response_comparison_against_data_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGP/all_pft"),
+                                                               mod.abb = "LPJGP",
+                                                               out.dir = paste0(getwd(), "/analysis_output/LPJGP/all_pft"),
                                                                eucDF = eucDF)
 
 
@@ -302,7 +309,7 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
                                              nutrient.trt = "HIP")
 
 
-### CABLE-POP
+### CABLE-POP 
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/CABLP/forest"),
                                              mod.abb = "CABLP",
                                              out.dir = paste0(getwd(), "/analysis_output/CABLP"),
@@ -322,22 +329,42 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
                                              nutrient.trt = "HIP")
 
 
-### LPJ-GUESS-CNP
-plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGP"),
+### LPJ-GUESS-CNP - eucalyptus trees only
+plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGP/euc_ter"),
                                              mod.abb = "LPJGP",
-                                             out.dir = paste0(getwd(), "/analysis_output/LPJGP"),
+                                             out.dir = paste0(getwd(), "/analysis_output/LPJGP/euc_ter"),
                                              sim.period = "PRD",
                                              nutrient.trt = "NOP")
 
-plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGP"),
+plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGP/euc_ter"),
                                              mod.abb = "LPJGP",
-                                             out.dir = paste0(getwd(), "/analysis_output/LPJGP"),
+                                             out.dir = paste0(getwd(), "/analysis_output/LPJGP/euc_ter"),
                                              sim.period = "PRD",
                                              nutrient.trt = "MDP")
 
-plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGP"),
+plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGP/euc_ter"),
                                              mod.abb = "LPJGP",
-                                             out.dir = paste0(getwd(), "/analysis_output/LPJGP"),
+                                             out.dir = paste0(getwd(), "/analysis_output/LPJGP/euc_ter"),
+                                             sim.period = "PRD",
+                                             nutrient.trt = "HIP")
+
+
+### LPJ-GUESS-CNP - all pft
+plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGP/all_pft"),
+                                             mod.abb = "LPJGP",
+                                             out.dir = paste0(getwd(), "/analysis_output/LPJGP/all_pft"),
+                                             sim.period = "PRD",
+                                             nutrient.trt = "NOP")
+
+plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGP/all_pft"),
+                                             mod.abb = "LPJGP",
+                                             out.dir = paste0(getwd(), "/analysis_output/LPJGP/all_pft"),
+                                             sim.period = "PRD",
+                                             nutrient.trt = "MDP")
+
+plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGP/all_pft"),
+                                             mod.abb = "LPJGP",
+                                             out.dir = paste0(getwd(), "/analysis_output/LPJGP/all_pft"),
                                              sim.period = "PRD",
                                              nutrient.trt = "HIP")
 
@@ -393,7 +420,7 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
 ### 1. Add LPJ-GUESS CN
 ### 2. check mass balance with individual modelers: QUINCY, LPJ-GUESS
 ### 3. Generate summary table on key model features
-### 4. Add CABLE-POP
+### 4. Add CABLE-POP both forest and tile-averaged
 ### 5. Include dynamic vegetation analysis: CABLE-POP and LPJ-GUESS
 ### 6. Add ELM
 ### 7. MIP figures on CO2 x P
