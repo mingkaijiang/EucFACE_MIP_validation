@@ -6,7 +6,7 @@ plot_CO2_response_ratio_for_individual_model <- function(source.dir,
     
     ### create output folder
     if(!dir.exists(out.dir)) {
-        dir.create(out.dir, showWarnings = FALSE)
+        dir.create(out.dir, showWarnings = FALSE, recursive = TRUE)
     }
     
     ### check for QUJSM
@@ -38,6 +38,16 @@ plot_CO2_response_ratio_for_individual_model <- function(source.dir,
         ambDF2 <- convert_into_annual_LPJGP(ambDF2)
         eleDF1 <- convert_into_annual_LPJGP(eleDF1)
         eleDF2 <- convert_into_annual_LPJGP(eleDF2)
+    } else if (mod.abb == "LPJGN") {
+        ambDF1 <- convert_into_annual_LPJGN(ambDF1)
+        ambDF2 <- convert_into_annual_LPJGN(ambDF2)
+        eleDF1 <- convert_into_annual_LPJGN(eleDF1)
+        eleDF2 <- convert_into_annual_LPJGN(eleDF2)
+    } else if (mod.abb == "GDAYN") {
+        ambDF1 <- convert_into_annual_GDAYN(ambDF1)
+        ambDF2 <- convert_into_annual_GDAYN(ambDF2)
+        eleDF1 <- convert_into_annual_GDAYN(eleDF1)
+        eleDF2 <- convert_into_annual_GDAYN(eleDF2)
     } else {
         ambDF1 <- convert_into_annual(ambDF1)
         ambDF2 <- convert_into_annual(ambDF2)

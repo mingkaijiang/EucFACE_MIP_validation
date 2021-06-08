@@ -34,13 +34,13 @@ translate_GDAY_CN_simulation_into_EucFACE_MIP_format(met.path ="/Users/mingkaiji
 translate_CABLP_simulation_into_EucFACE_MIP_format(source.dir = paste0(getwd(), "/simulation_output/CABLP/forest"))
 
 
-
 ### LPJ-GUESS-CNP - it seems that no need
 translate_LPJGP_simulation_into_EucFACE_MIP_format(source.dir = paste0(getwd(), "/simulation_output/LPJGP/trunk/"))
 translate_LPJGP_simulation_into_EucFACE_MIP_format(source.dir = paste0(getwd(), "/simulation_output/LPJGP/old_soil/"))
 
 translate_LPJGN_simulation_into_EucFACE_MIP_format(source.dir = paste0(getwd(), "/simulation_output/LPJGN/trunk/"))
 translate_LPJGN_simulation_into_EucFACE_MIP_format(source.dir = paste0(getwd(), "/simulation_output/LPJGN/old_soil/"))
+
 
 ### QUINCY - some unit conversions are needed
 
@@ -68,6 +68,8 @@ EucFACE_mass_balance_and_validation_script_CABLP()
 ## tile_averaged
 
 
+
+
 ### LPJ-GUESS-CNP
 ## euc_ter
 EucFACE_mass_balance_and_validation_script_LPJGP(mod.version="trunk", pft.group="euc_ter")
@@ -76,8 +78,6 @@ EucFACE_mass_balance_and_validation_script_LPJGP(mod.version="old_soil", pft.gro
 ## all_pft
 EucFACE_mass_balance_and_validation_script_LPJGP(mod.version="trunk", pft.group="all_pft")
 EucFACE_mass_balance_and_validation_script_LPJGP(mod.version="old_soil", pft.group="all_pft")
-
-
 
 
 ### LPJ-GUESS-CN
@@ -140,19 +140,33 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
 
 
 ### LPJ-GUESS-CNP - eucalyptus trees only
-plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGP/euc_ter"),
+plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGP/trunk/euc_ter"),
                                              mod.abb = "LPJGP",
-                                             out.dir = paste0(getwd(), "/analysis_output/LPJGP/euc_ter"),
+                                             out.dir = paste0(getwd(), "/analysis_output/LPJGP/trunk/euc_ter"),
+                                             sim.period = "OBS",
+                                             nutrient.trt = "NOP")
+
+
+plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGP/old_soil/euc_ter"),
+                                             mod.abb = "LPJGP",
+                                             out.dir = paste0(getwd(), "/analysis_output/LPJGP/old_soil/euc_ter"),
                                              sim.period = "OBS",
                                              nutrient.trt = "NOP")
 
 
 ### LPJ-GUESS-CNP all pft
-plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGP/all_pft"),
+plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGP/trunk/all_pft"),
                                              mod.abb = "LPJGP",
-                                             out.dir = paste0(getwd(), "/analysis_output/LPJGP/all_pft"),
+                                             out.dir = paste0(getwd(), "/analysis_output/LPJGP/trunk/all_pft"),
                                              sim.period = "OBS",
                                              nutrient.trt = "NOP")
+
+plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGP/old_soil/all_pft"),
+                                             mod.abb = "LPJGP",
+                                             out.dir = paste0(getwd(), "/analysis_output/LPJGP/old_soil/all_pft"),
+                                             sim.period = "OBS",
+                                             nutrient.trt = "NOP")
+
 
 ### QUINCY
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/QUINC"),
