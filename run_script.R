@@ -36,8 +36,11 @@ translate_CABLP_simulation_into_EucFACE_MIP_format(source.dir = paste0(getwd(), 
 
 
 ### LPJ-GUESS-CNP - it seems that no need
-translate_LPJGP_simulation_into_EucFACE_MIP_format(source.dir = paste0(getwd(), "/simulation_output/LPJGP/"))
+translate_LPJGP_simulation_into_EucFACE_MIP_format(source.dir = paste0(getwd(), "/simulation_output/LPJGP/trunk/"))
+translate_LPJGP_simulation_into_EucFACE_MIP_format(source.dir = paste0(getwd(), "/simulation_output/LPJGP/old_soil/"))
 
+translate_LPJGN_simulation_into_EucFACE_MIP_format(source.dir = paste0(getwd(), "/simulation_output/LPJGN/trunk/"))
+translate_LPJGN_simulation_into_EucFACE_MIP_format(source.dir = paste0(getwd(), "/simulation_output/LPJGN/old_soil/"))
 
 ### QUINCY - some unit conversions are needed
 
@@ -67,14 +70,24 @@ EucFACE_mass_balance_and_validation_script_CABLP()
 
 ### LPJ-GUESS-CNP
 ## euc_ter
-EucFACE_mass_balance_and_validation_script_LPJGP_euc_ter()
+EucFACE_mass_balance_and_validation_script_LPJGP(mod.version="trunk", pft.group="euc_ter")
+EucFACE_mass_balance_and_validation_script_LPJGP(mod.version="old_soil", pft.group="euc_ter")
 
 ## all_pft
-EucFACE_mass_balance_and_validation_script_LPJGP_all_pft()
+EucFACE_mass_balance_and_validation_script_LPJGP(mod.version="trunk", pft.group="all_pft")
+EucFACE_mass_balance_and_validation_script_LPJGP(mod.version="old_soil", pft.group="all_pft")
+
+
 
 
 ### LPJ-GUESS-CN
+## euc_ter
+EucFACE_mass_balance_and_validation_script_LPJGN(mod.version="trunk", pft.group="euc_ter")
+EucFACE_mass_balance_and_validation_script_LPJGN(mod.version="old_soil", pft.group="euc_ter")
 
+## all_pft
+EucFACE_mass_balance_and_validation_script_LPJGN(mod.version="trunk", pft.group="all_pft")
+EucFACE_mass_balance_and_validation_script_LPJGN(mod.version="old_soil", pft.group="all_pft")
 
 
 

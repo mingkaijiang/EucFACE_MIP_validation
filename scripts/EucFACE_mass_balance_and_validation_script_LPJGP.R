@@ -1,4 +1,5 @@
-EucFACE_mass_balance_and_validation_script_LPJGP_all_pft <- function() {
+EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
+                                                             pft.group) {
     #### EucFACE mass balance and validation script
     #### Mingkai Jiang (m.jiang@westernsydney.edu.au)
     ####
@@ -55,6 +56,14 @@ EucFACE_mass_balance_and_validation_script_LPJGP_all_pft <- function() {
     ### create output folder
     if(!dir.exists(out.dir)) {
         dir.create(out.dir, showWarnings = FALSE)
+    } 
+
+    ### include model version
+    out.dir <- paste0(out.dir, "/", mod.version)
+    
+    ### create output folder
+    if(!dir.exists(out.dir)) {
+        dir.create(out.dir, showWarnings = FALSE)
     }
     
     
@@ -65,8 +74,8 @@ EucFACE_mass_balance_and_validation_script_LPJGP_all_pft <- function() {
     ### the naming of the file follows the output protocol. 
     ### Note that this is the daily file. 
     ### You can modify this path to read in different files. 
-    modDF <- read.csv(paste0("simulation_output/", mod.abb,
-                             "/all_pft/EUC_", mod.abb, "_OBS_VAR_AMB_NOP_D.csv"))
+    modDF <- read.csv(paste0("simulation_output/", mod.abb, "/", mod.version,
+                             "/", pft.group, "/EUC_", mod.abb, "_OBS_VAR_AMB_NOP_D.csv"))
     
     ### checking number of column in the original dataframe
     ncol <- ncol(modDF)
@@ -84,18 +93,6 @@ EucFACE_mass_balance_and_validation_script_LPJGP_all_pft <- function() {
             
     }
     
-    ### revise a few LPJGP output variable names
-    names(modDF)[names(modDF)=="Year"]<-"YEAR"
-    names(modDF)[names(modDF)=="Day"]<-"DOY"
-    names(modDF)[names(modDF)=="T"]<-"TRANS"
-    names(modDF)[names(modDF)=="PWEAT"]<-"PWEA"
-    
-    
-    ### ignore lat and long
-    modDF$Lon <- NULL
-    modDF$Lat <- NULL
-    
-    
     
     ### add date to the dataset to help with the plotting
     for (i in 2012:2019) {
@@ -108,8 +105,37 @@ EucFACE_mass_balance_and_validation_script_LPJGP_all_pft <- function() {
     
     modDF$Date <- as.Date(modDF$Date)
     
-    ### add other variables not defined in the protocol but are potentially important for this MIP
-
+    ### additional variables specific to this model
+    #CDEBT - C debt g C m-2. Individuals can borrow C if they had a bad year. Will pay it back later. This is how much C debt they have in total. 
+    #CLEST - C leaf establishment g C m-2 yr-1. New individual C leaf.
+    #CWEST - C wood establishment g C m-2 yr-1. New individual C wood.
+    #CFREST - C root establishment g C m-2 yr-1. New individual C root.
+    #CDEBTEST - C debt establishment g C m-2 yr-1. New individual C debt. 
+    #CEXCESS - C excess g C m-2. When mass balance doesn't add up. For example, if C debt is larger than existing biomass when an individual is killed.
+    #CWLINDEBT - C wood litter is used to pay back debt instead of falling on the ground.
+    #PDEP - P deposition g P m-2 yr-1
+    #PFERT - P fertilisation g P m-2 yr-1
+    #PWEAT - P weathering rate g P m-2 yr-1
+    #PGOCL - P occlusion rate g P m-2 yr-1
+    #CLEACH - C leaching g C m-2 yr-1
+    #GPPno - GPP without any limitations
+    #GPPns - GPP with only nutrient limitation (GPP is with both nutrient and water limitation).
+    #PCON - Leaf P concentration PL / (2*CL)
+    #MAXNSTORE - maximum N storage capacity of all individuals
+    #MAXPSTORE - maximum P storage capacity of all individuals
+    #PHENL - Phenology of leaves (1 full leaf out, 0 no leaves. Euc_ter PFT has always 1, only grasses that have variable phenology)
+    #PHENFR - Phenology of roots (1 full root out, 0 no roots. Euc_ter PFT has always 1, only grasses that have variable phenology)
+    #SWtot - Total soil water content
+    #SWPAtot - Total plant-available soil water content
+    #CSOILtot - Total soil C
+    #NSOILtot - Total soil N
+    #NPMINtot - Total soil mineral N
+    #NPORGtot - Total soil organic N (includes soil N litter which CSOIL doesn't)
+    #PSOILtot - Total soil P
+    #PPMINtot - Total soil mineral P
+    #PPORGtot - Total soil organic P (includes soil P litter)
+    #NNEP - N total flux in the system. Corresponds to C mass NEP
+    #PNEP - P total flux in the system. Corresponds to C mass NEP
     
     ### The mass balance check is performed at annual timestep. 
     ### Note that, I assume that many models may not output some of these variables, 
@@ -119,13 +145,9 @@ EucFACE_mass_balance_and_validation_script_LPJGP_all_pft <- function() {
     ### Otherwise, please indicate the reasons as to why your model does not have mass balance closure.
     
     ### summarize all fluxes first to obain annual rate
-    fluxDF <- summaryBy(PREC+ET+TRANS+ES+EC+RO+DRAIN+NEP+
-                        GPP+GPPno+ # no nutrient stress
-                        GPPns+     # nutrient stressed
-                        NPP+
-                        CLEST+
-                        CWEST+CFREST+CDEBTEST+CEXCESS+
-                        CWLINDEBT+
+    fluxDF <- summaryBy(PREC+ET+TRANS+ES+EC+RO+DRAIN+NEP+GPP+NPP+
+                        GPPno+GPPns+CLEST+CWEST+CFREST+CDEBTEST+         ### model specific variables
+                        #CWLINDEBT+
                         RHET+RAU+RECO+CGL+CGFR+CGCR+CGW+
                         NGL+NGFR+NGCR+NGW+PGL+PGFR+PGCR+PGW+
                         NUP+NGMIN+NMIN+NLEACH+PUP+PGMIN+PMIN+PLEACH+
@@ -133,7 +155,8 @@ EucFACE_mass_balance_and_validation_script_LPJGP_all_pft <- function() {
                         RL+RW+RGR+CLITIN+CCRLIN+CFRLIN+CWLIN+NLITIN+
                         NCRLIN+NFRLIN+NWLIN+PLITIN+PCRLIN+PFRLIN+PWLIN+
                         NWRETR+PWRETR+NCRRETR+PCRRETR+NFRRETR+PFRRETR+
-                        NDEP+NFIX+NVOL+PDEP+PWEA+CLEACH+NNEP+PNEP+PHENL+PHENFR+PGOCL~YEAR, 
+                        CLEACH+NNEP+PNEP+PGOCL+                         ### Model specific variables
+                        NDEP+NFIX+NVOL+PDEP+PWEA~YEAR, 
                         data=modDF, FUN=sum, keep.names=T, na.rm=T)
     
     
@@ -142,11 +165,12 @@ EucFACE_mass_balance_and_validation_script_LPJGP_all_pft <- function() {
                        "CSOIL","NSOIL","PSOIL","NPMIN","PPMIN","PLAB","PSEC","POCC",
                        "PPAR","CFLIT","CFLITA","CFLITB",
                        "NFLITA","NFLITB","PFLITA","PFLITB","CCLITB","NCLITB","PCLITB","NFLIT","PFLIT", "NPORG", "PPORG", 
-                       "MAXNSTORE", "MAXPSTORE", "SWtot", "SWPAtot", "CSOILtot", "NSOILtot", "NPMINtot", ## model specific output
-                       "NPORGtot", "PSOILtot", "PPMINtot", "PPORGtot", "CDEBT", "PHENL", "PHENFR")]      ## model specific output
+                       "MAXNSTORE", "MAXPSTORE", "SWtot", "SWPAtot", "CSOILtot", "NSOILtot", "NPMINtot",          ## model specific output
+                       "NPORGtot", "PSOILtot", "PPMINtot", "PPORGtot", "CDEBT", "CEXCESS", "CWLINDEBT",           ## model specific output
+                       "PHENL", "PHENFR")]                                                                        ## model specific output
     
     poolDF <- subset(poolDF, DOY==1)
-    
+
     poolDF$DOY <- NULL
     
     ### calculate change in pools for mass balance
@@ -157,12 +181,6 @@ EucFACE_mass_balance_and_validation_script_LPJGP_all_pft <- function() {
     for (i in c(2012:2018)) {
         deltaDF[deltaDF$YEAR==i,2:l] <- poolDF[poolDF$YEAR==(i+1),2:l]-poolDF[poolDF$YEAR==i,2:l]
     }
-    
-    ### specific for CL and CFR where phenology needs to be considered
-    #for (i in c(2012:2018)) {
-    #    deltaDF$CL[deltaDF$YEAR==i] <- poolDF$CL[poolDF$YEAR==(i+1)]/poolDF$PHENL[poolDF$YEAR==(i+1)]-poolDF$CL[poolDF$YEAR==i]/poolDF$CL[poolDF$YEAR==i]
-    #}
-    
     
     ### add delta column name to deltaDF
     names(deltaDF)[2:l] <- paste0("delta", names(deltaDF[2:l]))
@@ -274,8 +292,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP_all_pft <- function() {
     ### Here production fluxes include: CGL, CGFR, CGCR, CGW and CREPR, 
     ### and the respiratory flux is RAU. 
     ### If there is an exudation flux, make it part of GPP too.
-    p10<-xyplot(I(RAU+CGL+CGFR+CGW+CREPR)~GPP,annDF,
-                #main='I(RAU+CGL+CGFR+CGCR+CGW+CREPR)~GPP',
+    p10<-xyplot(I(RAU+CGL+CGFR+CGW+CREPR+CLEST+CWEST+CFREST+CDEBTEST)~GPP,annDF,
                 auto.key=T,
                 scales=list(relation='free'),
                 panel=function(...){
@@ -285,7 +302,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP_all_pft <- function() {
     
     ### Similarly, NPP should equal to all growth fluxes, 
     ### that is, the sum of CGL, CGFR, CGCR, CGW, CREPR, and CEX.
-    p11<-xyplot(I(CGW+CGL+CGFR+CREPR)~NPP,annDF,
+    p11<-xyplot(I(CGW+CGL+CGFR+CREPR+CLEST+CWEST+CFREST+CDEBTEST)~NPP,annDF,
                 auto.key=T,
                 scales=list(relation='free'),
                 panel=function(...){
@@ -317,14 +334,16 @@ EucFACE_mass_balance_and_validation_script_LPJGP_all_pft <- function() {
     
     ### This mass balance equation checks the net of total influx litter and heterotrophic respiration. 
     ### In theory, the net difference of these two flues should equal to the change in soil + litter pool. 
-    p14<-xyplot(I(CLITIN+CWLIN+CFRLIN+CREPR-RHET-CLEACH)~I(deltaCSOIL+deltaCCLITB+deltaCFLIT),annDF,
+    ### But here, we only have trees,so the mass balance doesn't add up?
+    p14<-xyplot(I(CLITIN+CWLIN+CFRLIN+CREPR-RHET)~I(deltaCSOIL+deltaCCLITB+deltaCFLIT),annDF,
                 auto.key=T,
                 scales=list(relation='free'),
                 panel=function(...){
                     panel.xyplot(...)
                     panel.abline(a=0,b=1)}) 
     
-    p15<-xyplot(I(CLITIN+CWLIN+CFRLIN+CREPR-RHET-CLEACH)~I(deltaCSOILtot+deltaCCLITB+deltaCFLIT),annDF,
+    
+    p15<-xyplot(I(CLITIN+CWLIN+CFRLIN+CREPR-RHET)~I(deltaCSOILtot+deltaCCLITB+deltaCFLIT),annDF,
                 auto.key=T,
                 scales=list(relation='free'),
                 panel=function(...){
@@ -333,7 +352,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP_all_pft <- function() {
     
     
     ### print plots to file, change numbering if needed
-    pdf(paste0(out.dir, '/QC_Carbon_Balance_',mod.abb,'_all_pft.pdf',sep=''),width=10,height=8)
+    pdf(paste0(out.dir, '/QC_Carbon_Balance_',mod.abb,'_', pft.group, '.pdf',sep=''),width=10,height=8)
     for (i in 1:15) {
         print(get(paste("p",i,sep="")))
     }
@@ -380,7 +399,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP_all_pft <- function() {
     
     
     ### print plots to file, change numbering if needed
-    pdf(paste0(out.dir, '/QC_Water_Balance_',mod.abb,'_all_pft.pdf',sep=''),width=10,height=8)
+    pdf(paste0(out.dir, '/QC_Water_Balance_',mod.abb,'_', pft.group, '.pdf',sep=''),width=10,height=8)
     for (i in 1:4) {
         print(get(paste("p",i,sep="")))
     }
@@ -571,7 +590,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP_all_pft <- function() {
     
     
     ### print plots to file, change numbering if needed
-    pdf(paste0(out.dir, '/QC_Nitrogen_Balance_',mod.abb,'_all_pft.pdf',sep=''),width=10,height=8)
+    pdf(paste0(out.dir, '/QC_Nitrogen_Balance_',mod.abb,'_', pft.group, '.pdf',sep=''),width=10,height=8)
     for (i in 1:18) {
         print(get(paste("p",i,sep="")))
     }
@@ -760,7 +779,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP_all_pft <- function() {
     
     
     ### print plots to file, change numbering if needed
-    pdf(paste0(out.dir, '/QC_Phosphorus_Balance_',mod.abb,'_all_pft.pdf',sep=''),width=10,height=8)
+    pdf(paste0(out.dir, '/QC_Phosphorus_Balance_',mod.abb,'_', pft.group, '.pdf',sep=''),width=10,height=8)
     for (i in 1:19) {
         print(get(paste("p",i,sep="")))
     }
@@ -1287,7 +1306,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP_all_pft <- function() {
     
     
     ### print plots to file, change numbering if needed
-    pdf(paste0(out.dir, '/QC_Time_averaged_validation_',mod.abb,'_all_pft.pdf',sep=''),width=10,height=8)
+    pdf(paste0(out.dir, '/QC_Time_averaged_validation_',mod.abb,'_', pft.group, '.pdf',sep=''),width=10,height=8)
     for (i in 1:9) {
         print(get(paste("p",i,sep="")))
     }
@@ -1467,7 +1486,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP_all_pft <- function() {
     
     
     ### print plots to file, change numbering if needed
-    pdf(paste0(out.dir, '/QC_Time_varying_validation_',mod.abb,'_all_pft.pdf',sep=''),width=10,height=8)
+    pdf(paste0(out.dir, '/QC_Time_varying_validation_',mod.abb,'_', pft.group, '.pdf',sep=''),width=10,height=8)
     for (i in 1:4) {
         print(get(paste("p",i,sep="")))
     }

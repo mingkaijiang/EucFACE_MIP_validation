@@ -1,4 +1,5 @@
-EucFACE_mass_balance_and_validation_script_LPJGP_euc_ter <- function() {
+EucFACE_mass_balance_and_validation_script_LPJGN <- function(mod.version,
+                                                             pft.group) {
     #### EucFACE mass balance and validation script
     #### Mingkai Jiang (m.jiang@westernsydney.edu.au)
     ####
@@ -47,11 +48,19 @@ EucFACE_mass_balance_and_validation_script_LPJGP_euc_ter <- function() {
     ####             LPJGP: LPJ-Guess, CNP version
     ####             CABLP: CABLE-POP, CNP version
     ####             ELMXX: ELM, CNP version
-    mod.abb <- "LPJGP"
+    mod.abb <- "LPJGN"
     
     #### setting out path to store the files
     out.dir <- paste0(getwd(), "/validation_output/", mod.abb)
 
+    ### create output folder
+    if(!dir.exists(out.dir)) {
+        dir.create(out.dir, showWarnings = FALSE)
+    } 
+
+    ### include model version
+    out.dir <- paste0(out.dir, "/", mod.version)
+    
     ### create output folder
     if(!dir.exists(out.dir)) {
         dir.create(out.dir, showWarnings = FALSE)
@@ -65,8 +74,8 @@ EucFACE_mass_balance_and_validation_script_LPJGP_euc_ter <- function() {
     ### the naming of the file follows the output protocol. 
     ### Note that this is the daily file. 
     ### You can modify this path to read in different files. 
-    modDF <- read.csv(paste0("simulation_output/", mod.abb,
-                             "/euc_ter/EUC_", mod.abb, "_OBS_VAR_AMB_NOP_D.csv"))
+    modDF <- read.csv(paste0("simulation_output/", mod.abb, "/", mod.version,
+                             "/", pft.group, "/EUC_", mod.abb, "_OBS_VAR_AMB_NOP_D.csv"))
     
     ### checking number of column in the original dataframe
     ncol <- ncol(modDF)
@@ -96,8 +105,37 @@ EucFACE_mass_balance_and_validation_script_LPJGP_euc_ter <- function() {
     
     modDF$Date <- as.Date(modDF$Date)
     
-    ### add other variables not defined in the protocol but are potentially important for this MIP
-
+    ### additional variables specific to this model
+    #CDEBT - C debt g C m-2. Individuals can borrow C if they had a bad year. Will pay it back later. This is how much C debt they have in total. 
+    #CLEST - C leaf establishment g C m-2 yr-1. New individual C leaf.
+    #CWEST - C wood establishment g C m-2 yr-1. New individual C wood.
+    #CFREST - C root establishment g C m-2 yr-1. New individual C root.
+    #CDEBTEST - C debt establishment g C m-2 yr-1. New individual C debt. 
+    #CEXCESS - C excess g C m-2. When mass balance doesn't add up. For example, if C debt is larger than existing biomass when an individual is killed.
+    #CWLINDEBT - C wood litter is used to pay back debt instead of falling on the ground.
+    #PDEP - P deposition g P m-2 yr-1
+    #PFERT - P fertilisation g P m-2 yr-1
+    #PWEAT - P weathering rate g P m-2 yr-1
+    #PGOCL - P occlusion rate g P m-2 yr-1
+    #CLEACH - C leaching g C m-2 yr-1
+    #GPPno - GPP without any limitations
+    #GPPns - GPP with only nutrient limitation (GPP is with both nutrient and water limitation).
+    #PCON - Leaf P concentration PL / (2*CL)
+    #MAXNSTORE - maximum N storage capacity of all individuals
+    #MAXPSTORE - maximum P storage capacity of all individuals
+    #PHENL - Phenology of leaves (1 full leaf out, 0 no leaves. Euc_ter PFT has always 1, only grasses that have variable phenology)
+    #PHENFR - Phenology of roots (1 full root out, 0 no roots. Euc_ter PFT has always 1, only grasses that have variable phenology)
+    #SWtot - Total soil water content
+    #SWPAtot - Total plant-available soil water content
+    #CSOILtot - Total soil C
+    #NSOILtot - Total soil N
+    #NPMINtot - Total soil mineral N
+    #NPORGtot - Total soil organic N (includes soil N litter which CSOIL doesn't)
+    #PSOILtot - Total soil P
+    #PPMINtot - Total soil mineral P
+    #PPORGtot - Total soil organic P (includes soil P litter)
+    #NNEP - N total flux in the system. Corresponds to C mass NEP
+    #PNEP - P total flux in the system. Corresponds to C mass NEP
     
     ### The mass balance check is performed at annual timestep. 
     ### Note that, I assume that many models may not output some of these variables, 
@@ -107,34 +145,31 @@ EucFACE_mass_balance_and_validation_script_LPJGP_euc_ter <- function() {
     ### Otherwise, please indicate the reasons as to why your model does not have mass balance closure.
     
     ### summarize all fluxes first to obain annual rate
-    fluxDF <- summaryBy(PREC+ET+TRANS+ES+EC+RO+DRAIN+NEP+
-                        GPP+GPPno+ # no nutrient stress
-                        GPPns+     # nutrient stressed
-                        NPP+
-                        CLEST+
-                        CWEST+CFREST+CDEBTEST+CEXCESS+
-                        CWLINDEBT+
+    fluxDF <- summaryBy(PREC+ET+TRANS+ES+EC+RO+DRAIN+NEP+GPP+NPP+
+                        GPPno+GPPns+CLEST+CWEST+CFREST+CDEBTEST+         ### model specific variables
+                        #CWLINDEBT+
                         RHET+RAU+RECO+CGL+CGFR+CGCR+CGW+
-                        NGL+NGFR+NGCR+NGW+PGL+PGFR+PGCR+PGW+
-                        NUP+NGMIN+NMIN+NLEACH+PUP+PGMIN+PMIN+PLEACH+
-                        PBIOCHMIN+NLRETR+PLRETR+RCR+RFR+CREPR+CEX+CVOC+
+                        NGL+NGFR+NGCR+NGW+
+                        NUP+NGMIN+NMIN+NLEACH+NLRETR+PLRETR+RCR+RFR+CREPR+CEX+CVOC+
                         RL+RW+RGR+CLITIN+CCRLIN+CFRLIN+CWLIN+NLITIN+
-                        NCRLIN+NFRLIN+NWLIN+PLITIN+PCRLIN+PFRLIN+PWLIN+
-                        NWRETR+PWRETR+NCRRETR+PCRRETR+NFRRETR+PFRRETR+
-                        NDEP+NFIX+NVOL+PDEP+PWEA+CLEACH+NNEP+PNEP+PHENL+PHENFR+PGOCL~YEAR, 
+                        NCRLIN+NFRLIN+NWLIN+
+                        NWRETR+PWRETR+NCRRETR+NFRRETR+
+                        CLEACH+NNEP+                                     ### Model specific variables
+                        NDEP+NFIX+NVOL~YEAR, 
                         data=modDF, FUN=sum, keep.names=T, na.rm=T)
     
     
     ### subset first day within a year of all pools
-    poolDF <- modDF[,c("YEAR", "DOY", "SW","CL","LAI","CW","CFR","CCR","NL","NW","NFR","NCR","PL","PW","PFR","PCR","CSTOR","NSTOR","PSTOR",
-                       "CSOIL","NSOIL","PSOIL","NPMIN","PPMIN","PLAB","PSEC","POCC",
-                       "PPAR","CFLIT","CFLITA","CFLITB",
-                       "NFLITA","NFLITB","PFLITA","PFLITB","CCLITB","NCLITB","PCLITB","NFLIT","PFLIT", "NPORG", "PPORG", 
-                       "MAXNSTORE", "MAXPSTORE", "SWtot", "SWPAtot", "CSOILtot", "NSOILtot", "NPMINtot", ## model specific output
-                       "NPORGtot", "PSOILtot", "PPMINtot", "PPORGtot", "CDEBT")]                                  ## model specific output
+    poolDF <- modDF[,c("YEAR", "DOY", "SW","CL","LAI","CW","CFR","CCR","NL","NW","NFR","NCR","CSTOR","NSTOR",
+                       "CSOIL","NSOIL","NPMIN",
+                       "CFLIT","CFLITA","CFLITB",
+                       "NFLITA","NFLITB","CCLITB","NCLITB","NFLIT","NPORG",  
+                       "MAXNSTORE", "SWtot", "SWPAtot", "CSOILtot", "NSOILtot", "NPMINtot",          ## model specific output
+                       "NPORGtot","CDEBT", "CEXCESS", "CWLINDEBT",                                   ## model specific output
+                       "PHENL", "PHENFR")]                                                           ## model specific output
     
     poolDF <- subset(poolDF, DOY==1)
-    
+
     poolDF$DOY <- NULL
     
     ### calculate change in pools for mass balance
@@ -256,8 +291,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP_euc_ter <- function() {
     ### Here production fluxes include: CGL, CGFR, CGCR, CGW and CREPR, 
     ### and the respiratory flux is RAU. 
     ### If there is an exudation flux, make it part of GPP too.
-    p10<-xyplot(I(RAU+CGL+CGFR+CGW+CREPR)~GPP,annDF,
-                #main='I(RAU+CGL+CGFR+CGCR+CGW+CREPR)~GPP',
+    p10<-xyplot(I(RAU+CGL+CGFR+CGW+CREPR+CLEST+CWEST+CFREST+CDEBTEST)~GPP,annDF,
                 auto.key=T,
                 scales=list(relation='free'),
                 panel=function(...){
@@ -267,7 +301,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP_euc_ter <- function() {
     
     ### Similarly, NPP should equal to all growth fluxes, 
     ### that is, the sum of CGL, CGFR, CGCR, CGW, CREPR, and CEX.
-    p11<-xyplot(I(CGW+CGL+CGFR+CREPR)~NPP,annDF,
+    p11<-xyplot(I(CGW+CGL+CGFR+CREPR+CLEST+CWEST+CFREST+CDEBTEST)~NPP,annDF,
                 auto.key=T,
                 scales=list(relation='free'),
                 panel=function(...){
@@ -307,6 +341,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP_euc_ter <- function() {
                     panel.xyplot(...)
                     panel.abline(a=0,b=1)}) 
     
+    
     p15<-xyplot(I(CLITIN+CWLIN+CFRLIN+CREPR-RHET)~I(deltaCSOILtot+deltaCCLITB+deltaCFLIT),annDF,
                 auto.key=T,
                 scales=list(relation='free'),
@@ -316,7 +351,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP_euc_ter <- function() {
     
     
     ### print plots to file, change numbering if needed
-    pdf(paste0(out.dir, '/QC_Carbon_Balance_',mod.abb,'_euc_ter.pdf',sep=''),width=10,height=8)
+    pdf(paste0(out.dir, '/QC_Carbon_Balance_',mod.abb,'_', pft.group, '.pdf',sep=''),width=10,height=8)
     for (i in 1:15) {
         print(get(paste("p",i,sep="")))
     }
@@ -363,7 +398,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP_euc_ter <- function() {
     
     
     ### print plots to file, change numbering if needed
-    pdf(paste0(out.dir, '/QC_Water_Balance_',mod.abb,'_euc_ter.pdf',sep=''),width=10,height=8)
+    pdf(paste0(out.dir, '/QC_Water_Balance_',mod.abb,'_', pft.group, '.pdf',sep=''),width=10,height=8)
     for (i in 1:4) {
         print(get(paste("p",i,sep="")))
     }
@@ -554,203 +589,11 @@ EucFACE_mass_balance_and_validation_script_LPJGP_euc_ter <- function() {
     
     
     ### print plots to file, change numbering if needed
-    pdf(paste0(out.dir, '/QC_Nitrogen_Balance_',mod.abb,'_euc_ter.pdf',sep=''),width=10,height=8)
+    pdf(paste0(out.dir, '/QC_Nitrogen_Balance_',mod.abb,'_', pft.group, '.pdf',sep=''),width=10,height=8)
     for (i in 1:18) {
         print(get(paste("p",i,sep="")))
     }
     dev.off()
-    
-    
-    
-    ##################### Phosphorus balance check ################################
-    ### The net influx - outflux should equal to the change in all ecosystem P pools: 
-    ### PDEP+PWEA-PLEACH = DeltaPL+DeltaPW+DeltaPCR+DeltaPFR+DeltaPSOIL+DeltaPFLIT+DeltaPCLITB
-    p1<-xyplot(I(PDEP+PWEA-PLEACH)~(I(deltaPL+deltaPW+deltaPCR+deltaPFR+deltaPSOIL+deltaPFLIT+deltaPCLITB)),annDF,
-               #main='I(PDEP+PWEA-PLEACH)~(I(deltaPL+deltaPW+deltaPCR+deltaPFR+deltaPSOIL+deltaPFLIT+deltaPCLITB))',
-               auto.key=T,
-               scales=list(relation='free'),
-               panel=function(...){
-                   panel.xyplot(...)
-                   panel.abline(a=0,b=1)}) 
-    
-    
-    p2<-xyplot(I(PDEP+PWEA-PLEACH)~(I(deltaPL+deltaPW+deltaPCR+deltaPFR+deltaPSOILtot+deltaPFLIT+deltaPCLITB)),annDF,
-               #main='I(PDEP+PWEA-PLEACH)~(I(deltaPL+deltaPW+deltaPCR+deltaPFR+deltaPSOIL+deltaPFLIT+deltaPCLITB))',
-               auto.key=T,
-               scales=list(relation='free'),
-               panel=function(...){
-                   panel.xyplot(...)
-                   panel.abline(a=0,b=1)}) 
-    
-    
-    ### Next, we check changes in major vegetation P pools. 
-    ### It should equal to production flux - retranslocation flux - litterfall. 
-    p3<-xyplot(I(PGL-PLITIN-PLRETR)~deltaPL,annDF,
-               #main='I(PGL-PLITIN-PLRETR)~deltaPL',
-               auto.key=T,
-               scales=list(relation='free'),
-               panel=function(...){
-                   panel.xyplot(...)
-                   panel.abline(a=0,b=1)}) 
-    
-    
-    p4<-xyplot(I(PGW-PWLIN-PWRETR)~deltaPW,annDF,
-               #main='I(PGW-PWLIN-PWRETR)~deltaPW',
-               auto.key=T,
-               scales=list(relation='free'),
-               panel=function(...){
-                   panel.xyplot(...)
-                   panel.abline(a=0,b=1)}) 
-    
-    
-    p5<-xyplot(I(PGFR-PFRLIN-PFRRETR)~deltaPFR,annDF,
-               #main='I(PGFR-PFRLIN-PFRRETR)~deltaPFR',
-               auto.key=T,
-               scales=list(relation='free'),
-               panel=function(...){
-                   panel.xyplot(...)
-                   panel.abline(a=0,b=1)}) 
-    
-    p6 <- plot.new()
-    
-    p7 <- plot.new()
-    
-    
-    #p6<-xyplot(I(PGCR-PCRLIN-PCRRETR)~deltaPCR,annDF,
-    #           #main='I(PGCR-PCRLIN-PCRRETR)~deltaPCR',
-    #           auto.key=T,
-    #           scales=list(relation='free'),
-    #           panel=function(...){
-    #               panel.xyplot(...)
-    #               panel.abline(a=0,b=1)}) 
-    #
-    
-    ### This is to check P litter flux. 
-    p8<-xyplot(I(PFLITA+PFLITB)~PFLIT,annDF,
-               #main='I(PFLITA+PFLITB)~PFLIT',
-               auto.key=T,
-               scales=list(relation='free'),
-               panel=function(...){
-                   panel.xyplot(...)
-                   panel.abline(a=0,b=1)}) 
-    
-    ### Now we check the total P required to make new vegetation: 
-    ### PUP+PLRETR+PWRETR+PFRRETR+PCRRETR=PGL+PGFR+PGCR+PGW
-    p9<-xyplot(I(PUP+PLRETR+PWRETR+PFRRETR)~I(PGL+PGFR+PGW),annDF,
-               #main='I(PUP+PLRETR+PWRETR+PFRRETR+PCRRETR)~I(PGL+PGFR+PGCR+PGW)',
-               auto.key=T,
-               scales=list(relation='free'),
-               panel=function(...){
-                   panel.xyplot(...)
-                   panel.abline(a=0,b=1)}) 
-    
-    
-    ### This is to consider the effect of DeltaPSTOR. 
-    p10<-xyplot(I(PUP+PLRETR+PWRETR+PFRRETR-PGL-PGFR-PGW)~deltaPSTOR,annDF,
-               #main='I(PUP+PLRETR+PWRETR+PFRRETR+PCRRETR-PGL-PGFR-PGCR-PGW)~deltaPSTOR',
-               auto.key=T,
-               scales=list(relation='free'),
-               panel=function(...){
-                   panel.xyplot(...)
-                   panel.abline(a=0,b=1)}) 
-    
-    
-    ### This is to check whole ecosystem P flux, 
-    ### which means that total in - out = net change:
-    ### PDEP+PWEA+PLITIN+PWLIN+PCRLIN+PFRLIN-PUP-PLEACH = DeltaPSOIL+DeltaFLIT+DeltaPCLITB
-    p11<-xyplot(I(PDEP+PWEA+PLITIN+PWLIN+PFRLIN-PUP-PLEACH-PGOCL)~I(deltaPSOIL+deltaPFLIT+deltaPCLITB),annDF,
-                #main='I(PDEP+PWEA+PLITIN+PWLIN+PCRLIN+PFRLIN-PUP-PLEACH)~I(deltaPSOIL+deltaPFLIT+deltaPCLITB)',
-                auto.key=T,
-                scales=list(relation='free'),
-                panel=function(...){
-                    panel.xyplot(...)
-                    panel.abline(a=0,b=1)}) 
-    
-    
-    p12<-xyplot(I(PDEP+PWEA+PLITIN+PWLIN+PFRLIN-PUP-PLEACH-PGOCL)~I(deltaPSOILtot+deltaPFLIT+deltaPCLITB),annDF,
-                #main='I(PDEP+PWEA+PLITIN+PWLIN+PCRLIN+PFRLIN-PUP-PLEACH)~I(deltaPSOIL+deltaPFLIT+deltaPCLITB)',
-                auto.key=T,
-                scales=list(relation='free'),
-                panel=function(...){
-                    panel.xyplot(...)
-                    panel.abline(a=0,b=1)}) 
-    
-    
-    ### Now to check a basic mass balance on soil P. 
-    p13<-xyplot(I(PPMIN+PPORG)~PSOIL,annDF,
-                #main='I(PPMIN+PPORG)~PSOIL',
-                auto.key=T,
-                scales=list(relation='free'),
-                panel=function(...){
-                    panel.xyplot(...)
-                    panel.abline(a=0,b=1)}) 
-    
-    
-    p14<-xyplot(I(PPMINtot+PPORGtot)~PSOILtot,annDF,
-                #main='I(PPMIN+PPORG)~PSOIL',
-                auto.key=T,
-                scales=list(relation='free'),
-                panel=function(...){
-                    panel.xyplot(...)
-                    panel.abline(a=0,b=1)}) 
-    
-    
-    ### Inorganic P pool in soils: PLAB+PSEC+POCC+PPAR=PPMIN
-    p15<-xyplot(I(PLAB+PSEC+POCC)~PPMIN,annDF,
-                #main='I(PLAB+PSEC+POCC+PPAR)~PPMIN',
-                auto.key=T,
-                scales=list(relation='free'),
-                panel=function(...){
-                    panel.xyplot(...)
-                    panel.abline(a=0,b=1)}) 
-    
-    
-    p16<-xyplot(I(PLAB+PSEC+POCC)~PPMINtot,annDF,
-                #main='I(PLAB+PSEC+POCC+PPAR)~PPMIN',
-                auto.key=T,
-                scales=list(relation='free'),
-                panel=function(...){
-                    panel.xyplot(...)
-                    panel.abline(a=0,b=1)}) 
-    
-    
-    ### A different way to check PSOIL. 
-    p17<-xyplot(I(PLAB+PSEC+POCC+PPORG)~PSOIL,annDF,
-                #main='I(PLAB+PSEC+POCC+PPAR+PPORG)~PSOIL',
-                auto.key=T,
-                scales=list(relation='free'),
-                panel=function(...){
-                    panel.xyplot(...)
-                    panel.abline(a=0,b=1)}) 
-    
-    
-    p18<-xyplot(I(PLAB+PSEC+POCC+PPORGtot)~PSOILtot,annDF,
-                #main='I(PLAB+PSEC+POCC+PPAR+PPORG)~PSOIL',
-                auto.key=T,
-                scales=list(relation='free'),
-                panel=function(...){
-                    panel.xyplot(...)
-                    panel.abline(a=0,b=1)}) 
-    
-    
-    p19<-xyplot(I(PDEP+PWEA-PLEACH-PGOCL)~PNEP,annDF,
-                #main='I(PLAB+PSEC+POCC+PPAR+PPORG)~PSOIL',
-                auto.key=T,
-                scales=list(relation='free'),
-                panel=function(...){
-                    panel.xyplot(...)
-                    panel.abline(a=0,b=1)}) 
-    
-    
-    ### print plots to file, change numbering if needed
-    pdf(paste0(out.dir, '/QC_Phosphorus_Balance_',mod.abb,'_euc_ter.pdf',sep=''),width=10,height=8)
-    for (i in 1:19) {
-        print(get(paste("p",i,sep="")))
-    }
-    dev.off()
-    
-    
-    
     
     
     ##########################################################################
@@ -955,58 +798,50 @@ EucFACE_mass_balance_and_validation_script_LPJGP_euc_ter <- function() {
     ### but observed data are for top 10 cm only. 
     
     ### create a DF to store observation data for vegetation carbon stocks
-    pDF <- data.frame(rep(c("PLAB", "PMIN", "NMIN", "NUP", "PUP",
-                            "NLEACH", "PLEACH"), 2), 
-                      rep(c("obs", "sim"), each = 7), NA)
+    pDF <- data.frame(rep(c("NMIN", "NUP", 
+                            "NLEACH"), 2), 
+                      rep(c("obs", "sim"), each = 3), NA)
     colnames(pDF) <- c("Variable", 
                        "Group",
                        "meanvalue")
-    
-    pDF$meanvalue[pDF$Group=="obs"&pDF$Variable=="PLAB"] <- 0.17
-    pDF$meanvalue[pDF$Group=="obs"&pDF$Variable=="PMIN"] <- 0.3
-    pDF$meanvalue[pDF$Group=="obs"&pDF$Variable=="NMIN"] <- 8.81
     
     
     ### calcualte annual means in the simulated data
     subDF <- subset(modDF, YEAR <= 2016 & YEAR > 2012)
     
-    poolDF <- summaryBy(PLAB~YEAR, data=subDF, FUN=mean, na.rm=T, keep.names=T)
-    fluxDF <- summaryBy(PMIN+NMIN+NLEACH+PLEACH+NUP+PUP~YEAR, data=subDF, FUN=sum, na.rm=T, keep.names=T)
+    fluxDF <- summaryBy(NMIN+NLEACH+NUP~YEAR, data=subDF, FUN=sum, na.rm=T, keep.names=T)
     
     ### assign values
-    pDF$meanvalue[pDF$Group=="sim"&pDF$Variable=="PLAB"] <- round(poolDF$PLAB[poolDF$YEAR=="2016"], 3)
-    pDF$meanvalue[pDF$Group=="sim"&pDF$Variable=="PMIN"] <- round(mean(fluxDF$PMIN), 3)
     pDF$meanvalue[pDF$Group=="sim"&pDF$Variable=="NMIN"] <- round(mean(fluxDF$NMIN), 3)
-    pDF$meanvalue[pDF$Group=="sim"&pDF$Variable=="PLEACH"] <- round(mean(fluxDF$PLEACH), 3)
     pDF$meanvalue[pDF$Group=="sim"&pDF$Variable=="NLEACH"] <- round(mean(fluxDF$NLEACH), 3)
-    pDF$meanvalue[pDF$Group=="sim"&pDF$Variable=="PUP"] <- round(mean(fluxDF$PUP), 3)
     pDF$meanvalue[pDF$Group=="sim"&pDF$Variable=="NUP"] <- round(mean(fluxDF$NUP), 3)
     
     
-    plotDF1 <- pDF[pDF$Variable%in%c("PLAB", "PMIN"),]
     plotDF2 <- pDF[pDF$Variable%in%c("NMIN"),]
     
     ### plotting
-    p4 <- ggplot(data=plotDF1, 
-                 aes(Group, meanvalue)) +
-        geom_bar(stat = "identity", aes(fill=Variable), 
-                 position="dodge", col="black") +
-        ggtitle("Major phosphorus pools")+
-        theme_linedraw() +
-        theme(panel.grid.minor=element_blank(),
-              axis.text.x=element_text(size=12),
-              axis.title.x=element_text(size=14),
-              axis.text.y=element_text(size=12),
-              axis.title.y=element_text(size=14),
-              legend.text=element_text(size=12),
-              legend.title=element_text(size=14),
-              panel.grid.major=element_blank(),
-              legend.position="right",
-              legend.box = 'horizontal',
-              legend.box.just = 'left',
-              plot.title = element_text(size=14, face="bold.italic", 
-                                        hjust = 0.5))+
-        ylab(expression(paste("Phosphorus pools (g P " * m^2 * ")")))
+    p4 <- plot.new()
+    
+    #p4 <- ggplot(data=plotDF1, 
+    #             aes(Group, meanvalue)) +
+    #    geom_bar(stat = "identity", aes(fill=Variable), 
+    #             position="dodge", col="black") +
+    #    ggtitle("Major phosphorus pools")+
+    #    theme_linedraw() +
+    #    theme(panel.grid.minor=element_blank(),
+    #          axis.text.x=element_text(size=12),
+    #          axis.title.x=element_text(size=14),
+    #          axis.text.y=element_text(size=12),
+    #          axis.title.y=element_text(size=14),
+    #          legend.text=element_text(size=12),
+    #          legend.title=element_text(size=14),
+    #          panel.grid.major=element_blank(),
+    #          legend.position="right",
+    #          legend.box = 'horizontal',
+    #          legend.box.just = 'left',
+    #          plot.title = element_text(size=14, face="bold.italic", 
+    #                                    hjust = 0.5))+
+    #    ylab(expression(paste("Phosphorus pools (g P " * m^2 * ")")))
     
     
     p5 <- ggplot(data=plotDF2, 
@@ -1036,10 +871,9 @@ EucFACE_mass_balance_and_validation_script_LPJGP_euc_ter <- function() {
     ### create a DF to store observation data 
     stDF <- data.frame(rep(c("leaf", "sapwood", "wood", "fineroot", "soil"),2), 
                        rep(c("obs", "sim"), each = 5), 
-                       NA, NA, NA, NA, NA, NA)
+                       NA, NA)
     colnames(stDF) <- c("Variable", "Group", 
-                        "CN.mean", "CP.mean",  "NP.mean",
-                        "CN.se", "CP.se",  "NP.se")
+                        "CN.mean", "CN.se")
     
     stDF$CN.mean[stDF$Group=="obs"&stDF$Variable=="leaf"] <- 35.5
     stDF$CN.mean[stDF$Group=="obs"&stDF$Variable=="sapwood"] <- 101.6
@@ -1047,17 +881,6 @@ EucFACE_mass_balance_and_validation_script_LPJGP_euc_ter <- function() {
     stDF$CN.mean[stDF$Group=="obs"&stDF$Variable=="fineroot"] <- 56.9
     stDF$CN.mean[stDF$Group=="obs"&stDF$Variable=="soil"] <- 13.8 
     
-    stDF$CP.mean[stDF$Group=="obs"&stDF$Variable=="leaf"] <- 722 
-    stDF$CP.mean[stDF$Group=="obs"&stDF$Variable=="sapwood"] <- 3705 
-    stDF$CP.mean[stDF$Group=="obs"&stDF$Variable=="wood"] <- 7696 
-    stDF$CP.mean[stDF$Group=="obs"&stDF$Variable=="fineroot"] <- 1626
-    stDF$CP.mean[stDF$Group=="obs"&stDF$Variable=="soil"] <- 224
-    
-    stDF$NP.mean[stDF$Group=="obs"&stDF$Variable=="leaf"] <- 22.9 
-    stDF$NP.mean[stDF$Group=="obs"&stDF$Variable=="sapwood"] <- 35.6
-    stDF$NP.mean[stDF$Group=="obs"&stDF$Variable=="wood"] <- 33.7 
-    stDF$NP.mean[stDF$Group=="obs"&stDF$Variable=="fineroot"] <- 28.7
-    stDF$NP.mean[stDF$Group=="obs"&stDF$Variable=="soil"] <- 16.4 
     
     
     stDF$CN.se[stDF$Group=="obs"&stDF$Variable=="leaf"] <- 2.7
@@ -1066,29 +889,15 @@ EucFACE_mass_balance_and_validation_script_LPJGP_euc_ter <- function() {
     stDF$CN.se[stDF$Group=="obs"&stDF$Variable=="fineroot"] <- 4.6
     stDF$CN.se[stDF$Group=="obs"&stDF$Variable=="soil"] <- 1.0
     
-    stDF$CP.se[stDF$Group=="obs"&stDF$Variable=="leaf"] <- 33
-    stDF$CP.se[stDF$Group=="obs"&stDF$Variable=="sapwood"] <- 702
-    stDF$CP.se[stDF$Group=="obs"&stDF$Variable=="wood"] <- 982
-    stDF$CP.se[stDF$Group=="obs"&stDF$Variable=="fineroot"] <- 81
-    stDF$CP.se[stDF$Group=="obs"&stDF$Variable=="soil"] <- 39
-    
-    stDF$NP.se[stDF$Group=="obs"&stDF$Variable=="leaf"] <-  0.1
-    stDF$NP.se[stDF$Group=="obs"&stDF$Variable=="sapwood"] <- 2.1
-    stDF$NP.se[stDF$Group=="obs"&stDF$Variable=="wood"] <- 2.7
-    stDF$NP.se[stDF$Group=="obs"&stDF$Variable=="fineroot"] <- 3.3
-    stDF$NP.se[stDF$Group=="obs"&stDF$Variable=="soil"] <- 3.4
-    
-    
-    
+   
     
     ### create a DF to store simulated stocks
     tmpDF <- data.frame(rep(c("leaf", "wood", "fineroot", "soil"), 4), 
-                        rep(c(2013:2016), each = 4), NA, NA, NA)
+                        rep(c(2013:2016), each = 4), NA, NA)
     colnames(tmpDF) <- c("Variable", 
                          "Year",
                          "Cstock",
-                         "Nstock", 
-                         "Pstock")
+                         "Nstock")
     
     ### calcualte annual means in the simulated data
     poolDF <- subset(modDF, YEAR <= 2016 & YEAR > 2012 & DOY == 1)
@@ -1104,19 +913,14 @@ EucFACE_mass_balance_and_validation_script_LPJGP_euc_ter <- function() {
         tmpDF$Nstock[tmpDF$Year==i&tmpDF$Variable=="wood"] <- poolDF$NW[poolDF$YEAR == i]
         tmpDF$Nstock[tmpDF$Year==i&tmpDF$Variable=="fineroot"] <- poolDF$NFR[poolDF$YEAR == i]
         tmpDF$Nstock[tmpDF$Year==i&tmpDF$Variable=="soil"] <- poolDF$NSOIL[poolDF$YEAR == i]
-        
-        tmpDF$Pstock[tmpDF$Year==i&tmpDF$Variable=="leaf"] <- poolDF$PL[poolDF$YEAR == i]
-        tmpDF$Pstock[tmpDF$Year==i&tmpDF$Variable=="wood"] <- poolDF$PW[poolDF$YEAR == i]
-        tmpDF$Pstock[tmpDF$Year==i&tmpDF$Variable=="fineroot"] <- poolDF$PFR[poolDF$YEAR == i]
-        tmpDF$Pstock[tmpDF$Year==i&tmpDF$Variable=="soil"] <- poolDF$PSOIL[poolDF$YEAR == i]
+    
         
     }
     
     tmpDF$CN <- with(tmpDF, Cstock/Nstock)
-    tmpDF$CP <- with(tmpDF, Cstock/Pstock)
-    tmpDF$NP <- with(tmpDF, Nstock/Pstock)
     
-    tmpDF2 <- summaryBy(CN+CP+NP~Variable, FUN=c(mean, se), data=tmpDF, keep.names=T)
+    
+    tmpDF2 <- summaryBy(CN~Variable, FUN=c(mean, se), data=tmpDF, keep.names=T)
     
     
     ### assign values
@@ -1126,34 +930,11 @@ EucFACE_mass_balance_and_validation_script_LPJGP_euc_ter <- function() {
     stDF$CN.mean[stDF$Group=="sim"&stDF$Variable=="soil"] <-  tmpDF2$CN.mean[tmpDF2$Variable=="soil"]
     
     
-    stDF$CP.mean[stDF$Group=="sim"&stDF$Variable=="leaf"] <-  tmpDF2$CP.mean[tmpDF2$Variable=="leaf"]
-    stDF$CP.mean[stDF$Group=="sim"&stDF$Variable=="wood"] <-  tmpDF2$CP.mean[tmpDF2$Variable=="wood"]
-    stDF$CP.mean[stDF$Group=="sim"&stDF$Variable=="fineroot"] <- tmpDF2$CP.mean[tmpDF2$Variable=="fineroot"]
-    stDF$CP.mean[stDF$Group=="sim"&stDF$Variable=="soil"] <-  tmpDF2$CP.mean[tmpDF2$Variable=="soil"]
-    
-    stDF$NP.mean[stDF$Group=="sim"&stDF$Variable=="leaf"] <- tmpDF2$NP.mean[tmpDF2$Variable=="leaf"]
-    stDF$NP.mean[stDF$Group=="sim"&stDF$Variable=="wood"] <- tmpDF2$NP.mean[tmpDF2$Variable=="wood"]
-    stDF$NP.mean[stDF$Group=="sim"&stDF$Variable=="fineroot"] <- tmpDF2$NP.mean[tmpDF2$Variable=="fineroot"]
-    stDF$NP.mean[stDF$Group=="sim"&stDF$Variable=="soil"] <- tmpDF2$NP.mean[tmpDF2$Variable=="soil"]
-    
-    
-    
     stDF$CN.se[stDF$Group=="sim"&stDF$Variable=="leaf"] <- tmpDF2$CN.se[tmpDF2$Variable=="leaf"]
     stDF$CN.se[stDF$Group=="sim"&stDF$Variable=="wood"] <-  tmpDF2$CN.se[tmpDF2$Variable=="wood"]
     stDF$CN.se[stDF$Group=="sim"&stDF$Variable=="fineroot"] <-  tmpDF2$CN.se[tmpDF2$Variable=="fineroot"]
     stDF$CN.se[stDF$Group=="sim"&stDF$Variable=="soil"] <-  tmpDF2$CN.se[tmpDF2$Variable=="soil"]
     
-    
-    stDF$CP.se[stDF$Group=="sim"&stDF$Variable=="leaf"] <-  tmpDF2$CP.se[tmpDF2$Variable=="leaf"]
-    stDF$CP.se[stDF$Group=="sim"&stDF$Variable=="wood"] <-  tmpDF2$CP.se[tmpDF2$Variable=="wood"]
-    stDF$CP.se[stDF$Group=="sim"&stDF$Variable=="fineroot"] <- tmpDF2$CP.se[tmpDF2$Variable=="fineroot"]
-    stDF$CP.se[stDF$Group=="sim"&stDF$Variable=="soil"] <- tmpDF2$CP.se[tmpDF2$Variable=="soil"]
-    
-    
-    stDF$NP.se[stDF$Group=="sim"&stDF$Variable=="leaf"] <- tmpDF2$NP.se[tmpDF2$Variable=="leaf"]
-    stDF$NP.se[stDF$Group=="sim"&stDF$Variable=="wood"] <- tmpDF2$NP.se[tmpDF2$Variable=="wood"]
-    stDF$NP.se[stDF$Group=="sim"&stDF$Variable=="fineroot"] <- tmpDF2$NP.se[tmpDF2$Variable=="fineroot"]
-    stDF$NP.se[stDF$Group=="sim"&stDF$Variable=="soil"] <- tmpDF2$NP.se[tmpDF2$Variable=="soil"]
     
     ### plot
     p6 <- ggplot(data=stDF, 
@@ -1180,49 +961,9 @@ EucFACE_mass_balance_and_validation_script_LPJGP_euc_ter <- function() {
                                         hjust = 0.5))+
         ylab("CN stoichiometry")
     
-    p7 <- ggplot(data=stDF, 
-                 aes(Group, CP.mean, group=Variable)) +
-        geom_bar(stat = "identity", aes(fill=Variable), 
-                 position="dodge", col="black") +
-        ggtitle("CP stoichiometry")+
-        theme_linedraw() +
-        theme(panel.grid.minor=element_blank(),
-              axis.text.x=element_text(size=12),
-              axis.title.x=element_text(size=14),
-              axis.text.y=element_text(size=12),
-              axis.title.y=element_text(size=14),
-              legend.text=element_text(size=12),
-              legend.title=element_text(size=14),
-              panel.grid.major=element_blank(),
-              legend.position="right",
-              legend.box = 'horizontal',
-              legend.box.just = 'left',
-              plot.title = element_text(size=14, face="bold.italic", 
-                                        hjust = 0.5))+
-        ylab("CP stoichiometry")
+    p7 <- plot.new()
     
-    
-    p8 <- ggplot(data=stDF, 
-                 aes(Group, NP.mean, group=Variable)) +
-        geom_bar(stat = "identity", aes(fill=Variable), 
-                 position="dodge", col="black") +
-        ggtitle("NP stoichiometry")+
-        theme_linedraw() +
-        theme(panel.grid.minor=element_blank(),
-              axis.text.x=element_text(size=12),
-              axis.title.x=element_text(size=14),
-              axis.text.y=element_text(size=12),
-              axis.title.y=element_text(size=14),
-              legend.text=element_text(size=12),
-              legend.title=element_text(size=14),
-              panel.grid.major=element_blank(),
-              legend.position="right",
-              legend.box = 'horizontal',
-              legend.box.just = 'left',
-              plot.title = element_text(size=14, face="bold.italic", 
-                                        hjust = 0.5))+
-        ylab("NP stoichiometry")
-    
+    p8 <- plot.new()
     
     
     ################# Nutrient retranslocation coefficients  ####################
@@ -1234,16 +975,16 @@ EucFACE_mass_balance_and_validation_script_LPJGP_euc_ter <- function() {
     
     
     ### create DF for output
-    rtDF <- data.frame(rep(c("leafN", "leafP"), 2), 
-                       rep(c("obs", "sim"), each = 2), NA)
+    rtDF <- data.frame(rep(c("leafN"), 2), 
+                       rep(c("obs", "sim"), each = 1), NA)
     colnames(rtDF) <- c("Variable", "Group", "meanvalue")
     
     ### assign values
     rtDF$meanvalue[rtDF$Group=="obs"&rtDF$Variable=="leafN"] <- 0.31
-    rtDF$meanvalue[rtDF$Group=="obs"&rtDF$Variable=="leafP"] <- 0.53
+    #rtDF$meanvalue[rtDF$Group=="obs"&rtDF$Variable=="leafP"] <- 0.53
     
     rtDF$meanvalue[rtDF$Group=="sim"&rtDF$Variable=="leafN"] <- round(mean(tmpDF$NLRETR/tmpDF$NGL),2)
-    rtDF$meanvalue[rtDF$Group=="sim"&rtDF$Variable=="leafP"] <- round(mean(tmpDF$PLRETR/tmpDF$PGL),2)
+    #rtDF$meanvalue[rtDF$Group=="sim"&rtDF$Variable=="leafP"] <- round(mean(tmpDF$PLRETR/tmpDF$PGL),2)
     
     
     ### plotting
@@ -1270,7 +1011,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP_euc_ter <- function() {
     
     
     ### print plots to file, change numbering if needed
-    pdf(paste0(out.dir, '/QC_Time_averaged_validation_',mod.abb,'_euc_ter.pdf',sep=''),width=10,height=8)
+    pdf(paste0(out.dir, '/QC_Time_averaged_validation_',mod.abb,'_', pft.group, '.pdf',sep=''),width=10,height=8)
     for (i in 1:9) {
         print(get(paste("p",i,sep="")))
     }
@@ -1450,7 +1191,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP_euc_ter <- function() {
     
     
     ### print plots to file, change numbering if needed
-    pdf(paste0(out.dir, '/QC_Time_varying_validation_',mod.abb,'_euc_ter.pdf',sep=''),width=10,height=8)
+    pdf(paste0(out.dir, '/QC_Time_varying_validation_',mod.abb,'_', pft.group, '.pdf',sep=''),width=10,height=8)
     for (i in 1:4) {
         print(get(paste("p",i,sep="")))
     }
