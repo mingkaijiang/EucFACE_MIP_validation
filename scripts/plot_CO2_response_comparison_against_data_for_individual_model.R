@@ -5,7 +5,7 @@ plot_CO2_response_comparison_against_data_for_individual_model <- function (sour
     
     ### create output folder
     if(!dir.exists(out.dir)) {
-        dir.create(out.dir, showWarnings = FALSE)
+        dir.create(out.dir, showWarnings = FALSE, recursive = T)
     }
     
     ### check for QUJSM

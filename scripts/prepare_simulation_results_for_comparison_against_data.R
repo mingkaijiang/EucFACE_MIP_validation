@@ -12,6 +12,12 @@ prepare_simulation_results_for_comparison_against_data <- function(source.dir,
     } else if (mod.abb == "LPJGP") {
         simDF1 <- convert_into_annual_LPJGP(simDF1)
         simDF2 <- convert_into_annual_LPJGP(simDF2)
+    } else if (mod.abb == "LPJGN") {
+        simDF1 <- convert_into_annual_LPJGN(simDF1)
+        simDF2 <- convert_into_annual_LPJGN(simDF2)
+    } else if (mod.abb == "GDAYN") {
+        simDF1 <- convert_into_annual_GDAYN(simDF1)
+        simDF2 <- convert_into_annual_GDAYN(simDF2)
     } else {
         simDF1 <- convert_into_annual(simDF1)
         simDF2 <- convert_into_annual(simDF2)
