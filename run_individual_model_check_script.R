@@ -1,7 +1,6 @@
-#### Script to batch process all model simulation results
-#### Note: This is the model simulation output analysis script, 
-####       not the mass balance script (although it contains the mass balance checks). 
-####
+#### Script to batch process individual model simulation results
+#### Note: This is the model simulation output analysis script
+#### Checking model mass balance, CO2 response, P effect and water effect
 #### Author: Mingkai Jiang
 ####
 ##########################################################################
@@ -581,9 +580,28 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
 ### Do we still need it? We can plot multi-model results now.
 
 ##########################################################################
-#### Cross-model comparison, and against data
+#### Cross-model comparison over the observed period (2013 - 19), with variable climate
+#### Read in individual model results;
+#### Perform conversion on selected variables;
+#### Calculate multi-model means and variance;
+#### Merge together with observed data;
+#### Make plot with different factors: 
+####                                    nutrient cycle
+####                                    vegetation dynamics
+####                                    microbial processes
+
+make_time_averaged_data_model_comparison_over_obs_period()
 
 
+
+
+
+
+
+
+
+
+##########################################################################
 ### to do list:
 ### 1. Mass balance checks: LPJ-GUESS CN, LPJ-GUESS CNP
 ### 2. Mass balance checks: QUINCY, QUINCY-JSM

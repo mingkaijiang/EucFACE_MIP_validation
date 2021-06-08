@@ -1,7 +1,8 @@
 #### prepare
 #### Create data folder
 output.folders <- c(paste0(getwd(), "/validation_output"),
-                    paste0(getwd(), "/analysis_output"))
+                    paste0(getwd(), "/analysis_output"),
+                    paste0(getwd(), "/obs_output"))
 
 #### Create output folder
 for (y in output.folders) {
@@ -34,3 +35,6 @@ pacman::p_load(dplyr,
 #### Sourcing all R files in the modules subdirectory
 sourcefiles <- dir("scripts", pattern="[.]R$", recursive = TRUE, full.names = TRUE)
 for(z in sourcefiles)source(z)
+
+
+#### end
