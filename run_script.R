@@ -578,21 +578,22 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
 
 ##########################################################################
 #### Plot drought effect over historic period
-###test
+### Do we still need it? We can plot multi-model results now.
 
 ##########################################################################
 #### Cross-model comparison, and against data
 
-##########################################################################
+
 ### to do list:
-### 1. Add LPJ-GUESS CN
-### 2. check mass balance with individual modelers: QUINCY, LPJ-GUESS
-### 3. Generate summary table on key model features
-### 4. Add CABLE-POP both forest and tile-averaged
-### 5. Include dynamic vegetation analysis: CABLE-POP and LPJ-GUESS
-### 6. Add ELM
-### 7. MIP figures on CO2 x P
-### 8. MIP figures on CO2 x drought
+### 1. Mass balance checks: LPJ-GUESS CN, LPJ-GUESS CNP
+### 2. Mass balance checks: QUINCY, QUINCY-JSM
+### 3. Mass balance checks: CABLE-POP
+### 4. Generate summary table on key model features
+### 5. Add CABLE-POP both forest and tile-averaged
+### 6. Include dynamic vegetation analysis: CABLE-POP and LPJ-GUESS
+### 7. Add ELM
+### 8. MIP figures on CO2 x P
+### 9. MIP figures on CO2 x drought
 
 
 ##########################################################################
