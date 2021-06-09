@@ -29,8 +29,10 @@ source("prepare.R")
 
 
 ### CABLE-POP
-## current issue: unsure PFERT variable (current no variable made in the output)
-#translate_CABLP_simulation_into_EucFACE_MIP_format(source.dir = paste0(getwd(), "/simulation_output/CABLP/forest"))
+#translate_CABLP_simulation_into_EucFACE_MIP_format(source.dir = paste0(getwd(), "/simulation_output/CABLP/"), 
+#                                                   pft.variable = "forest")
+#translate_CABLP_simulation_into_EucFACE_MIP_format(source.dir = paste0(getwd(), "/simulation_output/CABLP/"), 
+#                                                   pft.variable = "tile_averaged")
 
 
 ### LPJ-GUESS-CNP - it seems that no need
@@ -62,11 +64,10 @@ EucFACE_mass_balance_and_validation_script_OCHDX()
 
 ### CABLE-POP 
 ## forest
-EucFACE_mass_balance_and_validation_script_CABLP()
+EucFACE_mass_balance_and_validation_script_CABLP(forest = T)
 
 ## tile_averaged
-
-
+EucFACE_mass_balance_and_validation_script_CABLP(forest = F)
 
 
 ### LPJ-GUESS-CNP

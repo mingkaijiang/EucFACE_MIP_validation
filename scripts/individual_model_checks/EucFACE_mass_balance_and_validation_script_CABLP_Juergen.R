@@ -1,4 +1,4 @@
-EucFACE_mass_balance_and_validation_script_CABLP <- function(forest=T) {
+EucFACE_mass_balance_and_validation_script_CABLP <- function(forest) {
     #### EucFACE mass balance and validation script
     #### Mingkai Jiang (m.jiang@westernsydney.edu.au)
     ####
@@ -73,8 +73,6 @@ EucFACE_mass_balance_and_validation_script_CABLP <- function(forest=T) {
     
     modDF <- read.csv(paste0("simulation_output/", mod.abb, "/",version,"/EUC_", mod.abb, "_OBS_VAR_AMB_NOP_D.csv"))
     
-    ### precipitation data in the unit of mm/h, so need to convert it to unit of mm/d
-    #modDF$PREC <- modDF$PREC * 24.0
     
     ### checking number of column in the original dataframe
     ncol <- ncol(modDF)
@@ -82,8 +80,14 @@ EucFACE_mass_balance_and_validation_script_CABLP <- function(forest=T) {
     
     # check length of frames, need to be TRUE, otherwise you have too many or little days
     # 8 years with 365 days plus 2 years with a leap day! (for those models that do not model leap days, please repeat Feb 28 to fill Feb 29)
-    if (nrow(modDF)!=(8*365)+2) {
-        print(paste("number of rows of model output does not match, all further results unreliable!!"))
+    if (nrow(modDF)==(8*365)) {
+      print(paste("number of rows of model output indicate no leap years, proceed further analysis..."))
+      
+    } else if (nrow(modDF)==(8*365)+2) {
+      print(paste("number of rows of model output indicate two leap years, proceed further analysis..."))
+    } else {
+      print(paste("number of rows of model output does not match correct number of days, all further results unreliable!!"))
+      
     }
     
     
@@ -97,10 +101,6 @@ EucFACE_mass_balance_and_validation_script_CABLP <- function(forest=T) {
     }
     
     modDF$Date <- as.Date(modDF$Date)
-    
-    ### add other variables not defined in the protocol but are potentially important for this MIP
-    # P weathering rate
-    #modDF$PWEA <- 0.0
     
     
     ### The mass balance check is performed at annual timestep. 

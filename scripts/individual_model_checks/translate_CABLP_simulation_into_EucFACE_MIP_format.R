@@ -1,4 +1,4 @@
-translate_CABLP_simulation_into_EucFACE_MIP_format <- function(source.dir) {
+translate_CABLP_simulation_into_EucFACE_MIP_format <- function(source.dir, pft.variable) {
     
     #######################################################################################################
     ### This is the script to translate GDAY output into EucFACE Multi-model intercomparison project
@@ -31,20 +31,12 @@ translate_CABLP_simulation_into_EucFACE_MIP_format <- function(source.dir) {
     ### loop through all data
     for (i in 1:16) {
         ### read in corresponding simulation file
-        myDF <- read.csv(paste0(source.dir, "/", file.names[i], ".csv"))
-        
-        ### precipitation data in the unit of mm/h, so need to convert it to unit of mm/d
-        myDF$PREC <- myDF$PREC * 24.0
+        myDF <- read.csv(paste0(source.dir, pft.variable, "/", file.names[i], ".csv"))
         
         ### ignore missing variables
         myDF[myDF<=-9999.] <- NA
         
-        ### EC also need to convert
-        myDF$EC <- myDF$EC * 24.0
-        
         ### add missing variables and fill with NAs
-        myDF$NWLIN <- NA
-        myDF$PWLIN <- NA
         myDF$SWPA <- NA
         myDF$LMA <- NA
         myDF$PFERT <- NA
@@ -60,24 +52,8 @@ translate_CABLP_simulation_into_EucFACE_MIP_format <- function(source.dir) {
         ############################################
         ### start preparing output
         
-        outDF <- myDF[,c("YEAR","DOY","CO2","PREC","PAR","TAIR","TSOIL","VPD","SW",
-                         "SWPA","NDEP","NEP","GPP","NPP","CEX","CVOC","RECO","RAU",
-                         "RL","RW","RCR","RFR","RGR","RHET","ET","TRANS","ES","EC",
-                         "RO","DRAIN","LE","SH","CL","CW","CCR","CFR","CSTOR","CFLIT",
-                         "CFLITA","CFLITB","CCLITB","CSOIL","CGL","CGW","CGCR","CGFR",
-                         "CREPR","CLITIN","CCRLIN","CFRLIN","CWLIN","LAI","LMA","NCON",
-                         "NL","NW","NCR","NFR","NSTOR","NFLIT","NFLITA","NFLITB","NCLITB",
-                         "NSOIL","NPMIN","NPORG","NFIX","NGL","NGW","NGCR","NGFR","NLITIN",
-                         "NCRLIN","NFRLIN","NWLIN","NUP","NGMIN","NMIN","NVOL","NLEACH",
-                         "NLRETR","NWRETR","NCRRETR","NFRRETR","APARd","GCd","GAd","GBd",
-                         "Betad","PL","PW","PCR","PFR","PSTOR","PFLIT","PFLITA","PFLITB",
-                         "PCLITB","PSOIL","PLAB","PSEC","POCC","PPAR","PPMIN","PPORG",
-                         "PLITIN","PCRLIN","PFRLIN","PWLIN","PUP","PGMIN","PMIN",
-                         "PBIOCHMIN","PLEACH","PGL","PGW","PGCR","PGFR","PLRETR","PWRETR",
-                         "PCRRETR","PFRRETR","PWEA","PDEP","PFERT", "CLABILE", "NIMM", "PIMM",
-                         "NLITMIN", "PLITMIN", "NLITINTOT", "PLITINTOT")]
         
-        write.csv(outDF, paste0(getwd(), source.dir, "/CABLP/forest/", file.names[i], ".csv"),
+        write.csv(myDF, paste0(source.dir, pft.variable, "/", file.names[i], ".csv"),
                   row.names=F)
     }
     
