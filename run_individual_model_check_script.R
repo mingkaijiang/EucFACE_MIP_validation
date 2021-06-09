@@ -131,10 +131,17 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
                                              nutrient.trt = "NOP")
 
 
-### CABLE-POP
+### CABLE-POP - forest
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/CABLP/forest"),
                                              mod.abb = "CABLP",
-                                             out.dir = paste0(getwd(), "/analysis_output/CABLP"),
+                                             out.dir = paste0(getwd(), "/analysis_output/CABLP/forest"),
+                                             sim.period = "OBS",
+                                             nutrient.trt = "NOP")
+
+### CABLE-POP - tile_averaged
+plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/CABLP/tile_averaged"),
+                                             mod.abb = "CABLP",
+                                             out.dir = paste0(getwd(), "/analysis_output/CABLP/tile_averaged"),
                                              sim.period = "OBS",
                                              nutrient.trt = "NOP")
 
@@ -247,10 +254,17 @@ plot_CO2_response_comparison_against_data_for_individual_model(source.dir=paste0
                                                                out.dir = paste0(getwd(), "/analysis_output/OCHDX"),
                                                                eucDF = eucDF)
 
-### CABLE-POP
+### CABLE-POP - forest
 plot_CO2_response_comparison_against_data_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/CABLP/forest"),
                                                                mod.abb = "CABLP",
-                                                               out.dir = paste0(getwd(), "/analysis_output/CABLP"),
+                                                               out.dir = paste0(getwd(), "/analysis_output/CABLP/forest"),
+                                                               eucDF = eucDF)
+
+
+### CABLE-POP - tile_averaged
+plot_CO2_response_comparison_against_data_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/CABLP/tile_averaged"),
+                                                               mod.abb = "CABLP",
+                                                               out.dir = paste0(getwd(), "/analysis_output/CABLP/tile_averaged"),
                                                                eucDF = eucDF)
 
 
@@ -402,22 +416,42 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
                                              nutrient.trt = "HIP")
 
 
-### CABLE-POP 
+### CABLE-POP - forest
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/CABLP/forest"),
                                              mod.abb = "CABLP",
-                                             out.dir = paste0(getwd(), "/analysis_output/CABLP"),
+                                             out.dir = paste0(getwd(), "/analysis_output/CABLP/forest"),
                                              sim.period = "PRD",
                                              nutrient.trt = "NOP")
 
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/CABLP/forest"),
                                              mod.abb = "CABLP",
-                                             out.dir = paste0(getwd(), "/analysis_output/CABLP"),
+                                             out.dir = paste0(getwd(), "/analysis_output/CABLP/forest"),
                                              sim.period = "PRD",
                                              nutrient.trt = "MDP")
 
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/CABLP/forest"),
                                              mod.abb = "CABLP",
-                                             out.dir = paste0(getwd(), "/analysis_output/CABLP"),
+                                             out.dir = paste0(getwd(), "/analysis_output/CABLP/forest"),
+                                             sim.period = "PRD",
+                                             nutrient.trt = "HIP")
+
+
+### CABLE-POP - tile_averaged
+plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/CABLP/tile_averaged"),
+                                             mod.abb = "CABLP",
+                                             out.dir = paste0(getwd(), "/analysis_output/CABLP/tile_averaged"),
+                                             sim.period = "PRD",
+                                             nutrient.trt = "NOP")
+
+plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/CABLP/tile_averaged"),
+                                             mod.abb = "CABLP",
+                                             out.dir = paste0(getwd(), "/analysis_output/CABLP/tile_averaged"),
+                                             sim.period = "PRD",
+                                             nutrient.trt = "MDP")
+
+plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/CABLP/tile_averaged"),
+                                             mod.abb = "CABLP",
+                                             out.dir = paste0(getwd(), "/analysis_output/CABLP/tile_averaged"),
                                              sim.period = "PRD",
                                              nutrient.trt = "HIP")
 
@@ -604,11 +638,10 @@ make_time_averaged_data_model_comparison_over_obs_period()
 
 ##########################################################################
 ### to do list:
-### 1. Mass balance checks: LPJ-GUESS CN, LPJ-GUESS CNP
-### 2. Mass balance checks: QUINCY, QUINCY-JSM
-### 3. Mass balance checks: CABLE-POP
-### 4. Generate summary table on key model features
-### 5. Add CABLE-POP both forest and tile-averaged
+### 1. Go through mass balance checks with David: LPJ-GUESS CN, LPJ-GUESS CNP
+### 2. New set of simulation to close mass balance checks: QUINCY, QUINCY-JSM
+### 3. Generate summary table on key model features
+### 4. Model structure diagrams and traceability analysis
 ### 6. Include dynamic vegetation analysis: CABLE-POP and LPJ-GUESS
 ### 7. Add ELM
 ### 8. MIP figures on CO2 x P
