@@ -120,13 +120,25 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
     ### NFRUIT: Growth N to fruit pool
     
     ### summarize all fluxes first to obain annual rate
-    fluxDF <- summaryBy(PREC+ET+TRANS+ES+EC+RO+DRAIN+NEP+GPP+NPP+RHET+RAU+RECO+CGL+CGFR+CGCR+CGW+NGL+NGFR+NGCR+NGW+PGL+PGFR+PGCR+PGW+NUP+NGMIN+NMIN+NLEACH+PUP+PGMIN+PMIN+PLEACH+PBIOCHMIN+NLRETR+PLRETR+RCR+RFR+CREPR+CEX+CVOC+RL+RW+RGR+CLITIN+CCRLIN+CFRLIN+CWLIN+NLITIN+NCRLIN+NFRLIN+NWLIN+PLITIN+PCRLIN+PFRLIN+PWLIN+NWRETR+PWRETR+NCRRETR+PCRRETR+NFRRETR+PFRRETR+NDEP+NFIX+NVOL+PDEP+PWEA+RMAIN+RNTRANS+NGLAB+NREPR+NRECYC+NSEED+NFRUIT+PGLAB+PREPR+PRECYC+PSEED+PFRUIT~YEAR, data=modDF, FUN=sum, keep.names=T, na.rm=T)
+    fluxDF <- summaryBy(PREC+ET+TRANS+ES+EC+RO+DRAIN+NEP+GPP+NPP+RHET+RAU+
+                            RECO+CGL+CGFR+CGCR+CGW+NGL+NGFR+NGCR+NGW+PGL+
+                            PGFR+PGCR+PGW+NUP+NGMIN+NMIN+NLEACH+PUP+PGMIN+
+                            PMIN+PLEACH+PBIOCHMIN+NLRETR+PLRETR+RCR+RFR+CREPR+
+                            CEX+CVOC+RL+RW+RGR+CLITIN+CCRLIN+CFRLIN+CWLIN+
+                            NLITIN+NCRLIN+NFRLIN+NWLIN+PLITIN+PCRLIN+PFRLIN+
+                            PWLIN+NWRETR+PWRETR+NCRRETR+PCRRETR+NFRRETR+
+                            PFRRETR+NDEP+NFIX+NVOL+PDEP+PWEA+RMAIN+RNTRANS+
+                            NGLAB+NREPR+NRECYC+NSEED+NFRUIT+PGLAB+PREPR+
+                            PRECYC+PSEED+PFRUIT~YEAR, data=modDF, FUN=sum, keep.names=T, na.rm=T)
     
     
     ### subset first day within a year of all pools
-    poolDF <- modDF[,c("YEAR", "DOY", "SW","CL","LAI","CW","CFR","CCR","NL","NW","NFR","NCR","PL","PW","PFR","PCR","CSTOR","NSTOR","PSTOR",
-                       "CSOIL","NSOIL","PSOIL","NPMIN","PPMIN","PLAB","PSEC","POCC","PPAR","CFLIT","CFLITA","CFLITB",
-                       "NFLITA","NFLITB","PFLITA","PFLITB","CCLITB","NCLITB","PCLITB","NFLIT","PFLIT", "NPORG", "PPORG", "CTSOIL", "NTPMIN",
+    poolDF <- modDF[,c("YEAR", "DOY", "SW","CL","LAI","CW","CFR","CCR","NL",
+                       "NW","NFR","NCR","PL","PW","PFR","PCR","CSTOR","NSTOR","PSTOR",
+                       "CSOIL","NSOIL","PSOIL","NPMIN","PPMIN","PLAB","PSEC",
+                       "POCC","PPAR","CFLIT","CFLITA","CFLITB",
+                       "NFLITA","NFLITB","PFLITA","PFLITB","CCLITB","NCLITB",
+                       "PCLITB","NFLIT","PFLIT", "NPORG", "PPORG", "CTSOIL", "NTPMIN",
                        "NTPORG", "NTSOIL")]
     
     poolDF <- subset(poolDF, DOY==1)
@@ -303,6 +315,7 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
                     panel.abline(a=0,b=1)}) 
     
     
+    ### Lin to check
     p15<-xyplot(I(CEX+CLITIN+CWLIN+CFRLIN+CCRLIN+CREPR-RHET)~I(deltaCTSOIL+deltaCCLITB+deltaCFLIT),annDF,
                 auto.key=T,
                 scales=list(relation='free'),
@@ -310,6 +323,8 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
                     panel.xyplot(...)
                     panel.abline(a=0,b=1)}) 
     
+    
+    plot(p15)
     
     ### print plots to file, change numbering if needed
     pdf(paste0(out.dir, '/QC_Carbon_Balance_',mod.abb,'.pdf',sep=''),width=10,height=8)
@@ -331,6 +346,7 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
                    panel.xyplot(...)
                    panel.abline(a=0,b=1)}) 
     
+    ### new version 
     p2<-xyplot(I(PREC-(RO+DRAIN+ET))~deltaSW, annDF,
                #main='PREC-RO-DRAIN-ET~deltaSW',
                auto.key=T,
@@ -378,7 +394,7 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
                    panel.abline(a=0,b=1)}) 
     
     
-    p4<-xyplot(I(NGFR-NFRLIN-NFRRETR)~deltaNFR,annDF,
+    p4<-xyplot(I(NGFR-NFRLIN)~deltaNFR,annDF,
                #main='I(NGFR-NFRLIN-NFRRETR)~deltaNFR',
                auto.key=T,
                scales=list(relation='free'),
@@ -387,7 +403,7 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
                    panel.abline(a=0,b=1)}) 
     
     
-    p5<-xyplot(I(NGCR-NCRLIN-NCRRETR)~deltaNCR,annDF,
+    p5<-xyplot(I(NGCR-NCRLIN)~deltaNCR,annDF,
                #main='I(NGCR-NCRLIN-NCRRETR)~deltaNCR',
                auto.key=T,
                scales=list(relation='free'),
@@ -472,7 +488,7 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
                     panel.xyplot(...)
                     panel.abline(a=0,b=1)}) 
     
-    p13<-xyplot(I(NDEP+NFIX-NLEACH-NVOL)~(I(deltaNL+deltaNW+deltaNCR+deltaNFR+deltaNTSOIL+deltaNFLIT+deltaNCLITB)),annDF,
+    p13<-xyplot(I(NDEP+NFIX-NLEACH-NVOL)~(I(deltaNL+deltaNW+deltaNCR+deltaNFR+deltaNTSOIL+deltaNFLIT+deltaNCLITB+deltaNSEED)),annDF,
                 #main='I(NDEP+NFIX-NLEACH-NVOL)~(I(deltaNL+deltaNW+deltaNCR+deltaNFR+deltaNSOIL+deltaNFLIT+deltaNCLITB))',
                 auto.key=T,
                 scales=list(relation='free'),
