@@ -625,6 +625,9 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
 ####                                    vegetation dynamics
 ####                                    microbial processes
 
+
+compile_obs_var_dataset_across_models()
+
 make_time_averaged_data_model_comparison_over_obs_period()
 
 

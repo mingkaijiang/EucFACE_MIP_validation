@@ -46,3 +46,4 @@ vignettes/*.pdf
 *.nc
 *.html
 *.dat
+*.rds
