@@ -48,12 +48,17 @@ obs.color <- c("#000000") # black
 
 cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
 
+### ambient treatment, real values
 make_time_averaged_data_model_comparison_over_obs_period(eucDF,
                                                          p.mod.list, 
                                                          n.mod.list, 
                                                          d.mod.list)
 
-
+### ambient treatment, CO2 responses
+plot_MIP_CO2_response_comparison(eucDF,
+                                 p.mod.list, 
+                                 n.mod.list, 
+                                 d.mod.list)
 
 
 
