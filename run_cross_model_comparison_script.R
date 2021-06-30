@@ -38,6 +38,11 @@ d.mod.list <- c("CABLP", "LPJGP")
 compile_obs_var_dataset_across_models(p.mod.list, n.mod.list, d.mod.list)
 
 
+
+### show P effect with the two models that have CN and CNP versions
+compare_CNP_and_CN_model_output()
+
+
 ### prepare observed dataset at annual timestep wherever possible
 eucDF <- prepare_EucFACE_observation_dataset()
 
