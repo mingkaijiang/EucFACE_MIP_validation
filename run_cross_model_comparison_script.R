@@ -71,6 +71,11 @@ make_time_averaged_data_model_comparison_over_obs_period(eucDF,
 ### 6. Include dynamic vegetation analysis: CABLE-POP and LPJ-GUESS
 ### 7. Add ELM
 ### 8. MIP figures on CO2 x P
+###    8.1. Data-model intercomparison, ambient conditions
+###    8.2. CO2 response ratios
+###    8.3. Beyond C budget
+###    8.4. Photosynthesis and leaf N, P relationships, and the CO2 response
+###    8.5. Microbial related analyses
 ### 9. MIP figures on CO2 x drought
 
 
