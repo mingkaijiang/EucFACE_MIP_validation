@@ -51,7 +51,7 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
     
     
     mod.list <- unique(annDF.amb.sum$ModName)
-    
+    nmod <- length(mod.list)
     
     ##########################################################################
     ####  Major carbon pools  
@@ -64,8 +64,8 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
     ### * CW includes branch and stem in the model simulation.
     
     ### create a DF to store observation data for vegetation carbon stocks
-    vegDF <- data.frame(rep(c("CL", "CW", "CFR", "CCR", "CSOIL"), 2), 
-                        rep(c("obs", "sim"), each=5), NA, NA)
+    vegDF <- data.frame(rep(c("CL", "CW", "CFR", "CCR"), (1+nmod)), 
+                        rep(c("obs", mod.list), each=4), NA, NA)
     colnames(vegDF) <- c("Variable", 
                          "Group",
                          "meanvalue",
@@ -75,30 +75,29 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
     vegDF$meanvalue[vegDF$Group=="obs"&vegDF$Variable=="CW"] <- 4558
     vegDF$meanvalue[vegDF$Group=="obs"&vegDF$Variable=="CFR"] <- 227
     vegDF$meanvalue[vegDF$Group=="obs"&vegDF$Variable=="CCR"] <- 606
-    vegDF$meanvalue[vegDF$Group=="obs"&vegDF$Variable=="CSOIL"] <- 2183
+    #vegDF$meanvalue[vegDF$Group=="obs"&vegDF$Variable=="CSOIL"] <- 2183
     
     vegDF$sevalue[vegDF$Group=="obs"&vegDF$Variable=="CL"] <- 14
     vegDF$sevalue[vegDF$Group=="obs"&vegDF$Variable=="CW"] <- 321
     vegDF$sevalue[vegDF$Group=="obs"&vegDF$Variable=="CFR"] <- 5
     vegDF$sevalue[vegDF$Group=="obs"&vegDF$Variable=="CCR"] <- 60
-    vegDF$sevalue[vegDF$Group=="obs"&vegDF$Variable=="CSOIL"] <- 280
+    #vegDF$sevalue[vegDF$Group=="obs"&vegDF$Variable=="CSOIL"] <- 280
     
+    for (i in mod.list) {
+        vegDF$meanvalue[vegDF$Group==i&vegDF$Variable=="CL"] <- annDF.amb.sum$CL.mean[annDF.amb.sum$ModName==i]
+        vegDF$meanvalue[vegDF$Group==i&vegDF$Variable=="CW"] <- annDF.amb.sum$CW.mean[annDF.amb.sum$ModName==i]
+        vegDF$meanvalue[vegDF$Group==i&vegDF$Variable=="CFR"] <- annDF.amb.sum$CFR.mean[annDF.amb.sum$ModName==i]
+        vegDF$meanvalue[vegDF$Group==i&vegDF$Variable=="CCR"] <- annDF.amb.sum$CCR.mean[annDF.amb.sum$ModName==i]
+        #vegDF$meanvalue[vegDF$Group==i&vegDF$Variable=="CSOIL"] <- annDF.amb.sum$CSOIL.mean[annDF.amb.sum$ModName==i]
+        
+        vegDF$sevalue[vegDF$Group==i&vegDF$Variable=="CL"] <- annDF.amb.sum$CL.sd[annDF.amb.sum$ModName==i]/sqrt(4)
+        vegDF$sevalue[vegDF$Group==i&vegDF$Variable=="CW"] <- annDF.amb.sum$CW.sd[annDF.amb.sum$ModName==i]/sqrt(4)
+        vegDF$sevalue[vegDF$Group==i&vegDF$Variable=="CFR"] <- annDF.amb.sum$CFR.sd[annDF.amb.sum$ModName==i]/sqrt(4)
+        vegDF$sevalue[vegDF$Group==i&vegDF$Variable=="CCR"] <- annDF.amb.sum$CCR.sd[annDF.amb.sum$ModName==i]/sqrt(4)
+        #vegDF$sevalue[vegDF$Group==i&vegDF$Variable=="CSOIL"] <- annDF.amb.sum$CSOIL.sd[annDF.amb.sum$ModName==i]/sqrt(4)
+    }
     
-    ### calcualte annual means in the simulated data
-    poolDF <- subset(modDF, YEAR <= 2016 & YEAR > 2012 & DOY == 1)
-    
-    ### assign values
-    vegDF$meanvalue[vegDF$Group=="sim"&vegDF$Variable=="CL"] <- mean(poolDF$CL, na.rm=T)
-    vegDF$meanvalue[vegDF$Group=="sim"&vegDF$Variable=="CW"] <- mean(poolDF$CW, na.rm=T)
-    vegDF$meanvalue[vegDF$Group=="sim"&vegDF$Variable=="CFR"] <- mean(poolDF$CFR, na.rm=T)
-    vegDF$meanvalue[vegDF$Group=="sim"&vegDF$Variable=="CCR"] <- mean(poolDF$CCR, na.rm=T)
-    vegDF$meanvalue[vegDF$Group=="sim"&vegDF$Variable=="CSOIL"] <- mean(poolDF$CSOIL, na.rm=T)
-    
-    vegDF$sevalue[vegDF$Group=="sim"&vegDF$Variable=="CL"] <- se(poolDF$CL, na.rm=T)
-    vegDF$sevalue[vegDF$Group=="sim"&vegDF$Variable=="CW"] <- se(poolDF$CW, na.rm=T)
-    vegDF$sevalue[vegDF$Group=="sim"&vegDF$Variable=="CFR"] <- se(poolDF$CFR, na.rm=T)
-    vegDF$sevalue[vegDF$Group=="sim"&vegDF$Variable=="CCR"] <- se(poolDF$CCR, na.rm=T)
-    vegDF$sevalue[vegDF$Group=="sim"&vegDF$Variable=="CSOIL"] <- se(poolDF$CSOIL, na.rm=T)
+    vegDF$meanvalue <- ifelse(vegDF$meanvalue<0, NA, vegDF$meanvalue)
     
     
     ### Plotting
@@ -124,7 +123,74 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
               legend.box.just = 'left',
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
-        ylab(expression(paste("Carbon pools (g C " * m^2*")")))
+        ylab(expression(paste("Carbon pools (g C " * m^2*")")))+
+        scale_x_discrete(limit=c("GDAYN", "LPJGN",
+                                 "CABLP", "CABLP-VD",
+                                 "LPJGP", "LPJGP-VD",
+                                 "GDAYP", 
+                                 "OCHDP", "OCHDX",
+                                 "QUINC", "QUJSM",
+                                 "obs"),
+                         label=c("GDAYN", "LPJGN",
+                                  "CABLP", "CABLP-VD",
+                                  "LPJGP", "LPJGP-VD",
+                                  "GDAYP", 
+                                  "OCHDP", "OCHDX",
+                                  "QUINC", "QUJSM",
+                                  "OBS")); p1
+    
+    
+    
+    ################# Major carbon fluxes  ####################
+    ### create a DF to store observation data for allocation coefficients
+    outDF <- data.frame(rep(c("NEP", "GPP", "NPP", "CUE", "RAU"), (1+nmod)), 
+                        rep(c("obs", mod.list), each = 5), NA)
+    colnames(outDF) <- c("Variable", 
+                         "Group",
+                         "meanvalue")
+    
+    outDF$meanvalue[outDF$Group=="obs"&outDF$Variable=="NEP"] <- -8
+    outDF$meanvalue[outDF$Group=="obs"&outDF$Variable=="GPP"] <- 1563
+    outDF$meanvalue[outDF$Group=="obs"&outDF$Variable=="NPP"] <- 484
+    outDF$meanvalue[outDF$Group=="obs"&outDF$Variable=="CUE"] <- 0.31
+    outDF$meanvalue[outDF$Group=="obs"&outDF$Variable=="RAU"] <- 1079
+    
+    
+    ### these fluxes were calculated above already
+    for (i in mod.list) {
+    ### assign values
+    outDF$meanvalue[outDF$Group==i&outDF$Variable=="NEP"] <- annDF.amb.sum$NEP.mean[annDF.amb.sum$ModName==i]
+    outDF$meanvalue[outDF$Group==i&outDF$Variable=="GPP"] <- annDF.amb.sum$GPP.mean[annDF.amb.sum$ModName==i]
+    outDF$meanvalue[outDF$Group==i&outDF$Variable=="NPP"] <- annDF.amb.sum$NPP.mean[annDF.amb.sum$ModName==i]
+    #outDF$meanvalue[outDF$Group==i&outDF$Variable=="CUE"] <- annDF.amb.sum$GPP.mean[annDF.amb.sum$ModName==i]
+    outDF$meanvalue[outDF$Group==i&outDF$Variable=="RAU"] <- annDF.amb.sum$RAU.mean[annDF.amb.sum$ModName==i]
+    
+    }
+    
+    ### plotDF1
+    plotDF1 <- outDF[outDF$Variable%in%c("GPP", "NPP", "RAU", "NEP"),]
+    
+    ### plotting GPP, NPP, and RAU
+    p2 <- ggplot(data=plotDF1, 
+                 aes(Group, meanvalue)) +
+        geom_bar(stat = "identity", aes(fill=Variable), 
+                 position="dodge", col="black") +
+        ggtitle("Major carbon fluxes")+
+        theme_linedraw() +
+        theme(panel.grid.minor=element_blank(),
+              axis.text.x=element_text(size=12),
+              axis.title.x=element_text(size=14),
+              axis.text.y=element_text(size=12),
+              axis.title.y=element_text(size=14),
+              legend.text=element_text(size=12),
+              legend.title=element_text(size=14),
+              panel.grid.major=element_blank(),
+              legend.position="right",
+              legend.box = 'horizontal',
+              legend.box.just = 'left',
+              plot.title = element_text(size=14, face="bold.italic", 
+                                        hjust = 0.5))+
+        ylab(expression(paste("Carbon fluxes (g C " * m^2 * " " * yr^-1 * ")"))); p2
     
     
     
@@ -188,54 +254,6 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
                                         hjust = 0.5))+
         ylab("allocation coefficients")
     
-    
-    ################# Major carbon fluxes  ####################
-    ### create a DF to store observation data for allocation coefficients
-    outDF <- data.frame(rep(c("NEP", "GPP", "NPP", "CUE", "RAU"), 2), 
-                        rep(c("obs", "sim"), each = 5), NA)
-    colnames(outDF) <- c("Variable", 
-                         "Group",
-                         "meanvalue")
-    
-    outDF$meanvalue[outDF$Group=="obs"&outDF$Variable=="NEP"] <- -8
-    outDF$meanvalue[outDF$Group=="obs"&outDF$Variable=="GPP"] <- 1563
-    outDF$meanvalue[outDF$Group=="obs"&outDF$Variable=="NPP"] <- 484
-    outDF$meanvalue[outDF$Group=="obs"&outDF$Variable=="CUE"] <- 0.31
-    outDF$meanvalue[outDF$Group=="obs"&outDF$Variable=="RAU"] <- 1079
-    
-    
-    ### these fluxes were calculated above already
-    ### assign values
-    outDF$meanvalue[outDF$Group=="sim"&outDF$Variable=="NEP"] <- round(mean(fluxDF$NEP),2)
-    outDF$meanvalue[outDF$Group=="sim"&outDF$Variable=="GPP"] <- round(mean(fluxDF$GPP),2)
-    outDF$meanvalue[outDF$Group=="sim"&outDF$Variable=="NPP"] <- round(mean(fluxDF$NPP),2)
-    outDF$meanvalue[outDF$Group=="sim"&outDF$Variable=="CUE"] <- round(mean(fluxDF$NPP/fluxDF$GPP),2)
-    outDF$meanvalue[outDF$Group=="sim"&outDF$Variable=="RAU"] <- round(mean(fluxDF$RAU),2)
-    
-    ### plotDF1
-    plotDF1 <- outDF[outDF$Variable%in%c("GPP", "NPP", "RAU", "NEP"),]
-    
-    ### plotting GPP, NPP, and RAU
-    p3 <- ggplot(data=plotDF1, 
-                 aes(Group, meanvalue)) +
-        geom_bar(stat = "identity", aes(fill=Variable), 
-                 position="dodge", col="black") +
-        ggtitle("Major carbon fluxes")+
-        theme_linedraw() +
-        theme(panel.grid.minor=element_blank(),
-              axis.text.x=element_text(size=12),
-              axis.title.x=element_text(size=14),
-              axis.text.y=element_text(size=12),
-              axis.title.y=element_text(size=14),
-              legend.text=element_text(size=12),
-              legend.title=element_text(size=14),
-              panel.grid.major=element_blank(),
-              legend.position="right",
-              legend.box = 'horizontal',
-              legend.box.just = 'left',
-              plot.title = element_text(size=14, face="bold.italic", 
-                                        hjust = 0.5))+
-        ylab(expression(paste("Carbon fluxes (g C " * m^2 * " " * yr^-1 * ")")))
     
     
     ################# Major nutrient pools  ####################
