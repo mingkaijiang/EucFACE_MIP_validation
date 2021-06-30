@@ -1,4 +1,4 @@
-compile_obs_var_dataset_across_models <- function() {
+compile_obs_var_dataset_across_models <- function(p.mod.list, n.mod.list, d.mod.list) {
     
     
     ##################################################################
@@ -11,24 +11,6 @@ compile_obs_var_dataset_across_models <- function() {
     if(!dir.exists(out.dir)) {
         dir.create(out.dir, showWarnings = FALSE)
     }
-    
-    ### color palette:
-    obs.color <- c("#000000") # black
-    
-    cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
-    
-    ### Model list
-    ## CNP model
-    p.mod.list <- c("CABLP", #"ELMXX", 
-                    "GDAYP", "LPJGP",
-                    "OCHDP", "OCHDX", 
-                    "QUINC", "QUJSM")
-    
-    ## CN model
-    n.mod.list <- c("GDAYN", "LPJGN")
-    
-    ## DGVM model
-    d.mod.list <- c("CABLP", "LPJGP")
     
     
     ### prepare consistent column names for CNP models

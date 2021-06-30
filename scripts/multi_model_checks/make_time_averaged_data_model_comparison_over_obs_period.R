@@ -1,9 +1,60 @@
-make_time_averaged_data_model_comparison_over_obs_period <- function() {
+make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
+                                                                     p.mod.list, 
+                                                                     n.mod.list, 
+                                                                     d.mod.list) {
+    
+    ##################################################################
+    #### Set up basics
+    
+    ### setting out path to store the files
+    out.dir <- paste0(getwd(), "/obs_var_output")
+    
+    ### create output folder
+    if(!dir.exists(out.dir)) {
+        dir.create(out.dir, showWarnings = FALSE)
+    }
+    
+    ### read in anual datasets
+    annDF.amb <- readRDS(paste0(out.dir, "/MIP_obs_var_amb_annual.rds"))
+    annDF.ele <- readRDS(paste0(out.dir, "/MIP_obs_var_ele_annual.rds"))
+    
+    
+    #### calculate 4-yr means in the simulation datasets
+    annDF.amb <- subset(annDF.amb, YEAR>2012 & YEAR<2017)
+    annDF.ele <- subset(annDF.ele, YEAR>2012 & YEAR<2017)
+    
+    annDF.pct.diff <- annDF.amb
+    annDF.pct.diff[,3:149] <- (annDF.ele[,3:149]-annDF.amb[,3:149])/annDF.amb[,3:149] * 100.0
+    
+    annDF.amb.sum <- summaryBy(.~ModName, FUN=c(mean,sd),
+                               data=annDF.amb,
+                               keep.names=T, na.rm=T)
+    
+    annDF.ele.sum <- summaryBy(.~ModName, FUN=c(mean,sd),
+                               data=annDF.ele,
+                               keep.names=T, na.rm=T)
+    
+    annDF.diff.sum <- summaryBy(.~ModName, FUN=c(mean,sd),
+                                data=annDF.pct.diff,
+                                keep.names=T, na.rm=T)
+    
     
     ##########################################################################
-    #### Step 3. Time-averaged validation
+    #### add observation data to the model simulation dataset so that we can plot them together
     
-    ################# Major carbon pools  ####################
+    
+    
+    
+    ##########################################################################
+    #### plot model simulated ambient
+    
+    
+    
+    mod.list <- unique(annDF.amb.sum$ModName)
+    
+    
+    ##########################################################################
+    ####  Major carbon pools  
     ### Firstly we will check the major carbon pools, 
     ### as these data are provided in Table 1 in the parameter file. 
     ### Note that:
