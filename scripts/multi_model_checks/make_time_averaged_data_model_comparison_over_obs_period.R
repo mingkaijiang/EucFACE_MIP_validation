@@ -190,7 +190,21 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
               legend.box.just = 'left',
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
-        ylab(expression(paste("Carbon fluxes (g C " * m^2 * " " * yr^-1 * ")"))); p2
+        ylab(expression(paste("Carbon fluxes (g C " * m^2 * " " * yr^-1 * ")")))+
+        scale_x_discrete(limit=c("GDAYN", "LPJGN",
+                                 "CABLP", "CABLP-VD",
+                                 "LPJGP", "LPJGP-VD",
+                                 "GDAYP", 
+                                 "OCHDP", "OCHDX",
+                                 "QUINC", "QUJSM",
+                                 "obs"),
+                         label=c("GDAYN", "LPJGN",
+                                 "CABLP", "CABLP-VD",
+                                 "LPJGP", "LPJGP-VD",
+                                 "GDAYP", 
+                                 "OCHDP", "OCHDX",
+                                 "QUINC", "QUJSM",
+                                 "OBS")); p2
     
     
     
@@ -202,38 +216,37 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
     ### which can be grouped with allocation to root as total belowground allocation. 
     ### This total belowground allocation is comparable to allocation coefficient to root in the model. 
     
+    annDF.amb.sum[annDF.amb.sum<= -1000] <- NA
+    
     ### create a DF to store observation data for allocation coefficients
-    allocDF <- data.frame(rep(c("leaf", "wood", "root", "exudation", 
-                                "belowground"), 2),
-                          rep(c("obs", "sim"), each = 5), NA)
+    allocDF <- data.frame(rep(c("leaf", "wood",
+                                "belowground"), (nmod+1)),
+                          rep(c("obs", mod.list), each = 3), NA)
     colnames(allocDF) <- c("Variable", 
                            "Group",
                            "meanvalue")
     
     allocDF$meanvalue[allocDF$Group=="obs"&allocDF$Variable=="leaf"] <- 0.48
     allocDF$meanvalue[allocDF$Group=="obs"&allocDF$Variable=="wood"] <- 0.20
-    allocDF$meanvalue[allocDF$Group=="obs"&allocDF$Variable=="root"] <- 0.22
-    allocDF$meanvalue[allocDF$Group=="obs"&allocDF$Variable=="exudation"] <- 0.10
+    #allocDF$meanvalue[allocDF$Group=="obs"&allocDF$Variable=="root"] <- 0.22
+    #allocDF$meanvalue[allocDF$Group=="obs"&allocDF$Variable=="exudation"] <- 0.10
     allocDF$meanvalue[allocDF$Group=="obs"&allocDF$Variable=="belowground"] <- 0.32
     
     
     ### calcualte annual means in the simulated data
-    subDF <- subset(modDF, YEAR <= 2016 & YEAR > 2012)
+    for (i in mod.list) {
+        ### assign values
+        allocDF$meanvalue[allocDF$Group==i&allocDF$Variable=="leaf"] <- annDF.amb.sum$CGL.mean[annDF.amb.sum$ModName==i]/annDF.amb.sum$NPP.mean[annDF.amb.sum$ModName==i]
+        allocDF$meanvalue[allocDF$Group==i&allocDF$Variable=="wood"] <- annDF.amb.sum$CGW.mean[annDF.amb.sum$ModName==i]/annDF.amb.sum$NPP.mean[annDF.amb.sum$ModName==i]
+        
+        allocDF$meanvalue[allocDF$Group==i&allocDF$Variable=="belowground"] <- sum(annDF.amb.sum$CGFR.mean[annDF.amb.sum$ModName==i],annDF.amb.sum$CGCR.mean[annDF.amb.sum$ModName==i],annDF.amb.sum$CEX.mean[annDF.amb.sum$ModName==i], na.rm=T)/annDF.amb.sum$NPP.mean[annDF.amb.sum$ModName==i]
+        
+    }
+
     
-    fluxDF <- summaryBy(GPP+NEP+NPP+CGL+CGW+CGFR+CGCR+CEX+RAU~YEAR, data=subDF, FUN=sum, na.rm=T, keep.names=T)
-    
-    ### assign values
-    allocDF$meanvalue[allocDF$Group=="sim"&allocDF$Variable=="leaf"] <- mean(fluxDF$CGL/fluxDF$NPP)
-    allocDF$meanvalue[allocDF$Group=="sim"&allocDF$Variable=="wood"] <- round(mean(fluxDF$CGW/fluxDF$NPP),2)
-    allocDF$meanvalue[allocDF$Group=="sim"&allocDF$Variable=="root"] <- round(mean((fluxDF$CGFR+fluxDF$CGCR)/fluxDF$NPP),2)
-    allocDF$meanvalue[allocDF$Group=="sim"&allocDF$Variable=="exudation"] <- round(mean((fluxDF$CEX)/fluxDF$NPP),2)
-    allocDF$meanvalue[allocDF$Group=="sim"&allocDF$Variable=="belowground"] <- round(mean((fluxDF$CGFR+fluxDF$CGCR+fluxDF$CEX)/fluxDF$NPP),2)
-    
-    
-    allocDF2 <- allocDF[allocDF$Variable%in%c("leaf", "wood", "root", "exudation"),]
-    
+
     ### Plotting
-    p2 <- ggplot(data=allocDF2, 
+    p3 <- ggplot(data=allocDF, 
                  aes(Group, meanvalue)) +
         geom_bar(stat = "identity", aes(fill=Variable), 
                  position="stack", col="black") +
@@ -252,7 +265,21 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
               legend.box.just = 'left',
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
-        ylab("allocation coefficients")
+        ylab("allocation coefficients")+
+        scale_x_discrete(limit=c("GDAYN", "LPJGN",
+                                 "CABLP", "CABLP-VD",
+                                 "LPJGP", "LPJGP-VD",
+                                 "GDAYP", 
+                                 "OCHDP", "OCHDX",
+                                 "QUINC", "QUJSM",
+                                 "obs"),
+                         label=c("GDAYN", "LPJGN",
+                                 "CABLP", "CABLP-VD",
+                                 "LPJGP", "LPJGP-VD",
+                                 "GDAYP", 
+                                 "OCHDP", "OCHDX",
+                                 "QUINC", "QUJSM",
+                                 "OBS")); p3
     
     
     
@@ -269,9 +296,8 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
     ### but observed data are for top 10 cm only. 
     
     ### create a DF to store observation data for vegetation carbon stocks
-    pDF <- data.frame(rep(c("PLAB", "PMIN", "NMIN", "NUP", "PUP",
-                            "NLEACH", "PLEACH"), 2), 
-                      rep(c("obs", "sim"), each = 7), NA)
+    pDF <- data.frame(rep(c("PLAB", "PMIN", "NMIN"), (1+nmod)), 
+                      rep(c("obs", mod.list), each = 3), NA)
     colnames(pDF) <- c("Variable", 
                        "Group",
                        "meanvalue")
@@ -282,22 +308,14 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
     
     
     ### calcualte annual means in the simulated data
-    subDF <- subset(modDF, YEAR <= 2016 & YEAR > 2012)
+    for (i in mod.list) {
+        ### assign values
+        pDF$meanvalue[pDF$Group==i&pDF$Variable=="PLAB"] <- annDF.amb.sum$PLAB.mean[annDF.amb.sum$ModName==i]
+        pDF$meanvalue[pDF$Group==i&pDF$Variable=="PMIN"] <- annDF.amb.sum$PMIN.mean[annDF.amb.sum$ModName==i]
+        pDF$meanvalue[pDF$Group==i&pDF$Variable=="NMIN"] <- annDF.amb.sum$NMIN.mean[annDF.amb.sum$ModName==i]
+    }
     
-    poolDF <- summaryBy(PLAB~YEAR, data=subDF, FUN=mean, na.rm=T, keep.names=T)
-    fluxDF <- summaryBy(PMIN+NMIN+NLEACH+PLEACH+NUP+PUP~YEAR, data=subDF, FUN=sum, na.rm=T, keep.names=T)
-    
-    ### assign values
-    pDF$meanvalue[pDF$Group=="sim"&pDF$Variable=="PLAB"] <- round(poolDF$PLAB[poolDF$YEAR=="2016"], 3)
-    pDF$meanvalue[pDF$Group=="sim"&pDF$Variable=="PMIN"] <- round(mean(fluxDF$PMIN), 3)
-    pDF$meanvalue[pDF$Group=="sim"&pDF$Variable=="NMIN"] <- round(mean(fluxDF$NMIN), 3)
-    pDF$meanvalue[pDF$Group=="sim"&pDF$Variable=="PLEACH"] <- round(mean(fluxDF$PLEACH), 3)
-    pDF$meanvalue[pDF$Group=="sim"&pDF$Variable=="NLEACH"] <- round(mean(fluxDF$NLEACH), 3)
-    pDF$meanvalue[pDF$Group=="sim"&pDF$Variable=="PUP"] <- round(mean(fluxDF$PUP), 3)
-    pDF$meanvalue[pDF$Group=="sim"&pDF$Variable=="NUP"] <- round(mean(fluxDF$NUP), 3)
-    
-    
-    plotDF1 <- pDF[pDF$Variable%in%c("PLAB", "PMIN"),]
+    plotDF1 <- pDF[pDF$Variable%in%c("PLAB"),]
     plotDF2 <- pDF[pDF$Variable%in%c("NMIN"),]
     
     ### plotting
@@ -320,7 +338,21 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
               legend.box.just = 'left',
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
-        ylab(expression(paste("Phosphorus pools (g P " * m^2 * ")")))
+        ylab(expression(paste("Phosphorus pools (g P " * m^2 * ")")))+
+        scale_x_discrete(limit=c("GDAYN", "LPJGN",
+                                 "CABLP", "CABLP-VD",
+                                 "LPJGP", "LPJGP-VD",
+                                 "GDAYP", 
+                                 "OCHDP", "OCHDX",
+                                 "QUINC", "QUJSM",
+                                 "obs"),
+                         label=c("GDAYN", "LPJGN",
+                                 "CABLP", "CABLP-VD",
+                                 "LPJGP", "LPJGP-VD",
+                                 "GDAYP", 
+                                 "OCHDP", "OCHDX",
+                                 "QUINC", "QUJSM",
+                                 "OBS")); p4
     
     
     p5 <- ggplot(data=plotDF2, 
@@ -342,132 +374,109 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
               legend.box.just = 'left',
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
-        ylab(expression(paste("Nitrogen pool (g N " * m^2 * ")")))
+        ylab(expression(paste("Nitrogen pool (g N " * m^2 * ")")))+
+        scale_x_discrete(limit=c("GDAYN", "LPJGN",
+                                 "CABLP", "CABLP-VD",
+                                 "LPJGP", "LPJGP-VD",
+                                 "GDAYP", 
+                                 "OCHDP", "OCHDX",
+                                 "QUINC", "QUJSM",
+                                 "obs"),
+                         label=c("GDAYN", "LPJGN",
+                                 "CABLP", "CABLP-VD",
+                                 "LPJGP", "LPJGP-VD",
+                                 "GDAYP", 
+                                 "OCHDP", "OCHDX",
+                                 "QUINC", "QUJSM",
+                                 "OBS")); p5
     
     
     
     ################# stoichiometry  ####################
     ### create a DF to store observation data 
-    stDF <- data.frame(rep(c("leaf", "sapwood", "wood", "fineroot", "soil"),2), 
-                       rep(c("obs", "sim"), each = 5), 
+    stDF <- data.frame(rep(c("leaf", #"sapwood", 
+                             "wood", "fineroot", "soil"), (1+nmod)), 
+                       rep(c("obs", mod.list), each = 4), 
                        NA, NA, NA, NA, NA, NA)
     colnames(stDF) <- c("Variable", "Group", 
                         "CN.mean", "CP.mean",  "NP.mean",
                         "CN.se", "CP.se",  "NP.se")
     
     stDF$CN.mean[stDF$Group=="obs"&stDF$Variable=="leaf"] <- 35.5
-    stDF$CN.mean[stDF$Group=="obs"&stDF$Variable=="sapwood"] <- 101.6
+    #stDF$CN.mean[stDF$Group=="obs"&stDF$Variable=="sapwood"] <- 101.6
     stDF$CN.mean[stDF$Group=="obs"&stDF$Variable=="wood"] <- 110.2 
     stDF$CN.mean[stDF$Group=="obs"&stDF$Variable=="fineroot"] <- 56.9
     stDF$CN.mean[stDF$Group=="obs"&stDF$Variable=="soil"] <- 13.8 
     
     stDF$CP.mean[stDF$Group=="obs"&stDF$Variable=="leaf"] <- 722 
-    stDF$CP.mean[stDF$Group=="obs"&stDF$Variable=="sapwood"] <- 3705 
+    #stDF$CP.mean[stDF$Group=="obs"&stDF$Variable=="sapwood"] <- 3705 
     stDF$CP.mean[stDF$Group=="obs"&stDF$Variable=="wood"] <- 7696 
     stDF$CP.mean[stDF$Group=="obs"&stDF$Variable=="fineroot"] <- 1626
     stDF$CP.mean[stDF$Group=="obs"&stDF$Variable=="soil"] <- 224
     
     stDF$NP.mean[stDF$Group=="obs"&stDF$Variable=="leaf"] <- 22.9 
-    stDF$NP.mean[stDF$Group=="obs"&stDF$Variable=="sapwood"] <- 35.6
+    #stDF$NP.mean[stDF$Group=="obs"&stDF$Variable=="sapwood"] <- 35.6
     stDF$NP.mean[stDF$Group=="obs"&stDF$Variable=="wood"] <- 33.7 
     stDF$NP.mean[stDF$Group=="obs"&stDF$Variable=="fineroot"] <- 28.7
     stDF$NP.mean[stDF$Group=="obs"&stDF$Variable=="soil"] <- 16.4 
     
     
     stDF$CN.se[stDF$Group=="obs"&stDF$Variable=="leaf"] <- 2.7
-    stDF$CN.se[stDF$Group=="obs"&stDF$Variable=="sapwood"] <- 14.7
+    #stDF$CN.se[stDF$Group=="obs"&stDF$Variable=="sapwood"] <- 14.7
     stDF$CN.se[stDF$Group=="obs"&stDF$Variable=="wood"] <- 30.3
     stDF$CN.se[stDF$Group=="obs"&stDF$Variable=="fineroot"] <- 4.6
     stDF$CN.se[stDF$Group=="obs"&stDF$Variable=="soil"] <- 1.0
     
     stDF$CP.se[stDF$Group=="obs"&stDF$Variable=="leaf"] <- 33
-    stDF$CP.se[stDF$Group=="obs"&stDF$Variable=="sapwood"] <- 702
+    #stDF$CP.se[stDF$Group=="obs"&stDF$Variable=="sapwood"] <- 702
     stDF$CP.se[stDF$Group=="obs"&stDF$Variable=="wood"] <- 982
     stDF$CP.se[stDF$Group=="obs"&stDF$Variable=="fineroot"] <- 81
     stDF$CP.se[stDF$Group=="obs"&stDF$Variable=="soil"] <- 39
     
     stDF$NP.se[stDF$Group=="obs"&stDF$Variable=="leaf"] <-  0.1
-    stDF$NP.se[stDF$Group=="obs"&stDF$Variable=="sapwood"] <- 2.1
+    #stDF$NP.se[stDF$Group=="obs"&stDF$Variable=="sapwood"] <- 2.1
     stDF$NP.se[stDF$Group=="obs"&stDF$Variable=="wood"] <- 2.7
     stDF$NP.se[stDF$Group=="obs"&stDF$Variable=="fineroot"] <- 3.3
     stDF$NP.se[stDF$Group=="obs"&stDF$Variable=="soil"] <- 3.4
     
-    
-    
-    
-    ### create a DF to store simulated stocks
-    tmpDF <- data.frame(rep(c("leaf", "wood", "fineroot", "soil"), 4), 
-                        rep(c(2013:2016), each = 4), NA, NA, NA)
-    colnames(tmpDF) <- c("Variable", 
-                         "Year",
-                         "Cstock",
-                         "Nstock", 
-                         "Pstock")
-    
-    ### calcualte annual means in the simulated data
-    poolDF <- subset(modDF, YEAR <= 2016 & YEAR > 2012 & DOY == 1)
-    
-    ### tmpDF assignment
-    for (i in 2013:2016) {
-        tmpDF$Cstock[tmpDF$Year==i&tmpDF$Variable=="leaf"] <- poolDF$CL[poolDF$YEAR == i]
-        tmpDF$Cstock[tmpDF$Year==i&tmpDF$Variable=="wood"] <- poolDF$CW[poolDF$YEAR == i]
-        tmpDF$Cstock[tmpDF$Year==i&tmpDF$Variable=="fineroot"] <- poolDF$CFR[poolDF$YEAR == i]
-        tmpDF$Cstock[tmpDF$Year==i&tmpDF$Variable=="soil"] <- poolDF$CSOIL[poolDF$YEAR == i]
+    for (i in mod.list) {
+        ### assign values
+        stDF$CN.mean[stDF$Group==i&stDF$Variable=="leaf"] <- annDF.amb.sum$CL.mean[annDF.amb.sum$ModName==i]/annDF.amb.sum$NL.mean[annDF.amb.sum$ModName==i]
+        stDF$CN.mean[stDF$Group==i&stDF$Variable=="wood"] <-  annDF.amb.sum$CW.mean[annDF.amb.sum$ModName==i]/annDF.amb.sum$NW.mean[annDF.amb.sum$ModName==i]
+        stDF$CN.mean[stDF$Group==i&stDF$Variable=="fineroot"] <-  annDF.amb.sum$CFR.mean[annDF.amb.sum$ModName==i]/annDF.amb.sum$NFR.mean[annDF.amb.sum$ModName==i]
+        stDF$CN.mean[stDF$Group==i&stDF$Variable=="soil"] <-  annDF.amb.sum$CSOIL.mean[annDF.amb.sum$ModName==i]/annDF.amb.sum$NSOIL.mean[annDF.amb.sum$ModName==i]
         
-        tmpDF$Nstock[tmpDF$Year==i&tmpDF$Variable=="leaf"] <- poolDF$NL[poolDF$YEAR == i]
-        tmpDF$Nstock[tmpDF$Year==i&tmpDF$Variable=="wood"] <- poolDF$NW[poolDF$YEAR == i]
-        tmpDF$Nstock[tmpDF$Year==i&tmpDF$Variable=="fineroot"] <- poolDF$NFR[poolDF$YEAR == i]
-        tmpDF$Nstock[tmpDF$Year==i&tmpDF$Variable=="soil"] <- poolDF$NSOIL[poolDF$YEAR == i]
         
-        tmpDF$Pstock[tmpDF$Year==i&tmpDF$Variable=="leaf"] <- poolDF$PL[poolDF$YEAR == i]
-        tmpDF$Pstock[tmpDF$Year==i&tmpDF$Variable=="wood"] <- poolDF$PW[poolDF$YEAR == i]
-        tmpDF$Pstock[tmpDF$Year==i&tmpDF$Variable=="fineroot"] <- poolDF$PFR[poolDF$YEAR == i]
-        tmpDF$Pstock[tmpDF$Year==i&tmpDF$Variable=="soil"] <- poolDF$PSOIL[poolDF$YEAR == i]
+        stDF$CP.mean[stDF$Group==i&stDF$Variable=="leaf"] <-  annDF.amb.sum$CL.mean[annDF.amb.sum$ModName==i]/annDF.amb.sum$PL.mean[annDF.amb.sum$ModName==i]
+        stDF$CP.mean[stDF$Group==i&stDF$Variable=="wood"] <-  annDF.amb.sum$CW.mean[annDF.amb.sum$ModName==i]/annDF.amb.sum$PW.mean[annDF.amb.sum$ModName==i]
+        stDF$CP.mean[stDF$Group==i&stDF$Variable=="fineroot"] <- annDF.amb.sum$CFR.mean[annDF.amb.sum$ModName==i]/annDF.amb.sum$PFR.mean[annDF.amb.sum$ModName==i]
+        stDF$CP.mean[stDF$Group==i&stDF$Variable=="soil"] <-  annDF.amb.sum$CSOIL.mean[annDF.amb.sum$ModName==i]/annDF.amb.sum$PSOIL.mean[annDF.amb.sum$ModName==i]
         
+        stDF$NP.mean[stDF$Group==i&stDF$Variable=="leaf"] <- annDF.amb.sum$NL.mean[annDF.amb.sum$ModName==i]/annDF.amb.sum$PL.mean[annDF.amb.sum$ModName==i]
+        stDF$NP.mean[stDF$Group==i&stDF$Variable=="wood"] <- annDF.amb.sum$NW.mean[annDF.amb.sum$ModName==i]/annDF.amb.sum$PW.mean[annDF.amb.sum$ModName==i]
+        stDF$NP.mean[stDF$Group==i&stDF$Variable=="fineroot"] <- annDF.amb.sum$NFR.mean[annDF.amb.sum$ModName==i]/annDF.amb.sum$PFR.mean[annDF.amb.sum$ModName==i]
+        stDF$NP.mean[stDF$Group==i&stDF$Variable=="soil"] <- annDF.amb.sum$NSOIL.mean[annDF.amb.sum$ModName==i]/annDF.amb.sum$PSOIL.mean[annDF.amb.sum$ModName==i]
+        
+        
+        
+        #stDF$CN.se[stDF$Group=="sim"&stDF$Variable=="leaf"] <- tmpDF2$CN.se[tmpDF2$Variable=="leaf"]
+        #stDF$CN.se[stDF$Group=="sim"&stDF$Variable=="wood"] <-  tmpDF2$CN.se[tmpDF2$Variable=="wood"]
+        #stDF$CN.se[stDF$Group=="sim"&stDF$Variable=="fineroot"] <-  tmpDF2$CN.se[tmpDF2$Variable=="fineroot"]
+        #stDF$CN.se[stDF$Group=="sim"&stDF$Variable=="soil"] <-  tmpDF2$CN.se[tmpDF2$Variable=="soil"]
+        #
+        #
+        #stDF$CP.se[stDF$Group=="sim"&stDF$Variable=="leaf"] <-  tmpDF2$CP.se[tmpDF2$Variable=="leaf"]
+        #stDF$CP.se[stDF$Group=="sim"&stDF$Variable=="wood"] <-  tmpDF2$CP.se[tmpDF2$Variable=="wood"]
+        #stDF$CP.se[stDF$Group=="sim"&stDF$Variable=="fineroot"] <- tmpDF2$CP.se[tmpDF2$Variable=="fineroot"]
+        #stDF$CP.se[stDF$Group=="sim"&stDF$Variable=="soil"] <- tmpDF2$CP.se[tmpDF2$Variable=="soil"]
+        #
+        #
+        #stDF$NP.se[stDF$Group=="sim"&stDF$Variable=="leaf"] <- tmpDF2$NP.se[tmpDF2$Variable=="leaf"]
+        #stDF$NP.se[stDF$Group=="sim"&stDF$Variable=="wood"] <- tmpDF2$NP.se[tmpDF2$Variable=="wood"]
+        #stDF$NP.se[stDF$Group=="sim"&stDF$Variable=="fineroot"] <- tmpDF2$NP.se[tmpDF2$Variable=="fineroot"]
+        #stDF$NP.se[stDF$Group=="sim"&stDF$Variable=="soil"] <- tmpDF2$NP.se[tmpDF2$Variable=="soil"]
     }
     
-    tmpDF$CN <- with(tmpDF, Cstock/Nstock)
-    tmpDF$CP <- with(tmpDF, Cstock/Pstock)
-    tmpDF$NP <- with(tmpDF, Nstock/Pstock)
-    
-    tmpDF2 <- summaryBy(CN+CP+NP~Variable, FUN=c(mean, se), data=tmpDF, keep.names=T)
-    
-    
-    ### assign values
-    stDF$CN.mean[stDF$Group=="sim"&stDF$Variable=="leaf"] <- tmpDF2$CN.mean[tmpDF2$Variable=="leaf"]
-    stDF$CN.mean[stDF$Group=="sim"&stDF$Variable=="wood"] <-  tmpDF2$CN.mean[tmpDF2$Variable=="wood"]
-    stDF$CN.mean[stDF$Group=="sim"&stDF$Variable=="fineroot"] <-  tmpDF2$CN.mean[tmpDF2$Variable=="fineroot"]
-    stDF$CN.mean[stDF$Group=="sim"&stDF$Variable=="soil"] <-  tmpDF2$CN.mean[tmpDF2$Variable=="soil"]
-    
-    
-    stDF$CP.mean[stDF$Group=="sim"&stDF$Variable=="leaf"] <-  tmpDF2$CP.mean[tmpDF2$Variable=="leaf"]
-    stDF$CP.mean[stDF$Group=="sim"&stDF$Variable=="wood"] <-  tmpDF2$CP.mean[tmpDF2$Variable=="wood"]
-    stDF$CP.mean[stDF$Group=="sim"&stDF$Variable=="fineroot"] <- tmpDF2$CP.mean[tmpDF2$Variable=="fineroot"]
-    stDF$CP.mean[stDF$Group=="sim"&stDF$Variable=="soil"] <-  tmpDF2$CP.mean[tmpDF2$Variable=="soil"]
-    
-    stDF$NP.mean[stDF$Group=="sim"&stDF$Variable=="leaf"] <- tmpDF2$NP.mean[tmpDF2$Variable=="leaf"]
-    stDF$NP.mean[stDF$Group=="sim"&stDF$Variable=="wood"] <- tmpDF2$NP.mean[tmpDF2$Variable=="wood"]
-    stDF$NP.mean[stDF$Group=="sim"&stDF$Variable=="fineroot"] <- tmpDF2$NP.mean[tmpDF2$Variable=="fineroot"]
-    stDF$NP.mean[stDF$Group=="sim"&stDF$Variable=="soil"] <- tmpDF2$NP.mean[tmpDF2$Variable=="soil"]
-    
-    
-    
-    stDF$CN.se[stDF$Group=="sim"&stDF$Variable=="leaf"] <- tmpDF2$CN.se[tmpDF2$Variable=="leaf"]
-    stDF$CN.se[stDF$Group=="sim"&stDF$Variable=="wood"] <-  tmpDF2$CN.se[tmpDF2$Variable=="wood"]
-    stDF$CN.se[stDF$Group=="sim"&stDF$Variable=="fineroot"] <-  tmpDF2$CN.se[tmpDF2$Variable=="fineroot"]
-    stDF$CN.se[stDF$Group=="sim"&stDF$Variable=="soil"] <-  tmpDF2$CN.se[tmpDF2$Variable=="soil"]
-    
-    
-    stDF$CP.se[stDF$Group=="sim"&stDF$Variable=="leaf"] <-  tmpDF2$CP.se[tmpDF2$Variable=="leaf"]
-    stDF$CP.se[stDF$Group=="sim"&stDF$Variable=="wood"] <-  tmpDF2$CP.se[tmpDF2$Variable=="wood"]
-    stDF$CP.se[stDF$Group=="sim"&stDF$Variable=="fineroot"] <- tmpDF2$CP.se[tmpDF2$Variable=="fineroot"]
-    stDF$CP.se[stDF$Group=="sim"&stDF$Variable=="soil"] <- tmpDF2$CP.se[tmpDF2$Variable=="soil"]
-    
-    
-    stDF$NP.se[stDF$Group=="sim"&stDF$Variable=="leaf"] <- tmpDF2$NP.se[tmpDF2$Variable=="leaf"]
-    stDF$NP.se[stDF$Group=="sim"&stDF$Variable=="wood"] <- tmpDF2$NP.se[tmpDF2$Variable=="wood"]
-    stDF$NP.se[stDF$Group=="sim"&stDF$Variable=="fineroot"] <- tmpDF2$NP.se[tmpDF2$Variable=="fineroot"]
-    stDF$NP.se[stDF$Group=="sim"&stDF$Variable=="soil"] <- tmpDF2$NP.se[tmpDF2$Variable=="soil"]
     
     ### plot
     p6 <- ggplot(data=stDF, 
@@ -492,7 +501,24 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
               legend.box.just = 'left',
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
-        ylab("CN stoichiometry")
+        ylab("CN stoichiometry")+
+        scale_x_discrete(limit=c("GDAYN", "LPJGN",
+                                 "CABLP", "CABLP-VD",
+                                 "LPJGP", "LPJGP-VD",
+                                 "GDAYP", 
+                                 "OCHDP", "OCHDX",
+                                 "QUINC", "QUJSM",
+                                 "obs"),
+                         label=c("GDAYN", "LPJGN",
+                                 "CABLP", "CABLP-VD",
+                                 "LPJGP", "LPJGP-VD",
+                                 "GDAYP", 
+                                 "OCHDP", "OCHDX",
+                                 "QUINC", "QUJSM",
+                                 "OBS")); p6
+    
+    
+    
     
     p7 <- ggplot(data=stDF, 
                  aes(Group, CP.mean, group=Variable)) +
@@ -513,7 +539,21 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
               legend.box.just = 'left',
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
-        ylab("CP stoichiometry")
+        ylab("CP stoichiometry")+
+        scale_x_discrete(limit=c("GDAYN", "LPJGN",
+                                 "CABLP", "CABLP-VD",
+                                 "LPJGP", "LPJGP-VD",
+                                 "GDAYP", 
+                                 "OCHDP", "OCHDX",
+                                 "QUINC", "QUJSM",
+                                 "obs"),
+                         label=c("GDAYN", "LPJGN",
+                                 "CABLP", "CABLP-VD",
+                                 "LPJGP", "LPJGP-VD",
+                                 "GDAYP", 
+                                 "OCHDP", "OCHDX",
+                                 "QUINC", "QUJSM",
+                                 "OBS")); p7
     
     
     p8 <- ggplot(data=stDF, 
@@ -535,29 +575,40 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
               legend.box.just = 'left',
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
-        ylab("NP stoichiometry")
+        ylab("NP stoichiometry")+
+        scale_x_discrete(limit=c("GDAYN", "LPJGN",
+                                 "CABLP", "CABLP-VD",
+                                 "LPJGP", "LPJGP-VD",
+                                 "GDAYP", 
+                                 "OCHDP", "OCHDX",
+                                 "QUINC", "QUJSM",
+                                 "obs"),
+                         label=c("GDAYN", "LPJGN",
+                                 "CABLP", "CABLP-VD",
+                                 "LPJGP", "LPJGP-VD",
+                                 "GDAYP", 
+                                 "OCHDP", "OCHDX",
+                                 "QUINC", "QUJSM",
+                                 "OBS")); p8
     
     
     
     ################# Nutrient retranslocation coefficients  ####################
     
-    ### subset and calculate
-    subDF <- subset(modDF, YEAR <= 2016 & YEAR > 2012)
-    
-    tmpDF <- summaryBy(NGL+PGL+NLRETR+PLRETR~YEAR, data=subDF, FUN=sum, keep.names=T, na.rm=T)
-    
-    
     ### create DF for output
-    rtDF <- data.frame(rep(c("leafN", "leafP"), 2), 
-                       rep(c("obs", "sim"), each = 2), NA)
+    rtDF <- data.frame(rep(c("leafN", "leafP"), (1+nmod)), 
+                       rep(c("obs", mod.list), each = 2), NA)
     colnames(rtDF) <- c("Variable", "Group", "meanvalue")
     
     ### assign values
     rtDF$meanvalue[rtDF$Group=="obs"&rtDF$Variable=="leafN"] <- 0.31
     rtDF$meanvalue[rtDF$Group=="obs"&rtDF$Variable=="leafP"] <- 0.53
     
-    rtDF$meanvalue[rtDF$Group=="sim"&rtDF$Variable=="leafN"] <- round(mean(tmpDF$NLRETR/tmpDF$NGL),2)
-    rtDF$meanvalue[rtDF$Group=="sim"&rtDF$Variable=="leafP"] <- round(mean(tmpDF$PLRETR/tmpDF$PGL),2)
+    for (i in mod.list) {
+        rtDF$meanvalue[rtDF$Group==i&rtDF$Variable=="leafN"] <- annDF.amb.sum$NLRETR.mean[annDF.amb.sum$ModName==i]/annDF.amb.sum$NGL.mean[annDF.amb.sum$ModName==i]
+        rtDF$meanvalue[rtDF$Group==i&rtDF$Variable=="leafP"] <- annDF.amb.sum$PLRETR.mean[annDF.amb.sum$ModName==i]/annDF.amb.sum$PGL.mean[annDF.amb.sum$ModName==i]
+    }
+
     
     
     ### plotting
@@ -580,11 +631,25 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
               legend.box.just = 'left',
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
-        ylab("Leaf retranslocation")
+        ylab("Leaf retranslocation")+
+        scale_x_discrete(limit=c("GDAYN", "LPJGN",
+                                 "CABLP", "CABLP-VD",
+                                 "LPJGP", "LPJGP-VD",
+                                 "GDAYP", 
+                                 "OCHDP", "OCHDX",
+                                 "QUINC", "QUJSM",
+                                 "obs"),
+                         label=c("GDAYN", "LPJGN",
+                                 "CABLP", "CABLP-VD",
+                                 "LPJGP", "LPJGP-VD",
+                                 "GDAYP", 
+                                 "OCHDP", "OCHDX",
+                                 "QUINC", "QUJSM",
+                                 "OBS")); p9
     
     
     ### print plots to file, change numbering if needed
-    pdf(paste0(out.dir, '/QC_Time_averaged_validation_',mod.abb,'.pdf',sep=''),width=10,height=8)
+    pdf(paste0(out.dir, '/MIP_Time_averaged_validation_.pdf',sep=''),width=12, height=8)
     for (i in 1:9) {
         print(get(paste("p",i,sep="")))
     }
@@ -602,20 +667,26 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
     laiDF <- read.csv("validation_dataset/EucFACE_LAI_2012_2016.csv")
     laiDF <- laiDF[laiDF$Trt=="aCO2",]
     laiDF$Date <- as.Date(as.character(laiDF$Date))
+    laiDF$ModName <- "OBS"
+    names(laiDF)[names(laiDF)=="lai"] <- "LAI"
+    laiDF <- laiDF[,c("Date", "LAI", "ModName")]
+    
+    
+    ### read in multi-model lai data
+    modDF <- readRDS(paste0(out.dir, "/MIP_obs_var_amb_daily.rds"))
     
     ### simulated LAI, subset
     subDF <- subset(modDF, YEAR <= 2016)
-    subDF <- subDF[,c("YEAR", "DOY", "Date", "LAI")]
+    subDF <- subDF[,c("YEAR", "DOY", "Date", "LAI", "ModName")]
     subDF$Date <- as.Date(as.character(subDF$Date))
+    subDF <- subDF[,c("Date", "LAI", "ModName")]
     
     ### merge the two dataset
-    testDF1 <- merge(subDF, laiDF, by="Date", all=T)
+    testDF1 <- rbind(subDF, laiDF)
     
     ### plot all data
     p1 <- ggplot(testDF1, aes(x=Date)) +
-        geom_errorbar(aes(ymin=lai-laiSD,
-                          ymax=lai+laiSD, color="obs"))+
-        geom_line(aes(y=LAI, color="sim"), lwd = 1) +
+        geom_line(aes(y=LAI, color=ModName), lwd = 1) +
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
               axis.title.x = element_text(size=14), 
@@ -627,35 +698,7 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
               panel.grid.major=element_blank(),
               plot.title = element_text(size = 10, face = "bold"),
               legend.position="right")+
-        ylab("LAI")+
-        scale_colour_manual("", 
-                            values = c("obs"="black", "sim"="red2"),
-                            labels = c("Observed", "Simulated"))
-    
-    ### Now we can check the goodness-of-fit of all days where observation is available. 
-    ### A perfect fit should have slope of 1 and intercept of 0. 
-    ### subset only days where observations are available
-    testDF2 <- testDF1[complete.cases(testDF1$lai),]
-    
-    lm.fit <- lm(testDF2$LAI~testDF2$lai)
-    
-    ### plot all data
-    p2 <- ggplot(testDF2, aes(x=lai, y=LAI)) +
-        geom_point()+
-        theme_linedraw() +
-        geom_smooth(method="lm")+
-        theme(panel.grid.minor=element_blank(),
-              axis.title.x = element_text(size=14), 
-              axis.text.x = element_text(size=12),
-              axis.text.y=element_text(size=12),
-              axis.title.y=element_text(size=14),
-              legend.text=element_text(size=12),
-              legend.title=element_text(size=12),
-              panel.grid.major=element_blank(),
-              plot.title = element_text(size = 10, face = "bold"),
-              legend.position="right")+
-        ylab("simulated LAI")+
-        xlab("observed LAI")
+        ylab("LAI"); p1
     
     
     #### Soil respiration
@@ -677,26 +720,27 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
     rsoilDF$Date <- as.Date(as.character(rsoilDF$Date))
     
     ### convert unit, from mg m-2 d-1 to g m-2 d-1
-    rsoilDF$Rsoil_g_m2_d <- rsoilDF$Rsoil_mg_m2_d / 1000.0
-    rsoilDF$RsoilSD_g <- rsoilDF$RsoilSD / 1000.0
-    
+    rsoilDF$Rsoil <- rsoilDF$Rsoil_mg_m2_d / 1000.0
+    rsoilDF$ModName <- "OBS"
+    rsoilDF <- rsoilDF[,c("Date", "Rsoil", "ModName")]
     
     ### simulated Rsoil, subset
     subDF <- subset(modDF, YEAR <= 2015 & YEAR > 2012)
-    subDF <- subDF[,c("YEAR", "DOY", "Date", "RHET", "RCR", "RFR")]
+    subDF <- subDF[,c("YEAR", "DOY", "Date", "RHET", "RCR", "RFR", "ModName")]
     subDF$Date <- as.Date(as.character(subDF$Date))
-    subDF$Rsoil_sim <- with(subDF, RHET+RCR+RFR)
     
+    subDF[subDF<=-999.] <- NA
+    
+    subDF$Rsoil<- with(subDF, RHET+RCR+RFR)
+    subDF <- subDF[,c("Date", "Rsoil", "ModName")]
     
     
     ### merge the two dataset
-    testDF1 <- merge(subDF, rsoilDF, by="Date", all=T)
+    testDF1 <- rbind(subDF, rsoilDF)
     
     ### plot all data
-    p3 <- ggplot(testDF1, aes(x=Date)) +
-        geom_errorbar(aes(ymin=Rsoil_g_m2_d-RsoilSD_g,
-                          ymax=Rsoil_g_m2_d+RsoilSD_g, color="obs"))+
-        geom_line(aes(y=Rsoil_sim, color="sim"), lwd = 1) +
+    p2 <- ggplot(testDF1, aes(x=Date)) +
+        geom_line(aes(y=Rsoil, color=ModName), lwd = 1) +
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
               axis.title.x = element_text(size=14), 
@@ -708,56 +752,14 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
               panel.grid.major=element_blank(),
               plot.title = element_text(size = 10, face = "bold"),
               legend.position="right")+
-        ylab("Soil respiration flux")+
-        scale_colour_manual("", 
-                            values = c("obs"="black", "sim"="red2"),
-                            labels = c("Observed", "Simulated"))
+        ylab("Soil respiration flux"); p2
     
     
-    #### Soil water content
-    ### Soil water content is more complex and non-linear, 
-    ### depending on many model-specific settings. 
-    ### The validation dataset only serves as a guidance to evaluate your model performance. 
-    ### validation Rsoil
-    swcDF <- read.csv("validation_dataset/EucFACE_SWC_2012_2019.csv")
-    
-    ### convert unit from VWC to kg H2O m-2
-    swcDF$multiplier <- ifelse(swcDF$Depth%in%c(25,50,75,100,125,150), 0.25, 0.5)
-    
-    swcDF$WC_kg_m2 <- swcDF$VWC * swcDF$multiplier * 1000.0 / 100.0
-    
-    sumDF <- summaryBy(WC_kg_m2~Location+Date, FUN=sum, data=swcDF, keep.names=T, na.rm=T)
-    
-    ### process simulation data
-    subDF <- modDF[,c("YEAR", "DOY", "Date", "SW", "SWPA")]
-    
-    plotDF <- merge(subDF, sumDF, by="Date", all=T)
-    
-    
-    ### plot all data
-    p4 <- ggplot(plotDF, aes(x=Date)) +
-        geom_point(aes(y=WC_kg_m2, color="obs"))+
-        geom_point(aes(y=SWPA, color="sim"), lwd = 1) +
-        theme_linedraw() +
-        theme(panel.grid.minor=element_blank(),
-              axis.title.x = element_text(size=14), 
-              axis.text.x = element_text(size=12),
-              axis.text.y=element_text(size=12),
-              axis.title.y=element_text(size=14),
-              legend.text=element_text(size=12),
-              legend.title=element_text(size=12),
-              panel.grid.major=element_blank(),
-              plot.title = element_text(size = 10, face = "bold"),
-              legend.position="right")+
-        ylab("Soil water (kg m-2)")+
-        scale_colour_manual("", 
-                            values = c("obs"="black", "sim"="red2"),
-                            labels = c("Observed", "Simulated"))
     
     
     ### print plots to file, change numbering if needed
-    pdf(paste0(out.dir, '/QC_Time_varying_validation_',mod.abb,'.pdf',sep=''),width=10,height=8)
-    for (i in 1:4) {
+    pdf(paste0(out.dir, '/MIP_Time_varying_variables.pdf',sep=''),width=12,height=8)
+    for (i in 1:2) {
         print(get(paste("p",i,sep="")))
     }
     dev.off()
