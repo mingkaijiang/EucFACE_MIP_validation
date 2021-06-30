@@ -2,7 +2,7 @@
 #### Create data folder
 output.folders <- c(paste0(getwd(), "/validation_output"),
                     paste0(getwd(), "/analysis_output"),
-                    paste0(getwd(), "/obs_output"))
+                    paste0(getwd(), "/obs_var_output"))
 
 #### Create output folder
 for (y in output.folders) {
