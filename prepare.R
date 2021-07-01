@@ -30,7 +30,8 @@ pacman::p_load(dplyr,
                reshape2,
                tinytex,
                qdap,
-               data.table)    
+               data.table,
+               gridExtra)    
 
 #### Sourcing all R files in the modules subdirectory
 sourcefiles <- dir("scripts", pattern="[.]R$", recursive = TRUE, full.names = TRUE)
