@@ -37,6 +37,7 @@ d.mod.list <- c("CABLP", "LPJGP")
 ### for observed period under variable climate only.
 compile_obs_var_dataset_across_models(p.mod.list, n.mod.list, d.mod.list)
 
+compile_obs_fix_dataset_across_models(p.mod.list, n.mod.list, d.mod.list)
 
 
 ### show P effect with the two models that have CN and CNP versions
@@ -44,7 +45,7 @@ compare_CNP_and_CN_model_output()
 
 
 ### make MIP time-series plot
-make_MIP_time_series_plot()
+make_MIP_time_series_plot(scenario="fix")
 
 
 ### prepare observed dataset at annual timestep wherever possible

@@ -1,9 +1,9 @@
-make_MIP_time_series_plot <- function() {
+make_MIP_time_series_plot <- function(scenario) {
     ##################################################################
     #### Set up basics
     
     ### setting out path to store the files
-    out.dir <- paste0(getwd(), "/obs_var_output")
+    out.dir <- paste0(getwd(), "/obs_", scenario, "_output")
     
     ### create output folder
     if(!dir.exists(out.dir)) {
@@ -13,8 +13,8 @@ make_MIP_time_series_plot <- function() {
     d <- dim(ambDF)[2]
     
     ### read in anual datasets
-    ambDF <- readRDS(paste0(out.dir, "/MIP_obs_var_amb_annual.rds"))
-    eleDF <- readRDS(paste0(out.dir, "/MIP_obs_var_ele_annual.rds"))
+    ambDF <- readRDS(paste0(out.dir, "/MIP_obs_", scenario, "_amb_annual.rds"))
+    eleDF <- readRDS(paste0(out.dir, "/MIP_obs_", scenario, "_ele_annual.rds"))
     
     ### ignore NAs
     ambDF[ambDF<=-999] <- NA
@@ -76,7 +76,7 @@ make_MIP_time_series_plot <- function() {
     ##################################################################
     require(gridExtra)
     
-    pdf(paste0(out.dir, "/MIP_time_series_comparison.pdf"), width=8, height=16)
+    pdf(paste0(out.dir, "/MIP_time_series_obs", scenario, "_comparison.pdf"), width=8, height=16)
     
     
     ### plot MIP
