@@ -76,7 +76,7 @@ make_MIP_time_series_plot <- function(scenario) {
     ##################################################################
     require(gridExtra)
     
-    pdf(paste0(out.dir, "/MIP_time_series_obs", scenario, "_comparison.pdf"), width=8, height=16)
+    pdf(paste0(out.dir, "/MIP_time_series_obs_", scenario, "_comparison.pdf"), width=8, height=16)
     
     
     ### plot MIP
