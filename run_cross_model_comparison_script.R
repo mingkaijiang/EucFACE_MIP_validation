@@ -55,11 +55,6 @@ eucDF <- prepare_EucFACE_observation_dataset()
 
 
 ### compare to observed dataset
-### color palette:
-obs.color <- c("#000000") # black
-
-cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
-
 ### ambient treatment, real values
 make_time_averaged_data_model_comparison_over_obs_period(eucDF,
                                                          p.mod.list, 
@@ -75,10 +70,20 @@ plot_MIP_CO2_response_comparison(eucDF,
 
 
 ### plot photosynthesis vs leaf N & P relationships
+plot_photosynthesis_relationships(scenario="fix")
+
 plot_photosynthesis_relationships(scenario="var")
 
 
-
+### this is a theoretical analysis on how leaf nutrient concentrations
+### affect Vcmax and Jmax parameters. 
+### Currently we know:
+### Walker et al. 2014: GDAYN, GDAYP, CABLP (also coordination hypothesis)
+### Ellsworth unpublished: OCHDY, OCHDX, LPJGP (with Haxeltine & Prentice, 1996)
+### Haxeltine and Prentice 1996: LPJGN
+### P only downregulate biomass growth: ELMXX, QUINC, QIJSM
+### To fill this script, we will need Ellsworth unpublished relationships
+theoretical_analysis_of_leaf_nutrient_effect_on_leaf_physiology()
 
 
 

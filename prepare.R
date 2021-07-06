@@ -1,9 +1,10 @@
-#### prepare
+#### prepare all necessary global settings
 #### Create data folder
 output.folders <- c(paste0(getwd(), "/validation_output"),
                     paste0(getwd(), "/analysis_output"),
                     paste0(getwd(), "/obs_var_output"),
                     paste0(getwd(), "/obs_fix_output"))
+
 
 #### Create output folder
 for (y in output.folders) {
@@ -34,9 +35,16 @@ pacman::p_load(dplyr,
                data.table,
                gridExtra)    
 
+
 #### Sourcing all R files in the modules subdirectory
 sourcefiles <- dir("scripts", pattern="[.]R$", recursive = TRUE, full.names = TRUE)
 for(z in sourcefiles)source(z)
+
+
+#### color palette:
+obs.color <- c("#000000") # black
+
+cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
 
 
 #### end
