@@ -162,6 +162,24 @@ compile_obs_fix_dataset_across_models <- function(p.mod.list, n.mod.list, d.mod.
         outDF <- plyr::rbind.fill(outDF, modDF)
     }
     
+    ### assign model ordering 
+    outDF$ModName <- gsub("CABLP-VD", "CVD", outDF$ModName)
+    outDF$ModName <- gsub("LPJGP-VD", "LVD", outDF$ModName)
+    
+    outDF$ModName <- gsub("CABLP", "A_CABLP", outDF$ModName)
+    outDF$ModName <- gsub("GDAYP", "B_GDAYP", outDF$ModName)
+    outDF$ModName <- gsub("LPJGP", "C_LPJGP", outDF$ModName)
+    outDF$ModName <- gsub("OCHDP", "D_OCHDP", outDF$ModName)
+    outDF$ModName <- gsub("QUINC", "E_QUINC", outDF$ModName)
+    
+    outDF$ModName <- gsub("ELMXX", "F_ELMXX", outDF$ModName)
+    outDF$ModName <- gsub("OCHDX", "G_OCHDX", outDF$ModName)
+    outDF$ModName <- gsub("QUJSM", "H_QUJSM", outDF$ModName)
+    
+    outDF$ModName <- gsub("GDAYN", "I_GDAYN", outDF$ModName)
+    outDF$ModName <- gsub("LPJGN", "J_LPJGN", outDF$ModName)
+    outDF$ModName <- gsub("CVD", "K_CABLP-VD", outDF$ModName)
+    outDF$ModName <- gsub("LVD", "L_LPJGP-VD", outDF$ModName)
     
     ### save the rds
     saveRDS(outDF, paste0(out.dir, "/MIP_obs_fix_amb_daily.rds"))
@@ -282,6 +300,25 @@ compile_obs_fix_dataset_across_models <- function(p.mod.list, n.mod.list, d.mod.
         ### merge all models
         outDF <- plyr::rbind.fill(outDF, modDF)
     }
+    
+    ### assign model ordering 
+    outDF$ModName <- gsub("CABLP-VD", "CVD", outDF$ModName)
+    outDF$ModName <- gsub("LPJGP-VD", "LVD", outDF$ModName)
+    
+    outDF$ModName <- gsub("CABLP", "A_CABLP", outDF$ModName)
+    outDF$ModName <- gsub("GDAYP", "B_GDAYP", outDF$ModName)
+    outDF$ModName <- gsub("LPJGP", "C_LPJGP", outDF$ModName)
+    outDF$ModName <- gsub("OCHDP", "D_OCHDP", outDF$ModName)
+    outDF$ModName <- gsub("QUINC", "E_QUINC", outDF$ModName)
+    
+    outDF$ModName <- gsub("ELMXX", "F_ELMXX", outDF$ModName)
+    outDF$ModName <- gsub("OCHDX", "G_OCHDX", outDF$ModName)
+    outDF$ModName <- gsub("QUJSM", "H_QUJSM", outDF$ModName)
+    
+    outDF$ModName <- gsub("GDAYN", "I_GDAYN", outDF$ModName)
+    outDF$ModName <- gsub("LPJGN", "J_LPJGN", outDF$ModName)
+    outDF$ModName <- gsub("CVD", "K_CABLP-VD", outDF$ModName)
+    outDF$ModName <- gsub("LVD", "L_LPJGP-VD", outDF$ModName)
     
     ### save the rds
     saveRDS(outDF, paste0(out.dir, "/MIP_obs_fix_ele_daily.rds"))

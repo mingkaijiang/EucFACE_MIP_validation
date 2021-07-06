@@ -17,12 +17,12 @@ compare_CNP_and_CN_model_output <- function() {
     eleDF <- readRDS(paste0(out.dir, "/MIP_obs_var_ele_annual.rds"))
     
     ### select GDAYN, GDAYP, LPJGN, LPJGP model output
-    ambDF <- subset(ambDF, ModName%in%c("GDAYN", "GDAYP",
-                                        "LPJGN", "LPJGP"))
+    ambDF <- subset(ambDF, ModName%in%c("I_GDAYN", "B_GDAYP",
+                                        "J_LPJGN", "C_LPJGP"))
     
     
-    eleDF <- subset(eleDF, ModName%in%c("GDAYN", "GDAYP",
-                                        "LPJGN", "LPJGP"))
+    eleDF <- subset(eleDF, ModName%in%c("I_GDAYN", "B_GDAYP",
+                                        "J_LPJGN", "C_LPJGP"))
     
     
     #### calculate 4-yr means in the simulation datasets
@@ -32,20 +32,20 @@ compare_CNP_and_CN_model_output <- function() {
     d <- dim(ambDF)[2]
     
     ### calculate the effect of P limitation as difference of CNP - CN
-    diffDF <- ambDF[ambDF$ModName%in%c("GDAYN", "LPJGN"),]
+    diffDF <- ambDF[ambDF$ModName%in%c("I_GDAYN", "J_LPJGN"),]
     
-    diffDF$ModName <- gsub("GDAYN", "GDAY", diffDF$ModName)
-    diffDF$ModName <- gsub("LPJGN", "LPJG", diffDF$ModName)
+    diffDF$ModName <- gsub("I_GDAYN", "GDAY", diffDF$ModName)
+    diffDF$ModName <- gsub("J_LPJGN", "LPJG", diffDF$ModName)
     
-    diffDF[diffDF$ModName=="GDAY",3:d] <- ambDF[ambDF$ModName=="GDAYP",3:d] - ambDF[ambDF$ModName=="GDAYN",3:d]
-    diffDF[diffDF$ModName=="LPJG",3:d] <- ambDF[ambDF$ModName=="LPJGP",3:d] - ambDF[ambDF$ModName=="LPJGN",3:d]
+    diffDF[diffDF$ModName=="GDAY",3:d] <- ambDF[ambDF$ModName=="B_GDAYP",3:d] - ambDF[ambDF$ModName=="I_GDAYN",3:d]
+    diffDF[diffDF$ModName=="LPJG",3:d] <- ambDF[ambDF$ModName=="C_LPJGP",3:d] - ambDF[ambDF$ModName=="J_LPJGN",3:d]
     
     
     ### calculate the effect of P limitation as % difference of (CNP - CN)/CN
     pctdiffDF <- diffDF
     
-    pctdiffDF[pctdiffDF$ModName=="GDAY",3:d] <- diffDF[diffDF$ModName=="GDAY",3:d]/ambDF[ambDF$ModName=="GDAYN",3:d] * 100.0
-    pctdiffDF[pctdiffDF$ModName=="LPJG",3:d] <- diffDF[diffDF$ModName=="LPJG",3:d]/ambDF[ambDF$ModName=="LPJGN",3:d] * 100.0
+    pctdiffDF[pctdiffDF$ModName=="GDAY",3:d] <- diffDF[diffDF$ModName=="GDAY",3:d]/ambDF[ambDF$ModName=="I_GDAYN",3:d] * 100.0
+    pctdiffDF[pctdiffDF$ModName=="LPJG",3:d] <- diffDF[diffDF$ModName=="LPJG",3:d]/ambDF[ambDF$ModName=="J_LPJGN",3:d] * 100.0
     
     
     ### calculate the effect of CO2 effect in real magnitude, in both versions of model
@@ -85,7 +85,7 @@ compare_CNP_and_CN_model_output <- function() {
     
     ##################################################################
     #### Plotting
-    mod.list1 <- c("GDAYN", "GDAYP", "LPJGN", "LPJGP")
+    mod.list1 <- c("B_GDAYP", "C_LPJGP", "I_GDAYN", "J_LPJGN")
     mod.list2 <- c("GDAY", "LPJG")
     
     
@@ -115,7 +115,7 @@ compare_CNP_and_CN_model_output <- function() {
     }
     
     for (i in c("amb", "ele")) {
-        for (j in c("GDAYN", "GDAYP", "LPJGN", "LPJGP")) {
+        for (j in mod.list1) {
             
             ### calculate means
             v1 <- sum(vegDF1$meanvalue[vegDF1$Model==j&vegDF1$Trt==i&vegDF1$Variable%in%c("CL", "CW", "CCR", "CFR")],
@@ -137,8 +137,8 @@ compare_CNP_and_CN_model_output <- function() {
     plotDF1 <- subset(vegDF1, Variable%in%c("CL", "CW", "CFR", "CCR") & Trt=="amb")
     plotDF2 <- subset(vegDF1, Variable%in%c("Total") & Trt=="amb")
     
-    val1 <- round((plotDF2$meanvalue[plotDF2$Model=="GDAYP"]-plotDF2$meanvalue[plotDF2$Model=="GDAYN"])/plotDF2$meanvalue[plotDF2$Model=="GDAYN"]*100, 1)
-    val2 <- round((plotDF2$meanvalue[plotDF2$Model=="LPJGP"]-plotDF2$meanvalue[plotDF2$Model=="LPJGN"])/plotDF2$meanvalue[plotDF2$Model=="LPJGN"]*100, 1)
+    val1 <- round((plotDF2$meanvalue[plotDF2$Model=="B_GDAYP"]-plotDF2$meanvalue[plotDF2$Model=="I_GDAYN"])/plotDF2$meanvalue[plotDF2$Model=="I_GDAYN"]*100, 1)
+    val2 <- round((plotDF2$meanvalue[plotDF2$Model=="C_LPJGP"]-plotDF2$meanvalue[plotDF2$Model=="J_LPJGN"])/plotDF2$meanvalue[plotDF2$Model=="J_LPJGN"]*100, 1)
     
     
     ### Plotting C pools in ambient CO2
@@ -146,9 +146,9 @@ compare_CNP_and_CN_model_output <- function() {
                  aes(Model, meanvalue)) +
         geom_bar(stat = "identity", aes(fill=Variable, alpha=Model), 
                  position="stack", col="black") +
-        annotate("text", x=2, y=plotDF2$meanvalue[plotDF2$Model=="GDAYP"]*1.15, 
+        annotate("text", x=2, y=plotDF2$meanvalue[plotDF2$Model=="B_GDAYP"]*1.15, 
                  label=(paste0(val1, "%")), size=10)+
-        annotate("text", x=4, y=plotDF2$meanvalue[plotDF2$Model=="LPJGP"]*1.15, 
+        annotate("text", x=4, y=plotDF2$meanvalue[plotDF2$Model=="C_LPJGP"]*1.15, 
                  label=(paste0(val2, "%")), size=10)+
         #geom_errorbar(data=plotDF2,
         #              aes(x=Model, 
@@ -170,13 +170,17 @@ compare_CNP_and_CN_model_output <- function() {
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
         ylab(expression(paste("Vegetation carbon pools (g C " * m^2*")")))+
-        scale_x_discrete(limit=c("GDAYN","GDAYP", 
-                                 "LPJGN","LPJGP"),
+        scale_x_discrete(limit=c("I_GDAYN","B_GDAYP", 
+                                 "J_LPJGN","C_LPJGP"),
                          label=c("GDAYN","GDAYP", 
                                  "LPJGN","LPJGP"))+
         xlab("")+
-        scale_alpha_manual(values=c("GDAYN" = 0.3, "GDAYP" = 1.0,
-                            "LPJGN" = 0.3, "LPJGP" = 1.0)); p1
+        scale_alpha_manual(values=c("I_GDAYN" = 0.3, 
+                                    "B_GDAYP" = 1.0, 
+                                    "J_LPJGN" = 0.3, 
+                                    "C_LPJGP" = 1.0),
+                           label=c("GDAYN","GDAYP", 
+                                   "LPJGN","LPJGP")); p1
     
     
     ### calculate CO2 pct response difference
