@@ -10,11 +10,11 @@ make_MIP_time_series_plot <- function(scenario) {
         dir.create(out.dir, showWarnings = FALSE)
     }
     
-    d <- dim(ambDF)[2]
-    
     ### read in anual datasets
     ambDF <- readRDS(paste0(out.dir, "/MIP_obs_", scenario, "_amb_annual.rds"))
     eleDF <- readRDS(paste0(out.dir, "/MIP_obs_", scenario, "_ele_annual.rds"))
+    
+    d <- dim(ambDF)[2]
     
     ### ignore NAs
     ambDF[ambDF<=-999] <- NA
@@ -76,8 +76,8 @@ make_MIP_time_series_plot <- function(scenario) {
     ##################################################################
     require(gridExtra)
     
-    pdf(paste0(out.dir, "/MIP_time_series_obs_", scenario, "_comparison.pdf"), width=8, height=16)
-    
+    pdf(paste0(out.dir, "/MIP_time_series_obs_", scenario, "_comparison.pdf"), 
+        width=8, height=16)
     
     ### plot MIP
     for (i in 3:d) {
@@ -87,7 +87,7 @@ make_MIP_time_series_plot <- function(scenario) {
                             ymax=ambDF.mip[,i-1]+ambDF.mip[,i+146]),
                         fill=alpha("grey", 0.3))+
             geom_line(data=ambDF, 
-                      aes(YEAR, ambDF[,i], col=ModName)) +
+                      aes(YEAR, ambDF[,i], col=ModName, lty=ModName),lwd=1.5) +
             geom_line(data=ambDF.mip, aes(YEAR, ambDF.mip[,i-1]), col="black", lwd=2)+
             ggtitle(paste0(names(ambDF)[i]))+
             theme_linedraw() +
@@ -99,12 +99,62 @@ make_MIP_time_series_plot <- function(scenario) {
                   legend.text=element_text(size=12),
                   legend.title=element_text(size=14),
                   panel.grid.major=element_blank(),
-                  legend.position="right",
+                  legend.position="bottom",
                   legend.box = 'horizontal',
                   legend.box.just = 'left',
                   plot.title = element_text(size=14, face="bold.italic", 
                                             hjust = 0.5))+
-            ylab(expression(paste("Ambient " * CO[2])))
+            scale_color_manual(name="Model",
+                               values=c("CABLP" = set3Palette[1],
+                                        "CABLP-VD" = set3Palette[1],
+                                        "ELMXX" = set3Palette[2],
+                                        "GDAYN" = set3Palette[3],
+                                        "GDAYP" = set3Palette[4],
+                                        "LPJGN" = set3Palette[5],
+                                        "LPJGP" = set3Palette[6],
+                                        "LPJGP-VD" = set3Palette[6],
+                                        "OCHDP" = set3Palette[7],
+                                        "OCHDX" = set3Palette[8],
+                                        "QUINC" = set3Palette[9],
+                                        "QUJSM" = set3Palette[10]))+
+            scale_linetype_manual(name="Model", 
+                                  values=c("CABLP" = 1,
+                                           "CABLP-VD" = 2,
+                                           "ELMXX" = 1,
+                                           "GDAYN" = 3,
+                                           "GDAYP" = 1,
+                                           "LPJGN" = 3,
+                                           "LPJGP" = 1,
+                                           "LPJGP-VD" = 2,
+                                           "OCHDP" = 1,
+                                           "OCHDX" = 1,
+                                           "QUINC" = 1,
+                                           "QUJSM" = 1))+
+            guides(fill = guide_legend(override.aes = list(col = c("CABLP" = set3Palette[1],
+                                                                   "CABLP-VD" = set3Palette[1],
+                                                                   "ELMXX" = set3Palette[2],
+                                                                   "GDAYN" = set3Palette[3],
+                                                                   "GDAYP" = set3Palette[4],
+                                                                   "LPJGN" = set3Palette[5],
+                                                                   "LPJGP" = set3Palette[6],
+                                                                   "LPJGP-VD" = set3Palette[6],
+                                                                   "OCHDP" = set3Palette[7],
+                                                                   "OCHDX" = set3Palette[8],
+                                                                   "QUINC" = set3Palette[9],
+                                                                   "QUJSM" = set3Palette[10]),
+                                                           lty = c("CABLP" = 1,
+                                                                   "CABLP-VD" = 2,
+                                                                   "ELMXX" = 1,
+                                                                   "GDAYN" = 3,
+                                                                   "GDAYP" = 1,
+                                                                   "LPJGN" = 3,
+                                                                   "LPJGP" = 1,
+                                                                   "LPJGP-VD" = 2,
+                                                                   "OCHDP" = 1,
+                                                                   "OCHDX" = 1,
+                                                                   "QUINC" = 1,
+                                                                   "QUJSM" = 1))))+
+            ylab(expression(paste("Ambient " * CO[2])));p1
         
         
         p2 <- ggplot() +

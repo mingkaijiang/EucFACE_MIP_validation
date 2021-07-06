@@ -35,6 +35,7 @@ d.mod.list <- c("CABLP", "LPJGP")
 
 ### compile all model results together, and save annual and daily datasets
 ### for observed period under variable climate only.
+### run once only
 compile_obs_var_dataset_across_models(p.mod.list, n.mod.list, d.mod.list)
 
 compile_obs_fix_dataset_across_models(p.mod.list, n.mod.list, d.mod.list)
@@ -99,14 +100,22 @@ theoretical_analysis_of_leaf_nutrient_effect_on_leaf_physiology()
 ###    Need to go through each model to confirm their entries.
 ### 3. Model structure diagrams 
 ###    Received: GDAYP, GDAYN, CABLP, LPJGN, LPJGP, QUINC, QUJSM, OCHDX (cannot to use for pub)
-###    Received pointers: ELMXX (published paper but rough), OCHDP
+###    Received pointers: ELMXX (published paper but rough), OCHDP (nothing available)
 ### 4. Traceability analysis?
 ### 5. Leaf nutrient effect on Vcmax and Jmax - theoretical analysis
-### 7. Data-model intercomparison figures:
+### 6. Data-model intercomparison figures:
 ###    Ambient + CO2 response (% and abs);
-###    Fate of C;
 ###    Time series plots;
+###    Fate of C;
+###    N + P variables;
+###    Projected future responses.
+### 7. CN cs. CNP model comparisons
+###    GDAYN vs. GDAYP, LPJGN vs. LPJGP
+###    Medlyn et al. 2016 model simulations
 ### 8. Microbial processes analysis
+###    Explicit microbial processes: QUJSM, OCHDX
+###    Semi-explicit microbial processes: ELMXX
+###    Exudation and priming: GDAYP
 ### 9. DGVM analysis:
 ###    CABLE-POP + LPJ-GUESS
 ### 10. CO2 x water: conceptual diagram + soil hydrology
