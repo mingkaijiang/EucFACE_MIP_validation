@@ -89,20 +89,27 @@ theoretical_analysis_of_leaf_nutrient_effect_on_leaf_physiology()
 
 ##########################################################################
 ### to do list:
-### 1. Go through mass balance checks with David: LPJ-GUESS CN, LPJ-GUESS CNP
-### 2. New set of simulation to close mass balance checks: QUINCY, QUINCY-JSM
-### 3. Generate summary table on key model features
-### 4. Model structure diagrams and traceability analysis
-### 6. Include dynamic vegetation analysis: CABLE-POP and LPJ-GUESS
-### 7. Add ELM
-### 8. MIP figures on CO2 x P
-###    8.1. Data-model intercomparison, ambient conditions
-###    8.2. CO2 response ratios
-###    8.3. Beyond C budget
-###    8.4. Photosynthesis and leaf N, P relationships, and the CO2 response
-###    8.5. Microbial related analyses
-### 9. MIP figures on CO2 x drought
-
+### 1. Simulation completion:
+###    Waiting for
+###                LPJ-GUESS CN + CNP for new set of simulations
+###                QUINC + QUJSM for new set of simulations
+###                ELM for first set of simulations
+### 2. Generate summary table on key model features:
+###    Waiting for input from ELM only,
+###    Need to go through each model to confirm their entries.
+### 3. Model structure diagrams 
+###    Received: GDAYP, GDAYN, CABLP, LPJGN, LPJGP, QUINC, QUJSM, OCHDX (cannot to use for pub)
+###    Received pointers: ELMXX (published paper but rough), OCHDP
+### 4. Traceability analysis?
+### 5. Leaf nutrient effect on Vcmax and Jmax - theoretical analysis
+### 7. Data-model intercomparison figures:
+###    Ambient + CO2 response (% and abs);
+###    Fate of C;
+###    Time series plots;
+### 8. Microbial processes analysis
+### 9. DGVM analysis:
+###    CABLE-POP + LPJ-GUESS
+### 10. CO2 x water: conceptual diagram + soil hydrology
 
 ##########################################################################
 ####
