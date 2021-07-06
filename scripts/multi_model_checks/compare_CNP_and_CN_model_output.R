@@ -209,15 +209,21 @@ compare_CNP_and_CN_model_output <- function() {
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
         ylab(expression(paste("Vegetation carbon " * CO[2] *" response ratio")))+
-        scale_x_discrete(limit=c("GDAYN","GDAYP", 
-                                 "LPJGN","LPJGP"),
+        scale_x_discrete(limit=c("I_GDAYN","B_GDAYP", 
+                                 "J_LPJGN","C_LPJGP"),
                          label=c("GDAYN","GDAYP", 
                                  "LPJGN","LPJGP"))+
         xlab("")+
-        scale_alpha_manual(values=c("GDAYN" = 0.3, "GDAYP" = 1.0,
-                                    "LPJGN" = 0.3, "LPJGP" = 1.0))+
-        scale_fill_manual(values=c("GDAYN" = "purple", "GDAYP" = "purple",
-                                   "LPJGN" = "orange", "LPJGP" = "orange"))+
+        scale_alpha_manual(values=c("I_GDAYN" = 0.3, 
+                                    "B_GDAYP" = 1.0, 
+                                    "J_LPJGN" = 0.3, 
+                                    "C_LPJGP" = 1.0),
+                           label=c("GDAYN","GDAYP", 
+                                   "LPJGN","LPJGP"))+
+        scale_fill_manual(values=c("I_GDAYN" = "purple", "B_GDAYP" = "purple",
+                                   "J_LPJGN" = "orange", "C_LPJGP" = "orange"),
+                          label=c("GDAYN","GDAYP", 
+                                  "LPJGN","LPJGP"))+
         coord_cartesian(ylim=c(1,1.1)); p2
     
     
@@ -274,13 +280,17 @@ compare_CNP_and_CN_model_output <- function() {
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
         ylab(expression(paste("Carbon fluxes (g C " * m^2 * " " * yr^-1 * ")")))+
-        scale_x_discrete(limit=c("GDAYN","GDAYP", 
-                                 "LPJGN","LPJGP"),
+        scale_x_discrete(limit=c("I_GDAYN","B_GDAYP", 
+                                 "J_LPJGN","C_LPJGP"),
                          label=c("GDAYN","GDAYP", 
                                  "LPJGN","LPJGP"))+
         xlab("")+
-        scale_alpha_manual(values=c("GDAYN" = 0.3, "GDAYP" = 1.0,
-                                    "LPJGN" = 0.3, "LPJGP" = 1.0)); p3
+        scale_alpha_manual(values=c("I_GDAYN" = 0.3, 
+                                    "B_GDAYP" = 1.0, 
+                                    "J_LPJGN" = 0.3, 
+                                    "C_LPJGP" = 1.0),
+                           label=c("GDAYN","GDAYP", 
+                                   "LPJGN","LPJGP")); p3
     
     
     ### pct CO2 effect
@@ -323,13 +333,17 @@ compare_CNP_and_CN_model_output <- function() {
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
         ylab(expression(paste("Carbon fluxes " * CO[2] *" response ratio")))+
-        scale_x_discrete(limit=c("GDAYN","GDAYP", 
-                                 "LPJGN","LPJGP"),
+        scale_x_discrete(limit=c("I_GDAYN","B_GDAYP", 
+                                 "J_LPJGN","C_LPJGP"),
                          label=c("GDAYN","GDAYP", 
                                  "LPJGN","LPJGP"))+
         xlab("")+
-        scale_alpha_manual(values=c("GDAYN" = 0.3, "GDAYP" = 1.0,
-                                    "LPJGN" = 0.3, "LPJGP" = 1.0)); 
+        scale_alpha_manual(values=c("I_GDAYN" = 0.3, 
+                                    "B_GDAYP" = 1.0, 
+                                    "J_LPJGN" = 0.3, 
+                                    "C_LPJGP" = 1.0),
+                           label=c("GDAYN","GDAYP", 
+                                   "LPJGN","LPJGP")); p4
     
     gg.gap::gg.gap(plot=p4,
                    segments=list(c(-200,-100),c(400,600)),
@@ -367,7 +381,7 @@ compare_CNP_and_CN_model_output <- function() {
     }
     
     for (i in c("amb", "ele")) {
-        for (j in c("GDAYN", "GDAYP", "LPJGN", "LPJGP")) {
+        for (j in mod.list1) {
             
             ### calculate means
             v1 <- sum(vegDF2$meanvalue[vegDF2$Model==j&vegDF2$Trt==i&vegDF2$Variable%in%c("NL", "NW", "NCR", "NFR")],
@@ -389,8 +403,8 @@ compare_CNP_and_CN_model_output <- function() {
     plotDF1 <- subset(vegDF2, Variable%in%c("NL", "NW", "NFR", "NCR") & Trt=="amb")
     plotDF2 <- subset(vegDF2, Variable%in%c("Total") & Trt=="amb")
     
-    val1 <- round((plotDF2$meanvalue[plotDF2$Model=="GDAYP"]-plotDF2$meanvalue[plotDF2$Model=="GDAYN"])/plotDF2$meanvalue[plotDF2$Model=="GDAYN"]*100, 1)
-    val2 <- round((plotDF2$meanvalue[plotDF2$Model=="LPJGP"]-plotDF2$meanvalue[plotDF2$Model=="LPJGN"])/plotDF2$meanvalue[plotDF2$Model=="LPJGN"]*100, 1)
+    val1 <- round((plotDF2$meanvalue[plotDF2$Model=="B_GDAYP"]-plotDF2$meanvalue[plotDF2$Model=="I_GDAYN"])/plotDF2$meanvalue[plotDF2$Model=="I_GDAYN"]*100, 1)
+    val2 <- round((plotDF2$meanvalue[plotDF2$Model=="C_LPJGP"]-plotDF2$meanvalue[plotDF2$Model=="J_LPJGN"])/plotDF2$meanvalue[plotDF2$Model=="J_LPJGN"]*100, 1)
     
     
     ### Plotting C pools in ambient CO2
@@ -417,13 +431,17 @@ compare_CNP_and_CN_model_output <- function() {
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
         ylab(expression(paste("Vegetation nitrogen pools (g N " * m^2*")")))+
-        scale_x_discrete(limit=c("GDAYN","GDAYP", 
-                                 "LPJGN","LPJGP"),
+        scale_x_discrete(limit=c("I_GDAYN","B_GDAYP", 
+                                 "J_LPJGN","C_LPJGP"),
                          label=c("GDAYN","GDAYP", 
                                  "LPJGN","LPJGP"))+
         xlab("")+
-        scale_alpha_manual(values=c("GDAYN" = 0.3, "GDAYP" = 1.0,
-                                    "LPJGN" = 0.3, "LPJGP" = 1.0)); p5
+        scale_alpha_manual(values=c("I_GDAYN" = 0.3, 
+                                    "B_GDAYP" = 1.0, 
+                                    "J_LPJGN" = 0.3, 
+                                    "C_LPJGP" = 1.0),
+                           label=c("GDAYN","GDAYP", 
+                                   "LPJGN","LPJGP")); p5
     
     
     ### calculate CO2 pct response difference
@@ -452,15 +470,21 @@ compare_CNP_and_CN_model_output <- function() {
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
         ylab(expression(paste("Vegetation nitrogen " * CO[2] *" response ratio")))+
-        scale_x_discrete(limit=c("GDAYN","GDAYP", 
-                                 "LPJGN","LPJGP"),
+        scale_x_discrete(limit=c("I_GDAYN","B_GDAYP", 
+                                 "J_LPJGN","C_LPJGP"),
                          label=c("GDAYN","GDAYP", 
                                  "LPJGN","LPJGP"))+
         xlab("")+
-        scale_alpha_manual(values=c("GDAYN" = 0.3, "GDAYP" = 1.0,
-                                    "LPJGN" = 0.3, "LPJGP" = 1.0))+
-        scale_fill_manual(values=c("GDAYN" = "purple", "GDAYP" = "purple",
-                                   "LPJGN" = "orange", "LPJGP" = "orange"))+
+        scale_alpha_manual(values=c("I_GDAYN" = 0.3, 
+                                    "B_GDAYP" = 1.0, 
+                                    "J_LPJGN" = 0.3, 
+                                    "C_LPJGP" = 1.0),
+                           label=c("GDAYN","GDAYP", 
+                                   "LPJGN","LPJGP"))+
+        scale_fill_manual(values=c("I_GDAYN" = "purple", "B_GDAYP" = "purple",
+                                   "J_LPJGN" = "orange", "C_LPJGP" = "orange"),
+                          label=c("GDAYN","GDAYP", 
+                                  "LPJGN","LPJGP"))+
         coord_cartesian(ylim=c(0.9,1.1)); p6
     
     
@@ -517,13 +541,17 @@ compare_CNP_and_CN_model_output <- function() {
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
         ylab(expression(paste("Nitrogen fluxes (g N " * m^2 * " " * yr^-1 * ")")))+
-        scale_x_discrete(limit=c("GDAYN","GDAYP", 
-                                 "LPJGN","LPJGP"),
+        scale_x_discrete(limit=c("I_GDAYN","B_GDAYP", 
+                                 "J_LPJGN","C_LPJGP"),
                          label=c("GDAYN","GDAYP", 
                                  "LPJGN","LPJGP"))+
         xlab("")+
-        scale_alpha_manual(values=c("GDAYN" = 0.3, "GDAYP" = 1.0,
-                                    "LPJGN" = 0.3, "LPJGP" = 1.0)); p7
+        scale_alpha_manual(values=c("I_GDAYN" = 0.3, 
+                                    "B_GDAYP" = 1.0, 
+                                    "J_LPJGN" = 0.3, 
+                                    "C_LPJGP" = 1.0),
+                           label=c("GDAYN","GDAYP", 
+                                   "LPJGN","LPJGP")); p7
     
     
     ### pct CO2 effect
@@ -570,13 +598,17 @@ compare_CNP_and_CN_model_output <- function() {
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
         ylab(expression(paste("Nitrogen fluxes " * CO[2] *" response ratio")))+
-        scale_x_discrete(limit=c("GDAYN","GDAYP", 
-                                 "LPJGN","LPJGP"),
+        scale_x_discrete(limit=c("I_GDAYN","B_GDAYP", 
+                                 "J_LPJGN","C_LPJGP"),
                          label=c("GDAYN","GDAYP", 
                                  "LPJGN","LPJGP"))+
         xlab("")+
-        scale_alpha_manual(values=c("GDAYN" = 0.3, "GDAYP" = 1.0,
-                                    "LPJGN" = 0.3, "LPJGP" = 1.0)); p8
+        scale_alpha_manual(values=c("I_GDAYN" = 0.3, 
+                                    "B_GDAYP" = 1.0, 
+                                    "J_LPJGN" = 0.3, 
+                                    "C_LPJGP" = 1.0),
+                           label=c("GDAYN","GDAYP", 
+                                   "LPJGN","LPJGP")); p8
     
     pdf(paste0(out.dir, '/MIP_CNP_vs_CN_model_comparisons.pdf',sep=''),width=12,height=8)
     for (i in 1:8) {

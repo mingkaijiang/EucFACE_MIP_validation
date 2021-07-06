@@ -93,82 +93,7 @@ make_MIP_time_series_plot <- function(scenario) {
             theme_linedraw() +
             theme(panel.grid.minor=element_blank(),
                   axis.text.x=element_text(size=12),
-                  axis.title.x=element_text(size=14),
-                  axis.text.y=element_text(size=12),
-                  axis.title.y=element_text(size=14),
-                  legend.text=element_text(size=12),
-                  legend.title=element_text(size=14),
-                  panel.grid.major=element_blank(),
-                  legend.position="bottom",
-                  legend.box = 'horizontal',
-                  legend.box.just = 'left',
-                  plot.title = element_text(size=14, face="bold.italic", 
-                                            hjust = 0.5))+
-            scale_color_manual(name="Model",
-                               values=c("CABLP" = set3Palette[1],
-                                        "CABLP-VD" = set3Palette[1],
-                                        "ELMXX" = set3Palette[2],
-                                        "GDAYN" = set3Palette[3],
-                                        "GDAYP" = set3Palette[4],
-                                        "LPJGN" = set3Palette[5],
-                                        "LPJGP" = set3Palette[6],
-                                        "LPJGP-VD" = set3Palette[6],
-                                        "OCHDP" = set3Palette[7],
-                                        "OCHDX" = set3Palette[8],
-                                        "QUINC" = set3Palette[9],
-                                        "QUJSM" = set3Palette[10]))+
-            scale_linetype_manual(name="Model", 
-                                  values=c("CABLP" = 1,
-                                           "CABLP-VD" = 2,
-                                           "ELMXX" = 1,
-                                           "GDAYN" = 3,
-                                           "GDAYP" = 1,
-                                           "LPJGN" = 3,
-                                           "LPJGP" = 1,
-                                           "LPJGP-VD" = 2,
-                                           "OCHDP" = 1,
-                                           "OCHDX" = 1,
-                                           "QUINC" = 1,
-                                           "QUJSM" = 1))+
-            guides(fill = guide_legend(override.aes = list(col = c("CABLP" = set3Palette[1],
-                                                                   "CABLP-VD" = set3Palette[1],
-                                                                   "ELMXX" = set3Palette[2],
-                                                                   "GDAYN" = set3Palette[3],
-                                                                   "GDAYP" = set3Palette[4],
-                                                                   "LPJGN" = set3Palette[5],
-                                                                   "LPJGP" = set3Palette[6],
-                                                                   "LPJGP-VD" = set3Palette[6],
-                                                                   "OCHDP" = set3Palette[7],
-                                                                   "OCHDX" = set3Palette[8],
-                                                                   "QUINC" = set3Palette[9],
-                                                                   "QUJSM" = set3Palette[10]),
-                                                           lty = c("CABLP" = 1,
-                                                                   "CABLP-VD" = 2,
-                                                                   "ELMXX" = 1,
-                                                                   "GDAYN" = 3,
-                                                                   "GDAYP" = 1,
-                                                                   "LPJGN" = 3,
-                                                                   "LPJGP" = 1,
-                                                                   "LPJGP-VD" = 2,
-                                                                   "OCHDP" = 1,
-                                                                   "OCHDX" = 1,
-                                                                   "QUINC" = 1,
-                                                                   "QUJSM" = 1))))+
-            ylab(expression(paste("Ambient " * CO[2])));p1
-        
-        
-        p2 <- ggplot() +
-            geom_ribbon(data=co2DF.mip, 
-                        aes(YEAR, ymin=co2DF.mip[,i-1]-co2DF.mip[,i+146],
-                            ymax=co2DF.mip[,i-1]+co2DF.mip[,i+146]),
-                        fill=alpha("grey", 0.3))+
-            geom_line(data=co2DF, 
-                      aes(YEAR, co2DF[,i], col=ModName)) +
-            geom_line(data=co2DF.mip, aes(YEAR, co2DF.mip[,i-1]), col="black", lwd=2)+
-            theme_linedraw() +
-            theme(panel.grid.minor=element_blank(),
-                  axis.text.x=element_text(size=12),
-                  axis.title.x=element_text(size=14),
+                  axis.title.x=element_blank(),
                   axis.text.y=element_text(size=12),
                   axis.title.y=element_text(size=14),
                   legend.text=element_text(size=12),
@@ -179,6 +104,49 @@ make_MIP_time_series_plot <- function(scenario) {
                   legend.box.just = 'left',
                   plot.title = element_text(size=14, face="bold.italic", 
                                             hjust = 0.5))+
+            scale_color_manual(name="Model",
+                               values=col.values,
+                               labels=model.labels)+
+            scale_linetype_manual(name="Model", 
+                                  values=linetype.values,
+                                  labels=model.labels)+
+            guides(fill = guide_legend(override.aes = list(col = col.values,
+                                                           lty = linetype.values)),
+                   color = guide_legend(nrow=6, byrow=F))+
+            ylab(expression(paste("Ambient " * CO[2])))
+        
+        
+        p2 <- ggplot() +
+            geom_ribbon(data=co2DF.mip, 
+                        aes(YEAR, ymin=co2DF.mip[,i-1]-co2DF.mip[,i+146],
+                            ymax=co2DF.mip[,i-1]+co2DF.mip[,i+146]),
+                        fill=alpha("grey", 0.3))+
+            geom_line(data=co2DF, 
+                      aes(YEAR, co2DF[,i], col=ModName, lty=ModName)) +
+            geom_line(data=co2DF.mip, aes(YEAR, co2DF.mip[,i-1]), col="black", lwd=2)+
+            theme_linedraw() +
+            theme(panel.grid.minor=element_blank(),
+                  axis.text.x=element_text(size=12),
+                  axis.title.x=element_blank(),
+                  axis.text.y=element_text(size=12),
+                  axis.title.y=element_text(size=14),
+                  legend.text=element_text(size=12),
+                  legend.title=element_text(size=14),
+                  panel.grid.major=element_blank(),
+                  legend.position="right",
+                  legend.box = 'horizontal',
+                  legend.box.just = 'left',
+                  plot.title = element_text(size=14, face="bold.italic", 
+                                            hjust = 0.5))+
+          scale_color_manual(name="Model",
+                             values=col.values,
+                             labels=model.labels)+
+          scale_linetype_manual(name="Model", 
+                                values=linetype.values,
+                                labels=model.labels)+
+          guides(fill = guide_legend(override.aes = list(col = col.values,
+                                                         lty = linetype.values)),
+                 color = guide_legend(nrow=6, byrow=F))+
             ylab(expression(paste(CO[2] * " effect (difference)")))
         
         
@@ -188,7 +156,7 @@ make_MIP_time_series_plot <- function(scenario) {
                             ymax=pctco2DF.mip[,i-1]+pctco2DF.mip[,i+146]),
                         fill=alpha("grey", 0.3))+
             geom_line(data=pctco2DF, 
-                      aes(YEAR, pctco2DF[,i], col=ModName)) +
+                      aes(YEAR, pctco2DF[,i], col=ModName, lty=ModName)) +
             geom_line(data=pctco2DF.mip, aes(YEAR, pctco2DF.mip[,i-1]), col="black", lwd=2)+
             theme_linedraw() +
             theme(panel.grid.minor=element_blank(),
@@ -204,10 +172,32 @@ make_MIP_time_series_plot <- function(scenario) {
                   legend.box.just = 'left',
                   plot.title = element_text(size=14, face="bold.italic", 
                                             hjust = 0.5))+
+          scale_color_manual(name="Model",
+                             values=col.values,
+                             labels=model.labels)+
+          scale_linetype_manual(name="Model", 
+                                values=linetype.values,
+                                labels=model.labels)+
+          guides(fill = guide_legend(override.aes = list(col = col.values,
+                                                         lty = linetype.values)),
+                 color = guide_legend(nrow=6, byrow=F))+
             ylab(expression(paste(CO[2] * " effect (ratio %)")));p3
         
-        grid.arrange(p1, p2, p3, nrow=3)
         
+        #all.legend <- get_legend(p3 + theme(legend.position="bottom",
+        #                                    legend.box = 'horizontal',
+        #                                    legend.box.just = 'left'))
+        #
+        #combined_plots <- plot_grid(p1, p2, p3,
+        #                             labels=c("(a)", "(b)", "(c)"), 
+        #                             ncol=1, align="vh", axis = "l",
+        #                             label_x=0.15, label_y=0.9)
+        #
+        #plot_grid(combined_plots, all.legend,
+        #          ncol=1, rel_heights=c(1,0.3))
+        
+        grid.arrange(p1, p2, p3, nrow=3)
+
     }
     
     dev.off()
