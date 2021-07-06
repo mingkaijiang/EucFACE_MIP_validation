@@ -57,10 +57,7 @@ eucDF <- prepare_EucFACE_observation_dataset()
 
 ### compare to observed dataset
 ### ambient treatment, real values
-make_time_averaged_data_model_comparison_over_obs_period(eucDF,
-                                                         p.mod.list, 
-                                                         n.mod.list, 
-                                                         d.mod.list)
+make_time_averaged_data_model_comparison_over_obs_period(eucDF)
 
 ### ambient treatment, CO2 responses
 plot_MIP_CO2_response_comparison(eucDF,

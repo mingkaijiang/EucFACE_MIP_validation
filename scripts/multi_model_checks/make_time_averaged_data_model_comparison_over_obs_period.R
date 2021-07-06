@@ -1,7 +1,4 @@
-make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
-                                                                     p.mod.list, 
-                                                                     n.mod.list, 
-                                                                     d.mod.list) {
+make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF) {
     
     ##################################################################
     #### Set up basics
@@ -105,6 +102,7 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
                  aes(Group, meanvalue)) +
         geom_bar(stat = "identity", aes(fill=Variable), 
                  position="stack", col="black") +
+        geom_vline(xintercept=c(5.5, 7.5, 9.5, 11.5), lty=2)+
         #geom_errorbar(aes(x=Group, ymin=meanvalue-sevalue, 
         #                  ymax=meanvalue+sevalue), 
         #              position="dodge", width=0.2) +
@@ -124,20 +122,8 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
         ylab(expression(paste("Carbon pools (g C " * m^2*")")))+
-        scale_x_discrete(limit=c("GDAYN", "LPJGN",
-                                 "CABLP", "CABLP-VD",
-                                 "LPJGP", "LPJGP-VD",
-                                 "GDAYP", 
-                                 "OCHDP", "OCHDX",
-                                 "QUINC", "QUJSM",
-                                 "obs"),
-                         label=c("GDAYN", "LPJGN",
-                                  "CABLP", "CABLP-VD",
-                                  "LPJGP", "LPJGP-VD",
-                                  "GDAYP", 
-                                  "OCHDP", "OCHDX",
-                                  "QUINC", "QUJSM",
-                                  "OBS")); p1
+        scale_x_discrete(limit=c(mod.list, "obs"),
+                         label=c(model.labels, "obs" = "OBS")); p1
     
     
     
@@ -175,6 +161,7 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
                  aes(Group, meanvalue)) +
         geom_bar(stat = "identity", aes(fill=Variable), 
                  position="dodge", col="black") +
+        geom_vline(xintercept=c(5.5, 7.5, 9.5, 11.5), lty=2)+
         ggtitle("Major carbon fluxes")+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
@@ -191,20 +178,8 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
         ylab(expression(paste("Carbon fluxes (g C " * m^2 * " " * yr^-1 * ")")))+
-        scale_x_discrete(limit=c("GDAYN", "LPJGN",
-                                 "CABLP", "CABLP-VD",
-                                 "LPJGP", "LPJGP-VD",
-                                 "GDAYP", 
-                                 "OCHDP", "OCHDX",
-                                 "QUINC", "QUJSM",
-                                 "obs"),
-                         label=c("GDAYN", "LPJGN",
-                                 "CABLP", "CABLP-VD",
-                                 "LPJGP", "LPJGP-VD",
-                                 "GDAYP", 
-                                 "OCHDP", "OCHDX",
-                                 "QUINC", "QUJSM",
-                                 "OBS")); p2
+        scale_x_discrete(limit=c(mod.list, "obs"),
+                         label=c(model.labels, "obs" = "OBS")); p2
     
     
     
@@ -250,6 +225,7 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
                  aes(Group, meanvalue)) +
         geom_bar(stat = "identity", aes(fill=Variable), 
                  position="stack", col="black") +
+        geom_vline(xintercept=c(5.5, 7.5, 9.5, 11.5), lty=2)+
         ggtitle("Allocation coefficient")+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
@@ -266,20 +242,8 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
         ylab("allocation coefficients")+
-        scale_x_discrete(limit=c("GDAYN", "LPJGN",
-                                 "CABLP", "CABLP-VD",
-                                 "LPJGP", "LPJGP-VD",
-                                 "GDAYP", 
-                                 "OCHDP", "OCHDX",
-                                 "QUINC", "QUJSM",
-                                 "obs"),
-                         label=c("GDAYN", "LPJGN",
-                                 "CABLP", "CABLP-VD",
-                                 "LPJGP", "LPJGP-VD",
-                                 "GDAYP", 
-                                 "OCHDP", "OCHDX",
-                                 "QUINC", "QUJSM",
-                                 "OBS")); p3
+        scale_x_discrete(limit=c(mod.list, "obs"),
+                         label=c(model.labels, "obs" = "OBS")); p3
     
     
     
@@ -323,6 +287,7 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
                  aes(Group, meanvalue)) +
         geom_bar(stat = "identity", aes(fill=Variable), 
                  position="dodge", col="black") +
+        geom_vline(xintercept=c(5.5, 7.5, 9.5, 11.5), lty=2)+
         ggtitle("Major phosphorus pools")+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
@@ -339,26 +304,15 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
         ylab(expression(paste("Phosphorus pools (g P " * m^2 * ")")))+
-        scale_x_discrete(limit=c("GDAYN", "LPJGN",
-                                 "CABLP", "CABLP-VD",
-                                 "LPJGP", "LPJGP-VD",
-                                 "GDAYP", 
-                                 "OCHDP", "OCHDX",
-                                 "QUINC", "QUJSM",
-                                 "obs"),
-                         label=c("GDAYN", "LPJGN",
-                                 "CABLP", "CABLP-VD",
-                                 "LPJGP", "LPJGP-VD",
-                                 "GDAYP", 
-                                 "OCHDP", "OCHDX",
-                                 "QUINC", "QUJSM",
-                                 "OBS")); p4
+        scale_x_discrete(limit=c(mod.list, "obs"),
+                         label=c(model.labels, "obs" = "OBS")); p4
     
     
     p5 <- ggplot(data=plotDF2, 
                  aes(Group, meanvalue)) +
         geom_bar(stat = "identity", aes(fill=Variable), 
                  position="dodge", col="black") +
+        geom_vline(xintercept=c(5.5, 7.5, 9.5, 11.5), lty=2)+
         ggtitle("Major nitrogen pool")+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
@@ -375,20 +329,8 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
         ylab(expression(paste("Nitrogen pool (g N " * m^2 * ")")))+
-        scale_x_discrete(limit=c("GDAYN", "LPJGN",
-                                 "CABLP", "CABLP-VD",
-                                 "LPJGP", "LPJGP-VD",
-                                 "GDAYP", 
-                                 "OCHDP", "OCHDX",
-                                 "QUINC", "QUJSM",
-                                 "obs"),
-                         label=c("GDAYN", "LPJGN",
-                                 "CABLP", "CABLP-VD",
-                                 "LPJGP", "LPJGP-VD",
-                                 "GDAYP", 
-                                 "OCHDP", "OCHDX",
-                                 "QUINC", "QUJSM",
-                                 "OBS")); p5
+        scale_x_discrete(limit=c(mod.list, "obs"),
+                         label=c(model.labels, "obs" = "OBS")); p5
     
     
     
@@ -483,6 +425,7 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
                  aes(Group, CN.mean, group=Variable)) +
         geom_bar(stat = "identity", aes(fill=Variable), 
                  position="dodge", col="black") +
+        geom_vline(xintercept=c(5.5, 7.5, 9.5, 11.5), lty=2)+
         #geom_errorbar(aes(x=Group, ymin=CN.mean-CN.se, 
         #                  ymax=CN.mean+CN.se), 
         #              position=position_dodge2(), width=0.2) +
@@ -502,20 +445,8 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
         ylab("CN stoichiometry")+
-        scale_x_discrete(limit=c("GDAYN", "LPJGN",
-                                 "CABLP", "CABLP-VD",
-                                 "LPJGP", "LPJGP-VD",
-                                 "GDAYP", 
-                                 "OCHDP", "OCHDX",
-                                 "QUINC", "QUJSM",
-                                 "obs"),
-                         label=c("GDAYN", "LPJGN",
-                                 "CABLP", "CABLP-VD",
-                                 "LPJGP", "LPJGP-VD",
-                                 "GDAYP", 
-                                 "OCHDP", "OCHDX",
-                                 "QUINC", "QUJSM",
-                                 "OBS")); p6
+        scale_x_discrete(limit=c(mod.list, "obs"),
+                         label=c(model.labels, "obs" = "OBS")); p6
     
     
     
@@ -524,6 +455,7 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
                  aes(Group, CP.mean, group=Variable)) +
         geom_bar(stat = "identity", aes(fill=Variable), 
                  position="dodge", col="black") +
+        geom_vline(xintercept=c(5.5, 7.5, 9.5, 11.5), lty=2)+
         ggtitle("CP stoichiometry")+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
@@ -540,26 +472,15 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
         ylab("CP stoichiometry")+
-        scale_x_discrete(limit=c("GDAYN", "LPJGN",
-                                 "CABLP", "CABLP-VD",
-                                 "LPJGP", "LPJGP-VD",
-                                 "GDAYP", 
-                                 "OCHDP", "OCHDX",
-                                 "QUINC", "QUJSM",
-                                 "obs"),
-                         label=c("GDAYN", "LPJGN",
-                                 "CABLP", "CABLP-VD",
-                                 "LPJGP", "LPJGP-VD",
-                                 "GDAYP", 
-                                 "OCHDP", "OCHDX",
-                                 "QUINC", "QUJSM",
-                                 "OBS")); p7
+        scale_x_discrete(limit=c(mod.list, "obs"),
+                         label=c(model.labels, "obs" = "OBS")); p7
     
     
     p8 <- ggplot(data=stDF, 
                  aes(Group, NP.mean, group=Variable)) +
         geom_bar(stat = "identity", aes(fill=Variable), 
                  position="dodge", col="black") +
+        geom_vline(xintercept=c(5.5, 7.5, 9.5, 11.5), lty=2)+
         ggtitle("NP stoichiometry")+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
@@ -576,20 +497,8 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
         ylab("NP stoichiometry")+
-        scale_x_discrete(limit=c("GDAYN", "LPJGN",
-                                 "CABLP", "CABLP-VD",
-                                 "LPJGP", "LPJGP-VD",
-                                 "GDAYP", 
-                                 "OCHDP", "OCHDX",
-                                 "QUINC", "QUJSM",
-                                 "obs"),
-                         label=c("GDAYN", "LPJGN",
-                                 "CABLP", "CABLP-VD",
-                                 "LPJGP", "LPJGP-VD",
-                                 "GDAYP", 
-                                 "OCHDP", "OCHDX",
-                                 "QUINC", "QUJSM",
-                                 "OBS")); p8
+        scale_x_discrete(limit=c(mod.list, "obs"),
+                         label=c(model.labels, "obs" = "OBS")); p8
     
     
     
@@ -616,6 +525,7 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
                  aes(Group, meanvalue, group=Variable)) +
         geom_bar(stat = "identity", aes(fill=Variable), 
                  position="dodge", col="black") +
+        geom_vline(xintercept=c(5.5, 7.5, 9.5, 11.5), lty=2)+
         ggtitle("Leaf retranslocation")+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
@@ -632,20 +542,8 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
         ylab("Leaf retranslocation")+
-        scale_x_discrete(limit=c("GDAYN", "LPJGN",
-                                 "CABLP", "CABLP-VD",
-                                 "LPJGP", "LPJGP-VD",
-                                 "GDAYP", 
-                                 "OCHDP", "OCHDX",
-                                 "QUINC", "QUJSM",
-                                 "obs"),
-                         label=c("GDAYN", "LPJGN",
-                                 "CABLP", "CABLP-VD",
-                                 "LPJGP", "LPJGP-VD",
-                                 "GDAYP", 
-                                 "OCHDP", "OCHDX",
-                                 "QUINC", "QUJSM",
-                                 "OBS")); p9
+        scale_x_discrete(limit=c(mod.list, "obs"),
+                         label=c(model.labels, "obs" = "OBS")); p9
     
     
     ### print plots to file, change numbering if needed
@@ -680,13 +578,17 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
     subDF <- subDF[,c("YEAR", "DOY", "Date", "LAI", "ModName")]
     subDF$Date <- as.Date(as.character(subDF$Date))
     subDF <- subDF[,c("Date", "LAI", "ModName")]
+        
+    ### there is something wrong with LPJGP-VD, we may need to do something about it later
+    #tDF <- subDF[subDF$ModName=="L_LPJGP-VD",]
+    #summary(tDF$LAI)
     
     ### merge the two dataset
     testDF1 <- rbind(subDF, laiDF)
     
     ### plot all data
     p1 <- ggplot(testDF1, aes(x=Date)) +
-        geom_line(aes(y=LAI, color=ModName), lwd = 1) +
+        geom_line(aes(y=LAI, color=ModName, lty=ModName), lwd = 1) +
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
               axis.title.x = element_text(size=14), 
@@ -698,6 +600,15 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
               panel.grid.major=element_blank(),
               plot.title = element_text(size = 10, face = "bold"),
               legend.position="right")+
+        scale_color_manual(name="Model",
+                           values=c(col.values, "OBS"="black"),
+                           labels=c(model.labels, "OBS"= "OBS"))+
+        scale_linetype_manual(name="Model", 
+                              values=c(linetype.values, "OBS"=1),
+                              labels=c(model.labels, "OBS"="OBS"))+
+        guides(fill = guide_legend(override.aes = list(col = c(col.values, "OBS"="black"),
+                                                       lty = c(linetype.values, "OBS"=1))),
+               color = guide_legend(nrow=12, byrow=F))+
         ylab("LAI"); p1
     
     
@@ -731,7 +642,7 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
     
     subDF[subDF<=-999.] <- NA
     
-    subDF$Rsoil<- with(subDF, RHET+RCR+RFR)
+    subDF$Rsoil<- rowSums(data.frame(subDF$RHET, subDF$RCR, subDF$RFR), na.rm=T)
     subDF <- subDF[,c("Date", "Rsoil", "ModName")]
     
     
@@ -740,7 +651,7 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
     
     ### plot all data
     p2 <- ggplot(testDF1, aes(x=Date)) +
-        geom_line(aes(y=Rsoil, color=ModName), lwd = 1) +
+        geom_line(aes(y=Rsoil, color=ModName, lty=ModName), lwd = 1) +
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
               axis.title.x = element_text(size=14), 
@@ -752,7 +663,16 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
               panel.grid.major=element_blank(),
               plot.title = element_text(size = 10, face = "bold"),
               legend.position="right")+
-        ylab("Soil respiration flux"); p2
+        scale_color_manual(name="Model",
+                           values=c(col.values, "OBS"="black"),
+                           labels=c(model.labels, "OBS"= "OBS"))+
+        scale_linetype_manual(name="Model", 
+                              values=c(linetype.values, "OBS"=1),
+                              labels=c(model.labels, "OBS"="OBS"))+
+        guides(fill = guide_legend(override.aes = list(col = c(col.values, "OBS"="black"),
+                                                       lty = c(linetype.values, "OBS"=1))),
+               color = guide_legend(nrow=12, byrow=F))+
+    ylab("Soil respiration flux"); p2
     
     
     

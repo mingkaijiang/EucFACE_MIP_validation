@@ -42,6 +42,20 @@ for(z in sourcefiles)source(z)
 
 
 #### color palette:
+model.names <- c("A_CABLP",
+                 "B_GDAYP",
+                 "C_LPJGP",
+                 "D_OCHDP",
+                 "E_QUINC",
+                 "F_ELMXX",
+                 "G_OCHDX",
+                 "H_QUJSM",
+                 "I_GDAYN",
+                 "J_LPJGN",
+                 "K_CABLP-VD",
+                 "L_LPJGP-VD")
+
+
 obs.color <- c("#000000") # black
 
 cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
@@ -107,6 +121,8 @@ model.labels <- c("A_CABLP" = "CABLP",
                   "J_LPJGN" = "LPJGN",
                   "K_CABLP-VD" = "CABLE-VD",
                   "L_LPJGP-VD" = "LPJGP-VD")
+
+
 
 
 
