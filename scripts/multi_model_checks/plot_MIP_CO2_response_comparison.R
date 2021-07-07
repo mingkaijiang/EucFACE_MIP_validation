@@ -1,7 +1,4 @@
-plot_MIP_CO2_response_comparison <- function (eucDF,
-                                              p.mod.list, 
-                                              n.mod.list, 
-                                              d.mod.list) {
+plot_MIP_CO2_response_comparison <- function (eucDF) {
     
     ##################################################################
     #### Set up basics
