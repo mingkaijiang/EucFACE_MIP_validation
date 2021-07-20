@@ -59,15 +59,18 @@ eucDF <- prepare_EucFACE_observation_dataset()
 ### ambient treatment, real values
 make_time_averaged_data_model_comparison_over_obs_period(eucDF)
 
-### ambient treatment, CO2 responses
-plot_MIP_CO2_response_comparison(eucDF)
-
-
 
 ### plot photosynthesis vs leaf N & P relationships
 plot_photosynthesis_relationships(scenario="fix")
 
 plot_photosynthesis_relationships(scenario="var")
+
+
+
+### ambient treatment, CO2 responses
+### incomplete
+#plot_MIP_CO2_response_comparison(eucDF)
+
 
 
 ### this is a theoretical analysis on how leaf nutrient concentrations
@@ -78,7 +81,7 @@ plot_photosynthesis_relationships(scenario="var")
 ### Haxeltine and Prentice 1996: LPJGN
 ### P only downregulate biomass growth: ELMXX, QUINC, QIJSM
 ### To fill this script, we will need Ellsworth unpublished relationships
-theoretical_analysis_of_leaf_nutrient_effect_on_leaf_physiology()
+#theoretical_analysis_of_leaf_nutrient_effect_on_leaf_physiology()
 
 
 

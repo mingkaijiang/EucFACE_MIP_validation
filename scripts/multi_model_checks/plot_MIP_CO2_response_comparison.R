@@ -78,7 +78,7 @@ plot_MIP_CO2_response_comparison <- function (eucDF) {
     
     ### prepare plotting
     ### plot CO2 response ratio
-    pdf(paste0(out.dir, "/", mod.abb, "_OBS_NOP_D_CO2_ratio_against_data.pdf"))
+    pdf(paste0(out.dir, "/MIP_OBS_NOP_D_CO2_ratio_against_data.pdf"))
     
     ### all carbon pools
     subDF1 <- plotDF2[plotDF2$Variable%in%c("CL", "CW", "CFR", "CFLIT", "CSOIL"),]
