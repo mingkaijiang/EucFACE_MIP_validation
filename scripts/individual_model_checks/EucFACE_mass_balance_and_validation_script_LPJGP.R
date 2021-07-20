@@ -279,14 +279,15 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
                    panel.abline(a=0,b=1)}) 
     
     
-    p9<-xyplot(I(CGCR-CCRLIN)~deltaCCR,annDF,
-               #main='CGCR-CCRLIN~deltaCCR',
-               auto.key=T,
-               scales=list(relation='free'),
-               panel=function(...){
-                   panel.xyplot(...)
-                   panel.abline(a=0,b=1)}) 
-    
+    p9 <- plot.new()
+    #p9<-xyplot(I(CGCR-CCRLIN)~deltaCCR,annDF,
+    #           #main='CGCR-CCRLIN~deltaCCR',
+    #           auto.key=T,
+    #           scales=list(relation='free'),
+    #           panel=function(...){
+    #               panel.xyplot(...)
+    #               panel.abline(a=0,b=1)}) 
+    #
     
     ### GPP should in theory equals to individual production fluxes and respiratory flux. 
     ### Here production fluxes include: CGL, CGFR, CGCR, CGW and CREPR, 
@@ -299,7 +300,6 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
                     panel.xyplot(...)
                     panel.abline(a=0,b=1)}) 
     
-    
     ### Similarly, NPP should equal to all growth fluxes, 
     ### that is, the sum of CGL, CGFR, CGCR, CGW, CREPR, and CEX.
     p11<-xyplot(I(CGW+CGL+CGFR+CREPR+CLEST+CWEST+CFREST+CDEBTEST)~NPP,annDF,
@@ -308,7 +308,6 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
                 panel=function(...){
                     panel.xyplot(...)
                     panel.abline(a=0,b=1)}) 
-    
     
     ### This is a different way to check mass balance for NPP, 
     ### in that it includes Delta$CSTOR in addition to those growth fluxes included in the previous figure. 
@@ -335,7 +334,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
     ### This mass balance equation checks the net of total influx litter and heterotrophic respiration. 
     ### In theory, the net difference of these two flues should equal to the change in soil + litter pool. 
     ### But here, we only have trees,so the mass balance doesn't add up?
-    p14<-xyplot(I(CLITIN+CWLIN+CFRLIN+CREPR-RHET)~I(deltaCSOIL+deltaCCLITB+deltaCFLIT),annDF,
+    p14<-xyplot(I(CLITIN+CWLIN+CFRLIN-RHET)~I(deltaCSOIL+deltaCCLITB+deltaCFLIT),annDF,
                 auto.key=T,
                 scales=list(relation='free'),
                 panel=function(...){
@@ -343,7 +342,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
                     panel.abline(a=0,b=1)}) 
     
     
-    p15<-xyplot(I(CLITIN+CWLIN+CFRLIN+CREPR-RHET)~I(deltaCSOILtot+deltaCCLITB+deltaCFLIT),annDF,
+    p15<-xyplot(I(CLITIN+CWLIN+CFRLIN-RHET)~I(deltaCSOILtot+deltaCCLITB+deltaCFLIT),annDF,
                 auto.key=T,
                 scales=list(relation='free'),
                 panel=function(...){
@@ -418,6 +417,8 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
                    panel.xyplot(...)
                    panel.abline(a=0,b=1)}) 
     
+    plot(p1)
+    
     p2<-xyplot(I(NGW-NWLIN-NWRETR)~deltaNW,annDF,
                #main='I(NGW-NWLIN-NWRETR)~deltaNW',
                auto.key=T,
@@ -460,18 +461,19 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
     ### which should euqal to the sum of nitrogen uptake and total retranslocation fluxes. 
     ### The full equation is written as:
     ### NUP+NLRETR+NWRETR+NFRRETR+NCRRETR = NGL+NGFR+NGCR+NGW
-    p6<-xyplot(I(NUP+NLRETR+NWRETR+NFRRETR)~I(NGL+NGFR+NGW),annDF,
+    p6<-xyplot(I(NUP+NLRETR+NWRETR+NFRRETR)~I(NGL+NGFR+NGW+NVOL),annDF,
                auto.key=T,
                scales=list(relation='free'),
                panel=function(...){
                    panel.xyplot(...)
                    panel.abline(a=0,b=1)}) 
     
+
     ### Some models could have a NSTOR pool, 
     ### so not all nitrogen available for plant is used for growth. 
     ### Here we are looking at DeltaNSTOR 
     ### to see if it helps to close the mass balance if the figure above doesn't close its mass balance. 
-    p7<-xyplot(I(NUP+NLRETR+NWRETR+NFRRETR-NGL-NGFR-NGW)~I(deltaNSTOR),annDF,
+    p7<-xyplot(I(NUP+NLRETR+NWRETR+NFRRETR-NGL-NGFR-NGW-NVOL)~I(deltaNSTOR),annDF,
                #main='I(NUP+NLRETR+NWRETR+NFRRETR+NCRRETR-NGL-NGFR-NGCR-NGW)~deltaNSTOR',
                auto.key=T,
                scales=list(relation='free'),
@@ -483,7 +485,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
     ### N fixation could also be added to plant directly. 
     ### So here we are checking its effect. Full equation is: 
     ### NFIX+NUP+NLRETR+NWRETR+NFRRETR+NCRRETR = NGL+NGFR+NGCR+NGW
-    p8<-xyplot(I(NFIX+NUP+NLRETR+NWRETR+NFRRETR)~I(NGL+NGFR+NGW),annDF,
+    p8<-xyplot(I(NFIX+NUP+NLRETR+NWRETR+NFRRETR)~I(NGL+NGFR+NGW+NVOL+deltaNSTOR),annDF,
                #main='I(NFIX+NUP+NLRETR+NWRETR+NFRRETR+NCRRETR)~I(NGL+NGFR+NGCR+NGW)',
                auto.key=T,
                scales=list(relation='free'),
@@ -505,7 +507,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
     ### Now we are checking the whole ecosystem N input and output. 
     ### Full equation is:
     ### NDEP+NFIX-NLEACH-NVOL = DeltaNL+DeltaNW+DeltaNCR+DeltaNFR+DeltaNSOIL+DeltaNFLIT+DeltaNCLITB
-    p10<-xyplot(I(NDEP+NFIX-NLEACH-NVOL)~(I(deltaNL+deltaNW+deltaNFR+deltaNSOIL+deltaNFLIT+deltaNCLITB)),annDF,
+    p10<-xyplot(I(NDEP+NFIX-NLEACH-NVOL)~(I(deltaNL+deltaNW+deltaNFR+deltaNSOIL+deltaNFLIT+deltaNCLITB+deltaNSTOR)),annDF,
                 #main='I(NDEP+NFIX-NLEACH-NVOL)~(I(deltaNL+deltaNW+deltaNCR+deltaNFR+deltaNSOIL+deltaNFLIT+deltaNCLITB))',
                 auto.key=T,
                 scales=list(relation='free'),
@@ -514,7 +516,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
                     panel.abline(a=0,b=1)}) 
     
     
-    p11<-xyplot(I(NDEP+NFIX-NLEACH-NVOL)~(I(deltaNL+deltaNW+deltaNFR+deltaNSOILtot+deltaNFLIT+deltaNCLITB)),annDF,
+    p11<-xyplot(I(NDEP+NFIX-NLEACH-NVOL)~(I(deltaNL+deltaNW+deltaNFR+deltaNSOILtot+deltaNFLIT+deltaNCLITB+deltaNSTOR)),annDF,
                 #main='I(NDEP+NFIX-NLEACH-NVOL)~(I(deltaNL+deltaNW+deltaNCR+deltaNFR+deltaNSOIL+deltaNFLIT+deltaNCLITB))',
                 auto.key=T,
                 scales=list(relation='free'),
@@ -524,7 +526,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
     
     ### A different way to check whole ecosystem N budget, as:
     ### NDEP+NFIX+NLITIN+NWLIN+NCRLIN+NFRLIN-NUP-NLEACH-NVOL = DeltaNSOIL+DeltaNFLIT+DeltaNCLITB
-    p12<-xyplot(I(NDEP+NFIX+NLITIN+NWLIN+NFRLIN-NUP-NLEACH-NVOL)~I(deltaNSOIL+deltaNFLIT+deltaNCLITB),annDF,
+    p12<-xyplot(I(NDEP+NFIX+NLITIN+NWLIN+NFRLIN-NUP-NLEACH-NVOL)~I(deltaNSOIL+deltaNFLIT+deltaNCLITB+deltaNSTOR),annDF,
                 #main='I(NDEP+NFIX+NLITIN+NWLIN+NCRLIN+NFRLIN-NUP-NLEACH-NVOL)~I(deltaNSOIL+deltaNFLIT+deltaNCLITB)',
                 auto.key=T,
                 scales=list(relation='free'),
@@ -532,7 +534,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
                     panel.xyplot(...)
                     panel.abline(a=0,b=1)}) 
     
-    p13<-xyplot(I(NDEP+NFIX+NLITIN+NWLIN+NFRLIN-NUP-NLEACH-NVOL)~I(deltaNSOILtot+deltaNFLIT+deltaNCLITB),annDF,
+    p13<-xyplot(I(NDEP+NFIX+NLITIN+NWLIN+NFRLIN-NUP-NLEACH-NVOL)~I(deltaNSOILtot+deltaNFLIT+deltaNCLITB+deltaNSTOR),annDF,
                 #main='I(NDEP+NFIX+NLITIN+NWLIN+NCRLIN+NFRLIN-NUP-NLEACH-NVOL)~I(deltaNSOIL+deltaNFLIT+deltaNCLITB)',
                 auto.key=T,
                 scales=list(relation='free'),
@@ -544,7 +546,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
     
     ### Another way to check ecosystem N budget, by excluding NFIX:
     ### NDEP+NLITIN+NWLIN+NCRLIN+NFRLIN-NUP-NLEACH-NVOL = DeltaNSOIL+DeltaNFLIT+DeltaNCLITB
-    p14<-xyplot(I(NDEP+NLITIN+NWLIN+NFRLIN-NUP-NLEACH-NVOL)~I(deltaNSOIL+deltaNFLIT+deltaNCLITB),annDF,
+    p14<-xyplot(I(NDEP+NLITIN+NWLIN+NFRLIN-NUP-NLEACH-NVOL)~I(deltaNSOIL+deltaNFLIT+deltaNCLITB+deltaNSTOR),annDF,
                 #main='I(NDEP+NLITIN+NWLIN+NCRLIN+NFRLIN-NUP-NLEACH-NVOL)~I(deltaNSOIL+deltaNFLIT+deltaNCLITB)',
                 auto.key=T,
                 scales=list(relation='free'),
@@ -552,7 +554,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
                     panel.xyplot(...)
                     panel.abline(a=0,b=1)}) 
     
-    p15<-xyplot(I(NDEP+NLITIN+NWLIN+NFRLIN-NUP-NLEACH-NVOL)~I(deltaNSOILtot+deltaNFLIT+deltaNCLITB),annDF,
+    p15<-xyplot(I(NDEP+NLITIN+NWLIN+NFRLIN-NUP-NLEACH-NVOL)~I(deltaNSOILtot+deltaNFLIT+deltaNCLITB+deltaNSTOR),annDF,
                 #main='I(NDEP+NLITIN+NWLIN+NCRLIN+NFRLIN-NUP-NLEACH-NVOL)~I(deltaNSOIL+deltaNFLIT+deltaNCLITB)',
                 auto.key=T,
                 scales=list(relation='free'),
@@ -579,7 +581,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
                     panel.xyplot(...)
                     panel.abline(a=0,b=1)}) 
     
-    
+    ### this NNEP should in theory equal to all delta N fluxes
     p18<-xyplot(I(NDEP+NFIX-NLEACH-NVOL)~NNEP,annDF,
                 #main='I(NPMIN+NPORG)~NSOIL',
                 auto.key=T,
@@ -601,7 +603,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
     ##################### Phosphorus balance check ################################
     ### The net influx - outflux should equal to the change in all ecosystem P pools: 
     ### PDEP+PWEA-PLEACH = DeltaPL+DeltaPW+DeltaPCR+DeltaPFR+DeltaPSOIL+DeltaPFLIT+DeltaPCLITB
-    p1<-xyplot(I(PDEP+PWEA-PLEACH)~(I(deltaPL+deltaPW+deltaPCR+deltaPFR+deltaPSOIL+deltaPFLIT+deltaPCLITB)),annDF,
+    p1<-xyplot(I(PDEP+PWEA-PLEACH)~(I(deltaPL+deltaPW+deltaPFR+deltaPSOIL+deltaPFLIT)),annDF,
                #main='I(PDEP+PWEA-PLEACH)~(I(deltaPL+deltaPW+deltaPCR+deltaPFR+deltaPSOIL+deltaPFLIT+deltaPCLITB))',
                auto.key=T,
                scales=list(relation='free'),
@@ -609,14 +611,16 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
                    panel.xyplot(...)
                    panel.abline(a=0,b=1)}) 
     
-    
-    p2<-xyplot(I(PDEP+PWEA-PLEACH)~(I(deltaPL+deltaPW+deltaPCR+deltaPFR+deltaPSOILtot+deltaPFLIT+deltaPCLITB)),annDF,
+
+    p2<-xyplot(I(PDEP+PWEA-PLEACH)~(I(deltaPL+deltaPW+deltaPFR+deltaPSOILtot+deltaPFLIT)),annDF,
                #main='I(PDEP+PWEA-PLEACH)~(I(deltaPL+deltaPW+deltaPCR+deltaPFR+deltaPSOIL+deltaPFLIT+deltaPCLITB))',
                auto.key=T,
                scales=list(relation='free'),
                panel=function(...){
                    panel.xyplot(...)
                    panel.abline(a=0,b=1)}) 
+    
+    plot(p2)
     
     
     ### Next, we check changes in major vegetation P pools. 
@@ -694,7 +698,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
     ### This is to check whole ecosystem P flux, 
     ### which means that total in - out = net change:
     ### PDEP+PWEA+PLITIN+PWLIN+PCRLIN+PFRLIN-PUP-PLEACH = DeltaPSOIL+DeltaFLIT+DeltaPCLITB
-    p11<-xyplot(I(PDEP+PWEA+PLITIN+PWLIN+PFRLIN-PUP-PLEACH-PGOCL)~I(deltaPSOIL+deltaPFLIT+deltaPCLITB),annDF,
+    p11<-xyplot(I(PDEP+PWEA+PLITIN+PWLIN+PFRLIN-PUP-PLEACH-PGOCL)~I(deltaPSOIL+deltaPFLIT),annDF,
                 #main='I(PDEP+PWEA+PLITIN+PWLIN+PCRLIN+PFRLIN-PUP-PLEACH)~I(deltaPSOIL+deltaPFLIT+deltaPCLITB)',
                 auto.key=T,
                 scales=list(relation='free'),
@@ -703,7 +707,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
                     panel.abline(a=0,b=1)}) 
     
     
-    p12<-xyplot(I(PDEP+PWEA+PLITIN+PWLIN+PFRLIN-PUP-PLEACH-PGOCL)~I(deltaPSOILtot+deltaPFLIT+deltaPCLITB),annDF,
+    p12<-xyplot(I(PDEP+PWEA+PLITIN+PWLIN+PFRLIN-PUP-PLEACH-PGOCL)~I(deltaPSOILtot+deltaPFLIT),annDF,
                 #main='I(PDEP+PWEA+PLITIN+PWLIN+PCRLIN+PFRLIN-PUP-PLEACH)~I(deltaPSOIL+deltaPFLIT+deltaPCLITB)',
                 auto.key=T,
                 scales=list(relation='free'),

@@ -79,7 +79,7 @@ plot_photosynthesis_relationships(scenario="var")
 ### Walker et al. 2014: GDAYN, GDAYP, CABLP (also coordination hypothesis)
 ### Ellsworth unpublished: OCHDY, OCHDX, LPJGP (with Haxeltine & Prentice, 1996)
 ### Haxeltine and Prentice 1996: LPJGN
-### P only downregulate biomass growth: ELMXX, QUINC, QIJSM
+### P only downregulate biomass growth: ELMXX, QUINC, QUJSM
 ### To fill this script, we will need Ellsworth unpublished relationships
 #theoretical_analysis_of_leaf_nutrient_effect_on_leaf_physiology()
 
@@ -89,7 +89,6 @@ plot_photosynthesis_relationships(scenario="var")
 ### to do list:
 ### 1. Simulation completion:
 ###    Waiting for
-###                LPJ-GUESS CN + CNP for new set of simulations
 ###                QUINC + QUJSM for new set of simulations
 ###                ELM for first set of simulations
 ### 2. Generate summary table on key model features:
