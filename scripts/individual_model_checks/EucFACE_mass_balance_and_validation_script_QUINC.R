@@ -109,15 +109,25 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
     ### additional variables are:
     ### RMAIN: maintenance respiration
     ### RNTRANS: respiration for N transformation
+    ### CGSTR: growth for storage compartments (labile and reserve pool)
+    ### NGSTR: growth N to plant labile and reserve pool
+    ### NREPR: Growth N to plant reproducable pool
+    ### NRECYC: N recycling
+    ### NSEED: seed pool N
+    ### NFRUIT: fruit pool N
+    ### PGSTR: growth P to plant labile and reserve pool
+    ### PREPR: Growth P to plant reproducable pool
+    ### PRECYC: P recycling
+    ### PSEED: seed pool P
+    ### PFRUIT: fruit pool P
     ### CTSOIL: total SOC (for 9.5 m)
     ### NTPMIN: Total mineral N
     ### NTPORG: Total SON
     ### NTSOIL: Total Soil N
-    ### NGLAB: growth N to plant labile pool
-    ### NREPR: Growth N to plant reproducable pool
-    ### NRECYC: N recycling
-    ### NSEED: Growth N to seed pool
-    ### NFRUIT: Growth N to fruit pool
+    ### PTSOIL: Total Soil P
+    ### PTPMIN: Total inorganic soil P
+    ### PTPORG: Total organic soil P
+    ### SWT: Total soil water
     
     ### summarize all fluxes first to obain annual rate
     fluxDF <- summaryBy(PREC+ET+TRANS+ES+EC+RO+DRAIN+NEP+GPP+NPP+RHET+RAU+
@@ -127,9 +137,12 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
                             CEX+CVOC+RL+RW+RGR+CLITIN+CCRLIN+CFRLIN+CWLIN+
                             NLITIN+NCRLIN+NFRLIN+NWLIN+PLITIN+PCRLIN+PFRLIN+
                             PWLIN+NWRETR+PWRETR+NCRRETR+PCRRETR+NFRRETR+
-                            PFRRETR+NDEP+NFIX+NVOL+PDEP+PWEA+RMAIN+RNTRANS+
-                            NGLAB+NREPR+NRECYC+NSEED+NFRUIT+PGLAB+PREPR+
-                            PRECYC+PSEED+PFRUIT~YEAR, data=modDF, FUN=sum, keep.names=T, na.rm=T)
+                            PFRRETR+NDEP+NFIX+NVOL+PDEP+PWEA+
+                            ### additional variables for QUINCY
+                            RMAIN+RNTRANS+CVEGLIN+CGSTR+
+                            NGSTR+NSTRLIN+NVEGLIN+NREPR+NRECYC+
+                            PGSTR+PSTRLIN+PVEGLIN+PREPR+PRECYC~
+                            YEAR, data=modDF, FUN=sum, keep.names=T, na.rm=T)
     
     
     ### subset first day within a year of all pools
@@ -138,8 +151,11 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
                        "CSOIL","NSOIL","PSOIL","NPMIN","PPMIN","PLAB","PSEC",
                        "POCC","PPAR","CFLIT","CFLITA","CFLITB",
                        "NFLITA","NFLITB","PFLITA","PFLITB","CCLITB","NCLITB",
-                       "PCLITB","NFLIT","PFLIT", "NPORG", "PPORG", "CTSOIL", "NTPMIN",
-                       "NTPORG", "NTSOIL")]
+                       "PCLITB","NFLIT","PFLIT", "NPORG", "PPORG", 
+                       ### additional variables for QUINCY
+                       "NSEED","NFRUIT","PSEED","PFRUIT",
+                       "CTSOIL", "NTPMIN","NTPORG", "NTSOIL",
+                       "PTSOIL","PTPMIN","PTPORG","SWT")]
     
     poolDF <- subset(poolDF, DOY==1)
     
@@ -202,7 +218,8 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
     ### sum of all autotrophic respiration fluxes
     ### Some models may not explicitly simulate individual respiratory fluxes (e.g. GDAY)
     ### Hence, this mass balance check may not be closed for all models. 
-    p4<-xyplot(I(RL+RW+RCR+RFR+RGR+RMAIN+RNTRANS)~RAU,fluxDF,
+    p4<-# xyplot(I(RL+RW+RCR+RFR+RGR+RMAIN+RNTRANS)~RAU,fluxDF,
+        xyplot(I(RGR+RMAIN+RNTRANS)~RAU,fluxDF,     
                #main='RL+RW+RCR+RFR+RGR~RAU',
                auto.key=T,
                scales=list(relation='free'),
@@ -262,7 +279,8 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
     ### Here production fluxes include: CGL, CGFR, CGCR, CGW and CREPR, 
     ### and the respiratory flux is RAU. 
     ### If there is an exudation flux, make it part of GPP too.
-    p10<-xyplot(I(RAU+CGL+CGFR+CGCR+CGW+CREPR+CEX+deltaCSTOR)~GPP,annDF,
+    p10<-#xyplot(I(RAU+CGL+CGFR+CGCR+CGW+CREPR+CEX+deltaCSTOR)~GPP,annDF,
+                xyplot(I(RAU+CGL+CGFR+CGCR+CGW+CGSTR+CREPR+CEX)~GPP,annDF,
                 #main='I(RAU+CGL+CGFR+CGCR+CGW+CREPR)~GPP',
                 auto.key=T,
                 scales=list(relation='free'),
@@ -273,7 +291,8 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
     
     ### Similarly, NPP should equal to all growth fluxes, 
     ### that is, the sum of CGL, CGFR, CGCR, CGW, CREPR, and CEX.
-    p11<-xyplot(I(CGW+CGL+CGFR+CGCR+CREPR+CEX)~NPP,annDF,
+    p11<-#xyplot(I(CGW+CGL+CGFR+CGCR+CREPR+CEX)~NPP,annDF,
+                xyplot(I(CGW+CGL+CGFR+CGCR+CREPR+CGSTR+CEX)~NPP,annDF,
                 auto.key=T,
                 scales=list(relation='free'),
                 panel=function(...){
@@ -284,6 +303,7 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
     ### This is a different way to check mass balance for NPP, 
     ### in that it includes Delta$CSTOR in addition to those growth fluxes included in the previous figure. 
     ### Some models don't explictly simulate CSTOR, so this mass balance may not apply. 
+    ### Lin COMMENT: I(deltaCVEG+CVEGLIN)~NPP
     p12<-xyplot(I(CGW+CGL+CGFR+CGCR+CREPR+CEX+deltaCSTOR)~NPP,annDF,
                 #main='I(CGW+CGL+CGFR+CGCR+CREPR+deltaCSTOR)~NPP',
                 auto.key=T,
@@ -316,7 +336,8 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
     
     
     ### Lin to check
-    p15<-xyplot(I(CEX+CLITIN+CWLIN+CFRLIN+CCRLIN+CREPR-RHET)~I(deltaCTSOIL+deltaCCLITB+deltaCFLIT),annDF,
+    p15<-# xyplot(I(CEX+CLITIN+CWLIN+CFRLIN+CCRLIN+CREPR-RHET)~I(deltaCTSOIL+deltaCCLITB+deltaCFLIT),annDF,
+                xyplot(I(CEX+CVEGLIN-RHET)~I(deltaCTSOIL+deltaCCLITB+deltaCFLIT),annDF,
                 auto.key=T,
                 scales=list(relation='free'),
                 panel=function(...){
@@ -347,7 +368,8 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
                    panel.abline(a=0,b=1)}) 
     
     ### new version 
-    p2<-xyplot(I(PREC-(RO+DRAIN+ET))~deltaSW, annDF,
+    p2<-# xyplot(I(PREC-(RO+DRAIN+ET))~deltaSW, annDF,
+               xyplot(I(PREC-(RO+DRAIN+ET))~deltaSWT, annDF,
                #main='PREC-RO-DRAIN-ET~deltaSW',
                auto.key=T,
                scales=list(relation='free'),
@@ -368,14 +390,17 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
     ##################### Nitrogen balance check ################################
     ### Firstly, we check Delta$NL, Delta$NW, Delta$NFR and Delta$NCR. 
     ### Here, Delta$NL = NGL + NLITIN - NLRETR, where NLRETR is the retranslocation flux. 
-    p1<-xyplot(I(NGL-NLITIN-NRECYC)~deltaNL,annDF,
+    ### Lin COMMENT: since we cannot separate NWRETR, leaf and root retranslocation from each other, 
+    ### I combine the three compartments for the N budget
+    p1<-# xyplot(I(NGL-NLITIN-NRECYC)~deltaNL,annDF,
+        xyplot(I(NGL-NLITIN+NGW-NWLIN+NGFR-NFRLIN-NRECYC)~I(deltaNL+deltaNW+deltaNFR),annDF,
                #main='I(NGL-NLITIN-NLRETR)~deltaNL',
                auto.key=T,
                scales=list(relation='free'),
                panel=function(...){
                    panel.xyplot(...)
                    panel.abline(a=0,b=1)}) 
-    
+    ### Lin COMMENT: not printed out for QUINCY
     p2<-xyplot(I(NGW-NWLIN-NWRETR)~deltaNW,annDF,
                #main='I(NGW-NWLIN-NWRETR)~deltaNW',
                auto.key=T,
@@ -384,7 +409,7 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
                    panel.xyplot(...)
                    panel.abline(a=0,b=1)}) 
     
-    
+    ### Lin COMMENT: not printed out for QUINCY
     p3<-xyplot(I(NGW-NWLIN)~deltaNW,annDF,
                #main='I(NGW-NWLIN-NWRETR)~deltaNW',
                auto.key=T,
@@ -393,7 +418,7 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
                    panel.xyplot(...)
                    panel.abline(a=0,b=1)}) 
     
-    
+    ### Lin COMMENT: not printed out for QUINCY
     p4<-xyplot(I(NGFR-NFRLIN)~deltaNFR,annDF,
                #main='I(NGFR-NFRLIN-NFRRETR)~deltaNFR',
                auto.key=T,
@@ -422,7 +447,8 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
                    panel.abline(a=0,b=1)}) 
     
     
-    p7<-xyplot(I(NRECYC)~deltaNSTOR,annDF,
+    p7<-# xyplot(I(NRECYC)~deltaNSTOR,annDF,
+        xyplot(I(NRECYC+NGSTR-NSTRLIN)~deltaNSTOR,annDF,
                #main='I(NFLITA+NFLITB)~NFLIT',
                auto.key=T,
                scales=list(relation='free'),
@@ -435,7 +461,8 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
     ### which should euqal to the sum of nitrogen uptake and total retranslocation fluxes. 
     ### The full equation is written as:
     ### NUP+NLRETR+NWRETR+NFRRETR+NCRRETR = NGL+NGFR+NGCR+NGW
-    p8<-xyplot(I(NUP+NRECYC)~I(NGL+NGFR+NGCR+NGW+NREPR),annDF,
+    p8<-# xyplot(I(NUP+NRECYC)~I(NGL+NGFR+NGCR+NGW+NREPR),annDF,
+          xyplot(I(NUP+NRECYC)~I(NGL+NGFR+NGCR+NGW+NREPR+deltaNSTOR+NSTRLIN),annDF,
                auto.key=T,
                scales=list(relation='free'),
                panel=function(...){
@@ -446,6 +473,7 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
     ### so not all nitrogen available for plant is used for growth. 
     ### Here we are looking at DeltaNSTOR 
     ### to see if it helps to close the mass balance if the figure above doesn't close its mass balance. 
+    ### Lin COMMENT: balance resolved in p8
     p9<-xyplot(I(NUP+NRECYC-NGL-NGFR-NGCR-NGW-NREPR)~deltaNSTOR,annDF,
                #main='I(NUP+NLRETR+NWRETR+NFRRETR+NCRRETR-NGL-NGFR-NGCR-NGW)~deltaNSTOR',
                auto.key=T,
@@ -458,6 +486,7 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
     ### N fixation could also be added to plant directly. 
     ### So here we are checking its effect. Full equation is: 
     ### NFIX+NUP+NLRETR+NWRETR+NFRRETR+NCRRETR = NGL+NGFR+NGCR+NGW
+    ### Lin COMMENT: not applicable for QUINCY since NFIX goes to soil not plant
     p10<-xyplot(I(NFIX+NUP+NRECYC)~I(NGL+NGFR+NGCR+NGW+NREPR),annDF,
                #main='I(NFIX+NUP+NLRETR+NWRETR+NFRRETR+NCRRETR)~I(NGL+NGFR+NGCR+NGW)',
                auto.key=T,
@@ -468,6 +497,7 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
     
     
     ### Similar to the above figure, we are checking if Delta$NSTOR helps to close the budget. 
+    ### Lin COMMENT: not applicable for QUINCY since NFIX goes to soil not plant
     p11<-xyplot(I(NFIX+NUP+NRECYC-NGL-NGFR-NGCR-NGW-NREPR)~deltaNSTOR,annDF,
                #main='I(NFIX+NUP+NLRETR+NWRETR+NFRRETR+NCRRETR-NGL-NGFR-NGCR-NGW)~deltaNSTOR',
                auto.key=T,
@@ -480,7 +510,10 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
     ### Now we are checking the whole ecosystem N input and output. 
     ### Full equation is:
     ### NDEP+NFIX-NLEACH-NVOL = DeltaNL+DeltaNW+DeltaNCR+DeltaNFR+DeltaNSOIL+DeltaNFLIT+DeltaNCLITB
-    p12<-xyplot(I(NDEP+NFIX-NLEACH-NVOL)~(I(deltaNL+deltaNW+deltaNCR+deltaNFR+deltaNSOIL+deltaNFLIT+deltaNCLITB)),annDF,
+    p12<-# xyplot(I(NDEP+NFIX-NLEACH-NVOL)~(I(deltaNL+deltaNW+deltaNCR+deltaNFR+deltaNSOIL+deltaNFLIT+deltaNCLITB)),annDF,
+         xyplot(I(NDEP+NFIX-NLEACH-NVOL)~
+                (I(deltaNL+deltaNW+deltaNCR+deltaNFR+deltaNSTOR+
+                       deltaNSEED+deltaNFRUIT+deltaNTSOIL+deltaNFLIT+deltaNCLITB)),annDF,
                 #main='I(NDEP+NFIX-NLEACH-NVOL)~(I(deltaNL+deltaNW+deltaNCR+deltaNFR+deltaNSOIL+deltaNFLIT+deltaNCLITB))',
                 auto.key=T,
                 scales=list(relation='free'),
@@ -488,7 +521,8 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
                     panel.xyplot(...)
                     panel.abline(a=0,b=1)}) 
     
-    p13<-xyplot(I(NDEP+NFIX-NLEACH-NVOL)~(I(deltaNL+deltaNW+deltaNCR+deltaNFR+deltaNTSOIL+deltaNFLIT+deltaNCLITB+deltaNSEED)),annDF,
+    p13<-xyplot(I(NDEP+NFIX-NLEACH-NVOL)~
+                    (I(deltaNL+deltaNW+deltaNCR+deltaNFR+deltaNSTOR+deltaNTSOIL+deltaNFLIT+deltaNCLITB+deltaNSEED+deltaNFRUIT)),annDF,
                 #main='I(NDEP+NFIX-NLEACH-NVOL)~(I(deltaNL+deltaNW+deltaNCR+deltaNFR+deltaNSOIL+deltaNFLIT+deltaNCLITB))',
                 auto.key=T,
                 scales=list(relation='free'),
@@ -498,8 +532,9 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
     
     
     ### A different way to check whole ecosystem N budget, as:
+    ### Lin COMMENT: this is acutually checking the soil N budget
     ### NDEP+NFIX+NLITIN+NWLIN+NCRLIN+NFRLIN-NUP-NLEACH-NVOL = DeltaNSOIL+DeltaNFLIT+DeltaNCLITB
-    p14<-xyplot(I(NDEP+NFIX+NLITIN+NWLIN+NCRLIN+NFRLIN+NSEED/1000+NFRUIT/1000-NUP-NLEACH-NVOL)~I(deltaNSOIL+deltaNFLIT+deltaNCLITB),annDF,
+    p14<-xyplot(I(NDEP+NFIX+NVEGLIN-NUP-NLEACH-NVOL)~I(deltaNTSOIL+deltaNFLIT+deltaNCLITB),annDF,
                 #main='I(NDEP+NFIX+NLITIN+NWLIN+NCRLIN+NFRLIN-NUP-NLEACH-NVOL)~I(deltaNSOIL+deltaNFLIT+deltaNCLITB)',
                 auto.key=T,
                 scales=list(relation='free'),
@@ -507,34 +542,35 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
                     panel.xyplot(...)
                     panel.abline(a=0,b=1)}) 
     
+    ### Lin: see p14
+    # p15<-xyplot(I(NDEP+NFIX+NLITIN+NWLIN+NCRLIN+NFRLIN+NSEED/1000+NFRUIT/1000-NUP-NLEACH-NVOL)~I(deltaNTSOIL+deltaNFLIT+deltaNCLITB),annDF,
+    #             #main='I(NDEP+NFIX+NLITIN+NWLIN+NCRLIN+NFRLIN-NUP-NLEACH-NVOL)~I(deltaNSOIL+deltaNFLIT+deltaNCLITB)',
+    #             auto.key=T,
+    #             scales=list(relation='free'),
+    #             panel=function(...){
+    #                 panel.xyplot(...)
+    #                 panel.abline(a=0,b=1)}) 
     
-    p15<-xyplot(I(NDEP+NFIX+NLITIN+NWLIN+NCRLIN+NFRLIN+NSEED/1000+NFRUIT/1000-NUP-NLEACH-NVOL)~I(deltaNTSOIL+deltaNFLIT+deltaNCLITB),annDF,
-                #main='I(NDEP+NFIX+NLITIN+NWLIN+NCRLIN+NFRLIN-NUP-NLEACH-NVOL)~I(deltaNSOIL+deltaNFLIT+deltaNCLITB)',
-                auto.key=T,
-                scales=list(relation='free'),
-                panel=function(...){
-                    panel.xyplot(...)
-                    panel.abline(a=0,b=1)}) 
     
-    
+    ### Lin: not applicable for QUINCY
     ### Another way to check ecosystem N budget, by excluding NFIX:
     ### NDEP+NLITIN+NWLIN+NCRLIN+NFRLIN-NUP-NLEACH-NVOL = DeltaNSOIL+DeltaNFLIT+DeltaNCLITB
-    p16<-xyplot(I(NDEP+NLITIN+NWLIN+NCRLIN+NFRLIN+NSEED/1000+NFRUIT/1000-NUP-NLEACH-NVOL)~I(deltaNSOIL+deltaNFLIT+deltaNCLITB),annDF,
-                #main='I(NDEP+NLITIN+NWLIN+NCRLIN+NFRLIN-NUP-NLEACH-NVOL)~I(deltaNSOIL+deltaNFLIT+deltaNCLITB)',
-                auto.key=T,
-                scales=list(relation='free'),
-                panel=function(...){
-                    panel.xyplot(...)
-                    panel.abline(a=0,b=1)}) 
-    
-    
-    p17<-xyplot(I(NDEP+NLITIN+NWLIN+NCRLIN+NFRLIN+NSEED/1000+NFRUIT/1000-NUP-NLEACH-NVOL)~I(deltaNTSOIL+deltaNFLIT+deltaNCLITB),annDF,
-                #main='I(NDEP+NLITIN+NWLIN+NCRLIN+NFRLIN-NUP-NLEACH-NVOL)~I(deltaNSOIL+deltaNFLIT+deltaNCLITB)',
-                auto.key=T,
-                scales=list(relation='free'),
-                panel=function(...){
-                    panel.xyplot(...)
-                    panel.abline(a=0,b=1)}) 
+    # p16<-xyplot(I(NDEP+NLITIN+NWLIN+NCRLIN+NFRLIN+NSEED/1000+NFRUIT/1000-NUP-NLEACH-NVOL)~I(deltaNSOIL+deltaNFLIT+deltaNCLITB),annDF,
+    #             #main='I(NDEP+NLITIN+NWLIN+NCRLIN+NFRLIN-NUP-NLEACH-NVOL)~I(deltaNSOIL+deltaNFLIT+deltaNCLITB)',
+    #             auto.key=T,
+    #             scales=list(relation='free'),
+    #             panel=function(...){
+    #                 panel.xyplot(...)
+    #                 panel.abline(a=0,b=1)}) 
+    # 
+    # 
+    # p17<-xyplot(I(NDEP+NLITIN+NWLIN+NCRLIN+NFRLIN+NSEED/1000+NFRUIT/1000-NUP-NLEACH-NVOL)~I(deltaNTSOIL+deltaNFLIT+deltaNCLITB),annDF,
+    #             #main='I(NDEP+NLITIN+NWLIN+NCRLIN+NFRLIN-NUP-NLEACH-NVOL)~I(deltaNSOIL+deltaNFLIT+deltaNCLITB)',
+    #             auto.key=T,
+    #             scales=list(relation='free'),
+    #             panel=function(...){
+    #                 panel.xyplot(...)
+    #                 panel.abline(a=0,b=1)}) 
     
     ### We now check the mass balance for NSOIL, which should equal to total organic and inorganic pools. 
     p18<-xyplot(I(NPMIN+NPORG)~NSOIL,annDF,
@@ -566,7 +602,10 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
     ##################### Phosphorus balance check ################################
     ### The net influx - outflux should equal to the change in all ecosystem P pools: 
     ### PDEP+PWEA-PLEACH = DeltaPL+DeltaPW+DeltaPCR+DeltaPFR+DeltaPSOIL+DeltaPFLIT+DeltaPCLITB
-    p1<-xyplot(I(PDEP+PWEA-PLEACH)~(I(deltaPL+deltaPW+deltaPCR+deltaPFR+deltaPSOIL+deltaPFLIT+deltaPCLITB)),annDF,
+    p1<-# xyplot(I(PDEP+PWEA-PLEACH)~(I(deltaPL+deltaPW+deltaPCR+deltaPFR+deltaPSOIL+deltaPFLIT+deltaPCLITB)),annDF,
+        xyplot(I(PDEP-PLEACH)~
+                   (I(deltaPL+deltaPW+deltaPCR+deltaPFR+deltaPSTOR+deltaPSEED+deltaPFRUIT+
+                                     deltaPTSOIL+deltaPFLIT+deltaPCLITB)),annDF,
                #main='I(PDEP+PWEA-PLEACH)~(I(deltaPL+deltaPW+deltaPCR+deltaPFR+deltaPSOIL+deltaPFLIT+deltaPCLITB))',
                auto.key=T,
                scales=list(relation='free'),
@@ -577,7 +616,8 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
     
     ### Next, we check changes in major vegetation P pools. 
     ### It should equal to production flux - retranslocation flux - litterfall. 
-    p2<-xyplot(I(PGL-PLITIN-PRECYC)~deltaPL,annDF,
+    p2<-# xyplot(I(PGL-PLITIN-PRECYC)~deltaPL,annDF,
+        xyplot(I(PGL-PLITIN+PGW-PWLIN+PGFR-PFRLIN-PRECYC)~I(deltaPL+deltaPW+deltaPFR),annDF,
                #main='I(PGL-PLITIN-PLRETR)~deltaPL',
                auto.key=T,
                scales=list(relation='free'),
@@ -585,7 +625,7 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
                    panel.xyplot(...)
                    panel.abline(a=0,b=1)}) 
     
-    
+    ### Lin: not printed out for QUINCY
     p3<-xyplot(I(PGW-PWLIN-PWRETR)~deltaPW,annDF,
                #main='I(PGW-PWLIN-PWRETR)~deltaPW',
                auto.key=T,
@@ -594,7 +634,7 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
                    panel.xyplot(...)
                    panel.abline(a=0,b=1)}) 
     
-    
+    ### Lin: not printed out for QUINCY
     p4<-xyplot(I(PGFR-PFRLIN-PFRRETR)~deltaPFR,annDF,
                #main='I(PGFR-PFRLIN-PFRRETR)~deltaPFR',
                auto.key=T,
@@ -603,7 +643,7 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
                    panel.xyplot(...)
                    panel.abline(a=0,b=1)}) 
     
-    
+    ### Lin: not printed out for QUINCY
     p5<-xyplot(I(PGCR-PCRLIN-PCRRETR)~deltaPCR,annDF,
                #main='I(PGCR-PCRLIN-PCRRETR)~deltaPCR',
                auto.key=T,
@@ -624,7 +664,8 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
     
     ### Now we check the total P required to make new vegetation: 
     ### PUP+PLRETR+PWRETR+PFRRETR+PCRRETR=PGL+PGFR+PGCR+PGW
-    p7<-xyplot(I(PUP+PRECYC)~I(PGL+PGFR+PGCR+PGW+PREPR),annDF,
+    p7<-# xyplot(I(PUP+PRECYC)~I(PGL+PGFR+PGCR+PGW+PREPR),annDF,
+        xyplot(I(PUP+PRECYC)~I(PGL+PGFR+PGCR+PGW+PREPR+deltaPSTOR+PSTRLIN),annDF,
                #main='I(PUP+PLRETR+PWRETR+PFRRETR+PCRRETR)~I(PGL+PGFR+PGCR+PGW)',
                auto.key=T,
                scales=list(relation='free'),
@@ -632,39 +673,42 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
                    panel.xyplot(...)
                    panel.abline(a=0,b=1)}) 
     
+    ### Lin: see p7
+    # p8<-xyplot(I(PUP+PRECYC)~I(PGL+PGFR+PGCR+PGW+PREPR+PSEED/1000+PFRUIT/1000),annDF,
+    #            #main='I(PUP+PLRETR+PWRETR+PFRRETR+PCRRETR)~I(PGL+PGFR+PGCR+PGW)',
+    #            auto.key=T,
+    #            scales=list(relation='free'),
+    #            panel=function(...){
+    #                panel.xyplot(...)
+    #                panel.abline(a=0,b=1)}) 
     
-    p8<-xyplot(I(PUP+PRECYC)~I(PGL+PGFR+PGCR+PGW+PREPR+PSEED/1000+PFRUIT/1000),annDF,
-               #main='I(PUP+PLRETR+PWRETR+PFRRETR+PCRRETR)~I(PGL+PGFR+PGCR+PGW)',
-               auto.key=T,
-               scales=list(relation='free'),
-               panel=function(...){
-                   panel.xyplot(...)
-                   panel.abline(a=0,b=1)}) 
-    
-    
+    ### Lin: see p7
     ### This is to consider the effect of DeltaPSTOR. 
-    p9<-xyplot(I(PUP+PRECYC-PGL-PGFR-PGCR-PGW-PREPR)~deltaPSTOR,annDF,
-               #main='I(PUP+PLRETR+PWRETR+PFRRETR+PCRRETR-PGL-PGFR-PGCR-PGW)~deltaPSTOR',
-               auto.key=T,
-               scales=list(relation='free'),
-               panel=function(...){
-                   panel.xyplot(...)
-                   panel.abline(a=0,b=1)}) 
+    # p9<-xyplot(I(PUP+PRECYC-PGL-PGFR-PGCR-PGW-PREPR)~deltaPSTOR,annDF,
+    #            #main='I(PUP+PLRETR+PWRETR+PFRRETR+PCRRETR-PGL-PGFR-PGCR-PGW)~deltaPSTOR',
+    #            auto.key=T,
+    #            scales=list(relation='free'),
+    #            panel=function(...){
+    #                panel.xyplot(...)
+    #                panel.abline(a=0,b=1)}) 
     
-    
-    p10<-xyplot(I(PUP+PRECYC-PGL-PGFR-PGCR-PGW-PREPR-PSEED/1000-PFRUIT/1000)~deltaPSTOR,annDF,
-                #main='I(PUP+PLRETR+PWRETR+PFRRETR+PCRRETR-PGL-PGFR-PGCR-PGW)~deltaPSTOR',
-                auto.key=T,
-                scales=list(relation='free'),
-                panel=function(...){
-                    panel.xyplot(...)
-                    panel.abline(a=0,b=1)}) 
+    ### Lin: see p7
+    # p10<-xyplot(I(PUP+PRECYC-PGL-PGFR-PGCR-PGW-PREPR-PSEED/1000-PFRUIT/1000)~deltaPSTOR,annDF,
+    #             #main='I(PUP+PLRETR+PWRETR+PFRRETR+PCRRETR-PGL-PGFR-PGCR-PGW)~deltaPSTOR',
+    #             auto.key=T,
+    #             scales=list(relation='free'),
+    #             panel=function(...){
+    #                 panel.xyplot(...)
+    #                 panel.abline(a=0,b=1)}) 
     
     
     ### This is to check whole ecosystem P flux, 
+    ### Lin: this is soil P budget. NOTE: weathering is already taken account in deltaPTSOIL
     ### which means that total in - out = net change:
     ### PDEP+PWEA+PLITIN+PWLIN+PCRLIN+PFRLIN-PUP-PLEACH = DeltaPSOIL+DeltaFLIT+DeltaPCLITB
-    p11<-xyplot(I(PDEP+PWEA+PLITIN+PWLIN+PCRLIN+PFRLIN-PUP-PLEACH)~I(deltaPSOIL+deltaPFLIT+deltaPCLITB),annDF,
+    p11<-# xyplot(I(PDEP+PWEA+PLITIN+PWLIN+PCRLIN+PFRLIN-PUP-PLEACH)~I(deltaPSOIL+deltaPFLIT+deltaPCLITB),annDF,
+         xyplot(I(PDEP+PVEGLIN-PUP-PLEACH)~
+                    I(deltaPTSOIL+deltaPFLIT+deltaPCLITB),annDF,       
                 #main='I(PDEP+PWEA+PLITIN+PWLIN+PCRLIN+PFRLIN-PUP-PLEACH)~I(deltaPSOIL+deltaPFLIT+deltaPCLITB)',
                 auto.key=T,
                 scales=list(relation='free'),
@@ -755,13 +799,15 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
     vegDF$meanvalue[vegDF$Group=="sim"&vegDF$Variable=="CW"] <- mean(poolDF$CW, na.rm=T)
     vegDF$meanvalue[vegDF$Group=="sim"&vegDF$Variable=="CFR"] <- mean(poolDF$CFR, na.rm=T)
     vegDF$meanvalue[vegDF$Group=="sim"&vegDF$Variable=="CCR"] <- mean(poolDF$CCR, na.rm=T)
-    vegDF$meanvalue[vegDF$Group=="sim"&vegDF$Variable=="CSOIL"] <- mean(poolDF$CSOIL, na.rm=T)
+    ### Lin: we are printing out soilC for top 30cm, while the measurement is top 10cm. 
+    ### I use a nasty fix here by assuming 50% of soilC in top 10cm
+    vegDF$meanvalue[vegDF$Group=="sim"&vegDF$Variable=="CSOIL"] <- mean(poolDF$CSOIL/2, na.rm=T)
     
     vegDF$sevalue[vegDF$Group=="sim"&vegDF$Variable=="CL"] <- se(poolDF$CL, na.rm=T)
     vegDF$sevalue[vegDF$Group=="sim"&vegDF$Variable=="CW"] <- se(poolDF$CW, na.rm=T)
     vegDF$sevalue[vegDF$Group=="sim"&vegDF$Variable=="CFR"] <- se(poolDF$CFR, na.rm=T)
     vegDF$sevalue[vegDF$Group=="sim"&vegDF$Variable=="CCR"] <- se(poolDF$CCR, na.rm=T)
-    vegDF$sevalue[vegDF$Group=="sim"&vegDF$Variable=="CSOIL"] <- se(poolDF$CSOIL, na.rm=T)
+    vegDF$sevalue[vegDF$Group=="sim"&vegDF$Variable=="CSOIL"] <- se(poolDF$CSOIL/2, na.rm=T)
     
     
     ### Plotting
@@ -916,7 +962,7 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
     ### but observed data are for top 10 cm only. 
     
     ### create a DF to store observation data for vegetation carbon stocks
-    pDF <- data.frame(rep(c("PLAB", "PMIN", "NMIN", "NUP", "PUP",
+    pDF <- data.frame(rep(c("PLAB", "PMIN", "PBIOCHMIN", "NMIN", "NUP", "PUP",
                             "NLEACH", "PLEACH"), 2), 
                       rep(c("obs", "sim"), each = 7), NA)
     colnames(pDF) <- c("Variable", 
@@ -932,11 +978,11 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
     subDF <- subset(modDF, YEAR <= 2016 & YEAR > 2012)
     
     poolDF <- summaryBy(PLAB~YEAR, data=subDF, FUN=mean, na.rm=T, keep.names=T)
-    fluxDF <- summaryBy(PMIN+NMIN+NLEACH+PLEACH+NUP+PUP~YEAR, data=subDF, FUN=sum, na.rm=T, keep.names=T)
+    fluxDF <- summaryBy(PMIN+PBIOCHMIN+NMIN+NLEACH+PLEACH+NUP+PUP~YEAR, data=subDF, FUN=sum, na.rm=T, keep.names=T)
     
     ### assign values
     pDF$meanvalue[pDF$Group=="sim"&pDF$Variable=="PLAB"] <- round(poolDF$PLAB[poolDF$YEAR=="2016"], 3)
-    pDF$meanvalue[pDF$Group=="sim"&pDF$Variable=="PMIN"] <- round(mean(fluxDF$PMIN), 3)
+    pDF$meanvalue[pDF$Group=="sim"&pDF$Variable=="PMIN"] <- round(mean(fluxDF$PMIN + fluxDF$PBIOCHMIN), 3)
     pDF$meanvalue[pDF$Group=="sim"&pDF$Variable=="NMIN"] <- round(mean(fluxDF$NMIN), 3)
     pDF$meanvalue[pDF$Group=="sim"&pDF$Variable=="PLEACH"] <- round(mean(fluxDF$PLEACH), 3)
     pDF$meanvalue[pDF$Group=="sim"&pDF$Variable=="NLEACH"] <- round(mean(fluxDF$NLEACH), 3)
