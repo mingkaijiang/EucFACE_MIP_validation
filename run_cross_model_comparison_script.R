@@ -66,6 +66,9 @@ plot_photosynthesis_relationships(scenario="fix")
 plot_photosynthesis_relationships(scenario="var")
 
 
+### fate of carbon
+trace_fate_of_carbon_MIP_plot()
+
 
 ### ambient treatment, CO2 responses
 ### incomplete

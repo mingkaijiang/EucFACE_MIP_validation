@@ -193,7 +193,7 @@ trace_fate_of_carbon_MIP_plot <- function() {
                 "deltaCFR"=expression(Delta*C[froot]),    
                 "deltaCCR"=expression(Delta*C[croot]),
                 "deltaCSOIL"=expression(Delta*C[soil]),
-                "deltaCLIT"=expression(Delta*C[lit]),
+                "deltaCFLIT"=expression(Delta*C[lit]),
                 "deltaCSTOR"=expression(Delta*C[store]))
     
     
@@ -348,8 +348,12 @@ trace_fate_of_carbon_MIP_plot <- function() {
         
         ### Plotting
         pdf(paste0(out.dir, "/MIP_fate_of_carbon_", i, ".pdf"), width=16, height=6)
-        plot_grid(p1, p2, p3, p4, labels="", ncol=4, align="h", axis="l",
-                  rel_widths=c(1.3, 0.5, 0.5, 0.5))
+        #plot_grid(p1, p2, p3, p4, labels="", ncol=4, align="h", axis="l",
+        #          rel_widths=c(1.3, 0.5, 0.5, 0.5))
+        grid.arrange(p1, p2, p3, p4, 
+                     widths=c(1.3, 0.5, 0.5, 0.5),
+                     #heights=c(1,1.2,1.2,1.4),
+                     ncol = 4)
         dev.off()
         
     }
