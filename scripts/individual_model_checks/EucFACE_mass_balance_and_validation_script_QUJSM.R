@@ -139,7 +139,7 @@ EucFACE_mass_balance_and_validation_script_QUJSM <- function() {
                             PWLIN+NWRETR+PWRETR+NCRRETR+PCRRETR+NFRRETR+
                             PFRRETR+NDEP+NFIX+NVOL+PDEP+PWEA+
                             ### additional variables for QUINCY
-                            RMAIN+RNTRANS+CVEGLIN+CGSTR+
+                            RMAIN+RNTRANS+CVEGLIN+CGSTR+CSTRLIN+
                             NGSTR+NSTRLIN+NVEGLIN+NREPR+NRECYC+
                             PGSTR+PSTRLIN+PVEGLIN+PREPR+PRECYC~
                             YEAR, data=modDF, FUN=sum, keep.names=T, na.rm=T)
@@ -303,8 +303,7 @@ EucFACE_mass_balance_and_validation_script_QUJSM <- function() {
     ### This is a different way to check mass balance for NPP, 
     ### in that it includes Delta$CSTOR in addition to those growth fluxes included in the previous figure. 
     ### Some models don't explictly simulate CSTOR, so this mass balance may not apply. 
-    ### Lin COMMENT: I(deltaCVEG+CVEGLIN)~NPP
-    p12<-xyplot(I(CGW+CGL+CGFR+CGCR+CREPR+CEX+deltaCSTOR)~NPP,annDF,
+    p12<-xyplot(I(CGW+CGL+CGFR+CGCR+CREPR+CEX+deltaCSTOR+CSTRLIN)~NPP,annDF,
                 #main='I(CGW+CGL+CGFR+CGCR+CREPR+deltaCSTOR)~NPP',
                 auto.key=T,
                 scales=list(relation='free'),
@@ -327,15 +326,16 @@ EucFACE_mass_balance_and_validation_script_QUJSM <- function() {
     ### In theory, the net difference of these two flues should equal to the change in soil + litter pool. 
     ### Note that CEX was included as an additional influx into the soil. The full equation is: 
     ### CLITIN+CWLIN+CFRLIN+CCRLIN+CREPR+CEX-RHET = Delta$CSOIL+Delta$CCLITB+Delta$CFLIT
-    p14<-xyplot(I(CEX+CLITIN+CWLIN+CFRLIN+CCRLIN+CREPR-RHET)~I(deltaCSOIL+deltaCCLITB+deltaCFLIT),annDF,
-                auto.key=T,
-                scales=list(relation='free'),
-                panel=function(...){
-                    panel.xyplot(...)
-                    panel.abline(a=0,b=1)}) 
+    # p14<-xyplot(I(CEX+CLITIN+CWLIN+CFRLIN+CCRLIN+CREPR-RHET)~I(deltaCSOIL+deltaCCLITB+deltaCFLIT),annDF,
+    #             auto.key=T,
+    #             scales=list(relation='free'),
+    #             panel=function(...){
+    #                 panel.xyplot(...)
+    #                 panel.abline(a=0,b=1)}) 
     
     
     ### Lin to check
+    ### I removed p14
     p15<-# xyplot(I(CEX+CLITIN+CWLIN+CFRLIN+CCRLIN+CREPR-RHET)~I(deltaCTSOIL+deltaCCLITB+deltaCFLIT),annDF,
                 xyplot(I(CEX+CVEGLIN-RHET)~I(deltaCTSOIL+deltaCCLITB+deltaCFLIT),annDF,
                 auto.key=T,
