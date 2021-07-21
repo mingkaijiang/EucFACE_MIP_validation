@@ -39,10 +39,10 @@ source("prepare.R")
 #                       destDir=paste0(getwd(), "/simulation_output"))
 
 ### LPJ-GUESS-CNP - it seems that no need
-translate_LPJGP_simulation_into_EucFACE_MIP_format(source.dir = paste0(getwd(), "/simulation_output/LPJGP/new_soil/"))
+#translate_LPJGP_simulation_into_EucFACE_MIP_format(source.dir = paste0(getwd(), "/simulation_output/LPJGP/new_soil/"))
 #translate_LPJGP_simulation_into_EucFACE_MIP_format(source.dir = paste0(getwd(), "/simulation_output/LPJGP/old_soil/"))
 
-translate_LPJGN_simulation_into_EucFACE_MIP_format(source.dir = paste0(getwd(), "/simulation_output/LPJGN/new_soil/"))
+#translate_LPJGN_simulation_into_EucFACE_MIP_format(source.dir = paste0(getwd(), "/simulation_output/LPJGN/new_soil/"))
 #translate_LPJGN_simulation_into_EucFACE_MIP_format(source.dir = paste0(getwd(), "/simulation_output/LPJGN/old_soil/"))
 
 
