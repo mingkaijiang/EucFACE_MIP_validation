@@ -35,10 +35,10 @@ source("prepare.R")
 #                                                   pft.variable = "tile_averaged")
 
 ### LPJ-GUESS
-#unzip_LPJ_GUESS_output(sourceDir=paste0('~/Downloads/2021-07-20_r9910'),
+#unzip_LPJ_GUESS_output(sourceDir=paste0('~/Downloads/2021-07-21_r9911'),
 #                       destDir=paste0(getwd(), "/simulation_output"))
 
-### LPJ-GUESS-CNP - it seems that no need
+### LPJ-GUESS-CNP rename file name
 #translate_LPJGP_simulation_into_EucFACE_MIP_format(source.dir = paste0(getwd(), "/simulation_output/LPJGP/new_soil/"))
 #translate_LPJGP_simulation_into_EucFACE_MIP_format(source.dir = paste0(getwd(), "/simulation_output/LPJGP/old_soil/"))
 

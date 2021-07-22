@@ -417,8 +417,6 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
                    panel.xyplot(...)
                    panel.abline(a=0,b=1)}) 
     
-    plot(p1)
-    
     p2<-xyplot(I(NGW-NWLIN-NWRETR)~deltaNW,annDF,
                #main='I(NGW-NWLIN-NWRETR)~deltaNW',
                auto.key=T,
@@ -437,14 +435,21 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
                    panel.abline(a=0,b=1)}) 
     
     
-    p4 <- plot.new()
-    #p4<-xyplot(I(NGCR-NCRLIN-NCRRETR)~deltaNCR,annDF,
-    #           #main='I(NGCR-NCRLIN-NCRRETR)~deltaNCR',
+    #p4<-xyplot(I(NGL+NGW+NGFR-NLITIN-NWLIN-NFRLIN-NLRETR-NWRETR-NFRRETR-deltaNSTOR)~I(deltaNL+deltaNW+deltaNFR),annDF,
     #           auto.key=T,
     #           scales=list(relation='free'),
     #           panel=function(...){
     #               panel.xyplot(...)
     #               panel.abline(a=0,b=1)}) 
+    #
+    p4<-xyplot(I(NGL+NGW+NGFR-NLITIN-NWLIN-NFRLIN-NLRETR-NWRETR-NFRRETR)~I(deltaNL+deltaNW+deltaNFR-deltaNSTOR),annDF,
+               auto.key=T,
+               scales=list(relation='free'),
+               panel=function(...){
+                   panel.xyplot(...)
+                   panel.abline(a=0,b=1)}) 
+    
+    #plot(p4)
     
     
     ### This is to check finelitter influx. Total NFLIT = NFLITA + NFLITB. 
@@ -461,19 +466,18 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
     ### which should euqal to the sum of nitrogen uptake and total retranslocation fluxes. 
     ### The full equation is written as:
     ### NUP+NLRETR+NWRETR+NFRRETR+NCRRETR = NGL+NGFR+NGCR+NGW
-    p6<-xyplot(I(NUP+NLRETR+NWRETR+NFRRETR)~I(NGL+NGFR+NGW+NVOL),annDF,
+    p6<-xyplot(I(NUP+NLRETR+NWRETR+NFRRETR)~I(NGL+NGFR+NGW),annDF,
                auto.key=T,
                scales=list(relation='free'),
                panel=function(...){
                    panel.xyplot(...)
                    panel.abline(a=0,b=1)}) 
     
-
     ### Some models could have a NSTOR pool, 
     ### so not all nitrogen available for plant is used for growth. 
     ### Here we are looking at DeltaNSTOR 
     ### to see if it helps to close the mass balance if the figure above doesn't close its mass balance. 
-    p7<-xyplot(I(NUP+NLRETR+NWRETR+NFRRETR-NGL-NGFR-NGW-NVOL)~I(deltaNSTOR),annDF,
+    p7<-xyplot(I(NUP+NLRETR+NWRETR+NFRRETR-NGL-NGFR-NGW)~I(deltaNSTOR),annDF,
                #main='I(NUP+NLRETR+NWRETR+NFRRETR+NCRRETR-NGL-NGFR-NGCR-NGW)~deltaNSTOR',
                auto.key=T,
                scales=list(relation='free'),
@@ -485,7 +489,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
     ### N fixation could also be added to plant directly. 
     ### So here we are checking its effect. Full equation is: 
     ### NFIX+NUP+NLRETR+NWRETR+NFRRETR+NCRRETR = NGL+NGFR+NGCR+NGW
-    p8<-xyplot(I(NFIX+NUP+NLRETR+NWRETR+NFRRETR)~I(NGL+NGFR+NGW+NVOL+deltaNSTOR),annDF,
+    p8<-xyplot(I(NFIX+NUP+NLRETR+NWRETR+NFRRETR)~I(NGL+NGFR+NGW+deltaNSTOR+deltaNL+deltaNW+deltaNFR),annDF,
                #main='I(NFIX+NUP+NLRETR+NWRETR+NFRRETR+NCRRETR)~I(NGL+NGFR+NGCR+NGW)',
                auto.key=T,
                scales=list(relation='free'),
@@ -493,6 +497,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
                    panel.xyplot(...)
                    panel.abline(a=0,b=1)}) 
     
+    plot(p8)
     
     ### Similar to the above figure, we are checking if Delta$NSTOR helps to close the budget. 
     p9<-xyplot(I(NFIX+NUP+NLRETR+NWRETR+NFRRETR-NGL-NGFR-NGW)~deltaNSTOR,annDF,
@@ -502,7 +507,6 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
                panel=function(...){
                    panel.xyplot(...)
                    panel.abline(a=0,b=1)}) 
-    
     
     ### Now we are checking the whole ecosystem N input and output. 
     ### Full equation is:
@@ -603,7 +607,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
     ##################### Phosphorus balance check ################################
     ### The net influx - outflux should equal to the change in all ecosystem P pools: 
     ### PDEP+PWEA-PLEACH = DeltaPL+DeltaPW+DeltaPCR+DeltaPFR+DeltaPSOIL+DeltaPFLIT+DeltaPCLITB
-    p1<-xyplot(I(PDEP+PWEA-PLEACH)~(I(deltaPL+deltaPW+deltaPFR+deltaPSOIL+deltaPFLIT)),annDF,
+    p1<-xyplot(I(PDEP+PWEA-PLEACH-PGOCL)~(I(deltaPL+deltaPW+deltaPFR+deltaPSOIL+deltaPFLIT)),annDF,
                #main='I(PDEP+PWEA-PLEACH)~(I(deltaPL+deltaPW+deltaPCR+deltaPFR+deltaPSOIL+deltaPFLIT+deltaPCLITB))',
                auto.key=T,
                scales=list(relation='free'),
@@ -612,15 +616,13 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
                    panel.abline(a=0,b=1)}) 
     
 
-    p2<-xyplot(I(PDEP+PWEA-PLEACH)~(I(deltaPL+deltaPW+deltaPFR+deltaPSOILtot+deltaPFLIT)),annDF,
+    p2<-xyplot(I(PDEP+PWEA-PLEACH-PGOCL)~(I(deltaPL+deltaPW+deltaPFR+deltaPSOILtot+deltaPFLIT+deltaPSTOR)),annDF,
                #main='I(PDEP+PWEA-PLEACH)~(I(deltaPL+deltaPW+deltaPCR+deltaPFR+deltaPSOIL+deltaPFLIT+deltaPCLITB))',
                auto.key=T,
                scales=list(relation='free'),
                panel=function(...){
                    panel.xyplot(...)
                    panel.abline(a=0,b=1)}) 
-    
-    plot(p2)
     
     
     ### Next, we check changes in major vegetation P pools. 
@@ -676,13 +678,15 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
     
     ### Now we check the total P required to make new vegetation: 
     ### PUP+PLRETR+PWRETR+PFRRETR+PCRRETR=PGL+PGFR+PGCR+PGW
-    p9<-xyplot(I(PUP+PLRETR+PWRETR+PFRRETR)~I(PGL+PGFR+PGW),annDF,
+    p9<-xyplot(I(PUP+PLRETR+PWRETR+PFRRETR)~I(PGL+PGFR+PGW+deltaPSTOR),annDF,
                #main='I(PUP+PLRETR+PWRETR+PFRRETR+PCRRETR)~I(PGL+PGFR+PGCR+PGW)',
                auto.key=T,
                scales=list(relation='free'),
                panel=function(...){
                    panel.xyplot(...)
                    panel.abline(a=0,b=1)}) 
+    
+    #plot(p9)
     
     
     ### This is to consider the effect of DeltaPSTOR. 
