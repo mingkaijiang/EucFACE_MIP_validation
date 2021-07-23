@@ -66,7 +66,7 @@ EucFACE_mass_balance_and_validation_script_QUJSM <- function() {
     ### Note that this is the daily file. 
     ### You can modify this path to read in different files. 
     modDF <- read.csv(paste0("simulation_output/", mod.abb, 
-                             "/EUC_QUINC_OBS_VAR_AMB_NOP_D.csv"))
+                             "/EUC_", mod.abb, "_OBS_VAR_AMB_NOP_D.csv"))
     
     ### checking number of column in the original dataframe
     ncol <- ncol(modDF)
@@ -345,7 +345,7 @@ EucFACE_mass_balance_and_validation_script_QUJSM <- function() {
                     panel.abline(a=0,b=1)}) 
     
     
-    plot(p15)
+    #plot(p15)
     
     ### print plots to file, change numbering if needed
     pdf(paste0(out.dir, '/QC_Carbon_Balance_',mod.abb,'.pdf',sep=''),width=10,height=8)
@@ -573,7 +573,7 @@ EucFACE_mass_balance_and_validation_script_QUJSM <- function() {
     #                 panel.abline(a=0,b=1)}) 
     
     ### We now check the mass balance for NSOIL, which should equal to total organic and inorganic pools. 
-    p18<-xyplot(I(NPMIN+NPORG)~NSOIL,annDF,
+    p15<-xyplot(I(NPMIN+NPORG)~NSOIL,annDF,
                 #main='I(NPMIN+NPORG)~NSOIL',
                 auto.key=T,
                 scales=list(relation='free'),
@@ -582,7 +582,7 @@ EucFACE_mass_balance_and_validation_script_QUJSM <- function() {
                     panel.abline(a=0,b=1)}) 
     
     
-    p19<-xyplot(I(NTPMIN+NTPORG)~NTSOIL,annDF,
+    p16<-xyplot(I(NTPMIN+NTPORG)~NTSOIL,annDF,
                 #main='I(NPMIN+NPORG)~NSOIL',
                 auto.key=T,
                 scales=list(relation='free'),
@@ -592,7 +592,7 @@ EucFACE_mass_balance_and_validation_script_QUJSM <- function() {
     
     ### print plots to file, change numbering if needed
     pdf(paste0(out.dir, '/QC_Nitrogen_Balance_',mod.abb,'.pdf',sep=''),width=10,height=8)
-    for (i in 1:19) {
+    for (i in 1:16) {
         print(get(paste("p",i,sep="")))
     }
     dev.off()
@@ -706,7 +706,7 @@ EucFACE_mass_balance_and_validation_script_QUJSM <- function() {
     ### Lin: this is soil P budget. NOTE: weathering is already taken account in deltaPTSOIL
     ### which means that total in - out = net change:
     ### PDEP+PWEA+PLITIN+PWLIN+PCRLIN+PFRLIN-PUP-PLEACH = DeltaPSOIL+DeltaFLIT+DeltaPCLITB
-    p11<-# xyplot(I(PDEP+PWEA+PLITIN+PWLIN+PCRLIN+PFRLIN-PUP-PLEACH)~I(deltaPSOIL+deltaPFLIT+deltaPCLITB),annDF,
+    p8<-# xyplot(I(PDEP+PWEA+PLITIN+PWLIN+PCRLIN+PFRLIN-PUP-PLEACH)~I(deltaPSOIL+deltaPFLIT+deltaPCLITB),annDF,
          xyplot(I(PDEP+PVEGLIN-PUP-PLEACH)~
                     I(deltaPTSOIL+deltaPFLIT+deltaPCLITB),annDF,       
                 #main='I(PDEP+PWEA+PLITIN+PWLIN+PCRLIN+PFRLIN-PUP-PLEACH)~I(deltaPSOIL+deltaPFLIT+deltaPCLITB)',
@@ -718,7 +718,7 @@ EucFACE_mass_balance_and_validation_script_QUJSM <- function() {
     
     
     ### Now to check a basic mass balance on soil P. 
-    p12<-xyplot(I(PPMIN+PPORG)~PSOIL,annDF,
+    p9<-xyplot(I(PPMIN+PPORG)~PSOIL,annDF,
                 #main='I(PPMIN+PPORG)~PSOIL',
                 auto.key=T,
                 scales=list(relation='free'),
@@ -728,7 +728,7 @@ EucFACE_mass_balance_and_validation_script_QUJSM <- function() {
     
     
     ### Inorganic P pool in soils: PLAB+PSEC+POCC+PPAR=PPMIN
-    p13<-xyplot(I(PLAB+PSEC+POCC+PPAR)~PPMIN,annDF,
+    p10<-xyplot(I(PLAB+PSEC+POCC+PPAR)~PPMIN,annDF,
                 #main='I(PLAB+PSEC+POCC+PPAR)~PPMIN',
                 auto.key=T,
                 scales=list(relation='free'),
@@ -738,7 +738,7 @@ EucFACE_mass_balance_and_validation_script_QUJSM <- function() {
     
     
     ### A different way to check PSOIL. 
-    p14<-xyplot(I(PLAB+PSEC+POCC+PPAR+PPORG)~PSOIL,annDF,
+    p11<-xyplot(I(PLAB+PSEC+POCC+PPAR+PPORG)~PSOIL,annDF,
                 #main='I(PLAB+PSEC+POCC+PPAR+PPORG)~PSOIL',
                 auto.key=T,
                 scales=list(relation='free'),
@@ -964,7 +964,7 @@ EucFACE_mass_balance_and_validation_script_QUJSM <- function() {
     ### create a DF to store observation data for vegetation carbon stocks
     pDF <- data.frame(rep(c("PLAB", "PMIN", "PBIOCHMIN", "NMIN", "NUP", "PUP",
                             "NLEACH", "PLEACH"), 2), 
-                      rep(c("obs", "sim"), each = 7), NA)
+                      rep(c("obs", "sim"), each = 8), NA)
     colnames(pDF) <- c("Variable", 
                        "Group",
                        "meanvalue")

@@ -14,7 +14,7 @@ plot_CO2_response_ratio_for_individual_model <- function(source.dir,
     
     if (check.mod == "QUJSM") {
         print("QUJSM model")
-        mod.abb <- "QUINC"
+        mod.abb <- "QUJSM"
     } else {
         print(paste0(mod.abb, " model"))
     }

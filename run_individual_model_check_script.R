@@ -46,7 +46,7 @@ source("prepare.R")
 #translate_LPJGN_simulation_into_EucFACE_MIP_format(source.dir = paste0(getwd(), "/simulation_output/LPJGN/old_soil/"))
 
 
-### QUINCY - some unit conversions are needed
+### QUINCY not needed
 
 
 ##########################################################################
