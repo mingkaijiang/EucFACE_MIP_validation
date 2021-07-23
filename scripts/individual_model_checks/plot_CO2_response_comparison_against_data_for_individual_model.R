@@ -13,7 +13,7 @@ plot_CO2_response_comparison_against_data_for_individual_model <- function (sour
     
     if (check.mod == "QUJSM") {
         print("QUJSM model")
-        mod.abb <- "QUINC"
+        mod.abb <- "QUJSM"
     } else {
         print(paste0(mod.abb, " model"))
     }

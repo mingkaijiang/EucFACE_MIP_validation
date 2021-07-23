@@ -67,7 +67,7 @@ compile_obs_fix_dataset_across_models <- function(p.mod.list, n.mod.list, d.mod.
                                      "/new_soil/euc_ter/EUC_", mod.abb, "_OBS_FIX_AMB_NOP_D.csv"))
         } else if (mod.abb=="QUJSM") {
             modDF <- read.csv(paste0("simulation_output/", mod.abb, 
-                                     "/EUC_QUINC_OBS_FIX_AMB_NOP_D.csv"))
+                                     "/EUC_QUJSM_OBS_FIX_AMB_NOP_D.csv"))
         } else {
             modDF <- read.csv(paste0("simulation_output/", mod.abb, 
                                      "/EUC_", mod.abb, "_OBS_FIX_AMB_NOP_D.csv"))
@@ -206,7 +206,7 @@ compile_obs_fix_dataset_across_models <- function(p.mod.list, n.mod.list, d.mod.
                                      "/new_soil/euc_ter/EUC_", mod.abb, "_OBS_FIX_ELE_NOP_D.csv"))
         } else if (mod.abb=="QUJSM") {
             modDF <- read.csv(paste0("simulation_output/", mod.abb, 
-                                     "/EUC_QUINC_OBS_FIX_ELE_NOP_D.csv"))
+                                     "/EUC_QUJSM_OBS_FIX_ELE_NOP_D.csv"))
         } else {
             modDF <- read.csv(paste0("simulation_output/", mod.abb, 
                                      "/EUC_", mod.abb, "_OBS_FIX_ELE_NOP_D.csv"))
