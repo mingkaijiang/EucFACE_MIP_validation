@@ -17,6 +17,8 @@ trace_fate_of_carbon_MIP_plot <- function() {
     ambDF <- subset(ambDF, YEAR>2012 & YEAR<2017)
     eleDF <- subset(eleDF, YEAR>2012 & YEAR<2017)
     
+    d<-dim(ambDF)[2]
+    
     ### summaryby
     co2DF <- ambDF
     co2DF[,3:d] <- eleDF[,3:d]-ambDF[,3:d]
@@ -35,7 +37,7 @@ trace_fate_of_carbon_MIP_plot <- function() {
     mod.list <- unique(outDF$ModName)
     nmod <- length(mod.list)
     
-    longDF <- melt(outDF, id.vars = c("ModName", "YEAR"))
+    longDF <- reshape2::melt(outDF, id.vars = c("ModName", "YEAR"))
     
     sumDF <- summaryBy(value~ModName+variable, FUN=c(mean, sd),
                       data=longDF, na.rm=T, keep.names=T)
@@ -50,8 +52,8 @@ trace_fate_of_carbon_MIP_plot <- function() {
                            rep("change_in_pool", 7)), 11)
     
     
-    sumDF$conf_low <- sumDF$value.mean - myDF$value.sd
-    sumDF$conf_high <- sumDF$value.mean + myDF$value.sd
+    sumDF$conf_low <- sumDF$value.mean - sumDF$value.sd
+    sumDF$conf_high <- sumDF$value.mean + sumDF$value.sd
     
     ### Subset GPP, NPP, change in pools, and out fluxes
     plotDF1 <- subset(sumDF, variable %in% c("ModName", 
