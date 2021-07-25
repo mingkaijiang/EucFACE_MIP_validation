@@ -336,8 +336,7 @@ EucFACE_mass_balance_and_validation_script_QUJSM <- function() {
     
     
     ### Lin to check
-    p15<-# xyplot(I(CEX+CLITIN+CWLIN+CFRLIN+CCRLIN+CREPR-RHET)~I(deltaCTSOIL+deltaCCLITB+deltaCFLIT),annDF,
-                xyplot(I(CEX+CVEGLIN-RHET)~I(deltaCTSOIL+deltaCCLITB+deltaCFLIT),annDF,
+    p15<- xyplot(I(CEX+CVEGLIN-RHET)~I(deltaCTSOIL+deltaCCLITB+deltaCFLIT),annDF,
                 auto.key=T,
                 scales=list(relation='free'),
                 panel=function(...){
@@ -345,11 +344,18 @@ EucFACE_mass_balance_and_validation_script_QUJSM <- function() {
                     panel.abline(a=0,b=1)}) 
     
     
-    #plot(p15)
+    p16<- xyplot(I(CVEGLIN)~I(CLITIN+CWLIN+CFRLIN+CCRLIN+CREPR),annDF,
+                 auto.key=T,
+                 scales=list(relation='free'),
+                 panel=function(...){
+                     panel.xyplot(...)
+                     panel.abline(a=0,b=1)}) 
+    
+    plot(p16)
     
     ### print plots to file, change numbering if needed
     pdf(paste0(out.dir, '/QC_Carbon_Balance_',mod.abb,'.pdf',sep=''),width=10,height=8)
-    for (i in 1:15) {
+    for (i in 1:16) {
         print(get(paste("p",i,sep="")))
     }
     dev.off()
@@ -392,14 +398,14 @@ EucFACE_mass_balance_and_validation_script_QUJSM <- function() {
     ### Here, Delta$NL = NGL + NLITIN - NLRETR, where NLRETR is the retranslocation flux. 
     ### Lin COMMENT: since we cannot separate NWRETR, leaf and root retranslocation from each other, 
     ### I combine the three compartments for the N budget
-    p1<-# xyplot(I(NGL-NLITIN-NRECYC)~deltaNL,annDF,
-        xyplot(I(NGL-NLITIN+NGW-NWLIN+NGFR-NFRLIN-NRECYC)~I(deltaNL+deltaNW+deltaNFR),annDF,
+    p1<-xyplot(I(NGL-NLITIN+NGW-NWLIN+NGFR-NFRLIN-NRECYC)~I(deltaNL+deltaNW+deltaNFR),annDF,
                #main='I(NGL-NLITIN-NLRETR)~deltaNL',
                auto.key=T,
                scales=list(relation='free'),
                panel=function(...){
                    panel.xyplot(...)
                    panel.abline(a=0,b=1)}) 
+    
     ### Lin COMMENT: not printed out for QUINCY
     p2<-xyplot(I(NGW-NWLIN-NWRETR)~deltaNW,annDF,
                #main='I(NGW-NWLIN-NWRETR)~deltaNW',
@@ -483,22 +489,9 @@ EucFACE_mass_balance_and_validation_script_QUJSM <- function() {
                    panel.abline(a=0,b=1)}) 
     
     
-    ### N fixation could also be added to plant directly. 
-    ### So here we are checking its effect. Full equation is: 
-    ### NFIX+NUP+NLRETR+NWRETR+NFRRETR+NCRRETR = NGL+NGFR+NGCR+NGW
-    ### Lin COMMENT: not applicable for QUINCY since NFIX goes to soil not plant
-    p10<-xyplot(I(NFIX+NUP+NRECYC)~I(NGL+NGFR+NGCR+NGW+NREPR),annDF,
-               #main='I(NFIX+NUP+NLRETR+NWRETR+NFRRETR+NCRRETR)~I(NGL+NGFR+NGCR+NGW)',
-               auto.key=T,
-               scales=list(relation='free'),
-               panel=function(...){
-                   panel.xyplot(...)
-                   panel.abline(a=0,b=1)}) 
-    
-    
     ### Similar to the above figure, we are checking if Delta$NSTOR helps to close the budget. 
     ### Lin COMMENT: not applicable for QUINCY since NFIX goes to soil not plant
-    p11<-xyplot(I(NFIX+NUP+NRECYC-NGL-NGFR-NGCR-NGW-NREPR)~deltaNSTOR,annDF,
+    p10<-xyplot(I(NUP+NRECYC-NGL-NGFR-NGCR-NGW-NREPR)~deltaNSTOR,annDF,
                #main='I(NFIX+NUP+NLRETR+NWRETR+NFRRETR+NCRRETR-NGL-NGFR-NGCR-NGW)~deltaNSTOR',
                auto.key=T,
                scales=list(relation='free'),
@@ -510,18 +503,16 @@ EucFACE_mass_balance_and_validation_script_QUJSM <- function() {
     ### Now we are checking the whole ecosystem N input and output. 
     ### Full equation is:
     ### NDEP+NFIX-NLEACH-NVOL = DeltaNL+DeltaNW+DeltaNCR+DeltaNFR+DeltaNSOIL+DeltaNFLIT+DeltaNCLITB
-    p12<-# xyplot(I(NDEP+NFIX-NLEACH-NVOL)~(I(deltaNL+deltaNW+deltaNCR+deltaNFR+deltaNSOIL+deltaNFLIT+deltaNCLITB)),annDF,
-         xyplot(I(NDEP+NFIX-NLEACH-NVOL)~
+    p11<- xyplot(I(NDEP+NFIX-NLEACH-NVOL)~
                 (I(deltaNL+deltaNW+deltaNCR+deltaNFR+deltaNSTOR+
                        deltaNSEED+deltaNFRUIT+deltaNTSOIL+deltaNFLIT+deltaNCLITB)),annDF,
-                #main='I(NDEP+NFIX-NLEACH-NVOL)~(I(deltaNL+deltaNW+deltaNCR+deltaNFR+deltaNSOIL+deltaNFLIT+deltaNCLITB))',
                 auto.key=T,
                 scales=list(relation='free'),
                 panel=function(...){
                     panel.xyplot(...)
                     panel.abline(a=0,b=1)}) 
     
-    p13<-xyplot(I(NDEP+NFIX-NLEACH-NVOL)~
+    p12<-xyplot(I(NDEP+NFIX-NLEACH-NVOL)~
                     (I(deltaNL+deltaNW+deltaNCR+deltaNFR+deltaNSTOR+deltaNTSOIL+deltaNFLIT+deltaNCLITB+deltaNSEED+deltaNFRUIT)),annDF,
                 #main='I(NDEP+NFIX-NLEACH-NVOL)~(I(deltaNL+deltaNW+deltaNCR+deltaNFR+deltaNSOIL+deltaNFLIT+deltaNCLITB))',
                 auto.key=T,
@@ -534,7 +525,7 @@ EucFACE_mass_balance_and_validation_script_QUJSM <- function() {
     ### A different way to check whole ecosystem N budget, as:
     ### Lin COMMENT: this is acutually checking the soil N budget
     ### NDEP+NFIX+NLITIN+NWLIN+NCRLIN+NFRLIN-NUP-NLEACH-NVOL = DeltaNSOIL+DeltaNFLIT+DeltaNCLITB
-    p14<-xyplot(I(NDEP+NFIX+NVEGLIN-NUP-NLEACH-NVOL)~I(deltaNTSOIL+deltaNFLIT+deltaNCLITB),annDF,
+    p13<-xyplot(I(NDEP+NFIX+NVEGLIN-NUP-NLEACH-NVOL)~I(deltaNTSOIL+deltaNFLIT+deltaNCLITB),annDF,
                 #main='I(NDEP+NFIX+NLITIN+NWLIN+NCRLIN+NFRLIN-NUP-NLEACH-NVOL)~I(deltaNSOIL+deltaNFLIT+deltaNCLITB)',
                 auto.key=T,
                 scales=list(relation='free'),
@@ -542,38 +533,9 @@ EucFACE_mass_balance_and_validation_script_QUJSM <- function() {
                     panel.xyplot(...)
                     panel.abline(a=0,b=1)}) 
     
-    ### Lin: see p14
-    # p15<-xyplot(I(NDEP+NFIX+NLITIN+NWLIN+NCRLIN+NFRLIN+NSEED/1000+NFRUIT/1000-NUP-NLEACH-NVOL)~I(deltaNTSOIL+deltaNFLIT+deltaNCLITB),annDF,
-    #             #main='I(NDEP+NFIX+NLITIN+NWLIN+NCRLIN+NFRLIN-NUP-NLEACH-NVOL)~I(deltaNSOIL+deltaNFLIT+deltaNCLITB)',
-    #             auto.key=T,
-    #             scales=list(relation='free'),
-    #             panel=function(...){
-    #                 panel.xyplot(...)
-    #                 panel.abline(a=0,b=1)}) 
-    
-    
-    ### Lin: not applicable for QUINCY
-    ### Another way to check ecosystem N budget, by excluding NFIX:
-    ### NDEP+NLITIN+NWLIN+NCRLIN+NFRLIN-NUP-NLEACH-NVOL = DeltaNSOIL+DeltaNFLIT+DeltaNCLITB
-    # p16<-xyplot(I(NDEP+NLITIN+NWLIN+NCRLIN+NFRLIN+NSEED/1000+NFRUIT/1000-NUP-NLEACH-NVOL)~I(deltaNSOIL+deltaNFLIT+deltaNCLITB),annDF,
-    #             #main='I(NDEP+NLITIN+NWLIN+NCRLIN+NFRLIN-NUP-NLEACH-NVOL)~I(deltaNSOIL+deltaNFLIT+deltaNCLITB)',
-    #             auto.key=T,
-    #             scales=list(relation='free'),
-    #             panel=function(...){
-    #                 panel.xyplot(...)
-    #                 panel.abline(a=0,b=1)}) 
-    # 
-    # 
-    # p17<-xyplot(I(NDEP+NLITIN+NWLIN+NCRLIN+NFRLIN+NSEED/1000+NFRUIT/1000-NUP-NLEACH-NVOL)~I(deltaNTSOIL+deltaNFLIT+deltaNCLITB),annDF,
-    #             #main='I(NDEP+NLITIN+NWLIN+NCRLIN+NFRLIN-NUP-NLEACH-NVOL)~I(deltaNSOIL+deltaNFLIT+deltaNCLITB)',
-    #             auto.key=T,
-    #             scales=list(relation='free'),
-    #             panel=function(...){
-    #                 panel.xyplot(...)
-    #                 panel.abline(a=0,b=1)}) 
     
     ### We now check the mass balance for NSOIL, which should equal to total organic and inorganic pools. 
-    p15<-xyplot(I(NPMIN+NPORG)~NSOIL,annDF,
+    p14<-xyplot(I(NPMIN+NPORG)~NSOIL,annDF,
                 #main='I(NPMIN+NPORG)~NSOIL',
                 auto.key=T,
                 scales=list(relation='free'),
@@ -582,7 +544,7 @@ EucFACE_mass_balance_and_validation_script_QUJSM <- function() {
                     panel.abline(a=0,b=1)}) 
     
     
-    p16<-xyplot(I(NTPMIN+NTPORG)~NTSOIL,annDF,
+    p15<-xyplot(I(NTPMIN+NTPORG)~NTSOIL,annDF,
                 #main='I(NPMIN+NPORG)~NSOIL',
                 auto.key=T,
                 scales=list(relation='free'),
@@ -592,7 +554,7 @@ EucFACE_mass_balance_and_validation_script_QUJSM <- function() {
     
     ### print plots to file, change numbering if needed
     pdf(paste0(out.dir, '/QC_Nitrogen_Balance_',mod.abb,'.pdf',sep=''),width=10,height=8)
-    for (i in 1:16) {
+    for (i in 1:15) {
         print(get(paste("p",i,sep="")))
     }
     dev.off()

@@ -45,6 +45,13 @@ compile_obs_fix_dataset_across_models(p.mod.list, n.mod.list, d.mod.list)
 compare_CNP_and_CN_model_output()
 
 
+### show microbial effects with the two microbial enabled models
+#compare_microbial_processes_model_output()
+
+### show dynamic vegetation effect with the two DGVM models
+#compare_dynamic_vegetation_effect_model_output()
+
+
 ### make MIP time-series plot for both variable and fixed climate, over observed period
 make_MIP_time_series_plot(scenario="var")
 
