@@ -139,7 +139,7 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
                             PWLIN+NWRETR+PWRETR+NCRRETR+PCRRETR+NFRRETR+
                             PFRRETR+NDEP+NFIX+NVOL+PDEP+PWEA+
                             ### additional variables for QUINCY
-                            RMAIN+RNTRANS+CVEGLIN+CGSTR+
+                            RMAIN+RNTRANS+CVEGLIN+CGSTR+ ## labile C flux into plant labile pool
                             NGSTR+NSTRLIN+NVEGLIN+NREPR+NRECYC+
                             PGSTR+PSTRLIN+PVEGLIN+PREPR+PRECYC~
                             YEAR, data=modDF, FUN=sum, keep.names=T, na.rm=T)
@@ -561,8 +561,8 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
     
     ##################### Phosphorus balance check ################################
     ### The net influx - outflux should equal to the change in all ecosystem P pools: 
-    ### PDEP+PWEA-PLEACH = DeltaPL+DeltaPW+DeltaPCR+DeltaPFR+DeltaPSOIL+DeltaPFLIT+DeltaPCLITB
-    ### MJ: missing outflux? What about PWEA?
+    ### Partical transport
+    ### MJ: missing outflux? What about PWEA? - parent pool in soil pool
     p1<-xyplot(I(PDEP-PLEACH)~
                    (I(deltaPL+deltaPW+deltaPCR+deltaPFR+deltaPSTOR+deltaPSEED+deltaPFRUIT+
                                      deltaPTSOIL+deltaPFLIT+deltaPCLITB)),annDF,
@@ -571,6 +571,8 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
                panel=function(...){
                    panel.xyplot(...)
                    panel.abline(a=0,b=1)}) 
+    
+    plot(p1)
     
     
     ### Next, we check changes in major vegetation P pools. 
