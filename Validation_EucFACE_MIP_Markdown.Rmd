@@ -31,7 +31,7 @@ source("prepare.R")
 ####             CABLP: CABLE-POP, CNP version
 ####             ELMXX: ELM, CNP version
 
-mod.abb <- "GDAYP"
+mod.abb <- "QUJSM"
 
 
 ```

@@ -65,7 +65,7 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
     ### the naming of the file follows the output protocol. 
     ### Note that this is the daily file. 
     ### You can modify this path to read in different files. 
-    modDF <- read.csv(paste0("simulation_output/", mod.abb, 
+    modDF <- read.csv(paste0("simulation_output/", #mod.abb, 
                              "/EUC_", mod.abb, "_OBS_VAR_AMB_NOP_D.csv"))
     
     ### checking number of column in the original dataframe
@@ -474,7 +474,7 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
     ### Here we are looking at DeltaNSTOR 
     ### to see if it helps to close the mass balance if the figure above doesn't close its mass balance. 
     ### Lin COMMENT: balance resolved in p8
-    p9<-xyplot(I(NUP+NRECYC-NGL-NGFR-NGCR-NGW-NREPR)~deltaNSTOR,annDF,
+    p9<-xyplot(I(NUP+NRECYC-NGL-NGFR-NGCR-NGW-NREPR-NSTRLIN)~deltaNSTOR,annDF,
                #main='I(NUP+NLRETR+NWRETR+NFRRETR+NCRRETR-NGL-NGFR-NGCR-NGW)~deltaNSTOR',
                auto.key=T,
                scales=list(relation='free'),
@@ -494,7 +494,6 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
                panel=function(...){
                    panel.xyplot(...)
                    panel.abline(a=0,b=1)}) 
-    
     
     ### Similar to the above figure, we are checking if Delta$NSTOR helps to close the budget. 
     ### Lin COMMENT: not applicable for QUINCY since NFIX goes to soil not plant
@@ -520,6 +519,7 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
                 panel=function(...){
                     panel.xyplot(...)
                     panel.abline(a=0,b=1)}) 
+    
     
     p13<-xyplot(I(NDEP+NFIX-NLEACH-NVOL)~
                     (I(deltaNL+deltaNW+deltaNCR+deltaNFR+deltaNSTOR+deltaNTSOIL+deltaNFLIT+deltaNCLITB+deltaNSEED+deltaNFRUIT)),annDF,
@@ -612,7 +612,28 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
                panel=function(...){
                    panel.xyplot(...)
                    panel.abline(a=0,b=1)}) 
-    
+    ### This is to check whole ecosystem P flux, 
+    ### Lin: this is soil P budget. NOTE: weathering is already taken account in deltaPTSOIL
+    ### which means that total in - out = net change:
+    ### PDEP+PWEA+PLITIN+PWLIN+PCRLIN+PFRLIN-PUP-PLEACH = DeltaPSOIL+DeltaFLIT+DeltaPCLITB
+    p11<-# xyplot(I(PDEP+PWEA+PLITIN+PWLIN+PCRLIN+PFRLIN-PUP-PLEACH)~I(deltaPSOIL+deltaPFLIT+deltaPCLITB),annDF,
+        xyplot(I(PDEP+PVEGLIN-PUP-PLEACH)~
+                   I(deltaPTSOIL+deltaPFLIT+deltaPCLITB),annDF,       
+               #main='I(PDEP+PWEA+PLITIN+PWLIN+PCRLIN+PFRLIN-PUP-PLEACH)~I(deltaPSOIL+deltaPFLIT+deltaPCLITB)',
+               auto.key=T,
+               scales=list(relation='free'),
+               panel=function(...){
+                   panel.xyplot(...)
+                   panel.abline(a=0,b=1)}) 
+    ### Lin: the reason for the unbalance is the missing litterfall of seedbed in PVEGLIN
+    p8<-xyplot(I(PUP-PVEGLIN)~
+                   I(deltaPL+deltaPW+deltaPCR+deltaPFR+deltaPSTOR+deltaPSEED+deltaPFRUIT),annDF,
+               #main='I(PDEP+PWEA-PLEACH)~(I(deltaPL+deltaPW+deltaPCR+deltaPFR+deltaPSOIL+deltaPFLIT+deltaPCLITB))',
+               auto.key=T,
+               scales=list(relation='free'),
+               panel=function(...){
+                   panel.xyplot(...)
+                   panel.abline(a=0,b=1)}) 
     
     ### Next, we check changes in major vegetation P pools. 
     ### It should equal to production flux - retranslocation flux - litterfall. 
@@ -684,13 +705,13 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
     
     ### Lin: see p7
     ### This is to consider the effect of DeltaPSTOR. 
-    # p9<-xyplot(I(PUP+PRECYC-PGL-PGFR-PGCR-PGW-PREPR)~deltaPSTOR,annDF,
-    #            #main='I(PUP+PLRETR+PWRETR+PFRRETR+PCRRETR-PGL-PGFR-PGCR-PGW)~deltaPSTOR',
-    #            auto.key=T,
-    #            scales=list(relation='free'),
-    #            panel=function(...){
-    #                panel.xyplot(...)
-    #                panel.abline(a=0,b=1)}) 
+    p9<-xyplot(I(PUP+PRECYC-PGL-PGFR-PGCR-PGW-PREPR-PSTRLIN)~deltaPSTOR,annDF,
+               #main='I(PUP+PLRETR+PWRETR+PFRRETR+PCRRETR-PGL-PGFR-PGCR-PGW)~deltaPSTOR',
+               auto.key=T,
+               scales=list(relation='free'),
+               panel=function(...){
+                   panel.xyplot(...)
+                   panel.abline(a=0,b=1)})
     
     ### Lin: see p7
     # p10<-xyplot(I(PUP+PRECYC-PGL-PGFR-PGCR-PGW-PREPR-PSEED/1000-PFRUIT/1000)~deltaPSTOR,annDF,
@@ -701,20 +722,7 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
     #                 panel.xyplot(...)
     #                 panel.abline(a=0,b=1)}) 
     
-    
-    ### This is to check whole ecosystem P flux, 
-    ### Lin: this is soil P budget. NOTE: weathering is already taken account in deltaPTSOIL
-    ### which means that total in - out = net change:
-    ### PDEP+PWEA+PLITIN+PWLIN+PCRLIN+PFRLIN-PUP-PLEACH = DeltaPSOIL+DeltaFLIT+DeltaPCLITB
-    p11<-# xyplot(I(PDEP+PWEA+PLITIN+PWLIN+PCRLIN+PFRLIN-PUP-PLEACH)~I(deltaPSOIL+deltaPFLIT+deltaPCLITB),annDF,
-         xyplot(I(PDEP+PVEGLIN-PUP-PLEACH)~
-                    I(deltaPTSOIL+deltaPFLIT+deltaPCLITB),annDF,       
-                #main='I(PDEP+PWEA+PLITIN+PWLIN+PCRLIN+PFRLIN-PUP-PLEACH)~I(deltaPSOIL+deltaPFLIT+deltaPCLITB)',
-                auto.key=T,
-                scales=list(relation='free'),
-                panel=function(...){
-                    panel.xyplot(...)
-                    panel.abline(a=0,b=1)}) 
+
     
     
     ### Now to check a basic mass balance on soil P. 
