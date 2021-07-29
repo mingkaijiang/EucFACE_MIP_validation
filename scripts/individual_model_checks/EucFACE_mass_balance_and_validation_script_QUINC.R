@@ -323,20 +323,10 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
                     panel.abline(a=0,b=1)}) 
     
     
-    ### This mass balance equation checks the net of total influx litter and heterotrophic respiration. 
-    ### In theory, the net difference of these two flues should equal to the change in soil + litter pool. 
-    ### Note that CEX was included as an additional influx into the soil. The full equation is: 
-    ### CLITIN+CWLIN+CFRLIN+CCRLIN+CREPR+CEX-RHET = Delta$CSOIL+Delta$CCLITB+Delta$CFLIT
-    p14<-xyplot(I(CEX+CLITIN+CWLIN+CFRLIN+CCRLIN+CREPR-RHET)~I(deltaCSOIL+deltaCCLITB+deltaCFLIT),annDF,
-                auto.key=T,
-                scales=list(relation='free'),
-                panel=function(...){
-                    panel.xyplot(...)
-                    panel.abline(a=0,b=1)}) 
     
     
     ### Lin to check
-    p15<-# xyplot(I(CEX+CLITIN+CWLIN+CFRLIN+CCRLIN+CREPR-RHET)~I(deltaCTSOIL+deltaCCLITB+deltaCFLIT),annDF,
+    p14<-# xyplot(I(CEX+CLITIN+CWLIN+CFRLIN+CCRLIN+CREPR-RHET)~I(deltaCTSOIL+deltaCCLITB+deltaCFLIT),annDF,
                 xyplot(I(CEX+CVEGLIN-RHET)~I(deltaCTSOIL+deltaCCLITB+deltaCFLIT),annDF,
                 auto.key=T,
                 scales=list(relation='free'),
@@ -349,7 +339,7 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
     
     ### print plots to file, change numbering if needed
     pdf(paste0(out.dir, '/QC_Carbon_Balance_',mod.abb,'.pdf',sep=''),width=10,height=8)
-    for (i in 1:15) {
+    for (i in 1:14) {
         print(get(paste("p",i,sep="")))
     }
     dev.off()
@@ -572,12 +562,26 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
                    panel.xyplot(...)
                    panel.abline(a=0,b=1)}) 
     
-    plot(p1)
+    p2<-xyplot(I(PDEP+PVEGLIN-PUP-PLEACH)~I(deltaPTSOIL+deltaPFLIT+deltaPCLITB),annDF,       
+               auto.key=T,
+               scales=list(relation='free'),
+               panel=function(...){
+                   panel.xyplot(...)
+                   panel.abline(a=0,b=1)}) 
+    
+    ### Lin: the reason for the unbalance is the missing litterfall of seedbed in PVEGLIN
+    p3<-xyplot(I(PUP-PVEGLIN)~
+                   I(deltaPL+deltaPW+deltaPCR+deltaPFR+deltaPSTOR+deltaPSEED+deltaPFRUIT),annDF,
+               auto.key=T,
+               scales=list(relation='free'),
+               panel=function(...){
+                   panel.xyplot(...)
+                   panel.abline(a=0,b=1)}) 
     
     
     ### Next, we check changes in major vegetation P pools. 
     ### It should equal to production flux - retranslocation flux - litterfall. 
-    p2<- xyplot(I(PGL-PLITIN+PGW-PWLIN+PGFR-PFRLIN-PRECYC)~I(deltaPL+deltaPW+deltaPFR),annDF,
+    p4<- xyplot(I(PGL-PLITIN+PGW-PWLIN+PGFR-PFRLIN-PRECYC)~I(deltaPL+deltaPW+deltaPFR),annDF,
                auto.key=T,
                scales=list(relation='free'),
                panel=function(...){
@@ -585,7 +589,7 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
                    panel.abline(a=0,b=1)}) 
     
     ### Lin: not printed out for QUINCY
-    p3<-xyplot(I(PGW-PWLIN-PWRETR)~deltaPW,annDF,
+    p5<-xyplot(I(PGW-PWLIN-PWRETR)~deltaPW,annDF,
                #main='I(PGW-PWLIN-PWRETR)~deltaPW',
                auto.key=T,
                scales=list(relation='free'),
@@ -594,7 +598,7 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
                    panel.abline(a=0,b=1)}) 
     
     ### Lin: not printed out for QUINCY
-    p4<-xyplot(I(PGFR-PFRLIN-PFRRETR)~deltaPFR,annDF,
+    p6<-xyplot(I(PGFR-PFRLIN-PFRRETR)~deltaPFR,annDF,
                #main='I(PGFR-PFRLIN-PFRRETR)~deltaPFR',
                auto.key=T,
                scales=list(relation='free'),
@@ -603,7 +607,7 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
                    panel.abline(a=0,b=1)}) 
     
     ### Lin: not printed out for QUINCY
-    p5<-xyplot(I(PGCR-PCRLIN-PCRRETR)~deltaPCR,annDF,
+    p7<-xyplot(I(PGCR-PCRLIN-PCRRETR)~deltaPCR,annDF,
                #main='I(PGCR-PCRLIN-PCRRETR)~deltaPCR',
                auto.key=T,
                scales=list(relation='free'),
@@ -613,7 +617,7 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
     
     
     ### This is to check P litter flux. 
-    p6<-xyplot(I(PFLITA+PFLITB)~PFLIT,annDF,
+    p8<-xyplot(I(PFLITA+PFLITB)~PFLIT,annDF,
                #main='I(PFLITA+PFLITB)~PFLIT',
                auto.key=T,
                scales=list(relation='free'),
@@ -623,7 +627,7 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
     
     ### Now we check the total P required to make new vegetation: 
     ### PUP+PLRETR+PWRETR+PFRRETR+PCRRETR=PGL+PGFR+PGCR+PGW
-    p7<-# xyplot(I(PUP+PRECYC)~I(PGL+PGFR+PGCR+PGW+PREPR),annDF,
+    p9<-# xyplot(I(PUP+PRECYC)~I(PGL+PGFR+PGCR+PGW+PREPR),annDF,
         xyplot(I(PUP+PRECYC)~I(PGL+PGFR+PGCR+PGW+PREPR+deltaPSTOR+PSTRLIN),annDF,
                #main='I(PUP+PLRETR+PWRETR+PFRRETR+PCRRETR)~I(PGL+PGFR+PGCR+PGW)',
                auto.key=T,
@@ -632,40 +636,11 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
                    panel.xyplot(...)
                    panel.abline(a=0,b=1)}) 
     
-    ### Lin: see p7
-    # p8<-xyplot(I(PUP+PRECYC)~I(PGL+PGFR+PGCR+PGW+PREPR+PSEED/1000+PFRUIT/1000),annDF,
-    #            #main='I(PUP+PLRETR+PWRETR+PFRRETR+PCRRETR)~I(PGL+PGFR+PGCR+PGW)',
-    #            auto.key=T,
-    #            scales=list(relation='free'),
-    #            panel=function(...){
-    #                panel.xyplot(...)
-    #                panel.abline(a=0,b=1)}) 
-    
-    ### Lin: see p7
-    ### This is to consider the effect of DeltaPSTOR. 
-    # p9<-xyplot(I(PUP+PRECYC-PGL-PGFR-PGCR-PGW-PREPR)~deltaPSTOR,annDF,
-    #            #main='I(PUP+PLRETR+PWRETR+PFRRETR+PCRRETR-PGL-PGFR-PGCR-PGW)~deltaPSTOR',
-    #            auto.key=T,
-    #            scales=list(relation='free'),
-    #            panel=function(...){
-    #                panel.xyplot(...)
-    #                panel.abline(a=0,b=1)}) 
-    
-    ### Lin: see p7
-    # p10<-xyplot(I(PUP+PRECYC-PGL-PGFR-PGCR-PGW-PREPR-PSEED/1000-PFRUIT/1000)~deltaPSTOR,annDF,
-    #             #main='I(PUP+PLRETR+PWRETR+PFRRETR+PCRRETR-PGL-PGFR-PGCR-PGW)~deltaPSTOR',
-    #             auto.key=T,
-    #             scales=list(relation='free'),
-    #             panel=function(...){
-    #                 panel.xyplot(...)
-    #                 panel.abline(a=0,b=1)}) 
-    
-    
     ### This is to check whole ecosystem P flux, 
     ### Lin: this is soil P budget. NOTE: weathering is already taken account in deltaPTSOIL
     ### which means that total in - out = net change:
     ### PDEP+PWEA+PLITIN+PWLIN+PCRLIN+PFRLIN-PUP-PLEACH = DeltaPSOIL+DeltaFLIT+DeltaPCLITB
-    p8<-# xyplot(I(PDEP+PWEA+PLITIN+PWLIN+PCRLIN+PFRLIN-PUP-PLEACH)~I(deltaPSOIL+deltaPFLIT+deltaPCLITB),annDF,
+    p10<-# xyplot(I(PDEP+PWEA+PLITIN+PWLIN+PCRLIN+PFRLIN-PUP-PLEACH)~I(deltaPSOIL+deltaPFLIT+deltaPCLITB),annDF,
          xyplot(I(PDEP+PVEGLIN-PUP-PLEACH)~
                     I(deltaPTSOIL+deltaPFLIT+deltaPCLITB),annDF,       
                 #main='I(PDEP+PWEA+PLITIN+PWLIN+PCRLIN+PFRLIN-PUP-PLEACH)~I(deltaPSOIL+deltaPFLIT+deltaPCLITB)',
@@ -677,7 +652,7 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
     
     
     ### Now to check a basic mass balance on soil P. 
-    p9<-xyplot(I(PPMIN+PPORG)~PSOIL,annDF,
+    p11<-xyplot(I(PPMIN+PPORG)~PSOIL,annDF,
                 #main='I(PPMIN+PPORG)~PSOIL',
                 auto.key=T,
                 scales=list(relation='free'),
@@ -687,7 +662,7 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
     
     
     ### Inorganic P pool in soils: PLAB+PSEC+POCC+PPAR=PPMIN
-    p10<-xyplot(I(PLAB+PSEC+POCC+PPAR)~PPMIN,annDF,
+    p12<-xyplot(I(PLAB+PSEC+POCC+PPAR)~PPMIN,annDF,
                 #main='I(PLAB+PSEC+POCC+PPAR)~PPMIN',
                 auto.key=T,
                 scales=list(relation='free'),
@@ -697,7 +672,7 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
     
     
     ### A different way to check PSOIL. 
-    p11<-xyplot(I(PLAB+PSEC+POCC+PPAR+PPORG)~PSOIL,annDF,
+    p13<-xyplot(I(PLAB+PSEC+POCC+PPAR+PPORG)~PSOIL,annDF,
                 #main='I(PLAB+PSEC+POCC+PPAR+PPORG)~PSOIL',
                 auto.key=T,
                 scales=list(relation='free'),
@@ -708,7 +683,7 @@ EucFACE_mass_balance_and_validation_script_QUINC <- function() {
     
     ### print plots to file, change numbering if needed
     pdf(paste0(out.dir, '/QC_Phosphorus_Balance_',mod.abb,'.pdf',sep=''),width=10,height=8)
-    for (i in 1:11) {
+    for (i in 1:13) {
         print(get(paste("p",i,sep="")))
     }
     dev.off()

@@ -279,8 +279,7 @@ EucFACE_mass_balance_and_validation_script_QUJSM <- function() {
     ### Here production fluxes include: CGL, CGFR, CGCR, CGW and CREPR, 
     ### and the respiratory flux is RAU. 
     ### If there is an exudation flux, make it part of GPP too.
-    p10<-#xyplot(I(RAU+CGL+CGFR+CGCR+CGW+CREPR+CEX+deltaCSTOR)~GPP,annDF,
-                xyplot(I(RAU+CGL+CGFR+CGCR+CGW+CGSTR+CREPR+CEX)~GPP,annDF,
+    p10<- xyplot(I(RAU+CGL+CGFR+CGCR+CGW+CGSTR+CREPR+CEX)~GPP,annDF,
                 #main='I(RAU+CGL+CGFR+CGCR+CGW+CREPR)~GPP',
                 auto.key=T,
                 scales=list(relation='free'),
@@ -291,8 +290,7 @@ EucFACE_mass_balance_and_validation_script_QUJSM <- function() {
     
     ### Similarly, NPP should equal to all growth fluxes, 
     ### that is, the sum of CGL, CGFR, CGCR, CGW, CREPR, and CEX.
-    p11<-#xyplot(I(CGW+CGL+CGFR+CGCR+CREPR+CEX)~NPP,annDF,
-                xyplot(I(CGW+CGL+CGFR+CGCR+CREPR+CGSTR+CEX)~NPP,annDF,
+    p11<-xyplot(I(CGW+CGL+CGFR+CGCR+CREPR+CGSTR+CEX)~NPP,annDF,
                 auto.key=T,
                 scales=list(relation='free'),
                 panel=function(...){
@@ -351,7 +349,7 @@ EucFACE_mass_balance_and_validation_script_QUJSM <- function() {
                      panel.xyplot(...)
                      panel.abline(a=0,b=1)}) 
     
-    plot(p16)
+    #plot(p16)
     
     ### print plots to file, change numbering if needed
     pdf(paste0(out.dir, '/QC_Carbon_Balance_',mod.abb,'.pdf',sep=''),width=10,height=8)
