@@ -148,6 +148,7 @@ EucFACE_mass_balance_and_validation_script_LPJGN <- function(mod.version,
     fluxDF <- summaryBy(PREC+ET+TRANS+ES+EC+RO+DRAIN+NEP+GPP+NPP+
                         GPPno+GPPns+CLEST+CWEST+CFREST+CDEBTEST+         ### model specific variables
                         #CWLINDEBT+
+                        NSTORLIN+
                         RHET+RAU+RECO+CGL+CGFR+CGCR+CGW+
                         NGL+NGFR+NGCR+NGW+
                         NUP+NGMIN+NMIN+NLEACH+NLRETR+PLRETR+RCR+RFR+CREPR+CEX+CVOC+
@@ -184,12 +185,13 @@ EucFACE_mass_balance_and_validation_script_LPJGN <- function(mod.version,
     ### add delta column name to deltaDF
     names(deltaDF)[2:l] <- paste0("delta", names(deltaDF[2:l]))
     
+    ### calculate annual maximum for some variables
+    maxDF <- summaryBy(LAI+CL+CFR+CSTOR+NL+NFR+NSTOR~YEAR, data=modDF, keep.names=T, na.rm=T)
+    
     ### merge all dataframe together
     annDF <- merge(fluxDF, poolDF, by="YEAR")
     annDF <- merge(annDF, deltaDF, by="YEAR", all.x=T)
-    
-    ### calculate annual maximum for some variables
-    maxDF <- summaryBy(LAI+CL+CFR+CSTOR+NL+NFR+NSTOR+PL+PFR+PSTOR~YEAR, data=modDF, keep.names=T, na.rm=T)
+    annDF <- merge(annDF, maxDF, by="YEAR", all.x=T)
     
     
     
