@@ -35,7 +35,7 @@ source("prepare.R")
 #                                                   pft.variable = "tile_averaged")
 
 ### LPJ-GUESS
-#unzip_LPJ_GUESS_output(sourceDir=paste0('~/Downloads/2021-07-21_r9911'),
+#unzip_LPJ_GUESS_output(sourceDir=paste0('~/Downloads/2021-07-28_r9918'),
 #                       destDir=paste0(getwd(), "/simulation_output"))
 
 ### LPJ-GUESS-CNP rename file name

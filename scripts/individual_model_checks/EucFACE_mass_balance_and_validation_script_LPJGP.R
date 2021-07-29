@@ -1,33 +1,53 @@
 EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
                                                              pft.group) {
-    #### EucFACE mass balance and validation script
-    #### Mingkai Jiang (m.jiang@westernsydney.edu.au)
-    ####
-    #### 
-    #### To use this script, please create two folders within this repository,
-    #### and place the relevant data files into each folder. 
-    #### - Create a folder "simulation_output", 
-    ####   and place the model simulation results into this folder 
-    ####   (note, only the file containing ambient treatment over the period of 2012 - 2019).
-    #### - Create a folder "validation_dataset", 
-    ###    and place the validation datasets into this folder (data can be obtained via the CloudStor link sent previously).
-    #### 
-    #### 
-    #### This output of this script is organized in the following order:
-    #### - Step 2: Checking mass balance. 
-    ####   This section will check mass balance of model output, 
-    ####   including major carbon, water, nitrogen and phosphorus cycle variables.  
-    #### - Step 3: Checking time-invariance variables against validation data. 
-    ####   This section will check some key pools and fluxes against the validation dataset. 
-    ####   All validation data are provided in the EucFACE parameter list file. 
-    ####   Note that the data are either averaged over time, or one fixed value measured at one point. 
-    #### - Step 4: Checking time-varying variables against some validation data. 
-    ####   This section will check some temporal patterns of the simulation results against some validation datasets. 
-    #### 
-    #### Finally, please note that, all checks are performed for the ambient CO2 treatment only, 
-    #### over the period where observations are available (i.e. 2012 - 2019). 
-    #### For the validation against observation dataset, 
-    #### please also use simulation results under the no P addition and variable climate forcing scenario. 
+    ### Notes from David Warlind, date 28-07-2021
+    #delta = day2 - day1
+    #rhs = day2
+    #
+    #C BALANCE
+    #
+    #If day1 and day2 has PHENL == 1
+    #delta CL = CGL+CLEST-CLITIN
+    #
+    #If day1 and day2 has PHENFR == 1
+    #delta CFR = CGFR+CFREST-CFRLIN
+    #
+    #delta CW = CGW+CWEST-(CWLIN+CWLINDEBT)
+    #
+    #delta (CFLIT + CCLITB + CSOILtot) = CLITIN + CFRLIN + CWLIN - RHET
+    #
+    #CSTOR sums NPP (GPP-RAU) over the year and uses it for allocation and growth on the last day of the year.
+    #
+    #The following works only on annual timesteps
+    #
+    #annual NPP == annual (GPP-RAU) == CSTOR == CGL + CGW + CGFR + CREPR - CWLINDEBT + delta CDEBT (day 365 - 365+1)
+    #
+    #annual GPP == RAU + CGL + CGW + CGFR + CREPR - CWLINDEBT + delta CDEBT (day 365 - 365+1)
+    #
+    #annual NEP == annual NPP - annual RHET - annual CLEACH - CREPR + CLEST + CWEST + CFREST - CDEBTEST
+    #
+    #
+    #N BALANCE
+    #
+    #delta NL = NGL - (NLITIN + NLRETR)
+    #delta NW = NGW - (NWLIN + NWRETR)
+    #delta NFR = NGFR - (NFRLIN + NFRRETR)
+    #
+    #delta (NL + NW + NFR + NSTOR) = NUP - (NLITIN + NFRLIN + NWLIN + NSTORLIN)
+    #
+    #NNEE == NDEP + NFIX - NLEACH - NVOL
+    #
+    #
+    #P BALANCE
+    #
+    #delta PL = PGL - (PLITIN + PLRETR)
+    #delta PW = PGW - (PWLIN + PWRETR)
+    #delta PFR = PGFR - (PFRLIN + PFRRETR)
+    #
+    #delta (PL + PW + PFR + PSTOR) = PUP - (PLITIN + PFRLIN + PWLIN + PSTORLIN)
+    #
+    #PNEE == PDEP + PWEAT - PLEACH - PGOCL
+    
     
     ##########################################################################
     #### Step 1: basic set-up
@@ -156,6 +176,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
                         NCRLIN+NFRLIN+NWLIN+PLITIN+PCRLIN+PFRLIN+PWLIN+
                         NWRETR+PWRETR+NCRRETR+PCRRETR+NFRRETR+PFRRETR+
                         CLEACH+NNEP+PNEP+PGOCL+                         ### Model specific variables
+                        NSTORLIN+PSTORLIN+
                         NDEP+NFIX+NVOL+PDEP+PWEA~YEAR, 
                         data=modDF, FUN=sum, keep.names=T, na.rm=T)
     
@@ -169,7 +190,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
                        "NPORGtot", "PSOILtot", "PPMINtot", "PPORGtot", "CDEBT", "CEXCESS", "CWLINDEBT",           ## model specific output
                        "PHENL", "PHENFR")]                                                                        ## model specific output
     
-    poolDF <- subset(poolDF, DOY==1)
+    poolDF <- subset(poolDF, DOY==365)
 
     poolDF$DOY <- NULL
     
@@ -185,13 +206,49 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
     ### add delta column name to deltaDF
     names(deltaDF)[2:l] <- paste0("delta", names(deltaDF[2:l]))
     
+    
+    
+    ### alternative
+    poolDF2 <- modDF[,c("YEAR", "DOY", "SW","CL","LAI","CW","CFR","CCR","NL","NW","NFR","NCR","PL","PW","PFR","PCR","CSTOR","NSTOR","PSTOR",
+                        "CSOIL","NSOIL","PSOIL","NPMIN","PPMIN","PLAB","PSEC","POCC",
+                        "PPAR","CFLIT","CFLITA","CFLITB",
+                        "NFLITA","NFLITB","PFLITA","PFLITB","CCLITB","NCLITB","PCLITB","NFLIT","PFLIT", "NPORG", "PPORG", 
+                        "MAXNSTORE", "MAXPSTORE", "SWtot", "SWPAtot", "CSOILtot", "NSOILtot", "NPMINtot",          ## model specific output
+                        "NPORGtot", "PSOILtot", "PPMINtot", "PPORGtot", "CDEBT", "CEXCESS", #"CWLINDEBT",           ## model specific output
+                        "PHENL", "PHENFR")] 
+    
+    ### calculate change in pools for mass balance
+    deltaDF2 <- poolDF2[poolDF2$DOY==1&poolDF2$YEAR < 2019,]
+    
+    l <- dim(deltaDF2)[2]
+    
+    for (i in c(2012:2018)) {
+        deltaDF2[deltaDF2$YEAR==i,3:l] <- poolDF2[poolDF2$YEAR==i&poolDF2$DOY==365,3:l]-poolDF2[poolDF2$YEAR==(i+1)&poolDF2$DOY==1,3:l]
+    }
+    
+    deltaDF2$DOY <- NULL
+    
+    ### add delta column name to deltaDF
+    names(deltaDF2)[2:(l-1)] <- paste0("delta", names(deltaDF2[2:(l-1)]))
+    
+    
+    ### calculate annual maximum for some variables
+    maxDF <- summaryBy(LAI+CL+CFR+CSTOR+NL+NFR+NSTOR+PL+PFR+PSTOR~YEAR, 
+                       data=modDF, keep.names=T, na.rm=T)
+    
+    ### add delta column name to deltaDF
+    l2 <- dim(maxDF)[2]
+    names(maxDF)[2:l2] <- paste0("max", names(maxDF[2:l2]))
+    
     ### merge all dataframe together
     annDF <- merge(fluxDF, poolDF, by="YEAR")
     annDF <- merge(annDF, deltaDF, by="YEAR", all.x=T)
+    annDF <- merge(annDF, maxDF, by="YEAR", all.x=T)
     
-    ### calculate annual maximum for some variables
-    maxDF <- summaryBy(LAI+CL+CFR+CSTOR+NL+NFR+NSTOR+PL+PFR+PSTOR~YEAR, data=modDF, keep.names=T, na.rm=T)
-    
+
+    annDF2 <- merge(fluxDF, poolDF, by="YEAR")
+    annDF2 <- merge(annDF2, deltaDF2, by="YEAR", all.x=T)
+    annDF2 <- merge(annDF2, maxDF, by="YEAR", all.x=T)
     
     
     
@@ -208,31 +265,71 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
                    panel.abline(a=0,b=1)}) 
     
     
-    ### NEP + RECO = GPP
-    ### mass balance not closed, because GPP is for trees only
-    p2<-xyplot(I(NEP+RECO)~GPP,annDF,
-               #main='NEP+RECO~GPP',
+    ### CSTOR sums NPP (GPP-RAU) over the year and 
+    ### uses it for allocation and growth on the last day of the year.
+    ### annual NPP == annual (GPP-RAU) 
+    ###            == CSTOR 
+    ###            == CGL + CGW + CGFR + CREPR - CWLINDEBT + delta CDEBT (day 365 - 365+1)
+    p2<-xyplot(CSTOR~NPP, annDF,
                auto.key=T,
                scales=list(relation='free'),
                panel=function(...){
                    panel.xyplot(...)
                    panel.abline(a=0,b=1)}) 
     
+    
+    p3 <-xyplot(NPP~(CGL+CGW+CGFR+CREPR-CWLINDEBT+deltaCDEBT),annDF,
+                auto.key=T,
+                scales=list(relation='free'),
+                panel=function(...){
+                    panel.xyplot(...)
+                    panel.abline(a=0,b=1)}) 
+    
+    #plot(p3)
+    
+    ### NEP + RECO = GPP
+    p4<-xyplot(I(NEP+RECO+CLEACH+CREPR)~GPP,annDF2,
+               auto.key=T,
+               scales=list(relation='free'),
+               panel=function(...){
+                   panel.xyplot(...)
+                   panel.abline(a=0,b=1)}) 
+    
+
+    ### annual GPP == RAU + CGL + CGW + CGFR + CREPR - CWLINDEBT + delta CDEBT (day 365 - 365+1)
+    p5<-xyplot(I(RAU+CGL+CGW+CGFR+CREPR-CWLINDEBT+deltaCDEBT)~GPP,annDF,
+               auto.key=T,
+               scales=list(relation='free'),
+               panel=function(...){
+                   panel.xyplot(...)
+                   panel.abline(a=0,b=1)}) 
+    
+    
+    #plot(p5)
     
     ### RHET + RAU = RECO
-    ### mass balance not closed because RAU is for trees only
-    p3<-xyplot(I(RHET+RAU)~RECO,fluxDF,
-               #main='RHET+RAUTO~RECO',
+    p6<-xyplot(I(RHET+RAU)~RECO,fluxDF,
                auto.key=T,
                scales=list(relation='free'),
                panel=function(...){
                    panel.xyplot(...)
                    panel.abline(a=0,b=1)}) 
+    
+    
+    ### annual NEP == annual NPP - annual RHET - annual CLEACH - CREPR + CLEST + CWEST + CFREST - CDEBTEST
+    p7<-xyplot(I(NPP-RHET-CLEACH-CREPR+CLEST+CWEST+CFREST-CDEBTEST)~NEP,annDF2,
+               auto.key=T,
+               scales=list(relation='free'),
+               panel=function(...){
+                   panel.xyplot(...)
+                   panel.abline(a=0,b=1)}) 
+    
+    #plot(p7)
     
     ### sum of all autotrophic respiration fluxes
     ### Some models may not explicitly simulate individual respiratory fluxes (e.g. GDAY)
     ### Hence, this mass balance check may not be closed for all models. 
-    p4<-xyplot(I(RW+RFR+RGR)~RAU,fluxDF,
+    p8<-xyplot(I(RW+RFR+RGR)~RAU,fluxDF,
                #main='RL+RW+RCR+RFR+RGR~RAU',
                auto.key=T,
                scales=list(relation='free'),
@@ -243,7 +340,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
     
     ### This is not a mass balance check, but rather, to see how LAI scales with leaf carbon pool.
     ### Given that we provided SLA, we can use
-    p5<-xyplot(LAI~CL,poolDF,
+    p9<-xyplot(LAI~CL,poolDF,
                #main='LAI~CL',
                auto.key=T,
                scales=list(relation='free'),
@@ -252,7 +349,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
                    panel.abline(a=0,b=1)}) 
     
     
-    p6<-xyplot(I(CGL+CLEST-CLITIN)~I(deltaCL),annDF,
+    p10<-xyplot(I(CGL+CLEST-CLITIN)~I(deltaCL),annDF,
                #main='CGL-CLITIN~deltaCL',
                auto.key=T,
                scales=list(relation='free'),
@@ -261,7 +358,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
                    panel.abline(a=0,b=1)}) 
     
     
-    p7<-xyplot(I(CGW+CWEST-CWLIN)~deltaCW,annDF,
+    p11<-xyplot(I(CGW+CWEST-CWLIN)~deltaCW,annDF,
                #main='CGW-CWLIN~deltaCW',
                auto.key=T,
                scales=list(relation='free'),
@@ -270,7 +367,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
                    panel.abline(a=0,b=1)}) 
     
     
-    p8<-xyplot(I(CGFR+CFREST-CFRLIN)~deltaCFR,annDF,
+    p12<-xyplot(I(CGFR+CFREST-CFRLIN)~deltaCFR,annDF,
                #main='CGFR-CFRLIN~deltaCFR',
                auto.key=T,
                scales=list(relation='free'),
@@ -279,40 +376,43 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
                    panel.abline(a=0,b=1)}) 
     
     
-    p9 <- plot.new()
-    #p9<-xyplot(I(CGCR-CCRLIN)~deltaCCR,annDF,
-    #           #main='CGCR-CCRLIN~deltaCCR',
-    #           auto.key=T,
-    #           scales=list(relation='free'),
-    #           panel=function(...){
-    #               panel.xyplot(...)
-    #               panel.abline(a=0,b=1)}) 
-    #
     
     ### GPP should in theory equals to individual production fluxes and respiratory flux. 
     ### Here production fluxes include: CGL, CGFR, CGCR, CGW and CREPR, 
     ### and the respiratory flux is RAU. 
     ### If there is an exudation flux, make it part of GPP too.
-    p10<-xyplot(I(RAU+CGL+CGFR+CGW+CREPR+CLEST+CWEST+CFREST+CDEBTEST)~GPP,annDF,
+    p13<-xyplot(I(RAU+CGL+CGFR+CGW+CREPR+CLEST+CWEST+CFREST+CDEBTEST-CWLINDEBT+deltaCDEBT)~GPP,annDF2,
                 auto.key=T,
                 scales=list(relation='free'),
                 panel=function(...){
                     panel.xyplot(...)
                     panel.abline(a=0,b=1)}) 
+    
+    #plot(p13)
     
     ### Similarly, NPP should equal to all growth fluxes, 
     ### that is, the sum of CGL, CGFR, CGCR, CGW, CREPR, and CEX.
-    p11<-xyplot(I(CGW+CGL+CGFR+CREPR+CLEST+CWEST+CFREST+CDEBTEST)~NPP,annDF,
+    p14<-xyplot(I(CGW+CGL+CGFR+CREPR+CLEST+CWEST+CFREST+CDEBTEST)~NPP,annDF,
                 auto.key=T,
                 scales=list(relation='free'),
                 panel=function(...){
                     panel.xyplot(...)
                     panel.abline(a=0,b=1)}) 
     
+    p15<-xyplot(I(CLEST+CWEST+CFREST+CDEBTEST)~(deltaCDEBT-CWLINDEBT),annDF2,
+                auto.key=T,
+                scales=list(relation='free'),
+                panel=function(...){
+                    panel.xyplot(...)
+                    panel.abline(a=0,b=1)}) 
+    
+    #plot(p15)
+    
+
     ### This is a different way to check mass balance for NPP, 
     ### in that it includes Delta$CSTOR in addition to those growth fluxes included in the previous figure. 
     ### Some models don't explictly simulate CSTOR, so this mass balance may not apply. 
-    p12<-xyplot(I(CGW+CGL+CGFR+CREPR-deltaCDEBT)~NPP,annDF,
+    p16<-xyplot(I(CGW+CGL+CGFR+CREPR-deltaCDEBT)~NPP,annDF2,
                 #main='I(CGW+CGL+CGFR+CGCR+CREPR+deltaCSTOR)~NPP',
                 auto.key=T,
                 scales=list(relation='free'),
@@ -322,7 +422,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
     
     
     ### Here, CFLIT = CFLITA + CFLITB. 
-    p13<-xyplot(I(CFLITA+CFLITB)~CFLIT,annDF,
+    p17<-xyplot(I(CFLITA+CFLITB)~CFLIT,annDF,
                 #main='CFLITA+CFLITB~CFLIT',
                 auto.key=T,
                 scales=list(relation='free'),
@@ -333,16 +433,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
     
     ### This mass balance equation checks the net of total influx litter and heterotrophic respiration. 
     ### In theory, the net difference of these two flues should equal to the change in soil + litter pool. 
-    ### But here, we only have trees,so the mass balance doesn't add up?
-    p14<-xyplot(I(CLITIN+CWLIN+CFRLIN-RHET)~I(deltaCSOIL+deltaCCLITB+deltaCFLIT),annDF,
-                auto.key=T,
-                scales=list(relation='free'),
-                panel=function(...){
-                    panel.xyplot(...)
-                    panel.abline(a=0,b=1)}) 
-    
-    
-    p15<-xyplot(I(CLITIN+CWLIN+CFRLIN-RHET)~I(deltaCSOILtot+deltaCCLITB+deltaCFLIT),annDF,
+    p18<-xyplot(I(CLITIN+CWLIN+CFRLIN-RHET)~I(deltaCSOILtot+deltaCCLITB+deltaCFLIT),annDF,
                 auto.key=T,
                 scales=list(relation='free'),
                 panel=function(...){
@@ -352,7 +443,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
     
     ### print plots to file, change numbering if needed
     pdf(paste0(out.dir, '/QC_Carbon_Balance_',mod.abb,'_', pft.group, '.pdf',sep=''),width=10,height=8)
-    for (i in 1:15) {
+    for (i in 1:18) {
         print(get(paste("p",i,sep="")))
     }
     dev.off()
@@ -435,13 +526,6 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
                    panel.abline(a=0,b=1)}) 
     
     
-    #p4<-xyplot(I(NGL+NGW+NGFR-NLITIN-NWLIN-NFRLIN-NLRETR-NWRETR-NFRRETR-deltaNSTOR)~I(deltaNL+deltaNW+deltaNFR),annDF,
-    #           auto.key=T,
-    #           scales=list(relation='free'),
-    #           panel=function(...){
-    #               panel.xyplot(...)
-    #               panel.abline(a=0,b=1)}) 
-    #
     p4<-xyplot(I(NGL+NGW+NGFR-NLITIN-NWLIN-NFRLIN-NLRETR-NWRETR-NFRRETR)~I(deltaNL+deltaNW+deltaNFR-deltaNSTOR),annDF,
                auto.key=T,
                scales=list(relation='free'),
@@ -486,22 +570,30 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
                    panel.abline(a=0,b=1)}) 
     
     
-    ### N fixation could also be added to plant directly. 
-    ### So here we are checking its effect. Full equation is: 
-    ### NFIX+NUP+NLRETR+NWRETR+NFRRETR+NCRRETR = NGL+NGFR+NGCR+NGW
-    p8<-xyplot(I(NFIX+NUP+NLRETR+NWRETR+NFRRETR)~I(NGL+NGFR+NGW+deltaNSTOR+deltaNL+deltaNW+deltaNFR),annDF,
-               #main='I(NFIX+NUP+NLRETR+NWRETR+NFRRETR+NCRRETR)~I(NGL+NGFR+NGCR+NGW)',
+    p8<-xyplot(I(NUP-NLITIN-NFRLIN-NWLIN-NSTORLIN)~I(deltaNSTOR+deltaNL+deltaNW+deltaNFR),
+               annDF,
                auto.key=T,
                scales=list(relation='free'),
                panel=function(...){
                    panel.xyplot(...)
                    panel.abline(a=0,b=1)}) 
     
-    plot(p8)
+    #plot(p8)
+    
+    ### N fixation could also be added to plant directly. 
+    ### So here we are checking its effect. Full equation is: 
+    ### NFIX+NUP+NLRETR+NWRETR+NFRRETR+NCRRETR = NGL+NGFR+NGCR+NGW
+    p9<-xyplot(I(NFIX+NUP+NLRETR+NWRETR+NFRRETR)~I(NGL+NGFR+NGW+deltaNSTOR+deltaNL+deltaNW+deltaNFR),annDF,
+               auto.key=T,
+               scales=list(relation='free'),
+               panel=function(...){
+                   panel.xyplot(...)
+                   panel.abline(a=0,b=1)}) 
+    
+    #plot(p9)
     
     ### Similar to the above figure, we are checking if Delta$NSTOR helps to close the budget. 
-    p9<-xyplot(I(NFIX+NUP+NLRETR+NWRETR+NFRRETR-NGL-NGFR-NGW)~deltaNSTOR,annDF,
-               #main='I(NFIX+NUP+NLRETR+NWRETR+NFRRETR+NCRRETR-NGL-NGFR-NGCR-NGW)~deltaNSTOR',
+    p10<-xyplot(I(NFIX+NUP+NLRETR+NWRETR+NFRRETR-NGL-NGFR-NGW)~deltaNSTOR,annDF,
                auto.key=T,
                scales=list(relation='free'),
                panel=function(...){
@@ -509,37 +601,25 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
                    panel.abline(a=0,b=1)}) 
     
     ### Now we are checking the whole ecosystem N input and output. 
-    ### Full equation is:
-    ### NDEP+NFIX-NLEACH-NVOL = DeltaNL+DeltaNW+DeltaNCR+DeltaNFR+DeltaNSOIL+DeltaNFLIT+DeltaNCLITB
-    p10<-xyplot(I(NDEP+NFIX-NLEACH-NVOL)~(I(deltaNL+deltaNW+deltaNFR+deltaNSOIL+deltaNFLIT+deltaNCLITB+deltaNSTOR)),annDF,
-                #main='I(NDEP+NFIX-NLEACH-NVOL)~(I(deltaNL+deltaNW+deltaNCR+deltaNFR+deltaNSOIL+deltaNFLIT+deltaNCLITB))',
-                auto.key=T,
-                scales=list(relation='free'),
-                panel=function(...){
-                    panel.xyplot(...)
-                    panel.abline(a=0,b=1)}) 
-    
-    
     p11<-xyplot(I(NDEP+NFIX-NLEACH-NVOL)~(I(deltaNL+deltaNW+deltaNFR+deltaNSOILtot+deltaNFLIT+deltaNCLITB+deltaNSTOR)),annDF,
-                #main='I(NDEP+NFIX-NLEACH-NVOL)~(I(deltaNL+deltaNW+deltaNCR+deltaNFR+deltaNSOIL+deltaNFLIT+deltaNCLITB))',
                 auto.key=T,
                 scales=list(relation='free'),
                 panel=function(...){
                     panel.xyplot(...)
                     panel.abline(a=0,b=1)}) 
+    
+    
+    p12<-xyplot(NNEP~(I(deltaNL+deltaNW+deltaNFR+deltaNSOILtot+deltaNFLIT+deltaNCLITB+deltaNSTOR)),annDF,
+                auto.key=T,
+                scales=list(relation='free'),
+                panel=function(...){
+                    panel.xyplot(...)
+                    panel.abline(a=0,b=1)}) 
+    
+    #plot(p12)
     
     ### A different way to check whole ecosystem N budget, as:
-    ### NDEP+NFIX+NLITIN+NWLIN+NCRLIN+NFRLIN-NUP-NLEACH-NVOL = DeltaNSOIL+DeltaNFLIT+DeltaNCLITB
-    p12<-xyplot(I(NDEP+NFIX+NLITIN+NWLIN+NFRLIN-NUP-NLEACH-NVOL)~I(deltaNSOIL+deltaNFLIT+deltaNCLITB+deltaNSTOR),annDF,
-                #main='I(NDEP+NFIX+NLITIN+NWLIN+NCRLIN+NFRLIN-NUP-NLEACH-NVOL)~I(deltaNSOIL+deltaNFLIT+deltaNCLITB)',
-                auto.key=T,
-                scales=list(relation='free'),
-                panel=function(...){
-                    panel.xyplot(...)
-                    panel.abline(a=0,b=1)}) 
-    
-    p13<-xyplot(I(NDEP+NFIX+NLITIN+NWLIN+NFRLIN-NUP-NLEACH-NVOL)~I(deltaNSOILtot+deltaNFLIT+deltaNCLITB+deltaNSTOR),annDF,
-                #main='I(NDEP+NFIX+NLITIN+NWLIN+NCRLIN+NFRLIN-NUP-NLEACH-NVOL)~I(deltaNSOIL+deltaNFLIT+deltaNCLITB)',
+    p13<-xyplot(I(NDEP+NFIX+NLITIN+NWLIN+NFRLIN+NSTORLIN-NUP-NLEACH-NVOL)~I(deltaNSOILtot+deltaNFLIT+deltaNCLITB+deltaNSTOR),annDF,
                 auto.key=T,
                 scales=list(relation='free'),
                 panel=function(...){
@@ -547,18 +627,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
                     panel.abline(a=0,b=1)}) 
     
     
-    
-    ### Another way to check ecosystem N budget, by excluding NFIX:
-    ### NDEP+NLITIN+NWLIN+NCRLIN+NFRLIN-NUP-NLEACH-NVOL = DeltaNSOIL+DeltaNFLIT+DeltaNCLITB
-    p14<-xyplot(I(NDEP+NLITIN+NWLIN+NFRLIN-NUP-NLEACH-NVOL)~I(deltaNSOIL+deltaNFLIT+deltaNCLITB+deltaNSTOR),annDF,
-                #main='I(NDEP+NLITIN+NWLIN+NCRLIN+NFRLIN-NUP-NLEACH-NVOL)~I(deltaNSOIL+deltaNFLIT+deltaNCLITB)',
-                auto.key=T,
-                scales=list(relation='free'),
-                panel=function(...){
-                    panel.xyplot(...)
-                    panel.abline(a=0,b=1)}) 
-    
-    p15<-xyplot(I(NDEP+NLITIN+NWLIN+NFRLIN-NUP-NLEACH-NVOL)~I(deltaNSOILtot+deltaNFLIT+deltaNCLITB+deltaNSTOR),annDF,
+    p14<-xyplot(I(NDEP+NLITIN+NWLIN+NFRLIN-NUP-NLEACH-NVOL)~I(deltaNSOILtot+deltaNFLIT+deltaNCLITB+deltaNSTOR),annDF,
                 #main='I(NDEP+NLITIN+NWLIN+NCRLIN+NFRLIN-NUP-NLEACH-NVOL)~I(deltaNSOIL+deltaNFLIT+deltaNCLITB)',
                 auto.key=T,
                 scales=list(relation='free'),
@@ -568,7 +637,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
     
     
     ### We now check the mass balance for NSOIL, which should equal to total organic and inorganic pools. 
-    p16<-xyplot(I(NPMIN+NPORG)~NSOIL,annDF,
+    p15<-xyplot(I(NPMIN+NPORG)~NSOIL,annDF,
                 #main='I(NPMIN+NPORG)~NSOIL',
                 auto.key=T,
                 scales=list(relation='free'),
@@ -577,7 +646,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
                     panel.abline(a=0,b=1)}) 
     
     
-    p17<-xyplot(I(NPMINtot+NPORGtot)~NSOILtot,annDF,
+    p16<-xyplot(I(NPMINtot+NPORGtot)~NSOILtot,annDF,
                 #main='I(NPMIN+NPORG)~NSOIL',
                 auto.key=T,
                 scales=list(relation='free'),
@@ -586,7 +655,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
                     panel.abline(a=0,b=1)}) 
     
     ### this NNEP should in theory equal to all delta N fluxes
-    p18<-xyplot(I(NDEP+NFIX-NLEACH-NVOL)~NNEP,annDF,
+    p17<-xyplot(I(NDEP+NFIX-NLEACH-NVOL)~NNEP,annDF,
                 #main='I(NPMIN+NPORG)~NSOIL',
                 auto.key=T,
                 scales=list(relation='free'),
@@ -597,7 +666,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
     
     ### print plots to file, change numbering if needed
     pdf(paste0(out.dir, '/QC_Nitrogen_Balance_',mod.abb,'_', pft.group, '.pdf',sep=''),width=10,height=8)
-    for (i in 1:18) {
+    for (i in 1:17) {
         print(get(paste("p",i,sep="")))
     }
     dev.off()
@@ -607,17 +676,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
     ##################### Phosphorus balance check ################################
     ### The net influx - outflux should equal to the change in all ecosystem P pools: 
     ### PDEP+PWEA-PLEACH = DeltaPL+DeltaPW+DeltaPCR+DeltaPFR+DeltaPSOIL+DeltaPFLIT+DeltaPCLITB
-    p1<-xyplot(I(PDEP+PWEA-PLEACH-PGOCL)~(I(deltaPL+deltaPW+deltaPFR+deltaPSOIL+deltaPFLIT)),annDF,
-               #main='I(PDEP+PWEA-PLEACH)~(I(deltaPL+deltaPW+deltaPCR+deltaPFR+deltaPSOIL+deltaPFLIT+deltaPCLITB))',
-               auto.key=T,
-               scales=list(relation='free'),
-               panel=function(...){
-                   panel.xyplot(...)
-                   panel.abline(a=0,b=1)}) 
-    
-
-    p2<-xyplot(I(PDEP+PWEA-PLEACH-PGOCL)~(I(deltaPL+deltaPW+deltaPFR+deltaPSOILtot+deltaPFLIT+deltaPSTOR)),annDF,
-               #main='I(PDEP+PWEA-PLEACH)~(I(deltaPL+deltaPW+deltaPCR+deltaPFR+deltaPSOIL+deltaPFLIT+deltaPCLITB))',
+    p1<-xyplot(I(PDEP+PWEA-PLEACH-PGOCL)~(I(deltaPL+deltaPW+deltaPFR+deltaPSOILtot+deltaPFLIT+deltaPSTOR)),annDF,
                auto.key=T,
                scales=list(relation='free'),
                panel=function(...){
@@ -627,7 +686,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
     
     ### Next, we check changes in major vegetation P pools. 
     ### It should equal to production flux - retranslocation flux - litterfall. 
-    p3<-xyplot(I(PGL-PLITIN-PLRETR)~deltaPL,annDF,
+    p2<-xyplot(I(PGL-PLITIN-PLRETR)~deltaPL,annDF,
                #main='I(PGL-PLITIN-PLRETR)~deltaPL',
                auto.key=T,
                scales=list(relation='free'),
@@ -653,19 +712,18 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
                    panel.xyplot(...)
                    panel.abline(a=0,b=1)}) 
     
-    p6 <- plot.new()
+    p6<-xyplot(I(PGFR+PGL+PGW-PFRLIN-PLITIN-PWLIN-PFRRETR-PLRETR-PWRETR)~I(deltaPL+deltaPW+deltaPFR),annDF,
+               #main='I(PGFR-PFRLIN-PFRRETR)~deltaPFR',
+               auto.key=T,
+               scales=list(relation='free'),
+               panel=function(...){
+                   panel.xyplot(...)
+                   panel.abline(a=0,b=1)}) 
+    
+    plot(p6)
     
     p7 <- plot.new()
     
-    
-    #p6<-xyplot(I(PGCR-PCRLIN-PCRRETR)~deltaPCR,annDF,
-    #           #main='I(PGCR-PCRLIN-PCRRETR)~deltaPCR',
-    #           auto.key=T,
-    #           scales=list(relation='free'),
-    #           panel=function(...){
-    #               panel.xyplot(...)
-    #               panel.abline(a=0,b=1)}) 
-    #
     
     ### This is to check P litter flux. 
     p8<-xyplot(I(PFLITA+PFLITB)~PFLIT,annDF,
@@ -686,33 +744,10 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
                    panel.xyplot(...)
                    panel.abline(a=0,b=1)}) 
     
-    #plot(p9)
-    
-    
-    ### This is to consider the effect of DeltaPSTOR. 
-    p10<-xyplot(I(PUP+PLRETR+PWRETR+PFRRETR-PGL-PGFR-PGW)~deltaPSTOR,annDF,
-               #main='I(PUP+PLRETR+PWRETR+PFRRETR+PCRRETR-PGL-PGFR-PGCR-PGW)~deltaPSTOR',
-               auto.key=T,
-               scales=list(relation='free'),
-               panel=function(...){
-                   panel.xyplot(...)
-                   panel.abline(a=0,b=1)}) 
-    
-    
     ### This is to check whole ecosystem P flux, 
     ### which means that total in - out = net change:
     ### PDEP+PWEA+PLITIN+PWLIN+PCRLIN+PFRLIN-PUP-PLEACH = DeltaPSOIL+DeltaFLIT+DeltaPCLITB
-    p11<-xyplot(I(PDEP+PWEA+PLITIN+PWLIN+PFRLIN-PUP-PLEACH-PGOCL)~I(deltaPSOIL+deltaPFLIT),annDF,
-                #main='I(PDEP+PWEA+PLITIN+PWLIN+PCRLIN+PFRLIN-PUP-PLEACH)~I(deltaPSOIL+deltaPFLIT+deltaPCLITB)',
-                auto.key=T,
-                scales=list(relation='free'),
-                panel=function(...){
-                    panel.xyplot(...)
-                    panel.abline(a=0,b=1)}) 
-    
-    
-    p12<-xyplot(I(PDEP+PWEA+PLITIN+PWLIN+PFRLIN-PUP-PLEACH-PGOCL)~I(deltaPSOILtot+deltaPFLIT),annDF,
-                #main='I(PDEP+PWEA+PLITIN+PWLIN+PCRLIN+PFRLIN-PUP-PLEACH)~I(deltaPSOIL+deltaPFLIT+deltaPCLITB)',
+    p10<-xyplot(I(PDEP+PWEA+PLITIN+PWLIN+PFRLIN+PSTORLIN-PUP-PLEACH-PGOCL)~I(deltaPSOILtot+deltaPFLIT),annDF,
                 auto.key=T,
                 scales=list(relation='free'),
                 panel=function(...){
@@ -721,7 +756,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
     
     
     ### Now to check a basic mass balance on soil P. 
-    p13<-xyplot(I(PPMIN+PPORG)~PSOIL,annDF,
+    p11<-xyplot(I(PPMIN+PPORG)~PSOIL,annDF,
                 #main='I(PPMIN+PPORG)~PSOIL',
                 auto.key=T,
                 scales=list(relation='free'),
@@ -730,7 +765,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
                     panel.abline(a=0,b=1)}) 
     
     
-    p14<-xyplot(I(PPMINtot+PPORGtot)~PSOILtot,annDF,
+    p12<-xyplot(I(PPMINtot+PPORGtot)~PSOILtot,annDF,
                 #main='I(PPMIN+PPORG)~PSOIL',
                 auto.key=T,
                 scales=list(relation='free'),
@@ -740,7 +775,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
     
     
     ### Inorganic P pool in soils: PLAB+PSEC+POCC+PPAR=PPMIN
-    p15<-xyplot(I(PLAB+PSEC+POCC)~PPMIN,annDF,
+    p13<-xyplot(I(PLAB+PSEC+POCC)~PPMIN,annDF,
                 #main='I(PLAB+PSEC+POCC+PPAR)~PPMIN',
                 auto.key=T,
                 scales=list(relation='free'),
@@ -749,7 +784,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
                     panel.abline(a=0,b=1)}) 
     
     
-    p16<-xyplot(I(PLAB+PSEC+POCC)~PPMINtot,annDF,
+    p14<-xyplot(I(PLAB+PSEC+POCC)~PPMINtot,annDF,
                 #main='I(PLAB+PSEC+POCC+PPAR)~PPMIN',
                 auto.key=T,
                 scales=list(relation='free'),
@@ -759,7 +794,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
     
     
     ### A different way to check PSOIL. 
-    p17<-xyplot(I(PLAB+PSEC+POCC+PPORG)~PSOIL,annDF,
+    p15<-xyplot(I(PLAB+PSEC+POCC+PPORG)~PSOIL,annDF,
                 #main='I(PLAB+PSEC+POCC+PPAR+PPORG)~PSOIL',
                 auto.key=T,
                 scales=list(relation='free'),
@@ -768,16 +803,8 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
                     panel.abline(a=0,b=1)}) 
     
     
-    p18<-xyplot(I(PLAB+PSEC+POCC+PPORGtot)~PSOILtot,annDF,
-                #main='I(PLAB+PSEC+POCC+PPAR+PPORG)~PSOIL',
-                auto.key=T,
-                scales=list(relation='free'),
-                panel=function(...){
-                    panel.xyplot(...)
-                    panel.abline(a=0,b=1)}) 
     
-    
-    p19<-xyplot(I(PDEP+PWEA-PLEACH-PGOCL)~PNEP,annDF,
+    p16<-xyplot(I(PDEP+PWEA-PLEACH-PGOCL)~PNEP,annDF,
                 #main='I(PLAB+PSEC+POCC+PPAR+PPORG)~PSOIL',
                 auto.key=T,
                 scales=list(relation='free'),
@@ -788,7 +815,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
     
     ### print plots to file, change numbering if needed
     pdf(paste0(out.dir, '/QC_Phosphorus_Balance_',mod.abb,'_', pft.group, '.pdf',sep=''),width=10,height=8)
-    for (i in 1:19) {
+    for (i in 1:16) {
         print(get(paste("p",i,sep="")))
     }
     dev.off()
