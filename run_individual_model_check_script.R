@@ -614,9 +614,6 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
                                              nutrient.trt = "HIP")
 
 ##########################################################################
-#### Plot drought effect over historic period
-### Do we still need it? We can plot multi-model results now.
-
 ##########################################################################
 ##########################################################################
 ####
