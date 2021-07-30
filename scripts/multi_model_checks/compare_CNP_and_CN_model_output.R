@@ -5,7 +5,7 @@ compare_CNP_and_CN_model_output <- function() {
     #### Set up basics
     
     ### setting out path to store the files
-    out.dir <- paste0(getwd(), "/obs_var_output")
+    out.dir <- paste0(getwd(), "/obs_fix_output")
     
     ### create output folder
     if(!dir.exists(out.dir)) {
@@ -13,8 +13,8 @@ compare_CNP_and_CN_model_output <- function() {
     }
     
     ### read in anual datasets
-    ambDF <- readRDS(paste0(out.dir, "/MIP_obs_var_amb_annual.rds"))
-    eleDF <- readRDS(paste0(out.dir, "/MIP_obs_var_ele_annual.rds"))
+    ambDF <- readRDS(paste0(out.dir, "/MIP_obs_fix_amb_annual.rds"))
+    eleDF <- readRDS(paste0(out.dir, "/MIP_obs_fix_ele_annual.rds"))
     
     ### select GDAYN, GDAYP, LPJGN, LPJGP model output
     ambDF <- subset(ambDF, ModName%in%c("I_GDAYN", "B_GDAYP",
@@ -26,8 +26,8 @@ compare_CNP_and_CN_model_output <- function() {
     
     
     #### calculate 4-yr means in the simulation datasets
-    ambDF <- subset(ambDF, YEAR>2012 & YEAR<2017)
-    eleDF <- subset(eleDF, YEAR>2012 & YEAR<2017)
+    #ambDF <- subset(ambDF, YEAR>2012 & YEAR<2017)
+    #eleDF <- subset(eleDF, YEAR>2012 & YEAR<2017)
     
     d <- dim(ambDF)[2]
     
@@ -186,7 +186,10 @@ compare_CNP_and_CN_model_output <- function() {
     ### calculate CO2 pct response difference
     plotDF3 <- plotDF2
     plotDF3$meanvalue <- vegDF1$meanvalue[vegDF1$Variable=="Total"&vegDF1$Trt=="ele"]/vegDF1$meanvalue[vegDF1$Variable=="Total"&vegDF1$Trt=="amb"]
-    plotDF3$sdvalue <- NA
+    plotDF3$sdvalue <- NA #sqrt((vegDF1$sdvalue[vegDF1$Variable=="Total"&vegDF1$Trt=="ele"]^2 + vegDF1$sdvalue[vegDF1$Variable=="Total"&vegDF1$Trt=="amb"]^2)/2)
+    
+    val1 <- round((plotDF3$meanvalue[plotDF3$Model=="B_GDAYP"]-plotDF3$meanvalue[plotDF3$Model=="I_GDAYN"])/plotDF3$meanvalue[plotDF3$Model=="I_GDAYN"]*100, 1)
+    val2 <- round((plotDF3$meanvalue[plotDF3$Model=="C_LPJGP"]-plotDF3$meanvalue[plotDF3$Model=="J_LPJGN"])/plotDF3$meanvalue[plotDF3$Model=="J_LPJGN"]*100, 1)
     
     
     ### Plotting C pools in CO2 pct response
@@ -194,6 +197,10 @@ compare_CNP_and_CN_model_output <- function() {
                  aes(Model, meanvalue)) +
         geom_bar(stat = "identity", aes(fill=Model, alpha=Model), 
                  position="stack", col="black") +
+        annotate("text", x=2, y=plotDF3$meanvalue[plotDF3$Model=="B_GDAYP"]*1.01, 
+                 label=(paste0(val1, "%")), size=10)+
+        annotate("text", x=4, y=plotDF3$meanvalue[plotDF3$Model=="C_LPJGP"]*1.01, 
+                 label=(paste0(val2, "%")), size=10)+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
               axis.text.x=element_text(size=12),
@@ -225,6 +232,139 @@ compare_CNP_and_CN_model_output <- function() {
                           label=c("GDAYN","GDAYP", 
                                   "LPJGN","LPJGP"))+
         coord_cartesian(ylim=c(1,1.1)); p2
+    
+    
+    ##################################################################
+    ### normalized vegetation C pool responses
+    norDF1 <- calculate_normalized_vegetation_pool_response(inDF=tmpDF,
+                                                           pcycle=F)
+    
+    norDF <- calculate_normalized_delta_vegetation_pool_response(inDF=tmpDF,
+                                                                 pcycle=F)
+    
+    myDF1 <- norDF$absDF
+    
+    ### prepare vegetation biomass datasets
+    vegDF1 <- data.frame(rep(c("CL", "CW", "CFR", "CCR", "CVEG"), 8), 
+                         rep(mod.list1, each=10), 
+                         rep(c("amb", "ele"), each = 5), NA, NA)
+    colnames(vegDF1) <- c("Variable", 
+                          "Model",
+                          "Trt",
+                          "meanvalue",
+                          "sdvalue")
+    
+    for (i in c("amb", "ele")) {
+        for (j in mod.list1) {
+            vegDF1$meanvalue[vegDF1$Variable=="CL"&vegDF1$Trt==i&vegDF1$Model==j] <- myDF1$CL[myDF1$Trt==i&myDF1$ModName==j]
+            
+            vegDF1$meanvalue[vegDF1$Variable=="CW"&vegDF1$Trt==i&vegDF1$Model==j] <- myDF1$CW[myDF1$Trt==i&myDF1$ModName==j]
+            
+            vegDF1$meanvalue[vegDF1$Variable=="CCR"&vegDF1$Trt==i&vegDF1$Model==j] <- myDF1$CCR[myDF1$Trt==i&myDF1$ModName==j]
+            
+            vegDF1$meanvalue[vegDF1$Variable=="CFR"&vegDF1$Trt==i&vegDF1$Model==j] <- myDF1$CFR[myDF1$Trt==i&myDF1$ModName==j]
+            
+            vegDF1$meanvalue[vegDF1$Variable=="CVEG"&vegDF1$Trt==i&vegDF1$Model==j] <- myDF1$CVEG[myDF1$Trt==i&myDF1$ModName==j]
+            
+        }
+    }
+    
+    
+    plotDF1 <- subset(vegDF1, Variable%in%c("CL", "CW", "CFR", "CCR") & Trt=="amb")
+    plotDF2 <- subset(vegDF1, Variable%in%c("CVEG") & Trt=="amb")
+    
+    val1 <- round((plotDF2$meanvalue[plotDF2$Model=="B_GDAYP"]-plotDF2$meanvalue[plotDF2$Model=="I_GDAYN"])/plotDF2$meanvalue[plotDF2$Model=="I_GDAYN"]*100, 1)
+    val2 <- round((plotDF2$meanvalue[plotDF2$Model=="C_LPJGP"]-plotDF2$meanvalue[plotDF2$Model=="J_LPJGN"])/plotDF2$meanvalue[plotDF2$Model=="J_LPJGN"]*100, 1)
+    
+    
+    ### Plotting C pools in ambient CO2
+    p1 <- ggplot(data=plotDF1, 
+                 aes(Model, meanvalue)) +
+        geom_bar(stat = "identity", aes(fill=Variable, alpha=Model), 
+                 position="stack", col="black") +
+        annotate("text", x=2, y=plotDF2$meanvalue[plotDF2$Model=="B_GDAYP"]*3, 
+                 label=(paste0(val1, "%")), size=10)+
+        annotate("text", x=4, y=plotDF2$meanvalue[plotDF2$Model=="C_LPJGP"]*1.2, 
+                 label=(paste0(val2, "%")), size=10)+
+        theme_linedraw() +
+        theme(panel.grid.minor=element_blank(),
+              axis.text.x=element_text(size=12),
+              axis.title.x=element_text(size=14),
+              axis.text.y=element_text(size=12),
+              axis.title.y=element_text(size=14),
+              legend.text=element_text(size=12),
+              legend.title=element_text(size=14),
+              panel.grid.major=element_blank(),
+              legend.position="right",
+              legend.box = 'horizontal',
+              legend.box.just = 'left',
+              plot.title = element_text(size=14, face="bold.italic", 
+                                        hjust = 0.5))+
+        ylab(expression(paste(Delta * C[veg] * " (g C " * m^2 * " " * yr^-1 * ")")))+
+        scale_x_discrete(limit=c("I_GDAYN","B_GDAYP", 
+                                 "J_LPJGN","C_LPJGP"),
+                         label=c("GDAYN","GDAYP", 
+                                 "LPJGN","LPJGP"))+
+        xlab("")+
+        scale_alpha_manual(values=c("I_GDAYN" = 0.3, 
+                                    "B_GDAYP" = 1.0, 
+                                    "J_LPJGN" = 0.3, 
+                                    "C_LPJGP" = 1.0),
+                           label=c("GDAYN","GDAYP", 
+                                   "LPJGN","LPJGP")); p1
+    
+    
+    ### calculate CO2 pct response difference
+    plotDF3 <- plotDF2
+    plotDF3$meanvalue <- vegDF1$meanvalue[vegDF1$Variable=="CVEG"&vegDF1$Trt=="ele"]/vegDF1$meanvalue[vegDF1$Variable=="CVEG"&vegDF1$Trt=="amb"]
+    plotDF3$sdvalue <- NA 
+    
+    val1 <- round((plotDF3$meanvalue[plotDF3$Model=="B_GDAYP"]-plotDF3$meanvalue[plotDF3$Model=="I_GDAYN"])/plotDF3$meanvalue[plotDF3$Model=="I_GDAYN"]*100, 1)
+    val2 <- round((plotDF3$meanvalue[plotDF3$Model=="C_LPJGP"]-plotDF3$meanvalue[plotDF3$Model=="J_LPJGN"])/plotDF3$meanvalue[plotDF3$Model=="J_LPJGN"]*100, 1)
+    
+    
+    ### Plotting C pools in CO2 pct response
+    p2 <- ggplot(data=plotDF3, 
+                 aes(Model, meanvalue)) +
+        geom_bar(stat = "identity", aes(fill=Model, alpha=Model), 
+                 position="stack", col="black") +
+        annotate("text", x=2, y=plotDF3$meanvalue[plotDF3$Model=="B_GDAYP"]*1.01, 
+                 label=(paste0(val1, "%")), size=10)+
+        annotate("text", x=4, y=plotDF3$meanvalue[plotDF3$Model=="C_LPJGP"]*1.01, 
+                 label=(paste0(val2, "%")), size=10)+
+        theme_linedraw() +
+        theme(panel.grid.minor=element_blank(),
+              axis.text.x=element_text(size=12),
+              axis.title.x=element_text(size=14),
+              axis.text.y=element_text(size=12),
+              axis.title.y=element_text(size=14),
+              legend.text=element_text(size=12),
+              legend.title=element_text(size=14),
+              panel.grid.major=element_blank(),
+              legend.position="right",
+              legend.box = 'horizontal',
+              legend.box.just = 'left',
+              plot.title = element_text(size=14, face="bold.italic", 
+                                        hjust = 0.5))+
+        ylab(expression(paste(Delta * C[veg] * " " * CO[2] *" response ratio")))+
+        scale_x_discrete(limit=c("I_GDAYN","B_GDAYP", 
+                                 "J_LPJGN","C_LPJGP"),
+                         label=c("GDAYN","GDAYP", 
+                                 "LPJGN","LPJGP"))+
+        xlab("")+
+        scale_alpha_manual(values=c("I_GDAYN" = 0.3, 
+                                    "B_GDAYP" = 1.0, 
+                                    "J_LPJGN" = 0.3, 
+                                    "C_LPJGP" = 1.0),
+                           label=c("GDAYN","GDAYP", 
+                                   "LPJGN","LPJGP"))+
+        scale_fill_manual(values=c("I_GDAYN" = "purple", "B_GDAYP" = "purple",
+                                   "J_LPJGN" = "orange", "C_LPJGP" = "orange"),
+                          label=c("GDAYN","GDAYP", 
+                                  "LPJGN","LPJGP"))+
+        coord_cartesian(ylim=c(1,3)); p2
+    
+    
     
     
 
@@ -265,6 +405,7 @@ compare_CNP_and_CN_model_output <- function() {
                           ymin=meanvalue-sdvalue, 
                           ymax=meanvalue+sdvalue), 
                       position=position_dodge()) +
+        geom_vline(xintercept=2.5)+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
               axis.text.x=element_text(size=12),
@@ -352,6 +493,14 @@ compare_CNP_and_CN_model_output <- function() {
     gg.gap::add.legend(plot = p4,
                        margin = c(top = 1, right = 700, 
                                   bottom = 450, left = 1))
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     ##################################################################
