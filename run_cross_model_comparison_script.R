@@ -68,8 +68,11 @@ make_time_averaged_data_model_comparison_over_obs_period(eucDF)
 
 
 ### plot photosynthesis vs leaf N & P relationships
-plot_photosynthesis_relationships(scenario="fix")
+plot_normalized_GPP_response(scenario="fix")
+plot_normalized_GPP_response(scenario="var")
 
+
+plot_photosynthesis_relationships(scenario="fix")
 plot_photosynthesis_relationships(scenario="var")
 
 
