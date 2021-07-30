@@ -71,9 +71,10 @@ make_time_averaged_data_model_comparison_over_obs_period(eucDF)
 plot_normalized_GPP_response(scenario="fix")
 plot_normalized_GPP_response(scenario="var")
 
+#plot_taylor_diagram()
 
-plot_photosynthesis_relationships(scenario="fix")
-plot_photosynthesis_relationships(scenario="var")
+#plot_photosynthesis_relationships(scenario="fix")
+#plot_photosynthesis_relationships(scenario="var")
 
 
 ### fate of carbon
