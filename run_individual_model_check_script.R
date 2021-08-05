@@ -101,6 +101,9 @@ EucFACE_mass_balance_and_validation_script_QUINC()
 EucFACE_mass_balance_and_validation_script_QUJSM()
 
 
+### ELMXX
+EucFACE_mass_balance_and_validation_script_ELMXX()
+
 ##########################################################################
 #### Step 4: Plot CO2 response ratios over observed period
 
