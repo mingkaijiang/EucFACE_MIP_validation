@@ -68,6 +68,9 @@ compile_obs_var_dataset_across_models <- function(p.mod.list, n.mod.list, d.mod.
         } else if (mod.abb=="QUJSM") {
             modDF <- read.csv(paste0("simulation_output/", mod.abb, 
                                      "/EUC_", mod.abb, "_OBS_VAR_AMB_NOP_D.csv"))
+        } else if (mod.abb=="ELMV1") {
+            modDF <- read.csv(paste0("simulation_output/ELMXX/EUC_", 
+                                     mod.abb, "_OBS_VAR_AMB_NOP_D.csv"))
         } else {
             modDF <- read.csv(paste0("simulation_output/", mod.abb, 
                                      "/EUC_", mod.abb, "_OBS_VAR_AMB_NOP_D.csv"))
@@ -172,7 +175,7 @@ compile_obs_var_dataset_across_models <- function(p.mod.list, n.mod.list, d.mod.
     outDF$ModName <- gsub("OCHDP", "D_OCHDP", outDF$ModName)
     outDF$ModName <- gsub("QUINC", "E_QUINC", outDF$ModName)
     
-    outDF$ModName <- gsub("ELMXX", "F_ELMXX", outDF$ModName)
+    outDF$ModName <- gsub("ELMV1", "F_ELMV1", outDF$ModName)
     outDF$ModName <- gsub("OCHDX", "G_OCHDX", outDF$ModName)
     outDF$ModName <- gsub("QUJSM", "H_QUJSM", outDF$ModName)
     
@@ -207,6 +210,9 @@ compile_obs_var_dataset_across_models <- function(p.mod.list, n.mod.list, d.mod.
         } else if (mod.abb=="QUJSM") {
             modDF <- read.csv(paste0("simulation_output/", mod.abb, 
                                      "/EUC_", mod.abb, "_OBS_VAR_ELE_NOP_D.csv"))
+        } else if (mod.abb=="ELMV1") {
+            modDF <- read.csv(paste0("simulation_output/ELMXX/EUC_", 
+                                     mod.abb, "_OBS_VAR_ELE_NOP_D.csv"))
         } else {
             modDF <- read.csv(paste0("simulation_output/", mod.abb, 
                                      "/EUC_", mod.abb, "_OBS_VAR_ELE_NOP_D.csv"))
@@ -310,7 +316,7 @@ compile_obs_var_dataset_across_models <- function(p.mod.list, n.mod.list, d.mod.
     outDF$ModName <- gsub("OCHDP", "D_OCHDP", outDF$ModName)
     outDF$ModName <- gsub("QUINC", "E_QUINC", outDF$ModName)
     
-    outDF$ModName <- gsub("ELMXX", "F_ELMXX", outDF$ModName)
+    outDF$ModName <- gsub("ELMV1", "F_ELMV1", outDF$ModName)
     outDF$ModName <- gsub("OCHDX", "G_OCHDX", outDF$ModName)
     outDF$ModName <- gsub("QUJSM", "H_QUJSM", outDF$ModName)
     

@@ -22,7 +22,7 @@ source("prepare.R")
 
 ### Model list
 ## CNP model
-p.mod.list <- c("CABLP", "ELMXX", 
+p.mod.list <- c("CABLP", "ELMV1", 
                 "GDAYP", "LPJGP",
                 "OCHDP", "OCHDX", 
                 "QUINC", "QUJSM")

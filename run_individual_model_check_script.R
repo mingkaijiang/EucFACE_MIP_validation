@@ -344,6 +344,13 @@ plot_CO2_response_comparison_against_data_for_individual_model(source.dir=paste0
                                                                eucDF = eucDF)
 
 
+### ELMXX
+plot_CO2_response_comparison_against_data_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/ELMXX"),
+                                                               mod.abb = "ELMV1",
+                                                               out.dir = paste0(getwd(), "/analysis_output/ELMXX"),
+                                                               eucDF = eucDF)
+
+
 ##########################################################################
 #### Step 6: Plot CO2 response ratios over predicted period
 
@@ -622,6 +629,26 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
                                              out.dir = paste0(getwd(), "/analysis_output/QUJSM"),
                                              sim.period = "PRD",
                                              nutrient.trt = "HIP")
+
+
+### ELMXX - not available yet
+#plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/ELMXX"),
+#                                             mod.abb = "ELMV1",
+#                                             out.dir = paste0(getwd(), "/analysis_output/ELMXX"),
+#                                             sim.period = "PRD",
+#                                             nutrient.trt = "NOP")
+#
+#plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/ELMXX"),
+#                                             mod.abb = "ELMV1",
+#                                             out.dir = paste0(getwd(), "/analysis_output/ELMXX"),
+#                                             sim.period = "PRD",
+#                                             nutrient.trt = "MDP")
+#
+#plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/ELMXX"),
+#                                             mod.abb = "ELMV1",
+#                                             out.dir = paste0(getwd(), "/analysis_output/ELMXX"),
+#                                             sim.period = "PRD",
+#                                             nutrient.trt = "HIP")
 
 ##########################################################################
 ##########################################################################
