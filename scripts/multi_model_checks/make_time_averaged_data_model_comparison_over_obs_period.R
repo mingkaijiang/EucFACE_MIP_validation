@@ -102,7 +102,7 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF) {
                  aes(Group, meanvalue)) +
         geom_bar(stat = "identity", aes(fill=Variable), 
                  position="stack", col="black") +
-        geom_vline(xintercept=c(5.5, 7.5, 9.5, 11.5), lty=2)+
+        geom_vline(xintercept=c(5.5, 8.5, 10.5, 12.5), lty=2)+
         #geom_errorbar(aes(x=Group, ymin=meanvalue-sevalue, 
         #                  ymax=meanvalue+sevalue), 
         #              position="dodge", width=0.2) +
@@ -161,7 +161,7 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF) {
                  aes(Group, meanvalue)) +
         geom_bar(stat = "identity", aes(fill=Variable), 
                  position="dodge", col="black") +
-        geom_vline(xintercept=c(5.5, 7.5, 9.5, 11.5), lty=2)+
+        geom_vline(xintercept=c(5.5, 8.5, 10.5, 12.5), lty=2)+
         ggtitle("Major carbon fluxes")+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
@@ -225,7 +225,7 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF) {
                  aes(Group, meanvalue)) +
         geom_bar(stat = "identity", aes(fill=Variable), 
                  position="stack", col="black") +
-        geom_vline(xintercept=c(5.5, 7.5, 9.5, 11.5), lty=2)+
+        geom_vline(xintercept=c(5.5, 8.5, 10.5, 12.5), lty=2)+
         ggtitle("Allocation coefficient")+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
@@ -287,7 +287,7 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF) {
                  aes(Group, meanvalue)) +
         geom_bar(stat = "identity", aes(fill=Variable), 
                  position="dodge", col="black") +
-        geom_vline(xintercept=c(5.5, 7.5, 9.5, 11.5), lty=2)+
+        geom_vline(xintercept=c(5.5, 8.5, 10.5, 12.5), lty=2)+
         ggtitle("Major phosphorus pools")+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
@@ -312,7 +312,7 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF) {
                  aes(Group, meanvalue)) +
         geom_bar(stat = "identity", aes(fill=Variable), 
                  position="dodge", col="black") +
-        geom_vline(xintercept=c(5.5, 7.5, 9.5, 11.5), lty=2)+
+        geom_vline(xintercept=c(5.5, 8.5, 10.5, 12.5), lty=2)+
         ggtitle("Major nitrogen pool")+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
@@ -425,7 +425,7 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF) {
                  aes(Group, CN.mean, group=Variable)) +
         geom_bar(stat = "identity", aes(fill=Variable), 
                  position="dodge", col="black") +
-        geom_vline(xintercept=c(5.5, 7.5, 9.5, 11.5), lty=2)+
+        geom_vline(xintercept=c(5.5, 8.5, 10.5, 12.5), lty=2)+
         #geom_errorbar(aes(x=Group, ymin=CN.mean-CN.se, 
         #                  ymax=CN.mean+CN.se), 
         #              position=position_dodge2(), width=0.2) +
@@ -455,7 +455,7 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF) {
                  aes(Group, CP.mean, group=Variable)) +
         geom_bar(stat = "identity", aes(fill=Variable), 
                  position="dodge", col="black") +
-        geom_vline(xintercept=c(5.5, 7.5, 9.5, 11.5), lty=2)+
+        geom_vline(xintercept=c(5.5, 8.5, 10.5, 12.5), lty=2)+
         ggtitle("CP stoichiometry")+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
@@ -480,7 +480,7 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF) {
                  aes(Group, NP.mean, group=Variable)) +
         geom_bar(stat = "identity", aes(fill=Variable), 
                  position="dodge", col="black") +
-        geom_vline(xintercept=c(5.5, 7.5, 9.5, 11.5), lty=2)+
+        geom_vline(xintercept=c(5.5, 8.5, 10.5, 12.5), lty=2)+
         ggtitle("NP stoichiometry")+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
@@ -525,7 +525,7 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF) {
                  aes(Group, meanvalue, group=Variable)) +
         geom_bar(stat = "identity", aes(fill=Variable), 
                  position="dodge", col="black") +
-        geom_vline(xintercept=c(5.5, 7.5, 9.5, 11.5), lty=2)+
+        geom_vline(xintercept=c(5.5, 8.5, 10.5, 12.5), lty=2)+
         ggtitle("Leaf retranslocation")+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),

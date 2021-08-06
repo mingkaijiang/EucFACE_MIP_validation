@@ -49,7 +49,7 @@ trace_fate_of_carbon_MIP_plot <- function() {
                            rep("prod", 6),
                            rep("litter", 4),
                            rep("pool", 7), 
-                           rep("change_in_pool", 7)), 11)
+                           rep("change_in_pool", 7)), 12)
     
     
     sumDF$conf_low <- sumDF$value.mean - sumDF$value.sd
