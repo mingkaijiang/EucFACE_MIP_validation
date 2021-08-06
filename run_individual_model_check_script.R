@@ -228,6 +228,13 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
                                              nutrient.trt = "NOP")
 
 
+### ELMV1
+plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/ELMXX"),
+                                             mod.abb = "ELMV1",
+                                             out.dir = paste0(getwd(), "/analysis_output/ELMXX"),
+                                             sim.period = "OBS",
+                                             nutrient.trt = "NOP")
+
 ##########################################################################
 #### Step 5: compare observed period simulation results with observation data, focus on CO2 response
 ### Prepare EucFACE observation datasets.

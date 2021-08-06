@@ -146,7 +146,7 @@ EucFACE_mass_balance_and_validation_script_ELMXX <- function() {
     ### NPP + RAU = GPP
     ### all models should get this right,
     ### but note that some models may simply assume a fixed CUE to get RAU (e.g. GDAY)
-    p1<-xyplot(I(NPP+RAU)~GPP,fluxDF,
+    p1<-xyplot(I(NPP+RAU)~GPP,annDF,
                #main='NPP+RAU~GPP',
                auto.key=T,
                scales=list(relation='free'),
@@ -177,13 +177,15 @@ EucFACE_mass_balance_and_validation_script_ELMXX <- function() {
     ### sum of all autotrophic respiration fluxes
     ### Some models may not explicitly simulate individual respiratory fluxes (e.g. GDAY)
     ### Hence, this mass balance check may not be closed for all models. 
-    p4<-xyplot(I(RL+RW+RFR+RGR)~RAU,fluxDF,
+    p4<-xyplot(I(RL+RW+RFR+RGR-CVOC)~RAU,annDF,
                #main='RL+RW+RCR+RFR+RGR~RAU',
                auto.key=T,
                scales=list(relation='free'),
                panel=function(...){
                    panel.xyplot(...)
                    panel.abline(a=0,b=1)}) 
+    
+    #plot(p4)
     
     
     ### This is not a mass balance check, but rather, to see how LAI scales with leaf carbon pool.
@@ -214,14 +216,15 @@ EucFACE_mass_balance_and_validation_script_ELMXX <- function() {
                    panel.xyplot(...)
                    panel.abline(a=0,b=1)}) 
     
+    p8 <- plot.new()
     
-    p8<-xyplot(I(CGFR-CFRLIN)~deltaCFR,annDF,
-               #main='CGFR-CFRLIN~deltaCFR',
-               auto.key=T,
-               scales=list(relation='free'),
-               panel=function(...){
-                   panel.xyplot(...)
-                   panel.abline(a=0,b=1)}) 
+    #p8<-xyplot(I(CGFR-CFRLIN)~deltaCFR,annDF,
+    #           #main='CGFR-CFRLIN~deltaCFR',
+    #           auto.key=T,
+    #           scales=list(relation='free'),
+    #           panel=function(...){
+    #               panel.xyplot(...)
+    #               panel.abline(a=0,b=1)}) 
     
     
     #p9<-xyplot(I(CGCR-CCRLIN)~deltaCCR,annDF,
@@ -238,13 +241,14 @@ EucFACE_mass_balance_and_validation_script_ELMXX <- function() {
     ### Here production fluxes include: CGL, CGFR, CGCR, CGW and CREPR, 
     ### and the respiratory flux is RAU. 
     ### If there is an exudation flux, make it part of GPP too.
-    p10<-xyplot(I(RAU+CGL+CGFR+CGW)~GPP,annDF,
-                #main='I(RAU+CGL+CGFR+CGCR+CGW+CREPR)~GPP',
+    p10<-xyplot(I(RAU+CGL+CGFR+CGW-CVOC)~GPP,annDF,
                 auto.key=T,
                 scales=list(relation='free'),
                 panel=function(...){
                     panel.xyplot(...)
                     panel.abline(a=0,b=1)}) 
+    
+    #plot(p10)
     
     
     ### Similarly, NPP should equal to all growth fluxes, 
@@ -269,14 +273,18 @@ EucFACE_mass_balance_and_validation_script_ELMXX <- function() {
                     panel.abline(a=0,b=1)}) 
     
     
+    #plot(p12)
+    
     ### Here, CFLIT = CFLITA + CFLITB. 
-    p13<-xyplot(I(CFLITA+CFLITB)~CFLIT,annDF,
+    p13<-xyplot(I(CFLITB)~CFLIT,annDF,
                 #main='CFLITA+CFLITB~CFLIT',
                 auto.key=T,
                 scales=list(relation='free'),
                 panel=function(...){
                     panel.xyplot(...)
                     panel.abline(a=0,b=1)}) 
+    
+    plot(p13)
     
     
     ### This mass balance equation checks the net of total influx litter and heterotrophic respiration. 
@@ -290,6 +298,7 @@ EucFACE_mass_balance_and_validation_script_ELMXX <- function() {
                     panel.xyplot(...)
                     panel.abline(a=0,b=1)}) 
     
+    plot(p14)
     
     ### print plots to file, change numbering if needed
     pdf(paste0(out.dir, '/QC_Carbon_Balance_',mod.abb,'.pdf',sep=''),width=10,height=8)
@@ -332,7 +341,7 @@ EucFACE_mass_balance_and_validation_script_ELMXX <- function() {
     ##################### Nitrogen balance check ################################
     ### Firstly, we check Delta$NL, Delta$NW, Delta$NFR and Delta$NCR. 
     ### Here, Delta$NL = NGL + NLITIN - NLRETR, where NLRETR is the retranslocation flux. 
-    p1<-xyplot(I(NGL-NLITIN-NLRETR)~deltaNL,annDF,
+    p1<-xyplot(I(NGL-NLITIN)~deltaNL,annDF,
                #main='I(NGL-NLITIN-NLRETR)~deltaNL',
                auto.key=T,
                scales=list(relation='free'),
@@ -340,7 +349,7 @@ EucFACE_mass_balance_and_validation_script_ELMXX <- function() {
                    panel.xyplot(...)
                    panel.abline(a=0,b=1)}) 
     
-    p2<-xyplot(I(NGW-NWLIN-NWRETR)~deltaNW,annDF,
+    p2<-xyplot(I(NGW)~deltaNW,annDF,
                #main='I(NGW-NWLIN-NWRETR)~deltaNW',
                auto.key=T,
                scales=list(relation='free'),
@@ -349,7 +358,7 @@ EucFACE_mass_balance_and_validation_script_ELMXX <- function() {
                    panel.abline(a=0,b=1)}) 
     
     
-    p3<-xyplot(I(NGFR-NFRLIN-NFRRETR)~deltaNFR,annDF,
+    p3<-xyplot(I(NGFR)~deltaNFR,annDF,
                #main='I(NGFR-NFRLIN-NFRRETR)~deltaNFR',
                auto.key=T,
                scales=list(relation='free'),
@@ -358,17 +367,18 @@ EucFACE_mass_balance_and_validation_script_ELMXX <- function() {
                    panel.abline(a=0,b=1)}) 
     
     
-    p4<-xyplot(I(NGCR-NCRLIN-NCRRETR)~deltaNCR,annDF,
-               #main='I(NGCR-NCRLIN-NCRRETR)~deltaNCR',
-               auto.key=T,
-               scales=list(relation='free'),
-               panel=function(...){
-                   panel.xyplot(...)
-                   panel.abline(a=0,b=1)}) 
-    
+    p4 <- plot.new()
+    #p4<-xyplot(I(NGCR-NCRLIN-NCRRETR)~deltaNCR,annDF,
+    #           #main='I(NGCR-NCRLIN-NCRRETR)~deltaNCR',
+    #           auto.key=T,
+    #           scales=list(relation='free'),
+    #           panel=function(...){
+    #               panel.xyplot(...)
+    #               panel.abline(a=0,b=1)}) 
+    #
     
     ### This is to check finelitter influx. Total NFLIT = NFLITA + NFLITB. 
-    p5<-xyplot(I(NFLITA+NFLITB)~NFLIT,annDF,
+    p5<-xyplot(I(NFLITB)~NFLIT,annDF,
                #main='I(NFLITA+NFLITB)~NFLIT',
                auto.key=T,
                scales=list(relation='free'),
@@ -381,7 +391,7 @@ EucFACE_mass_balance_and_validation_script_ELMXX <- function() {
     ### which should euqal to the sum of nitrogen uptake and total retranslocation fluxes. 
     ### The full equation is written as:
     ### NUP+NLRETR+NWRETR+NFRRETR+NCRRETR = NGL+NGFR+NGCR+NGW
-    p6<-xyplot(I(NUP+NLRETR+NWRETR+NFRRETR+NCRRETR)~I(NGL+NGFR+NGCR+NGW),annDF,
+    p6<-xyplot(I(NUP)~I(NGL+NGFR+NGCR+NGW),annDF,
                #main='I(NUP+NLRETR+NWRETR+NFRRETR+NCRRETR)~I(NGL+NGFR+NGCR+NGW)',
                auto.key=T,
                scales=list(relation='free'),
@@ -393,7 +403,7 @@ EucFACE_mass_balance_and_validation_script_ELMXX <- function() {
     ### so not all nitrogen available for plant is used for growth. 
     ### Here we are looking at DeltaNSTOR 
     ### to see if it helps to close the mass balance if the figure above doesn't close its mass balance. 
-    p7<-xyplot(I(NUP+NLRETR+NWRETR+NFRRETR+NCRRETR-NGL-NGFR-NGCR-NGW)~deltaNSTOR,annDF,
+    p7<-xyplot(I(NUP-NGL-NGFR-NGCR-NGW)~deltaNSTOR,annDF,
                #main='I(NUP+NLRETR+NWRETR+NFRRETR+NCRRETR-NGL-NGFR-NGCR-NGW)~deltaNSTOR',
                auto.key=T,
                scales=list(relation='free'),
@@ -405,7 +415,7 @@ EucFACE_mass_balance_and_validation_script_ELMXX <- function() {
     ### N fixation could also be added to plant directly. 
     ### So here we are checking its effect. Full equation is: 
     ### NFIX+NUP+NLRETR+NWRETR+NFRRETR+NCRRETR = NGL+NGFR+NGCR+NGW
-    p8<-xyplot(I(NFIX+NUP+NLRETR+NWRETR+NFRRETR+NCRRETR)~I(NGL+NGFR+NGCR+NGW),annDF,
+    p8<-xyplot(I(NFIX+NUP)~I(NGL+NGFR+NGCR+NGW),annDF,
                #main='I(NFIX+NUP+NLRETR+NWRETR+NFRRETR+NCRRETR)~I(NGL+NGFR+NGCR+NGW)',
                auto.key=T,
                scales=list(relation='free'),
@@ -415,7 +425,7 @@ EucFACE_mass_balance_and_validation_script_ELMXX <- function() {
     
     
     ### Similar to the above figure, we are checking if Delta$NSTOR helps to close the budget. 
-    p9<-xyplot(I(NFIX+NUP+NLRETR+NWRETR+NFRRETR+NCRRETR-NGL-NGFR-NGCR-NGW)~deltaNSTOR,annDF,
+    p9<-xyplot(I(NFIX+NUP-NGL-NGFR-NGCR-NGW)~deltaNSTOR,annDF,
                #main='I(NFIX+NUP+NLRETR+NWRETR+NFRRETR+NCRRETR-NGL-NGFR-NGCR-NGW)~deltaNSTOR',
                auto.key=T,
                scales=list(relation='free'),
@@ -427,7 +437,6 @@ EucFACE_mass_balance_and_validation_script_ELMXX <- function() {
     ### Now we are checking the whole ecosystem N input and output. 
     ### Full equation is:
     ### NDEP+NFIX-NLEACH-NVOL = DeltaNL+DeltaNW+DeltaNCR+DeltaNFR+DeltaNSOIL+DeltaNFLIT+DeltaNCLITB
-    
     p10<-xyplot(I(NDEP+NFIX-NLEACH-NVOL)~(I(deltaNL+deltaNW+deltaNCR+deltaNFR+deltaNSOIL+deltaNFLIT+deltaNCLITB)),annDF,
                 #main='I(NDEP+NFIX-NLEACH-NVOL)~(I(deltaNL+deltaNW+deltaNCR+deltaNFR+deltaNSOIL+deltaNFLIT+deltaNCLITB))',
                 auto.key=T,
@@ -720,8 +729,8 @@ EucFACE_mass_balance_and_validation_script_ELMXX <- function() {
     ### assign values
     allocDF$meanvalue[allocDF$Group=="sim"&allocDF$Variable=="leaf"] <- mean(fluxDF$CGL/fluxDF$NPP)
     allocDF$meanvalue[allocDF$Group=="sim"&allocDF$Variable=="wood"] <- round(mean(fluxDF$CGW/fluxDF$NPP),2)
-    allocDF$meanvalue[allocDF$Group=="sim"&allocDF$Variable=="root"] <- round(mean((fluxDF$CGFR+fluxDF$CGCR)/fluxDF$NPP),2)
-    allocDF$meanvalue[allocDF$Group=="sim"&allocDF$Variable=="exudation"] <- round(mean((fluxDF$CEX)/fluxDF$NPP),2)
+    allocDF$meanvalue[allocDF$Group=="sim"&allocDF$Variable=="root"] <- round(mean(fluxDF$CGFR/fluxDF$NPP),2)
+    #allocDF$meanvalue[allocDF$Group=="sim"&allocDF$Variable=="exudation"] <- round(mean((fluxDF$CEX)/fluxDF$NPP),2)
     allocDF$meanvalue[allocDF$Group=="sim"&allocDF$Variable=="belowground"] <- round(mean((fluxDF$CGFR+fluxDF$CGCR+fluxDF$CEX)/fluxDF$NPP),2)
     
     
@@ -1104,26 +1113,28 @@ EucFACE_mass_balance_and_validation_script_ELMXX <- function() {
     
     
     ### plotting
-    p9 <- ggplot(data=rtDF, 
-                 aes(Group, meanvalue, group=Variable)) +
-        geom_bar(stat = "identity", aes(fill=Variable), 
-                 position="dodge", col="black") +
-        ggtitle("Leaf retranslocation")+
-        theme_linedraw() +
-        theme(panel.grid.minor=element_blank(),
-              axis.text.x=element_text(size=12),
-              axis.title.x=element_text(size=14),
-              axis.text.y=element_text(size=12),
-              axis.title.y=element_text(size=14),
-              legend.text=element_text(size=12),
-              legend.title=element_text(size=14),
-              panel.grid.major=element_blank(),
-              legend.position="right",
-              legend.box = 'horizontal',
-              legend.box.just = 'left',
-              plot.title = element_text(size=14, face="bold.italic", 
-                                        hjust = 0.5))+
-        ylab("Leaf retranslocation")
+    #p9 <- ggplot(data=rtDF, 
+    #             aes(Group, meanvalue, group=Variable)) +
+    #    geom_bar(stat = "identity", aes(fill=Variable), 
+    #             position="dodge", col="black") +
+    #    ggtitle("Leaf retranslocation")+
+    #    theme_linedraw() +
+    #    theme(panel.grid.minor=element_blank(),
+    #          axis.text.x=element_text(size=12),
+    #          axis.title.x=element_text(size=14),
+    #          axis.text.y=element_text(size=12),
+    #          axis.title.y=element_text(size=14),
+    #          legend.text=element_text(size=12),
+    #          legend.title=element_text(size=14),
+    #          panel.grid.major=element_blank(),
+    #          legend.position="right",
+    #          legend.box = 'horizontal',
+    #          legend.box.just = 'left',
+    #          plot.title = element_text(size=14, face="bold.italic", 
+    #                                    hjust = 0.5))+
+    #    ylab("Leaf retranslocation")
+    
+    p9 <- plot.new()
     
     
     ### print plots to file, change numbering if needed
@@ -1228,7 +1239,7 @@ EucFACE_mass_balance_and_validation_script_ELMXX <- function() {
     subDF <- subset(modDF, YEAR <= 2015 & YEAR > 2012)
     subDF <- subDF[,c("YEAR", "DOY", "Date", "RHET", "RCR", "RFR")]
     subDF$Date <- as.Date(as.character(subDF$Date))
-    subDF$Rsoil_sim <- with(subDF, RHET+RCR+RFR)
+    subDF$Rsoil_sim <- with(subDF, RHET+RFR)
     
     
     
@@ -1280,7 +1291,7 @@ EucFACE_mass_balance_and_validation_script_ELMXX <- function() {
     ### plot all data
     p4 <- ggplot(plotDF, aes(x=Date)) +
         geom_point(aes(y=WC_kg_m2, color="obs"))+
-        geom_point(aes(y=SWPA, color="sim"), lwd = 1) +
+        geom_point(aes(y=SW, color="sim"), lwd = 1) +
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
               axis.title.x = element_text(size=14), 
