@@ -33,7 +33,8 @@ pacman::p_load(dplyr,
                tinytex,
                qdap,
                data.table,
-               gridExtra)    
+               gridExtra,
+               grid)    
 
 
 #### Sourcing all R files in the modules subdirectory
