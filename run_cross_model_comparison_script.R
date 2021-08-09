@@ -41,26 +41,28 @@ compile_obs_var_dataset_across_models(p.mod.list, n.mod.list, d.mod.list)
 compile_obs_fix_dataset_across_models(p.mod.list, n.mod.list, d.mod.list)
 
 
-### show P effect with the two models that have CN and CNP versions
-compare_CNP_and_CN_model_output()
-
-
-### show microbial effects with the two microbial enabled models
-#compare_microbial_processes_model_output()
-
-### show dynamic vegetation effect with the two DGVM models
-#compare_dynamic_vegetation_effect_model_output()
-
-
 ### make MIP time-series plot for both variable and fixed climate, over observed period
 make_MIP_time_series_plot(scenario="var")
 
 make_MIP_time_series_plot(scenario="fix")
 
 
+### show P effect with the two models that have CN and CNP versions
+### based on fixed climate forcing
+compare_CNP_and_CN_model_output()
+
+
+### show microbial effects with the two microbial enabled models
+### based on fixed climate forcing
+compare_microbial_model_output()
+
+### show dynamic vegetation effect with the two DGVM models
+#compare_dynamic_vegetation_effect_model_output()
+
+
+
 ### prepare observed dataset at annual timestep wherever possible
 eucDF <- prepare_EucFACE_observation_dataset()
-
 
 ### compare to observed dataset
 ### ambient treatment, real values
@@ -71,15 +73,16 @@ make_time_averaged_data_model_comparison_over_obs_period(eucDF)
 plot_normalized_GPP_response(scenario="fix")
 plot_normalized_GPP_response(scenario="var")
 
+### fate of carbon - go into function to plot
+scenario="var"
+scenario="fix"
+trace_fate_of_carbon_MIP_plot(scenario="var")
+
+
 #plot_taylor_diagram()
 
 #plot_photosynthesis_relationships(scenario="fix")
 #plot_photosynthesis_relationships(scenario="var")
-
-
-### fate of carbon - go into function to plot
-scenario="var"
-trace_fate_of_carbon_MIP_plot(scenario="var")
 
 
 ### ambient treatment, CO2 responses
