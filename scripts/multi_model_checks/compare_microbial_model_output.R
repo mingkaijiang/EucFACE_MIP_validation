@@ -302,8 +302,8 @@ compare_microbial_model_output <- function() {
         plotDF2$sdvalue[plotDF2$Model==i] <- smDF$sdvalue[smDF$Model==i]
     }
     
-    val1 <- round((plotDF2$meanvalue[plotDF2$Model=="B_GDAYP"]-plotDF2$meanvalue[plotDF2$Model=="I_GDAYN"])/plotDF2$meanvalue[plotDF2$Model=="I_GDAYN"]*100, 1)
-    val2 <- round((plotDF2$meanvalue[plotDF2$Model=="C_LPJGP"]-plotDF2$meanvalue[plotDF2$Model=="J_LPJGN"])/plotDF2$meanvalue[plotDF2$Model=="J_LPJGN"]*100, 1)
+    val1 <- round((plotDF2$meanvalue[plotDF2$Model=="G_OCHDX"]-plotDF2$meanvalue[plotDF2$Model=="D_OCHDP"])/plotDF2$meanvalue[plotDF2$Model=="D_OCHDP"]*100, 1)
+    val2 <- round((plotDF2$meanvalue[plotDF2$Model=="H_QUJSM"]-plotDF2$meanvalue[plotDF2$Model=="E_QUINC"])/plotDF2$meanvalue[plotDF2$Model=="E_QUINC"]*100, 1)
     
     
     ### Plotting C pools in ambient CO2
@@ -336,10 +336,10 @@ compare_microbial_model_output <- function() {
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
         ylab(expression(paste(Delta * C[veg] * " (g C " * m^2 * " " * yr^-1 * ")")))+
-        scale_x_discrete(limit=c("I_GDAYN","B_GDAYP", 
-                                 "J_LPJGN","C_LPJGP"),
-                         label=c("GDAYN","GDAYP", 
-                                 "LPJGN","LPJGP"))+
+        scale_x_discrete(limit=c("D_OCHDP","G_OCHDX", 
+                                 "E_QUINC","H_QUJSM"),
+                         label=c("OCHDP","OCHDX", 
+                                 "QUINC","QUJSM"))+
         xlab("")+
         scale_fill_manual(name=expression(C[veg]),
                           values=c("CL"=cbbPalette[2],
@@ -354,12 +354,12 @@ compare_microbial_model_output <- function() {
                                                             "CCR"=cbbPalette[7],
                                                             "CSTOR"=cbbPalette[8])),
                                    nrow=1, byrow=F))+
-        scale_alpha_manual(values=c("B_GDAYP" = 1.0, 
-                                    "C_LPJGP" = 1.0,
-                                    "I_GDAYN" = 0.3, 
-                                    "J_LPJGN" = 0.3),
-                           label=c("GDAYP","LPJGP", 
-                                   "GDAYN","LPJGN")); p3
+        scale_alpha_manual(values=c("D_OCHDP" = 0.3, 
+                                    "E_QUINC" = 0.3,
+                                    "G_OCHDX" = 1.0, 
+                                    "H_QUJSM" = 1.0),
+                           label=c("OCHDP","QUINC",
+                                   "OCHDX","QUJSM")); p3
     
     
     ### calculate CO2 pct response difference
@@ -421,21 +421,21 @@ compare_microbial_model_output <- function() {
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
         ylab(expression(paste(Delta * C[veg] * " " * CO[2] * " effect (g C " * m^2 * " " * yr^-1 * ")")))+
-        scale_x_discrete(limit=c("I_GDAYN","B_GDAYP", 
-                                 "J_LPJGN","C_LPJGP"),
-                         label=c("GDAYN","GDAYP", 
-                                 "LPJGN","LPJGP"))+
+        scale_x_discrete(limit=c("D_OCHDP","G_OCHDX", 
+                                 "E_QUINC","H_QUJSM"),
+                         label=c("OCHDP","OCHDX", 
+                                 "QUINC","QUJSM"))+
         xlab("")+
-        scale_alpha_manual(values=c("B_GDAYP" = 1.0, 
-                                    "C_LPJGP" = 1.0,
-                                    "I_GDAYN" = 0.3, 
-                                    "J_LPJGN" = 0.3),
-                           label=c("GDAYP","LPJGP", 
-                                   "GDAYN","LPJGN"))+
-        scale_fill_manual(values=c("B_GDAYP" = "black", "C_LPJGP" = "black",
-                                   "I_GDAYN" = "black", "J_LPJGN" = "black"),
-                          label=c("GDAYP","LPJGP", 
-                                  "GDAYN","LPJGN"));p4
+        scale_alpha_manual(values=c("D_OCHDP" = 0.3, 
+                                    "E_QUINC" = 0.3,
+                                    "G_OCHDX" = 1.0, 
+                                    "H_QUJSM" = 1.0),
+                           label=c("OCHDP","QUINC",
+                                   "OCHDX","QUJSM"))+
+        scale_fill_manual(values=c("D_OCHDP" = "black", "E_QUINC" = "black",
+                                   "G_OCHDX" = "black", "H_QUJSM" = "black"),
+                          label=c("OCHDP","OCHDX", 
+                                  "QUINC","QUJSM"));p4
     
     
     
@@ -497,10 +497,10 @@ compare_microbial_model_output <- function() {
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
         ylab(expression(paste("Carbon fluxes (g C " * m^2 * " " * yr^-1 * ")")))+
-        scale_x_discrete(limit=c("I_GDAYN","B_GDAYP", 
-                                 "J_LPJGN","C_LPJGP"),
-                         label=c("GDAYN","GDAYP", 
-                                 "LPJGN","LPJGP"))+
+        scale_x_discrete(limit=c("D_OCHDP","G_OCHDX", 
+                                 "E_QUINC","H_QUJSM"),
+                         label=c("OCHDP","OCHDX", 
+                                 "QUINC","QUJSM"))+
         xlab("")+
         scale_fill_manual(name=expression(C[flux]),
                           values=c("GPP"="purple",
@@ -508,12 +508,12 @@ compare_microbial_model_output <- function() {
                                    "RAU"="red"),
                           labels=c("GPP", "NPP", "RAU"))+
         scale_alpha_manual(name="Model",
-                           values=c("B_GDAYP" = 1.0, 
-                                    "C_LPJGP" = 1.0,
-                                    "I_GDAYN" = 0.3, 
-                                    "J_LPJGN" = 0.3),
-                           label=c("GDAYP","LPJGP", 
-                                   "GDAYN","LPJGN"))+
+                           values=c("D_OCHDP" = 0.3, 
+                                    "E_QUINC" = 0.3,
+                                    "G_OCHDX" = 1.0, 
+                                    "H_QUJSM" = 1.0),
+                           label=c("OCHDP","QUINC",
+                                   "OCHDX","QUJSM"))+
         #guides(fill = guide_legend(override.aes=list(fill=c("GPP"="purple",
         #                                                    "NPP"="green",
         #                                                    "RAU"="red")),
@@ -562,10 +562,10 @@ compare_microbial_model_output <- function() {
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
         ylab(expression(paste("Carbon fluxes " * CO[2] *" response (%)")))+
-        scale_x_discrete(limit=c("I_GDAYN","B_GDAYP", 
-                                 "J_LPJGN","C_LPJGP"),
-                         label=c("GDAYN","GDAYP", 
-                                 "LPJGN","LPJGP"))+
+        scale_x_discrete(limit=c("D_OCHDP","G_OCHDX", 
+                                 "E_QUINC","H_QUJSM"),
+                         label=c("OCHDP","OCHDX", 
+                                 "QUINC","QUJSM"))+
         xlab("")+
         scale_fill_manual(name=expression(C[flux]),
                           values=c("GPP"="purple",
@@ -577,12 +577,12 @@ compare_microbial_model_output <- function() {
                                                             "RAU"="red")),
                                    nrow=1, byrow=F))+
         scale_alpha_manual(name="Model",
-                           values=c("B_GDAYP" = 1.0, 
-                                    "C_LPJGP" = 1.0,
-                                    "I_GDAYN" = 0.3, 
-                                    "J_LPJGN" = 0.3),
-                           label=c("GDAYP","LPJGP", 
-                                   "GDAYN","LPJGN")); p6
+                           values=c("D_OCHDP" = 0.3, 
+                                    "E_QUINC" = 0.3,
+                                    "G_OCHDX" = 1.0, 
+                                    "H_QUJSM" = 1.0),
+                           label=c("OCHDP","QUINC",
+                                   "OCHDX","QUJSM")); p6
     
     
     #gg.gap::gg.gap(plot=p4,
@@ -616,7 +616,7 @@ compare_microbial_model_output <- function() {
                                   label_size = 18)
     
     
-    pdf(paste0(out.dir, "/MIP_CN_vs_CNP_combined.pdf"), 
+    pdf(paste0(out.dir, "/MIP_microbial_model_combined.pdf"), 
         width=10, height=12)
     #grid.arrange(p3, p4, p5, p6,
     #             ncol = 2)

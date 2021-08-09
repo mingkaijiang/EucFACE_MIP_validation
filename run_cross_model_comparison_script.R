@@ -54,6 +54,7 @@ compare_CNP_and_CN_model_output()
 
 ### show microbial effects with the two microbial enabled models
 ### based on fixed climate forcing
+### add Csoil, Clit, Rh comparison plot
 compare_microbial_model_output()
 
 ### show dynamic vegetation effect with the two DGVM models
