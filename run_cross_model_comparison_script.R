@@ -108,7 +108,6 @@ trace_fate_of_carbon_MIP_plot(scenario="var")
 ### to do list:
 ### 1. Simulation completion:
 ###    Waiting for
-###                QUINC + QUJSM for new set of simulations
 ###                ELM for first set of simulations
 ### 2. Generate summary table on key model features:
 ###    Waiting for input from ELM only,
