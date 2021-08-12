@@ -42,6 +42,7 @@ compile_obs_fix_dataset_across_models(p.mod.list, n.mod.list, d.mod.list)
 
 
 ### make MIP time-series plot for both variable and fixed climate, over observed period
+### when number of variables change in the input, need to revise the code
 make_MIP_time_series_plot(scenario="var")
 
 make_MIP_time_series_plot(scenario="fix")

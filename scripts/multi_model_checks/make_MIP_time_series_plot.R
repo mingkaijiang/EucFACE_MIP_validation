@@ -31,7 +31,7 @@ make_MIP_time_series_plot <- function(scenario) {
     
     ### calculate multiple model means for each year
     ### amb
-    ambDF.mip <- summaryBy(.~YEAR, FUN=c(mean, sd),
+    ambDF.mip <- summaryBy(.~YEAR+ModName, FUN=c(mean, sd),
                            data=ambDF, keep.names=T, na.rm=T)
     
     d2 <- dim(ambDF.mip)[2]
@@ -41,7 +41,7 @@ make_MIP_time_series_plot <- function(scenario) {
     #ambDF.mip <- ambDF.mip[,1:(d-1)]
     
     ### co2
-    co2DF.mip <- summaryBy(.~YEAR, FUN=c(mean, sd),
+    co2DF.mip <- summaryBy(.~YEAR+ModName, FUN=c(mean, sd),
                            data=co2DF, keep.names=T, na.rm=T)
     
     #co2DF.mip.sd <- cbind(co2DF.mip$YEAR, co2DF.mip[,d:d2])
@@ -49,7 +49,7 @@ make_MIP_time_series_plot <- function(scenario) {
     #co2DF.mip <- co2DF.mip[,1:(d-1)]
     
     ### co2 pct
-    pctco2DF.mip <- summaryBy(.~YEAR, FUN=c(mean, sd),
+    pctco2DF.mip <- summaryBy(.~YEAR+ModName, FUN=c(mean, sd),
                               data=pctco2DF, keep.names=T, na.rm=T)
     
     #pctco2DF.mip.sd <- cbind(pctco2DF.mip$YEAR, pctco2DF.mip[,d:d2])
@@ -83,12 +83,12 @@ make_MIP_time_series_plot <- function(scenario) {
     for (i in 3:d) {
         p1 <- ggplot() +
             geom_ribbon(data=ambDF.mip, 
-                        aes(YEAR, ymin=ambDF.mip[,i-1]-ambDF.mip[,i+146],
-                            ymax=ambDF.mip[,i-1]+ambDF.mip[,i+146]),
+                        aes(YEAR, ymin=ambDF.mip[,i]-ambDF.mip[,i+153],
+                            ymax=ambDF.mip[,i]+ambDF.mip[,i+153]),
                         fill=alpha("grey", 0.3))+
             geom_line(data=ambDF, 
                       aes(YEAR, ambDF[,i], col=ModName, lty=ModName),lwd=1.5) +
-            geom_line(data=ambDF.mip, aes(YEAR, ambDF.mip[,i-1]), col="black", lwd=2)+
+            geom_line(data=ambDF.mip, aes(YEAR, ambDF.mip[,i]), col="black", lwd=2)+
             ggtitle(paste0(names(ambDF)[i]))+
             theme_linedraw() +
             theme(panel.grid.minor=element_blank(),
@@ -118,12 +118,12 @@ make_MIP_time_series_plot <- function(scenario) {
         
         p2 <- ggplot() +
             geom_ribbon(data=co2DF.mip, 
-                        aes(YEAR, ymin=co2DF.mip[,i-1]-co2DF.mip[,i+146],
-                            ymax=co2DF.mip[,i-1]+co2DF.mip[,i+146]),
+                        aes(YEAR, ymin=co2DF.mip[,i]-co2DF.mip[,i+153],
+                            ymax=co2DF.mip[,i]+co2DF.mip[,i+153]),
                         fill=alpha("grey", 0.3))+
             geom_line(data=co2DF, 
                       aes(YEAR, co2DF[,i], col=ModName, lty=ModName)) +
-            geom_line(data=co2DF.mip, aes(YEAR, co2DF.mip[,i-1]), col="black", lwd=2)+
+            geom_line(data=co2DF.mip, aes(YEAR, co2DF.mip[,i]), col="black", lwd=2)+
             theme_linedraw() +
             theme(panel.grid.minor=element_blank(),
                   axis.text.x=element_text(size=12),
@@ -152,12 +152,12 @@ make_MIP_time_series_plot <- function(scenario) {
         
         p3 <- ggplot() +
             geom_ribbon(data=pctco2DF.mip, 
-                        aes(YEAR, ymin=pctco2DF.mip[,i-1]-pctco2DF.mip[,i+146],
-                            ymax=pctco2DF.mip[,i-1]+pctco2DF.mip[,i+146]),
+                        aes(YEAR, ymin=pctco2DF.mip[,i]-pctco2DF.mip[,i+153],
+                            ymax=pctco2DF.mip[,i]+pctco2DF.mip[,i+153]),
                         fill=alpha("grey", 0.3))+
             geom_line(data=pctco2DF, 
                       aes(YEAR, pctco2DF[,i], col=ModName, lty=ModName)) +
-            geom_line(data=pctco2DF.mip, aes(YEAR, pctco2DF.mip[,i-1]), col="black", lwd=2)+
+            geom_line(data=pctco2DF.mip, aes(YEAR, pctco2DF.mip[,i]), col="black", lwd=2)+
             theme_linedraw() +
             theme(panel.grid.minor=element_blank(),
                   axis.text.x=element_text(size=12),
