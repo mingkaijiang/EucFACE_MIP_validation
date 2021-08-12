@@ -46,7 +46,10 @@ source("prepare.R")
 #translate_LPJGN_simulation_into_EucFACE_MIP_format(source.dir = paste0(getwd(), "/simulation_output/LPJGN/old_soil/"))
 
 
-### QUINCY not needed
+### QUINCY forcing data to convert units
+translate_QUINC_simulation_into_EucFACE_MIP_format(source.dir = "simulation_output/QUINC/")
+translate_QUJSM_simulation_into_EucFACE_MIP_format(source.dir = "simulation_output/QUJSM/")
+
 
 
 ##########################################################################

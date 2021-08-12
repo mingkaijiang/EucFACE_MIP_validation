@@ -429,11 +429,24 @@ compile_obs_var_dataset_across_models <- function(p.mod.list, n.mod.list, d.mod.
     names(deltaDF1)[3:l] <- paste0("delta", names(deltaDF1[3:l]))
     names(deltaDF2)[3:l] <- paste0("delta", names(deltaDF2[3:l]))
     
+    
+    ### climate
+    
+    climDFx <- ambDF[,c("ModName", "YEAR", "DOY", "CO2", "PAR","TAIR","TSOIL","VPD")]
+    climDFy <- eleDF[,c("ModName", "YEAR", "DOY", "CO2", "PAR","TAIR","TSOIL","VPD")]
+    
+    climDF1 <- summaryBy(CO2+PAR+TAIR+TSOIL+VPD~ModName+YEAR, FUN=mean,
+                         data=climDFx, na.rm=T, keep.names=T)
+    
+    climDF2 <- summaryBy(CO2+PAR+TAIR+TSOIL+VPD~ModName+YEAR, FUN=mean,
+                         data=climDFy, na.rm=T, keep.names=T)
+    
     ### merge all dataframe together
+    fluxDF1 <- merge(climDF1, fluxDF1, by=c("ModName", "YEAR"))
     annDF1 <- merge(fluxDF1, poolDF1, by=c("ModName", "YEAR"))
     annDF1 <- merge(annDF1, deltaDF1, by=c("ModName", "YEAR"), all.x=T)
     
-    
+    fluxDF2 <- merge(climDF2, fluxDF2, by=c("ModName", "YEAR"))
     annDF2 <- merge(fluxDF2, poolDF2, by=c("ModName", "YEAR"))
     annDF2 <- merge(annDF2, deltaDF2, by=c("ModName", "YEAR"), all.x=T)
     
