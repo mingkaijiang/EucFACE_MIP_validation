@@ -84,7 +84,7 @@ plot_normalized_GPP_response <- function(scenario) {
                                                      lty = linetype.values),
                                  nrow=2, byrow=F))+
       xlab(expression(paste("Year")))+
-      ylim(c(1,4))
+      ylim(c(1,5))
     
     
     p2 <- ggplot() +
@@ -116,7 +116,7 @@ plot_normalized_GPP_response <- function(scenario) {
                                                      lty = linetype.values),
                                  nrow=2, byrow=F))+
       xlab(expression(paste("Year")))+
-      ylim(c(1,4))
+      ylim(c(1,5))
     
     ### LAI
     p3 <- ggplot() +

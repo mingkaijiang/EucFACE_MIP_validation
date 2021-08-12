@@ -399,9 +399,12 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
               panel.grid.major=element_blank(),
               legend.position="none",
               legend.text.align=0)+
-        scale_y_continuous(limits=c(-205, 600), 
-                           breaks=c(-200, -100, 0, 100, 200, 400, 600),
-                           labels=c(-200, -100, 0, 100, 200, 400, 600))+
+        #scale_y_continuous(limits=c(-205, 600), 
+        #                   breaks=c(-200, -100, 0, 100, 200, 400, 600),
+        #                   labels=c(-200, -100, 0, 100, 200, 400, 600))+
+        scale_y_continuous(limits=c(-50, 100), 
+                           breaks=c(-50, 0, 25, 50, 75, 100),
+                           labels=c(-50, 0, 25, 50, 75, 100))+
         guides(fill=guide_legend(ncol=3),legend.justification = c(0, 1))+
     annotate(geom="text", x=1, y=-100, label="GDAYP", size=7)
     
@@ -433,9 +436,9 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
               panel.grid.major=element_blank(),
               legend.position="none",
               legend.text.align=0)+
-        scale_y_continuous(limits=c(-205, 600), 
-                           breaks=c(-200, -100, 0, 100, 200, 400, 600),
-                           labels=c(-200, -100, 0, 100, 200, 400, 600))+
+        scale_y_continuous(limits=c(-50, 100), 
+                           breaks=c(-50, 0, 25, 50, 75, 100),
+                           labels=c(-50, 0, 25, 50, 75, 100))+
         guides(fill=guide_legend(ncol=2))#+
     #annotate(geom="text", x=0.5, y=500, label="b", size=7)
     
@@ -465,9 +468,9 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
               panel.grid.major=element_blank(),
               legend.position="none",
               legend.text.align=0)+
-        scale_y_continuous(limits=c(-205, 600), 
-                           breaks=c(-200, -100, 0, 100, 200, 400, 600),
-                           labels=c(-200, -100, 0, 100, 200, 400, 600))+
+        scale_y_continuous(limits=c(-50, 100), 
+                           breaks=c(-50, 0, 25, 50, 75, 100),
+                           labels=c(-50, 0, 25, 50, 75, 100))+
         guides(fill=guide_legend(ncol=2, nrow=3))#+
     #annotate(geom="text",x=0.5, y=500, label="c", size=7)
     
@@ -497,9 +500,9 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
               panel.grid.major=element_blank(),
               legend.position="none",
               legend.text.align=0)+
-        scale_y_continuous(limits=c(-205, 600), 
-                           breaks=c(-200, -100, 0, 100, 200, 400, 600),
-                           labels=c(-200, -100, 0, 100, 200, 400, 600))+
+        scale_y_continuous(limits=c(-50, 100), 
+                           breaks=c(-50, 0, 25, 50, 75, 100),
+                           labels=c(-50, 0, 25, 50, 75, 100))+
         guides(fill=guide_legend(ncol=2))#+
     #annotate(geom="text", x=0.5, y=500, label="d", size=7)
     

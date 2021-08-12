@@ -72,14 +72,18 @@ make_time_averaged_data_model_comparison_over_obs_period(eucDF)
 
 
 ### plot photosynthesis vs leaf N & P relationships
+### need to go into function to plot
+scenario="fix"
 plot_normalized_GPP_response(scenario="fix")
+scenario="var"
 plot_normalized_GPP_response(scenario="var")
 
 ### fate of carbon - go into function to plot
 scenario="var"
-scenario="fix"
 trace_fate_of_carbon_MIP_plot(scenario="var")
 
+scenario="fix"
+trace_fate_of_carbon_MIP_plot(scenario="fix")
 
 #plot_taylor_diagram()
 

@@ -67,6 +67,7 @@ make_MIP_time_series_plot <- function(scenario) {
     pctco2DF.mip[sapply(pctco2DF.mip, is.infinite)] <- NA
     pctco2DF.mip[sapply(pctco2DF.mip, is.nan)] <- NA
     
+
     ##################################################################
     
     

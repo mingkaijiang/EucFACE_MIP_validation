@@ -518,8 +518,22 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF) {
         rtDF$meanvalue[rtDF$Group==i&rtDF$Variable=="leafN"] <- annDF.amb.sum$NLRETR.mean[annDF.amb.sum$ModName==i]/annDF.amb.sum$NGL.mean[annDF.amb.sum$ModName==i]
         rtDF$meanvalue[rtDF$Group==i&rtDF$Variable=="leafP"] <- annDF.amb.sum$PLRETR.mean[annDF.amb.sum$ModName==i]/annDF.amb.sum$PGL.mean[annDF.amb.sum$ModName==i]
     }
-
     
+    ### hard wired, check with modelers to make sure
+    rtDF$meanvalue[rtDF$Group=="D_OCHDP"&rtDF$Variable=="leafN"] <- 0.31
+    rtDF$meanvalue[rtDF$Group=="D_OCHDP"&rtDF$Variable=="leafP"] <- 0.53
+    
+    rtDF$meanvalue[rtDF$Group=="G_OCHDX"&rtDF$Variable=="leafN"] <- 0.31
+    rtDF$meanvalue[rtDF$Group=="G_OCHDX"&rtDF$Variable=="leafP"] <- 0.53
+    
+    rtDF$meanvalue[rtDF$Group=="E_QUINC"&rtDF$Variable=="leafN"] <- 0.31
+    rtDF$meanvalue[rtDF$Group=="E_QUINC"&rtDF$Variable=="leafP"] <- 0.53
+    
+    rtDF$meanvalue[rtDF$Group=="H_QUJSM"&rtDF$Variable=="leafN"] <- 0.31
+    rtDF$meanvalue[rtDF$Group=="H_QUJSM"&rtDF$Variable=="leafP"] <- 0.53
+    
+    rtDF$meanvalue[rtDF$Group=="F_ELMV1"&rtDF$Variable=="leafN"] <- 0.31
+    rtDF$meanvalue[rtDF$Group=="F_ELMV1"&rtDF$Variable=="leafP"] <- 0.53
     
     ### plotting
     p9 <- ggplot(data=rtDF, 
