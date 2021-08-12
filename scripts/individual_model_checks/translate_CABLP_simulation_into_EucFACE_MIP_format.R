@@ -40,7 +40,7 @@ translate_CABLP_simulation_into_EucFACE_MIP_format <- function(source.dir, pft.v
         myDF$SWPA <- NA
         myDF$LMA <- NA
         myDF$PFERT <- NA
-        
+        myDF$TSOIL <- myDF$TSOIL - 273.15
         
         ### end changing variable names
         ############################################

@@ -15,15 +15,15 @@ source("prepare.R")
 #### Step 2: Conver model-specific output into requested MIP output format
 
 ### GDAY-CNP
-#translate_GDAY_simulation_into_EucFACE_MIP_format(met.path ="/Users/mingkaijiang/Documents/Research/Projects/EucFACE_Modeling/GDAY-EucFACE/met_data",
-#                                                  sim.path = "/Users/mingkaijiang/Documents/Research/Projects/EucFACE_Modeling/GDAY-EucFACE/outputs",
-#                                                  out.path = "simulation_output")
-#
-#
-#### GDAY-CN
-#translate_GDAY_CN_simulation_into_EucFACE_MIP_format(met.path ="/Users/mingkaijiang/Documents/Research/Projects/EucFACE_Modeling/GDAY-EucFACE/met_data",
-#                                                     sim.path = "simulation_output/GDAYN/default_output",
-#                                                     out.path = "simulation_output")
+translate_GDAY_simulation_into_EucFACE_MIP_format(met.path ="/Users/mingkaijiang/Documents/Research/Projects/EucFACE_Modeling/GDAY-EucFACE/met_data",
+                                                  sim.path = "/Users/mingkaijiang/Documents/Research/Projects/EucFACE_Modeling/GDAY-EucFACE/outputs",
+                                                  out.path = "simulation_output")
+
+
+### GDAY-CN
+translate_GDAY_CN_simulation_into_EucFACE_MIP_format(met.path ="/Users/mingkaijiang/Documents/Research/Projects/EucFACE_Modeling/GDAY-EucFACE/met_data",
+                                                     sim.path = "simulation_output/GDAYN/default_output",
+                                                     out.path = "simulation_output")
 
 ### ORCHIDEE - no need for both models
 
@@ -47,8 +47,8 @@ source("prepare.R")
 
 
 ### QUINCY forcing data to convert units
-translate_QUINC_simulation_into_EucFACE_MIP_format(source.dir = "simulation_output/QUINC/")
-translate_QUJSM_simulation_into_EucFACE_MIP_format(source.dir = "simulation_output/QUJSM/")
+#translate_QUINC_simulation_into_EucFACE_MIP_format(source.dir = "simulation_output/QUINC/")
+#translate_QUJSM_simulation_into_EucFACE_MIP_format(source.dir = "simulation_output/QUJSM/")
 
 
 

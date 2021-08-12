@@ -97,7 +97,7 @@ translate_GDAY_simulation_into_EucFACE_MIP_format <- function(met.path,
         
         ## convert
         # met forcing
-        myDF$par <- (myDF$par_am + myDF$par_pm) * MJ_TO_MOL
+        myDF$par <- (myDF$par_am + myDF$par_pm) * MJ_TO_MOL * 12.0
         myDF$vpd <- (myDF$vpd_am + myDF$vpd_pm) / 2
         
         myDF$ndep <- myDF$ndep * tonnes_per_ha_to_g_m2
