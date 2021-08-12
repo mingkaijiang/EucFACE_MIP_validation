@@ -15,13 +15,14 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF) {
     annDF.amb <- readRDS(paste0(out.dir, "/MIP_obs_var_amb_annual.rds"))
     annDF.ele <- readRDS(paste0(out.dir, "/MIP_obs_var_ele_annual.rds"))
     
+    d <- dim(annDF.amb)[2]
     
     #### calculate 4-yr means in the simulation datasets
     annDF.amb <- subset(annDF.amb, YEAR>2012 & YEAR<2017)
     annDF.ele <- subset(annDF.ele, YEAR>2012 & YEAR<2017)
     
     annDF.pct.diff <- annDF.amb
-    annDF.pct.diff[,3:149] <- (annDF.ele[,3:149]-annDF.amb[,3:149])/annDF.amb[,3:149] * 100.0
+    annDF.pct.diff[,3:d] <- (annDF.ele[,3:d]-annDF.amb[,3:d])/annDF.amb[,3:d] * 100.0
     
     annDF.amb.sum <- summaryBy(.~ModName, FUN=c(mean,sd),
                                data=annDF.amb,
