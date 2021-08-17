@@ -44,6 +44,7 @@ for(z in sourcefiles)source(z)
 
 #### color palette:
 model.names <- c("A_CABLP",
+                 #"B_ELMV1",
                  "B_GDAYP",
                  "C_LPJGP",
                  "D_OCHDP",
