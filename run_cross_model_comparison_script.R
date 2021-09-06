@@ -111,9 +111,8 @@ trace_fate_of_carbon_MIP_plot(scenario="fix")
 
 ##########################################################################
 ### to do list:
-### 1. Simulation completion:
-###    Waiting for
-###                ELM for first set of simulations
+### 1. Check individual model to include unaccounted fluxes and pools that are necesary for mass balance closure (e.g. allocation)
+### 2. Storyline development
 ### 2. Generate summary table on key model features:
 ###    Waiting for input from ELM only,
 ###    Need to go through each model to confirm their entries.
@@ -136,7 +135,7 @@ trace_fate_of_carbon_MIP_plot(scenario="fix")
 ###    Semi-explicit microbial processes: ELMXX
 ###    Exudation and priming: GDAYP
 ### 9. DGVM analysis:
-###    CABLE-POP + LPJ-GUESS
+###    CABLE-POP + LPJ-GUESS, waiting for ED2 and possibly FATES (noting that BiomeEES also available)
 ### 10. CO2 x water: conceptual diagram + soil hydrology
 
 ##########################################################################
