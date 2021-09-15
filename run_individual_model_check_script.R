@@ -51,6 +51,11 @@ source("prepare.R")
 #translate_QUJSM_simulation_into_EucFACE_MIP_format(source.dir = "simulation_output/QUJSM/")
 
 
+### ELM output error correction
+# the model output CFLITA = -9999, which should be revised using CFLIT
+# then CFLIT is the total of CFLITA + CFLITB. Same for N and P 
+#translate_ELMV1_simulation_into_EucFACE_MIP_format(source.dir = "simulation_output/ELMV1/")
+
 
 ##########################################################################
 #### Step 3: Run individual model mass balance checks
@@ -76,6 +81,13 @@ EucFACE_mass_balance_and_validation_script_CABLP(forest = T)
 EucFACE_mass_balance_and_validation_script_CABLP(forest = F)
 
 
+### QUINCY, i.e. QUINC
+EucFACE_mass_balance_and_validation_script_QUINC()
+
+### QUINCY-JSM, i.e. QUJSM
+EucFACE_mass_balance_and_validation_script_QUJSM()
+
+
 ### LPJ-GUESS-CNP
 ## euc_ter
 EucFACE_mass_balance_and_validation_script_LPJGP(mod.version="new_soil", pft.group="euc_ter")
@@ -96,15 +108,11 @@ EucFACE_mass_balance_and_validation_script_LPJGN(mod.version="new_soil", pft.gro
 #EucFACE_mass_balance_and_validation_script_LPJGN(mod.version="old_soil", pft.group="all_pft")
 
 
-
-### QUINCY, i.e. QUINC
-EucFACE_mass_balance_and_validation_script_QUINC()
-
-### QUINCY-JSM, i.e. QUJSM
-EucFACE_mass_balance_and_validation_script_QUJSM()
-
-
 ### ELMXX
+# summary of ELM: retranslocation flux needed
+# respiration flux needed to check
+# litter pool check
+# Plab too large. If divide by 40, CSOIL too small (and Pmineralization flux)
 EucFACE_mass_balance_and_validation_script_ELMXX()
 
 ##########################################################################
