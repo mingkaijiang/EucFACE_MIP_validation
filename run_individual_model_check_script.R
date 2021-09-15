@@ -90,12 +90,12 @@ EucFACE_mass_balance_and_validation_script_QUJSM()
 
 ### LPJ-GUESS-CNP
 ## euc_ter
-EucFACE_mass_balance_and_validation_script_LPJGP(mod.version="new_soil", pft.group="euc_ter")
-#EucFACE_mass_balance_and_validation_script_LPJGP(mod.version="old_soil", pft.group="euc_ter")
+EucFACE_mass_balance_and_validation_script_LPJGP(mod.version="new_soil", 
+                                                 pft.group="euc_ter")
 
 ## all_pft
-EucFACE_mass_balance_and_validation_script_LPJGP(mod.version="new_soil", pft.group="all_pft")
-#EucFACE_mass_balance_and_validation_script_LPJGP(mod.version="old_soil", pft.group="all_pft")
+EucFACE_mass_balance_and_validation_script_LPJGP(mod.version="new_soil", 
+                                                 pft.group="all_pft")
 
 
 ### LPJ-GUESS-CN

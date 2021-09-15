@@ -16,11 +16,13 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
     #
     #delta (CFLIT + CCLITB + CSOILtot) = CLITIN + CFRLIN + CWLIN - RHET
     #
-    #CSTOR sums NPP (GPP-RAU) over the year and uses it for allocation and growth on the last day of the year.
+    #CSTOR sums NPP (GPP-RAU) over the year and uses it 
+    #      for allocation and growth on the last day of the year.
     #
     #The following works only on annual timesteps
     #
-    #annual NPP == annual (GPP-RAU) == CSTOR == CGL + CGW + CGFR + CREPR - CWLINDEBT + delta CDEBT (day 365 - 365+1)
+    #annual NPP == annual (GPP-RAU) == CSTOR 
+    #           == CGL + CGW + CGFR + CREPR - CWLINDEBT + delta CDEBT (day 365 - 365+1)
     #
     #annual GPP == RAU + CGL + CGW + CGFR + CREPR - CWLINDEBT + delta CDEBT (day 365 - 365+1)
     #
@@ -67,7 +69,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
     ####             LPJGN: LPJ-Guess, CN version
     ####             LPJGP: LPJ-Guess, CNP version
     ####             CABLP: CABLE-POP, CNP version
-    ####             ELMXX: ELM, CNP version
+    ####             ELMV1: ELM, CNP version
     mod.abb <- "LPJGP"
     
     #### setting out path to store the files
@@ -126,12 +128,16 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
     modDF$Date <- as.Date(modDF$Date)
     
     ### additional variables specific to this model
-    #CDEBT - C debt g C m-2. Individuals can borrow C if they had a bad year. Will pay it back later. This is how much C debt they have in total. 
+    #CDEBT - C debt g C m-2. Individuals can borrow C if they had a bad year. 
+    #                        Will pay it back later. 
+    #                        This is how much C debt they have in total. 
     #CLEST - C leaf establishment g C m-2 yr-1. New individual C leaf.
     #CWEST - C wood establishment g C m-2 yr-1. New individual C wood.
     #CFREST - C root establishment g C m-2 yr-1. New individual C root.
     #CDEBTEST - C debt establishment g C m-2 yr-1. New individual C debt. 
-    #CEXCESS - C excess g C m-2. When mass balance doesn't add up. For example, if C debt is larger than existing biomass when an individual is killed.
+    #CEXCESS - C excess g C m-2. When mass balance doesn't add up. 
+    #                            For example, if C debt is larger than 
+    #                            existing biomass when an individual is killed.
     #CWLINDEBT - C wood litter is used to pay back debt instead of falling on the ground.
     #PDEP - P deposition g P m-2 yr-1
     #PFERT - P fertilisation g P m-2 yr-1
@@ -139,12 +145,16 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
     #PGOCL - P occlusion rate g P m-2 yr-1
     #CLEACH - C leaching g C m-2 yr-1
     #GPPno - GPP without any limitations
-    #GPPns - GPP with only nutrient limitation (GPP is with both nutrient and water limitation).
+    #GPPns - GPP with only nutrient limitation 
+    #        (GPP is with both nutrient and water limitation).
     #PCON - Leaf P concentration PL / (2*CL)
     #MAXNSTORE - maximum N storage capacity of all individuals
     #MAXPSTORE - maximum P storage capacity of all individuals
-    #PHENL - Phenology of leaves (1 full leaf out, 0 no leaves. Euc_ter PFT has always 1, only grasses that have variable phenology)
-    #PHENFR - Phenology of roots (1 full root out, 0 no roots. Euc_ter PFT has always 1, only grasses that have variable phenology)
+    #PHENL - Phenology of leaves (1 full leaf out, 0 no leaves. 
+    #        Euc_ter PFT has always 1, only grasses that have variable phenology)
+    #PHENFR - Phenology of roots 
+    #         (1 full root out, 0 no roots. 
+    #         Euc_ter PFT has always 1, only grasses that have variable phenology)
     #SWtot - Total soil water content
     #SWPAtot - Total plant-available soil water content
     #CSOILtot - Total soil C
@@ -156,13 +166,6 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
     #PPORGtot - Total soil organic P (includes soil P litter)
     #NNEP - N total flux in the system. Corresponds to C mass NEP
     #PNEP - P total flux in the system. Corresponds to C mass NEP
-    
-    ### The mass balance check is performed at annual timestep. 
-    ### Note that, I assume that many models may not output some of these variables, 
-    ### and as such, the mass balance may not close without the inclusion model-specific variables. 
-    ### For those that are relevant, please modify the script with additional/alternative variables 
-    ### to try to close the mass balance. 
-    ### Otherwise, please indicate the reasons as to why your model does not have mass balance closure.
     
     ### summarize all fluxes first to obain annual rate
     fluxDF <- summaryBy(PREC+ET+TRANS+ES+EC+RO+DRAIN+NEP+GPP+NPP+
@@ -190,6 +193,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
                        "NPORGtot", "PSOILtot", "PPMINtot", "PPORGtot", "CDEBT", "CEXCESS", "CWLINDEBT",           ## model specific output
                        "PHENL", "PHENFR")]                                                                        ## model specific output
     
+    ## note: all other model uses DOY == 1
     poolDF <- subset(poolDF, DOY==365)
 
     poolDF$DOY <- NULL
@@ -245,7 +249,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
     annDF <- merge(annDF, deltaDF, by="YEAR", all.x=T)
     annDF <- merge(annDF, maxDF, by="YEAR", all.x=T)
     
-
+    ### deltaDF2 is the df that uses day (365) - day 365 + 1
     annDF2 <- merge(fluxDF, poolDF, by="YEAR")
     annDF2 <- merge(annDF2, deltaDF2, by="YEAR", all.x=T)
     annDF2 <- merge(annDF2, maxDF, by="YEAR", all.x=T)
@@ -278,7 +282,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
                    panel.abline(a=0,b=1)}) 
     
     
-    p3 <-xyplot(NPP~(CGL+CGW+CGFR+CREPR-CWLINDEBT+deltaCDEBT),annDF,
+    p3 <-xyplot(NPP~(CGL+CGW+CGFR+CREPR-CWLINDEBT+deltaCDEBT),annDF2,
                 auto.key=T,
                 scales=list(relation='free'),
                 panel=function(...){
@@ -286,9 +290,14 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
                     panel.abline(a=0,b=1)}) 
     
     #plot(p3)
+    # deltaCDEBT is 0 in annDF2, but non-0 in annDF
+    # CWLINDEBT = CWLINDEBT in annDF2 and annDF
+    # not sure why there is a tiny imbalance
+    # but allocation, we will need to add additional allocation to 
+    # non-structural carbohydrate pool
     
     ### NEP + RECO = GPP
-    p4<-xyplot(I(NEP+RECO+CLEACH+CREPR)~GPP,annDF2,
+    p4<-xyplot(I(NEP+RECO+CLEACH+CREPR)~GPP,annDF,
                auto.key=T,
                scales=list(relation='free'),
                panel=function(...){
@@ -297,7 +306,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
     
 
     ### annual GPP == RAU + CGL + CGW + CGFR + CREPR - CWLINDEBT + delta CDEBT (day 365 - 365+1)
-    p5<-xyplot(I(RAU+CGL+CGW+CGFR+CREPR-CWLINDEBT+deltaCDEBT)~GPP,annDF,
+    p5<-xyplot(I(RAU+CGL+CGW+CGFR+CREPR-CWLINDEBT+deltaCDEBT)~GPP,annDF2,
                auto.key=T,
                scales=list(relation='free'),
                panel=function(...){
@@ -306,6 +315,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
     
     
     #plot(p5)
+    # the problem year is year 2018
     
     ### RHET + RAU = RECO
     p6<-xyplot(I(RHET+RAU)~RECO,fluxDF,
@@ -317,15 +327,14 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
     
     
     ### annual NEP == annual NPP - annual RHET - annual CLEACH - CREPR + CLEST + CWEST + CFREST - CDEBTEST
-    p7<-xyplot(I(NPP-RHET-CLEACH-CREPR+CLEST+CWEST+CFREST-CDEBTEST)~NEP,annDF2,
+    p7<-xyplot(I(NPP-RHET-CLEACH-CREPR+CLEST+CWEST+CFREST-CDEBTEST)~NEP,annDF,
                auto.key=T,
                scales=list(relation='free'),
                panel=function(...){
                    panel.xyplot(...)
                    panel.abline(a=0,b=1)}) 
     
-    #plot(p7)
-    
+
     ### sum of all autotrophic respiration fluxes
     ### Some models may not explicitly simulate individual respiratory fluxes (e.g. GDAY)
     ### Hence, this mass balance check may not be closed for all models. 
@@ -357,6 +366,9 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
                    panel.xyplot(...)
                    panel.abline(a=0,b=1)}) 
     
+    plot(p10)
+    # not sure which dataset to use now (annDF or annDF2)
+    
     
     p11<-xyplot(I(CGW+CWEST-CWLIN)~deltaCW,annDF,
                #main='CGW-CWLIN~deltaCW',
@@ -366,6 +378,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
                    panel.xyplot(...)
                    panel.abline(a=0,b=1)}) 
     
+    plot(p11)
     
     p12<-xyplot(I(CGFR+CFREST-CFRLIN)~deltaCFR,annDF,
                #main='CGFR-CFRLIN~deltaCFR',
