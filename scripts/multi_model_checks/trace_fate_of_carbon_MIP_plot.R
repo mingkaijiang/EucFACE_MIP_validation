@@ -346,8 +346,8 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
         #annotate(geom="text", x=0.5, y=500, label="d", size=7)
     
     
-    plots_A_CABLP <- plot_grid(p1_1, p1_2, p1_3, p1_4, 
-                               labels=c("(a1)", "(a2)", "(a3)", "(a4)"),
+    plots_C_CABLP <- plot_grid(p1_1, p1_2, p1_3, p1_4, 
+                               labels=c("(c1)", "(c2)", "(c3)", "(c4)"),
                                ncol=4, align="h", axis = "l",
                                label_x=c(0.86,0.6,0.6,0.6), label_y=0.95,
                                label_size = 18,
@@ -356,7 +356,7 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
     
     
     #### GDAYP
-    i <- "B_GDAYP"
+    i <- "A_GDAYP"
     
     subDF <- plotDF2[plotDF2$ModName==i,]
     
@@ -507,8 +507,8 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
     #annotate(geom="text", x=0.5, y=500, label="d", size=7)
     
     
-    plots_B_GDAYP <- plot_grid(p2_1, p2_2, p2_3, p2_4, 
-                               labels=c("(b1)", "(b2)", "(b3)", "(b4)"),
+    plots_A_GDAYP <- plot_grid(p2_1, p2_2, p2_3, p2_4, 
+                               labels=c("(a1)", "(a2)", "(a3)", "(a4)"),
                                ncol=4, align="h", axis = "l",
                                label_x=c(0.86,0.6,0.6,0.6), label_y=0.95,
                                label_size = 18,
@@ -517,7 +517,7 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
     
     
     #### LPJGP
-    i <- "C_LPJGP"
+    i <- "D_LPJGP"
     
     subDF <- plotDF2[plotDF2$ModName==i,]
     
@@ -663,16 +663,16 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
     #annotate(geom="text", x=0.5, y=500, label="d", size=7)
     
     
-    plots_C_LPJGP <- plot_grid(p3_1, p3_2, p3_3, p3_4, 
-                               labels=c("(c1)", "(c2)", "(c3)", "(c4)"),
+    plots_D_LPJGP <- plot_grid(p3_1, p3_2, p3_3, p3_4, 
+                               labels=c("(d1)", "(d2)", "(d3)", "(d4)"),
                                ncol=4, align="h", axis = "l",
                                label_x=c(0.86,0.6,0.6,0.6), label_y=0.95,
                                label_size = 18,
                                rel_widths=c(1.5,0.5,0.5,0.5))
     
     
-    #### D_OCHDP
-    i <- "D_OCHDP"
+    #### E_OCHDP
+    i <- "E_OCHDP"
     
     subDF <- plotDF2[plotDF2$ModName==i,]
     
@@ -820,8 +820,8 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
     #annotate(geom="text", x=0.5, y=500, label="d", size=7)
     
     
-    plots_D_OCHDP <- plot_grid(p4_1, p4_2, p4_3, p4_4, 
-                               labels=c("(d1)", "(d2)", "(d3)", "(d4)"),
+    plots_E_OCHDP <- plot_grid(p4_1, p4_2, p4_3, p4_4, 
+                               labels=c("(e1)", "(e2)", "(e3)", "(e4)"),
                                ncol=4, align="h", axis = "l",
                                label_x=c(0.86,0.6,0.6,0.6), label_y=0.95,
                                label_size = 18,
@@ -829,8 +829,8 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
     
     
     
-    #### E-QUINC
-    i <- "E_QUINC"
+    #### F-QUINC
+    i <- "F_QUINC"
     
     subDF <- plotDF2[plotDF2$ModName==i,]
     
@@ -978,8 +978,8 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
     #annotate(geom="text", x=0.5, y=500, label="d", size=7)
     
     
-    plots_E_QUINC <- plot_grid(p5_1, p5_2, p5_3, p5_4, 
-                               labels=c("(e1)", "(e2)", "(e3)", "(e4)"),
+    plots_F_QUINC <- plot_grid(p5_1, p5_2, p5_3, p5_4, 
+                               labels=c("(f1)", "(f2)", "(f3)", "(f4)"),
                                ncol=4, align="h", axis = "l",
                                label_x=c(0.86,0.6,0.6,0.6), label_y=0.95,
                                label_size = 18,
@@ -1015,11 +1015,11 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
     ### Plotting
     pdf(paste0(out.dir, "/MIP_fate_of_carbon_CNP_models.pdf"), width=12, height=16)
 
-    plot_grid(plots_A_CABLP,
-              plots_B_GDAYP,
-              plots_C_LPJGP,
-              plots_D_OCHDP,
-              plots_E_QUINC,
+    plot_grid(plots_A_GDAYP,
+              plots_C_CABLP,
+              plots_D_LPJGP,
+              plots_E_OCHDP,
+              plots_F_QUINC,
               plots_legend,
               ncol=1, rel_heights=c(1,1,1,1,1,0.4))
     
@@ -1033,7 +1033,7 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
     
     ###################### prepare individual models -microbial #########################
     #### ELMV1
-    i <- "F_ELMV1"
+    i <- "B_ELMV1"
     
     subDF <- plotDF2[plotDF2$ModName==i,]
     
@@ -1181,7 +1181,7 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
     #annotate(geom="text", x=0.5, y=500, label="d", size=7)
     
     
-    plots_F_ELMV1 <- plot_grid(p6_1, p6_2, p6_3, p6_4, 
+    plots_B_ELMV1 <- plot_grid(p6_1, p6_2, p6_3, p6_4, 
                                labels=c("(a1)", "(a2)", "(a3)", "(a4)"),
                                ncol=4, align="h", axis = "l",
                                label_x=c(0.86,0.6,0.6,0.6), label_y=0.95,
@@ -1534,7 +1534,7 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
     ### Plotting
     pdf(paste0(out.dir, "/MIP_fate_of_carbon_Microbial_models.pdf"), width=12, height=10)
     
-    plot_grid(plots_F_ELMV1,
+    plot_grid(plots_B_ELMV1,
               plots_G_OCHDX,
               plots_H_QUJSM,
               plots_legend,
