@@ -116,6 +116,8 @@ make_MIP_time_series_plot <- function(scenario) {
                    color = guide_legend(nrow=6, byrow=F))+
             ylab(expression(paste("Ambient " * CO[2])))
         
+        plot(p1)
+        
         
         p2 <- ggplot() +
             geom_ribbon(data=co2DF.mip, 

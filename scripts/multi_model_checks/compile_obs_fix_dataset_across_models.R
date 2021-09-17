@@ -69,7 +69,7 @@ compile_obs_fix_dataset_across_models <- function(p.mod.list, n.mod.list, d.mod.
             modDF <- read.csv(paste0("simulation_output/", mod.abb, 
                                      "/EUC_QUJSM_OBS_FIX_AMB_NOP_D.csv"))
         } else if (mod.abb=="ELMV1") {
-            modDF <- read.csv(paste0("simulation_output/ELMXX/EUC_",
+            modDF <- read.csv(paste0("simulation_output/", mod.abb, "/EUC_",
                                      mod.abb, "_OBS_FIX_AMB_NOP_D.csv"))
         } else {
             modDF <- read.csv(paste0("simulation_output/", mod.abb, 
@@ -99,37 +99,37 @@ compile_obs_fix_dataset_across_models <- function(p.mod.list, n.mod.list, d.mod.
     
     
     ### looping vegetation dynamic models
-    for (mod.abb in d.mod.list) {
-        
-        ## read in individual models
-        if (mod.abb=="CABLP") {
-            modDF <- read.csv(paste0("simulation_output/", mod.abb, 
-                                     "/tile_averaged/EUC_", mod.abb, "_OBS_FIX_AMB_NOP_D.csv"))
-        } else if (mod.abb=="LPJGP") {
-            modDF <- read.csv(paste0("simulation_output/", mod.abb, 
-                                     "/new_soil/all_pft/EUC_", mod.abb, "_OBS_FIX_AMB_NOP_D.csv"))
-        } 
-        
-        ## select consistent columns
-        modDF <- modDF[,p.mod.names]
-        
-        ## add date to the dataset to help with the plotting
-        for (i in 2012:2019) {
-            
-            date.list <- as.Date((modDF$DOY[modDF$YEAR==i]-1), 
-                                 origin = paste0(i, "-01-01"))
-            
-            modDF$Date[modDF$YEAR == i] <- as.character(date.list)
-        }
-        
-        modDF$Date <- as.Date(modDF$Date)
-        
-        ## add model name
-        modDF$ModName <- paste0(mod.abb, "-VD")
-        
-        ### merge all models
-        outDF <- rbind(outDF, modDF)
-    }
+    #for (mod.abb in d.mod.list) {
+    #    
+    #    ## read in individual models
+    #    if (mod.abb=="CABLP") {
+    #        modDF <- read.csv(paste0("simulation_output/", mod.abb, 
+    #                                 "/tile_averaged/EUC_", mod.abb, "_OBS_FIX_AMB_NOP_D.csv"))
+    #    } else if (mod.abb=="LPJGP") {
+    #        modDF <- read.csv(paste0("simulation_output/", mod.abb, 
+    #                                 "/new_soil/all_pft/EUC_", mod.abb, "_OBS_FIX_AMB_NOP_D.csv"))
+    #    } 
+    #    
+    #    ## select consistent columns
+    #    modDF <- modDF[,p.mod.names]
+    #    
+    #    ## add date to the dataset to help with the plotting
+    #    for (i in 2012:2019) {
+    #        
+    #        date.list <- as.Date((modDF$DOY[modDF$YEAR==i]-1), 
+    #                             origin = paste0(i, "-01-01"))
+    #        
+    #        modDF$Date[modDF$YEAR == i] <- as.character(date.list)
+    #    }
+    #    
+    #    modDF$Date <- as.Date(modDF$Date)
+    #    
+    #    ## add model name
+    #    modDF$ModName <- paste0(mod.abb, "-VD")
+    #    
+    #    ### merge all models
+    #    outDF <- rbind(outDF, modDF)
+    #}
     
     
     ### looping CN models
@@ -166,23 +166,23 @@ compile_obs_fix_dataset_across_models <- function(p.mod.list, n.mod.list, d.mod.
     }
     
     ### assign model ordering 
-    outDF$ModName <- gsub("CABLP-VD", "CVD", outDF$ModName)
-    outDF$ModName <- gsub("LPJGP-VD", "LVD", outDF$ModName)
+    #outDF$ModName <- gsub("CABLP-VD", "CVD", outDF$ModName)
+    #outDF$ModName <- gsub("LPJGP-VD", "LVD", outDF$ModName)
     
-    outDF$ModName <- gsub("CABLP", "A_CABLP", outDF$ModName)
-    outDF$ModName <- gsub("GDAYP", "B_GDAYP", outDF$ModName)
-    outDF$ModName <- gsub("LPJGP", "C_LPJGP", outDF$ModName)
-    outDF$ModName <- gsub("OCHDP", "D_OCHDP", outDF$ModName)
-    outDF$ModName <- gsub("QUINC", "E_QUINC", outDF$ModName)
+    outDF$ModName <- gsub("GDAYP", "A_GDAYP", outDF$ModName)
+    outDF$ModName <- gsub("ELMV1", "B_ELMV1", outDF$ModName)
+    outDF$ModName <- gsub("CABLP", "C_CABLP", outDF$ModName)
+    outDF$ModName <- gsub("LPJGP", "D_LPJGP", outDF$ModName)
+    outDF$ModName <- gsub("OCHDP", "E_OCHDP", outDF$ModName)
+    outDF$ModName <- gsub("QUINC", "F_QUINC", outDF$ModName)
     
-    outDF$ModName <- gsub("ELMV1", "F_ELMV1", outDF$ModName)
     outDF$ModName <- gsub("OCHDX", "G_OCHDX", outDF$ModName)
     outDF$ModName <- gsub("QUJSM", "H_QUJSM", outDF$ModName)
     
     outDF$ModName <- gsub("GDAYN", "I_GDAYN", outDF$ModName)
     outDF$ModName <- gsub("LPJGN", "J_LPJGN", outDF$ModName)
-    outDF$ModName <- gsub("CVD", "K_CABLP-VD", outDF$ModName)
-    outDF$ModName <- gsub("LVD", "L_LPJGP-VD", outDF$ModName)
+    #outDF$ModName <- gsub("CVD", "K_CABLP-VD", outDF$ModName)
+    #outDF$ModName <- gsub("LVD", "L_LPJGP-VD", outDF$ModName)
     
     
     ### save the rds
@@ -212,7 +212,7 @@ compile_obs_fix_dataset_across_models <- function(p.mod.list, n.mod.list, d.mod.
             modDF <- read.csv(paste0("simulation_output/", mod.abb, 
                                      "/EUC_QUJSM_OBS_FIX_ELE_NOP_D.csv"))
         } else if (mod.abb=="ELMV1") {
-            modDF <- read.csv(paste0("simulation_output/ELMXX/EUC_", 
+            modDF <- read.csv(paste0("simulation_output/", mod.abb, "/EUC_", 
                                      mod.abb, "_OBS_FIX_ELE_NOP_D.csv"))
         } else {
             modDF <- read.csv(paste0("simulation_output/", mod.abb, 
@@ -242,37 +242,37 @@ compile_obs_fix_dataset_across_models <- function(p.mod.list, n.mod.list, d.mod.
     
     
     ### looping vegetation dynamic models
-    for (mod.abb in d.mod.list) {
-        
-        ## read in individual models
-        if (mod.abb=="CABLP") {
-            modDF <- read.csv(paste0("simulation_output/", mod.abb, 
-                                     "/tile_averaged/EUC_", mod.abb, "_OBS_FIX_ELE_NOP_D.csv"))
-        } else if (mod.abb=="LPJGP") {
-            modDF <- read.csv(paste0("simulation_output/", mod.abb, 
-                                     "/new_soil/all_pft/EUC_", mod.abb, "_OBS_FIX_ELE_NOP_D.csv"))
-        } 
-        
-        ## select consistent columns
-        modDF <- modDF[,p.mod.names]
-        
-        ## add date to the dataset to help with the plotting
-        for (i in 2012:2019) {
-            
-            date.list <- as.Date((modDF$DOY[modDF$YEAR==i]-1), 
-                                 origin = paste0(i, "-01-01"))
-            
-            modDF$Date[modDF$YEAR == i] <- as.character(date.list)
-        }
-        
-        modDF$Date <- as.Date(modDF$Date)
-        
-        ## add model name
-        modDF$ModName <- paste0(mod.abb, "-VD")
-        
-        ### merge all models
-        outDF <- rbind(outDF, modDF)
-    }
+    #for (mod.abb in d.mod.list) {
+    #    
+    #    ## read in individual models
+    #    if (mod.abb=="CABLP") {
+    #        modDF <- read.csv(paste0("simulation_output/", mod.abb, 
+    #                                 "/tile_averaged/EUC_", mod.abb, "_OBS_FIX_ELE_NOP_D.csv"))
+    #    } else if (mod.abb=="LPJGP") {
+    #        modDF <- read.csv(paste0("simulation_output/", mod.abb, 
+    #                                 "/new_soil/all_pft/EUC_", mod.abb, "_OBS_FIX_ELE_NOP_D.csv"))
+    #    } 
+    #    
+    #    ## select consistent columns
+    #    modDF <- modDF[,p.mod.names]
+    #    
+    #    ## add date to the dataset to help with the plotting
+    #    for (i in 2012:2019) {
+    #        
+    #        date.list <- as.Date((modDF$DOY[modDF$YEAR==i]-1), 
+    #                             origin = paste0(i, "-01-01"))
+    #        
+    #        modDF$Date[modDF$YEAR == i] <- as.character(date.list)
+    #    }
+    #    
+    #    modDF$Date <- as.Date(modDF$Date)
+    #    
+    #    ## add model name
+    #    modDF$ModName <- paste0(mod.abb, "-VD")
+    #    
+    #    ### merge all models
+    #    outDF <- rbind(outDF, modDF)
+    #}
     
     
     ### looping CN models
@@ -309,23 +309,23 @@ compile_obs_fix_dataset_across_models <- function(p.mod.list, n.mod.list, d.mod.
     }
     
     ### assign model ordering 
-    outDF$ModName <- gsub("CABLP-VD", "CVD", outDF$ModName)
-    outDF$ModName <- gsub("LPJGP-VD", "LVD", outDF$ModName)
+    #outDF$ModName <- gsub("CABLP-VD", "CVD", outDF$ModName)
+    #outDF$ModName <- gsub("LPJGP-VD", "LVD", outDF$ModName)
     
-    outDF$ModName <- gsub("CABLP", "A_CABLP", outDF$ModName)
-    outDF$ModName <- gsub("GDAYP", "B_GDAYP", outDF$ModName)
-    outDF$ModName <- gsub("LPJGP", "C_LPJGP", outDF$ModName)
-    outDF$ModName <- gsub("OCHDP", "D_OCHDP", outDF$ModName)
-    outDF$ModName <- gsub("QUINC", "E_QUINC", outDF$ModName)
+    outDF$ModName <- gsub("GDAYP", "A_GDAYP", outDF$ModName)
+    outDF$ModName <- gsub("ELMV1", "B_ELMV1", outDF$ModName)
+    outDF$ModName <- gsub("CABLP", "C_CABLP", outDF$ModName)
+    outDF$ModName <- gsub("LPJGP", "D_LPJGP", outDF$ModName)
+    outDF$ModName <- gsub("OCHDP", "E_OCHDP", outDF$ModName)
+    outDF$ModName <- gsub("QUINC", "F_QUINC", outDF$ModName)
     
-    outDF$ModName <- gsub("ELMV1", "F_ELMV1", outDF$ModName)
     outDF$ModName <- gsub("OCHDX", "G_OCHDX", outDF$ModName)
     outDF$ModName <- gsub("QUJSM", "H_QUJSM", outDF$ModName)
     
     outDF$ModName <- gsub("GDAYN", "I_GDAYN", outDF$ModName)
     outDF$ModName <- gsub("LPJGN", "J_LPJGN", outDF$ModName)
-    outDF$ModName <- gsub("CVD", "K_CABLP-VD", outDF$ModName)
-    outDF$ModName <- gsub("LVD", "L_LPJGP-VD", outDF$ModName)
+    #outDF$ModName <- gsub("CVD", "K_CABLP-VD", outDF$ModName)
+    #outDF$ModName <- gsub("LVD", "L_LPJGP-VD", outDF$ModName)
     
     ### save the rds
     saveRDS(outDF, paste0(out.dir, "/MIP_obs_fix_ele_daily.rds"))
