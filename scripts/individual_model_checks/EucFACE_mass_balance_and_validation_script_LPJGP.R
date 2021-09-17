@@ -678,6 +678,8 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
                    panel.xyplot(...)
                    panel.abline(a=0,b=1)}) 
     
+    #plot(p1)
+    
     p2<-xyplot(I(PDEP+PWEA-PLEACH-PGOCL)~PNEP,annDF,
                auto.key=T,
                scales=list(relation='free'),

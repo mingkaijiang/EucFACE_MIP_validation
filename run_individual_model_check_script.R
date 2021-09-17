@@ -100,15 +100,15 @@ EucFACE_mass_balance_and_validation_script_LPJGP(mod.version="new_soil",
 
 ### LPJ-GUESS-CN
 ## euc_ter
-EucFACE_mass_balance_and_validation_script_LPJGN(mod.version="new_soil", pft.group="euc_ter")
-#EucFACE_mass_balance_and_validation_script_LPJGN(mod.version="old_soil", pft.group="euc_ter")
+EucFACE_mass_balance_and_validation_script_LPJGN(mod.version="new_soil", 
+                                                 pft.group="euc_ter")
 
 ## all_pft
-EucFACE_mass_balance_and_validation_script_LPJGN(mod.version="new_soil", pft.group="all_pft")
-#EucFACE_mass_balance_and_validation_script_LPJGN(mod.version="old_soil", pft.group="all_pft")
+EucFACE_mass_balance_and_validation_script_LPJGN(mod.version="new_soil",
+                                                 pft.group="all_pft")
 
 
-### ELMXX
+### ELMXX - should be renamed to ELM V1
 # summary of ELM: retranslocation flux needed
 # respiration flux needed to check
 # litter pool check
@@ -171,12 +171,6 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
                                              nutrient.trt = "NOP")
 
 
-#plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGP/old_soil/euc_ter"),
-#                                             mod.abb = "LPJGP",
-#                                             out.dir = paste0(getwd(), "/analysis_output/LPJGP/old_soil/euc_ter"),
-#                                             sim.period = "OBS",
-#                                             nutrient.trt = "NOP")
-
 
 ### LPJ-GUESS-CNP all pft
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGP/new_soil/all_pft"),
@@ -184,12 +178,6 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
                                              out.dir = paste0(getwd(), "/analysis_output/LPJGP/new_soil/all_pft"),
                                              sim.period = "OBS",
                                              nutrient.trt = "NOP")
-
-#plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGP/old_soil/all_pft"),
-#                                             mod.abb = "LPJGP",
-#                                             out.dir = paste0(getwd(), "/analysis_output/LPJGP/old_soil/all_pft"),
-#                                             sim.period = "OBS",
-#                                             nutrient.trt = "NOP")
 
 
 
@@ -201,12 +189,6 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
                                              nutrient.trt = "NOP")
 
 
-#plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGN/old_soil/euc_ter"),
-#                                             mod.abb = "LPJGN",
-#                                             out.dir = paste0(getwd(), "/analysis_output/LPJGN/old_soil/euc_ter"),
-#                                             sim.period = "OBS",
-#                                             nutrient.trt = "NOP")
-
 
 ### LPJ-GUESS-CN all pft
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGN/new_soil/all_pft"),
@@ -214,13 +196,6 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
                                              out.dir = paste0(getwd(), "/analysis_output/LPJGN/new_soil/all_pft"),
                                              sim.period = "OBS",
                                              nutrient.trt = "NOP")
-
-#plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGN/old_soil/all_pft"),
-#                                             mod.abb = "LPJGN",
-#                                             out.dir = paste0(getwd(), "/analysis_output/LPJGN/old_soil/all_pft"),
-#                                             sim.period = "OBS",
-#                                             nutrient.trt = "NOP")
-
 
 
 ### QUINCY
@@ -240,11 +215,12 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
 
 
 ### ELMV1
-plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/ELMXX"),
+plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/ELMV1"),
                                              mod.abb = "ELMV1",
-                                             out.dir = paste0(getwd(), "/analysis_output/ELMXX"),
+                                             out.dir = paste0(getwd(), "/analysis_output/ELMV1"),
                                              sim.period = "OBS",
                                              nutrient.trt = "NOP")
+
 
 ##########################################################################
 #### Step 5: compare observed period simulation results with observation data, focus on CO2 response
