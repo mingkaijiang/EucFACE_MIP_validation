@@ -67,7 +67,7 @@ YlOrRdPalette <- rev(brewer.pal(n = 9, name = "YlOrRd"))
 
 GreensPalette <- rev(brewer.pal(n = 9, name = "Greens"))
 
-SpectralPalette <- brewer.pal(n = 11, name = "Spectral")
+SpectralPalette <- brewer.pal(n = 8, name = "Spectral")
 
 
 #col.values <- c("A_CABLP" = YlOrRdPalette[1],
@@ -84,18 +84,29 @@ SpectralPalette <- brewer.pal(n = 11, name = "Spectral")
 #                "L_LPJGP-VD" = YlOrRdPalette[5])
 
 
-col.values <- c("A_GDAYP" = set3Palette[1],#SpectralPalette[1],
-                "B_ELMV1" = set3Palette[2],#SpectralPalette[3],
-                "C_CABLP" = set3Palette[3],#SpectralPalette[5],
-                "D_LPJGP" = set3Palette[4],#SpectralPalette[7],
-                "E_OCHDP" = set3Palette[5],#SpectralPalette[9],
-                "F_QUINC" = set3Palette[6],#SpectralPalette[11],
-                "G_OCHDX" = set3Palette[7],#SpectralPalette[12],
-                "H_QUJSM" = set3Palette[8],#SpectralPalette[11],
-                "I_GDAYN" = set3Palette[1],#SpectralPalette[1],
-                "J_LPJGN" = set3Palette[4])#,#SpectralPalette[4],
-                #"K_CABLP-VD" = SpectralPalette[3],
-                #"L_LPJGP-VD" = SpectralPalette[4])
+#col.values <- c("A_GDAYP" = set3Palette[1],
+#                "B_ELMV1" = set3Palette[2],
+#                "C_CABLP" = set3Palette[3],
+#                "D_LPJGP" = set3Palette[4],
+#                "E_OCHDP" = set3Palette[5],
+#                "F_QUINC" = set3Palette[6],
+#                "G_OCHDX" = set3Palette[7],
+#                "H_QUJSM" = set3Palette[8],
+#                "I_GDAYN" = set3Palette[1],
+#                "J_LPJGN" = set3Palette[4])
+
+col.values <- c("A_GDAYP" = SpectralPalette[1],
+                "B_ELMV1" = SpectralPalette[2],
+                "C_CABLP" = SpectralPalette[3],
+                "D_LPJGP" = SpectralPalette[4],
+                "E_OCHDP" = SpectralPalette[5],
+                "F_QUINC" = SpectralPalette[6],
+                "G_OCHDX" = SpectralPalette[7],
+                "H_QUJSM" = SpectralPalette[8],
+                "I_GDAYN" = SpectralPalette[1],
+                "J_LPJGN" = SpectralPalette[4])#,
+#"K_CABLP-VD" = SpectralPalette[3],
+#"L_LPJGP-VD" = SpectralPalette[4])
 
 linetype.values <- c("A_GDAYP" = 1,
                      "B_ELMV1" = 1,

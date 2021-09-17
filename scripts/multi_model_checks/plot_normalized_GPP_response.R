@@ -289,7 +289,7 @@ plot_normalized_GPP_response <- function(scenario) {
                  aes(ModName, Aleaf.mean.mean, group=Trt)) +
       geom_bar(stat = "identity", aes(fill=ModName, alpha=Trt), 
                position=position_dodge(), col="black") +
-      geom_vline(xintercept=c(5.5, 8.5, 10.5, 12.5), lty=2)+
+      geom_vline(xintercept=c(6.5, 8.5), lty=2)+
       geom_errorbar(aes(x=ModName, ymin=Aleaf.mean.mean-Aleaf.mean.sd, 
                         ymax=Aleaf.mean.mean+Aleaf.mean.sd), 
                     position=position_dodge(width=1)) +
@@ -317,7 +317,7 @@ plot_normalized_GPP_response <- function(scenario) {
                          labels=model.labels)+
       guides(alpha=guide_legend("Treatment"), fill = FALSE)+
       scale_x_discrete(limit=c(mod.list),
-                       label=c(model.labels)); p1
+                       label=c(model.labels))
     
     
     
@@ -325,7 +325,7 @@ plot_normalized_GPP_response <- function(scenario) {
                  aes(ModName, LAI.mean.mean, group=Trt)) +
       geom_bar(stat = "identity", aes(fill=ModName, alpha=Trt), 
                position=position_dodge(), col="black") +
-      geom_vline(xintercept=c(5.5, 8.5, 10.5, 12.5), lty=2)+
+      geom_vline(xintercept=c(6.5, 8.5), lty=2)+
       geom_errorbar(aes(x=ModName, ymin=LAI.mean.mean-LAI.mean.sd, 
                         ymax=LAI.mean.mean+LAI.mean.sd), 
                     position=position_dodge(width=1)) +
@@ -360,7 +360,7 @@ plot_normalized_GPP_response <- function(scenario) {
                  aes(ModName, GPP.mean, group=Trt)) +
       geom_bar(stat = "identity", aes(fill=ModName, alpha=Trt), 
                position=position_dodge(), col="black") +
-      geom_vline(xintercept=c(5.5, 8.5, 10.5, 12.5), lty=2)+
+      geom_vline(xintercept=c(6.5, 8.5), lty=2)+
       geom_errorbar(aes(x=ModName, ymin=GPP.mean-GPP.sd, 
                         ymax=GPP.mean+GPP.sd), 
                     position=position_dodge(width=1)) +

@@ -113,10 +113,9 @@ make_MIP_time_series_plot <- function(scenario) {
                                   labels=model.labels)+
             guides(fill = guide_legend(override.aes = list(col = col.values,
                                                            lty = linetype.values)),
-                   color = guide_legend(nrow=6, byrow=F))+
+                   color = guide_legend(nrow=6, byrow=F),
+                   linetype = guide_legend(override.aes = list(size = 0.5)))+
             ylab(expression(paste("Ambient " * CO[2])))
-        
-        plot(p1)
         
         
         p2 <- ggplot() +
@@ -149,7 +148,8 @@ make_MIP_time_series_plot <- function(scenario) {
                                 labels=model.labels)+
           guides(fill = guide_legend(override.aes = list(col = col.values,
                                                          lty = linetype.values)),
-                 color = guide_legend(nrow=6, byrow=F))+
+                 color = guide_legend(nrow=6, byrow=F),
+                 linetype = guide_legend(override.aes = list(size = 0.5)))+
             ylab(expression(paste(CO[2] * " effect (difference)")))
         
         
@@ -183,7 +183,8 @@ make_MIP_time_series_plot <- function(scenario) {
                                 labels=model.labels)+
           guides(fill = guide_legend(override.aes = list(col = col.values,
                                                          lty = linetype.values)),
-                 color = guide_legend(nrow=6, byrow=F))+
+                 color = guide_legend(nrow=6, byrow=F),
+                 linetype = guide_legend(override.aes = list(size = 0.5)))+
             ylab(expression(paste(CO[2] * " effect (ratio %)")))
         
         

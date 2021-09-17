@@ -49,7 +49,7 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
                            rep("prod", 6),
                            rep("litter", 4),
                            rep("pool", 7), 
-                           rep("change_in_pool", 7)), 12)
+                           rep("change_in_pool", 7)), 10)
     
     
     sumDF$conf_low <- sumDF$value.mean - sumDF$value.sd
@@ -198,7 +198,7 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
     
     ###################### prepare individual models #########################
     #### CABLE POP
-    i <- "A_CABLP"
+    i <- "C_CABLP"
     
     subDF <- plotDF2[plotDF2$ModName==i,]
     
