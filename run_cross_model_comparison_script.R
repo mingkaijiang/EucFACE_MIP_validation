@@ -82,8 +82,6 @@ plot_normalized_GPP_response(scenario="var")
 scenario="var"
 trace_fate_of_carbon_MIP_plot(scenario="var")
 
-
-
 scenario="fix"
 trace_fate_of_carbon_MIP_plot(scenario="fix")
 

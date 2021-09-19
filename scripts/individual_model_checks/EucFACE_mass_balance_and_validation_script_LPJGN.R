@@ -194,6 +194,8 @@ EucFACE_mass_balance_and_validation_script_LPJGN <- function(mod.version,
     annDF <- merge(annDF, maxDF, by="YEAR", all.x=T)
     
     
+    ### calculate daily fluxes on N and P retranslocation 
+    daiDF <- calculate_LPJG_daily_N_and_P_fluxes(modDF, mod.abb)
     
     
     ##################### Carbon balance check ################################
@@ -430,7 +432,7 @@ EucFACE_mass_balance_and_validation_script_LPJGN <- function(mod.version,
     ##################### Nitrogen balance check ################################
     ### Firstly, we check Delta$NL, Delta$NW, Delta$NFR and Delta$NCR. 
     ### Here, Delta$NL = NGL + NLITIN - NLRETR, where NLRETR is the retranslocation flux. 
-    p1<-xyplot(I(NGL-NLITIN)~I(deltaNL+NLRETR),annDF,
+    p1<-xyplot(I(NGL-NLITIN)~I(deltaNL+NLRETR),daiDF,
                #main='I(NGL-NLITIN-NLRETR)~deltaNL',
                auto.key=T,
                scales=list(relation='free'),
@@ -438,7 +440,7 @@ EucFACE_mass_balance_and_validation_script_LPJGN <- function(mod.version,
                    panel.xyplot(...)
                    panel.abline(a=0,b=1)}) 
     
-    p2<-xyplot(I(NGW-NWLIN)~I(deltaNW+NWRETR),annDF,
+    p2<-xyplot(I(NGW-NWLIN)~I(deltaNW+NWRETR),daiDF,
                #main='I(NGW-NWLIN-NWRETR)~deltaNW',
                auto.key=T,
                scales=list(relation='free'),
@@ -447,7 +449,7 @@ EucFACE_mass_balance_and_validation_script_LPJGN <- function(mod.version,
                    panel.abline(a=0,b=1)}) 
     
     
-    p3<-xyplot(I(NGFR-NFRLIN)~I(deltaNFR+NFRRETR),annDF,
+    p3<-xyplot(I(NGFR-NFRLIN)~I(deltaNFR+NFRRETR),daiDF,
                #main='I(NGFR-NFRLIN-NFRRETR)~deltaNFR',
                auto.key=T,
                scales=list(relation='free'),

@@ -261,6 +261,10 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
     #annDF2 <- merge(annDF2, maxDF, by="YEAR", all.x=T)
     
     
+    ### calculate daily fluxes on N and P retranslocation 
+    daiDF <- calculate_LPJG_daily_N_and_P_fluxes(modDF, mod.abb)
+    
+    
     
     ##################### Carbon balance check ################################
     ### NPP + RAU = GPP
@@ -395,14 +399,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
                     panel.xyplot(...)
                     panel.abline(a=0,b=1)}) 
     
-    p15<-xyplot(I(CLEST+CWEST+CFREST+CDEBTEST-CWLINDEBT)~(deltaCDEBT),annDF,
-                auto.key=T,
-                scales=list(relation='free'),
-                panel=function(...){
-                    panel.xyplot(...)
-                    panel.abline(a=0,b=1)}) 
-    
-    #plot(p15)
+    p15<-plot.new()
     
 
     ### This is a different way to check mass balance for NPP, 
@@ -494,18 +491,42 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
     
     
     ##################### Nitrogen balance check ################################
+    #For leaves it works as follows (perfect when I look at it)
+    #deltaNL = NL_today - NL_yesterday = (NGL - (NLITIN + NLRETR))_today
+    
+    
     ### Firstly, we check Delta$NL, Delta$NW, Delta$NFR and Delta$NCR. 
     ### Here, Delta$NL = NGL + NLITIN - NLRETR, where NLRETR is the retranslocation flux. 
-    p1<-xyplot(I(NGL-NLITIN)~I(deltaNL+NLRETR),annDF,
-               #main='I(NGL-NLITIN-NLRETR)~deltaNL',
+    #p1<-xyplot(I(NGL-NLITIN-NLRETR)~I(deltaNL),annDF,
+    #           main='I(NGL-NLITIN-NLRETR)~deltaNL',
+    #           auto.key=T,
+    #           scales=list(relation='free'),
+    #           panel=function(...){
+    #               panel.xyplot(...)
+    #               panel.abline(a=0,b=1)}) 
+    
+    p1<-xyplot(I(NGL-NLITIN-NLRETR)~I(deltaNL),daiDF,
+               main='daily timestep works',
                auto.key=T,
                scales=list(relation='free'),
                panel=function(...){
                    panel.xyplot(...)
                    panel.abline(a=0,b=1)}) 
     
-    p2<-xyplot(I(NGW-NWLIN)~I(deltaNW+NWRETR),annDF,
-               #main='I(NGW-NWLIN-NWRETR)~deltaNW',
+    
+    #plot(p1)
+
+    #p2<-xyplot(I(NGW-NWLIN-NWRETR)~I(deltaNW),annDF,
+    #           #main='I(NGW-NWLIN-NWRETR)~deltaNW',
+    #           auto.key=T,
+    #           scales=list(relation='free'),
+    #           panel=function(...){
+    #               panel.xyplot(...)
+    #               panel.abline(a=0,b=1)}) 
+    #
+    
+    p2<-xyplot(I(NGW-NWLIN-NWRETR)~I(deltaNW),daiDF,
+               main='daily timestep works',
                auto.key=T,
                scales=list(relation='free'),
                panel=function(...){
@@ -513,14 +534,21 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
                    panel.abline(a=0,b=1)}) 
     
     
-    p3<-xyplot(I(NGFR-NFRLIN)~I(deltaNFR+NFRRETR),annDF,
-               #main='I(NGFR-NFRLIN-NFRRETR)~deltaNFR',
+    #p3<-xyplot(I(NGFR-NFRLIN-NFRRETR)~I(deltaNFR),annDF,
+    #           #main='I(NGFR-NFRLIN-NFRRETR)~deltaNFR',
+    #           auto.key=T,
+    #           scales=list(relation='free'),
+    #           panel=function(...){
+    #               panel.xyplot(...)
+    #               panel.abline(a=0,b=1)}) 
+    
+    p3<-xyplot(I(NGFR-NFRLIN-NFRRETR)~I(deltaNFR),daiDF,
+               main='daily timestep works',
                auto.key=T,
                scales=list(relation='free'),
                panel=function(...){
                    panel.xyplot(...)
                    panel.abline(a=0,b=1)}) 
-    
     
     p4<-xyplot(I(NGL+NGW+NGFR-NLITIN-NWLIN-NFRLIN)~I(deltaNL+deltaNW+deltaNFR-deltaNSTOR+NLRETR+NWRETR+NFRRETR),annDF,
                auto.key=T,
@@ -602,9 +630,8 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
                     panel.abline(a=0,b=1)}) 
     
     #plot(p11)
-    # year 2018
-    
-    p12<-xyplot(NNEP~(I(deltaNL+deltaNW+deltaNFR+deltaNSOILtot+deltaNFLIT+deltaNCLITB+deltaNSTOR)),annDF,
+
+    p12<-xyplot(I(NNEP)~I(deltaNL+deltaNW+deltaNFR+deltaNSOILtot+deltaNFLIT+deltaNCLITB+deltaNSTOR),annDF,
                 auto.key=T,
                 scales=list(relation='free'),
                 panel=function(...){
@@ -621,6 +648,8 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
                     panel.xyplot(...)
                     panel.abline(a=0,b=1)}) 
     
+    #plot(p13)
+    
     
     p14<-xyplot(I(NDEP+NLITIN+NWLIN+NFRLIN-NUP-NLEACH-NVOL)~I(deltaNSOILtot+deltaNFLIT+deltaNCLITB+deltaNSTOR),annDF,
                 #main='I(NDEP+NLITIN+NWLIN+NCRLIN+NFRLIN-NUP-NLEACH-NVOL)~I(deltaNSOIL+deltaNFLIT+deltaNCLITB)',
@@ -630,6 +659,8 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
                     panel.xyplot(...)
                     panel.abline(a=0,b=1)}) 
     
+    
+    #plot(p14)
     
     ### We now check the mass balance for NSOIL, which should equal to total organic and inorganic pools. 
     p15<-xyplot(I(NPMIN+NPORG)~NSOIL,annDF,
@@ -669,9 +700,22 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
     
     
     ##################### Phosphorus balance check ################################
+    #Daily
+    #
+    #deltaPplant = (PL + PW + PFR + PSTOR)_today - (PL + PW + PFR + PSTOR)_yesterday = (PUP - (PLITIN + PFRLIN + PWLIN + PSTORLIN))_today
+    #
+    #PNEP = PDEP + PFERT + PWEAT - PLEACH - PGOCL
+    #
+    #delta PL = PGL - (PLITIN + PLRETR)
+    #delta PFR = PGFR - (PFRLIN + PFRRETR)
+    #
+    #Annual sums
+    #
+    #annual_sum(PNEP) = annual_sum(PDEP + PFERT + PWEAT - PLEACH - PGOCL) = (PL + PW + PFR + PSTOR + PFLIT + PCLITB + PSOILtot)_{day1+365} - (PL + PW + PFR + PSTOR + PFLIT + PCLITB + PSOILtot)_{day1}
+    
     ### The net influx - outflux should equal to the change in all ecosystem P pools: 
     ### PDEP+PWEA-PLEACH = DeltaPL+DeltaPW+DeltaPCR+DeltaPFR+DeltaPSOIL+DeltaPFLIT+DeltaPCLITB
-    p1<-xyplot(I(PDEP+PWEA-PLEACH-PGOCL)~I(deltaPL+deltaPW+deltaPFR+deltaPSOILtot+deltaPFLIT+deltaPSTOR),annDF,
+    p1<-xyplot(I(PDEP+PWEA-PLEACH-PGOCL)~I(deltaPL+deltaPW+deltaPFR+deltaPSOILtot+deltaPFLIT+deltaPSTOR+deltaPCLITB),annDF,
                auto.key=T,
                scales=list(relation='free'),
                panel=function(...){
@@ -690,7 +734,16 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
 
     ### Next, we check changes in major vegetation P pools. 
     ### It should equal to production flux - retranslocation flux - litterfall. 
-    p3<-xyplot(I(PGL-PLITIN)~I(deltaPL+PLRETR),annDF,
+    #p3<-xyplot(I(PGL-PLITIN-PLRETR)~I(deltaPL),annDF,
+    #           #main='I(PGL-PLITIN-PLRETR)~deltaPL',
+    #           auto.key=T,
+    #           scales=list(relation='free'),
+    #           panel=function(...){
+    #               panel.xyplot(...)
+    #               panel.abline(a=0,b=1)}) 
+    
+    
+    p3<-xyplot(I(PGL-PLITIN-PLRETR)~I(deltaPL),daiDF,
                #main='I(PGL-PLITIN-PLRETR)~deltaPL',
                auto.key=T,
                scales=list(relation='free'),
@@ -698,12 +751,9 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
                    panel.xyplot(...)
                    panel.abline(a=0,b=1)}) 
     
+
     
-    #plot(p3)
-    # this is the exame formular as N, but N is balanced, not P, strange.
-    # and wood P is balanced. 
-    
-    p4<-xyplot(I(PGW-PWLIN)~I(deltaPW+PWRETR),annDF,
+    p4<-xyplot(I(PGW-PWLIN)~I(deltaPW+PWRETR),daiDF,
                #main='I(PGW-PWLIN-PWRETR)~deltaPW',
                auto.key=T,
                scales=list(relation='free'),
@@ -712,7 +762,7 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
                    panel.abline(a=0,b=1)}) 
     
     
-    p5<-xyplot(I(PGFR-PFRLIN)~I(deltaPFR+PFRRETR),annDF,
+    p5<-xyplot(I(PGFR-PFRLIN)~I(deltaPFR+PFRRETR),daiDF,
                #main='I(PGFR-PFRLIN-PFRRETR)~deltaPFR',
                auto.key=T,
                scales=list(relation='free'),
@@ -720,9 +770,6 @@ EucFACE_mass_balance_and_validation_script_LPJGP <- function(mod.version,
                    panel.xyplot(...)
                    panel.abline(a=0,b=1)}) 
     
-    plot(p5)
-    # this is the exame formular as N, but N is balanced, not P, strange.
-    # and wood P is balanced. 
     
     p6<-xyplot(I(PGFR+PGL+PGW-PFRLIN-PLITIN-PWLIN)~I(deltaPL+deltaPW+deltaPFR+PFRRETR+PLRETR+PWRETR),annDF,
                #main='I(PGFR-PFRLIN-PFRRETR)~deltaPFR',
