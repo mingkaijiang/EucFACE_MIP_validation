@@ -44,17 +44,22 @@ compile_obs_fix_dataset_across_models(p.mod.list, n.mod.list, d.mod.list)
 
 ##########################################################################
 ### check forcing data consistency
+### go into function to plot
 check_forcing_data_consistency(scenario="var")
+
+check_forcing_data_consistency(scenario="fix")
+
 
 ##########################################################################
 ### make MIP time-series plot for both variable and fixed climate, over observed period
 ### when number of variables change in the input, need to revise the code
 make_MIP_time_series_plot(scenario="var")
 
-## check input data consistency and unit
 make_MIP_time_series_plot(scenario="fix")
 
 
+
+##########################################################################
 ### show P effect with the two models that have CN and CNP versions
 ### based on fixed climate forcing
 compare_CNP_and_CN_model_output()

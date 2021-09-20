@@ -64,6 +64,8 @@ check_forcing_data_consistency <- function(scenario) {
     
     plotDF <- rbind(obsDF, ambDF)
     
+    plotDF$PAR[plotDF$ModName%in%c("I_GDAYN", "A_GDAYP", "C_CABLP")] <- plotDF$PAR[plotDF$ModName%in%c("I_GDAYN", "A_GDAYP", "C_CABLP")] * 2
+    
     
     ##################################################################
     
