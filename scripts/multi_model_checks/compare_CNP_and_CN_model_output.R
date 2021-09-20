@@ -1,11 +1,11 @@
-compare_CNP_and_CN_model_output <- function() {
+compare_CNP_and_CN_model_output <- function(scenario) {
     
     
     ##################################################################
     #### Set up basics
     
     ### setting out path to store the files
-    out.dir <- paste0(getwd(), "/obs_fix_output")
+    out.dir <- paste0(getwd(), "/obs_", scenario, "_output")
     
     ### create output folder
     if(!dir.exists(out.dir)) {
@@ -13,16 +13,16 @@ compare_CNP_and_CN_model_output <- function() {
     }
     
     ### read in anual datasets
-    ambDF <- readRDS(paste0(out.dir, "/MIP_obs_fix_amb_annual.rds"))
-    eleDF <- readRDS(paste0(out.dir, "/MIP_obs_fix_ele_annual.rds"))
+    ambDF <- readRDS(paste0(out.dir, "/MIP_obs_", scenario, "_amb_annual.rds"))
+    eleDF <- readRDS(paste0(out.dir, "/MIP_obs_", scenario, "_ele_annual.rds"))
     
     ### select GDAYN, GDAYP, LPJGN, LPJGP model output
-    ambDF <- subset(ambDF, ModName%in%c("I_GDAYN", "B_GDAYP",
-                                        "J_LPJGN", "C_LPJGP"))
+    ambDF <- subset(ambDF, ModName%in%c("I_GDAYN", "A_GDAYP",
+                                        "J_LPJGN", "D_LPJGP"))
     
     
-    eleDF <- subset(eleDF, ModName%in%c("I_GDAYN", "B_GDAYP",
-                                        "J_LPJGN", "C_LPJGP"))
+    eleDF <- subset(eleDF, ModName%in%c("I_GDAYN", "A_GDAYP",
+                                        "J_LPJGN", "D_LPJGP"))
     
     
     #### calculate 4-yr means in the simulation datasets
@@ -37,8 +37,8 @@ compare_CNP_and_CN_model_output <- function() {
     diffDF$ModName <- gsub("I_GDAYN", "GDAY", diffDF$ModName)
     diffDF$ModName <- gsub("J_LPJGN", "LPJG", diffDF$ModName)
     
-    diffDF[diffDF$ModName=="GDAY",3:d] <- ambDF[ambDF$ModName=="B_GDAYP",3:d] - ambDF[ambDF$ModName=="I_GDAYN",3:d]
-    diffDF[diffDF$ModName=="LPJG",3:d] <- ambDF[ambDF$ModName=="C_LPJGP",3:d] - ambDF[ambDF$ModName=="J_LPJGN",3:d]
+    diffDF[diffDF$ModName=="GDAY",3:d] <- ambDF[ambDF$ModName=="A_GDAYP",3:d] - ambDF[ambDF$ModName=="I_GDAYN",3:d]
+    diffDF[diffDF$ModName=="LPJG",3:d] <- ambDF[ambDF$ModName=="D_LPJGP",3:d] - ambDF[ambDF$ModName=="J_LPJGN",3:d]
     
     
     ### calculate the effect of P limitation as % difference of (CNP - CN)/CN
@@ -85,7 +85,7 @@ compare_CNP_and_CN_model_output <- function() {
     
     ##################################################################
     #### Plotting
-    mod.list1 <- c("B_GDAYP", "C_LPJGP", "I_GDAYN", "J_LPJGN")
+    mod.list1 <- c("A_GDAYP", "D_LPJGP", "I_GDAYN", "J_LPJGN")
     mod.list2 <- c("GDAY", "LPJG")
     
     
@@ -141,8 +141,8 @@ compare_CNP_and_CN_model_output <- function() {
     plotDF1 <- subset(vegDF1, Variable%in%c("CL", "CW", "CFR", "CCR", "CSTOR") & Trt=="amb")
     plotDF2 <- subset(vegDF1, Variable%in%c("Total") & Trt=="amb")
     
-    val1 <- round((plotDF2$meanvalue[plotDF2$Model=="B_GDAYP"]-plotDF2$meanvalue[plotDF2$Model=="I_GDAYN"])/plotDF2$meanvalue[plotDF2$Model=="I_GDAYN"]*100, 1)
-    val2 <- round((plotDF2$meanvalue[plotDF2$Model=="C_LPJGP"]-plotDF2$meanvalue[plotDF2$Model=="J_LPJGN"])/plotDF2$meanvalue[plotDF2$Model=="J_LPJGN"]*100, 1)
+    val1 <- round((plotDF2$meanvalue[plotDF2$Model=="A_GDAYP"]-plotDF2$meanvalue[plotDF2$Model=="I_GDAYN"])/plotDF2$meanvalue[plotDF2$Model=="I_GDAYN"]*100, 1)
+    val2 <- round((plotDF2$meanvalue[plotDF2$Model=="D_LPJGP"]-plotDF2$meanvalue[plotDF2$Model=="J_LPJGN"])/plotDF2$meanvalue[plotDF2$Model=="J_LPJGN"]*100, 1)
     
     
     ### Plotting C pools in ambient CO2
@@ -150,9 +150,9 @@ compare_CNP_and_CN_model_output <- function() {
                  aes(Model, meanvalue)) +
         geom_bar(stat = "identity", aes(fill=Variable, alpha=Model), 
                  position="stack", col="black") +
-        annotate("text", x=2, y=plotDF2$meanvalue[plotDF2$Model=="B_GDAYP"]*1.15, 
+        annotate("text", x=2, y=plotDF2$meanvalue[plotDF2$Model=="A_GDAYP"]*1.15, 
                  label=(paste0(val1, "%")), size=10)+
-        annotate("text", x=4, y=plotDF2$meanvalue[plotDF2$Model=="C_LPJGP"]*1.15, 
+        annotate("text", x=4, y=plotDF2$meanvalue[plotDF2$Model=="D_LPJGP"]*1.15, 
                  label=(paste0(val2, "%")), size=10)+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
@@ -169,8 +169,8 @@ compare_CNP_and_CN_model_output <- function() {
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
         ylab(expression(paste(C[veg] * " pools (g C " * m^2*")")))+
-        scale_x_discrete(limit=c("I_GDAYN","B_GDAYP", 
-                                 "J_LPJGN","C_LPJGP"),
+        scale_x_discrete(limit=c("I_GDAYN","A_GDAYP", 
+                                 "J_LPJGN","D_LPJGP"),
                          label=c("GDAYN","GDAYP", 
                                  "LPJGN","LPJGP"))+
         xlab("")+
@@ -187,8 +187,8 @@ compare_CNP_and_CN_model_output <- function() {
                                                             "CCR"=cbbPalette[7],
                                                             "CSTOR"=cbbPalette[8])),
                                    nrow=5, byrow=F))+
-        scale_alpha_manual(values=c("B_GDAYP" = 1.0, 
-                                    "C_LPJGP" = 1.0,
+        scale_alpha_manual(values=c("A_GDAYP" = 1.0, 
+                                    "D_LPJGP" = 1.0,
                                     "I_GDAYN" = 0.3, 
                                     "J_LPJGN" = 0.3),
                            label=c("GDAYP","LPJGP", 
@@ -200,8 +200,8 @@ compare_CNP_and_CN_model_output <- function() {
     plotDF3$meanvalue <- vegDF1$meanvalue[vegDF1$Variable=="Total"&vegDF1$Trt=="ele"]/vegDF1$meanvalue[vegDF1$Variable=="Total"&vegDF1$Trt=="amb"]
     plotDF3$sdvalue <- NA #sqrt((vegDF1$sdvalue[vegDF1$Variable=="Total"&vegDF1$Trt=="ele"]^2 + vegDF1$sdvalue[vegDF1$Variable=="Total"&vegDF1$Trt=="amb"]^2)/2)
     
-    val1 <- round((plotDF3$meanvalue[plotDF3$Model=="B_GDAYP"]-plotDF3$meanvalue[plotDF3$Model=="I_GDAYN"])/plotDF3$meanvalue[plotDF3$Model=="I_GDAYN"]*100, 1)
-    val2 <- round((plotDF3$meanvalue[plotDF3$Model=="C_LPJGP"]-plotDF3$meanvalue[plotDF3$Model=="J_LPJGN"])/plotDF3$meanvalue[plotDF3$Model=="J_LPJGN"]*100, 1)
+    val1 <- round((plotDF3$meanvalue[plotDF3$Model=="A_GDAYP"]-plotDF3$meanvalue[plotDF3$Model=="I_GDAYN"])/plotDF3$meanvalue[plotDF3$Model=="I_GDAYN"]*100, 1)
+    val2 <- round((plotDF3$meanvalue[plotDF3$Model=="D_LPJGP"]-plotDF3$meanvalue[plotDF3$Model=="J_LPJGN"])/plotDF3$meanvalue[plotDF3$Model=="J_LPJGN"]*100, 1)
     
     
     ### Plotting C pools in CO2 pct response
@@ -209,9 +209,9 @@ compare_CNP_and_CN_model_output <- function() {
                  aes(Model, meanvalue)) +
         geom_bar(stat = "identity", aes(fill=Model, alpha=Model), 
                  position="stack", col="black") +
-        annotate("text", x=2, y=plotDF3$meanvalue[plotDF3$Model=="B_GDAYP"]*1.01, 
+        annotate("text", x=2, y=plotDF3$meanvalue[plotDF3$Model=="A_GDAYP"]*1.01, 
                  label=(paste0(val1, "%")), size=10)+
-        annotate("text", x=4, y=plotDF3$meanvalue[plotDF3$Model=="C_LPJGP"]*1.01, 
+        annotate("text", x=4, y=plotDF3$meanvalue[plotDF3$Model=="D_LPJGP"]*1.01, 
                  label=(paste0(val2, "%")), size=10)+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
@@ -228,18 +228,18 @@ compare_CNP_and_CN_model_output <- function() {
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
         ylab(expression(paste(C[veg] * " " * CO[2] *" response ratio")))+
-        scale_x_discrete(limit=c("I_GDAYN","B_GDAYP", 
-                                 "J_LPJGN","C_LPJGP"),
+        scale_x_discrete(limit=c("I_GDAYN","A_GDAYP", 
+                                 "J_LPJGN","D_LPJGP"),
                          label=c("GDAYN","GDAYP", 
                                  "LPJGN","LPJGP"))+
         xlab("")+
-        scale_alpha_manual(values=c("B_GDAYP" = 1.0, 
-                                    "C_LPJGP" = 1.0,
+        scale_alpha_manual(values=c("A_GDAYP" = 1.0, 
+                                    "D_LPJGP" = 1.0,
                                     "I_GDAYN" = 0.3, 
                                     "J_LPJGN" = 0.3),
                            label=c("GDAYP","LPJGP", 
                                    "GDAYN","LPJGN"))+
-        scale_fill_manual(values=c("B_GDAYP" = "purple", "C_LPJGP" = "orange",
+        scale_fill_manual(values=c("A_GDAYP" = "purple", "D_LPJGP" = "orange",
                                    "I_GDAYN" = "purple", "J_LPJGN" = "orange"),
                           label=c("GDAYP","LPJGP", 
                                   "GDAYN","LPJGN"))+
@@ -303,8 +303,8 @@ compare_CNP_and_CN_model_output <- function() {
         plotDF2$sdvalue[plotDF2$Model==i] <- smDF$sdvalue[smDF$Model==i]
     }
     
-    val1 <- round((plotDF2$meanvalue[plotDF2$Model=="B_GDAYP"]-plotDF2$meanvalue[plotDF2$Model=="I_GDAYN"])/plotDF2$meanvalue[plotDF2$Model=="I_GDAYN"]*100, 1)
-    val2 <- round((plotDF2$meanvalue[plotDF2$Model=="C_LPJGP"]-plotDF2$meanvalue[plotDF2$Model=="J_LPJGN"])/plotDF2$meanvalue[plotDF2$Model=="J_LPJGN"]*100, 1)
+    val1 <- round((plotDF2$meanvalue[plotDF2$Model=="A_GDAYP"]-plotDF2$meanvalue[plotDF2$Model=="I_GDAYN"])/plotDF2$meanvalue[plotDF2$Model=="I_GDAYN"]*100, 1)
+    val2 <- round((plotDF2$meanvalue[plotDF2$Model=="D_LPJGP"]-plotDF2$meanvalue[plotDF2$Model=="J_LPJGN"])/plotDF2$meanvalue[plotDF2$Model=="J_LPJGN"]*100, 1)
     
     
     ### Plotting C pools in ambient CO2
@@ -337,8 +337,8 @@ compare_CNP_and_CN_model_output <- function() {
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
         ylab(expression(paste(Delta * C[veg] * " (g C " * m^2 * " " * yr^-1 * ")")))+
-        scale_x_discrete(limit=c("I_GDAYN","B_GDAYP", 
-                                 "J_LPJGN","C_LPJGP"),
+        scale_x_discrete(limit=c("I_GDAYN","A_GDAYP", 
+                                 "J_LPJGN","D_LPJGP"),
                          label=c("GDAYN","GDAYP", 
                                  "LPJGN","LPJGP"))+
         xlab("")+
@@ -355,8 +355,8 @@ compare_CNP_and_CN_model_output <- function() {
                                                             "CCR"=cbbPalette[7],
                                                             "CSTOR"=cbbPalette[8])),
                                    nrow=1, byrow=F))+
-        scale_alpha_manual(values=c("B_GDAYP" = 1.0, 
-                                    "C_LPJGP" = 1.0,
+        scale_alpha_manual(values=c("A_GDAYP" = 1.0, 
+                                    "D_LPJGP" = 1.0,
                                     "I_GDAYN" = 0.3, 
                                     "J_LPJGN" = 0.3),
                            label=c("GDAYP","LPJGP", 
@@ -389,8 +389,8 @@ compare_CNP_and_CN_model_output <- function() {
         plotDF3$sdvalue[plotDF3$Model==i] <- smDF$sdvalue[smDF$Model==i]
     }
     
-    val1 <- round((plotDF3$meanvalue[plotDF3$Model=="B_GDAYP"]-plotDF3$meanvalue[plotDF3$Model=="I_GDAYN"])/plotDF3$meanvalue[plotDF3$Model=="I_GDAYN"]*100, 1)
-    val2 <- round((plotDF3$meanvalue[plotDF3$Model=="C_LPJGP"]-plotDF3$meanvalue[plotDF3$Model=="J_LPJGN"])/plotDF3$meanvalue[plotDF3$Model=="J_LPJGN"]*100, 1)
+    val1 <- round((plotDF3$meanvalue[plotDF3$Model=="A_GDAYP"]-plotDF3$meanvalue[plotDF3$Model=="I_GDAYN"])/plotDF3$meanvalue[plotDF3$Model=="I_GDAYN"]*100, 1)
+    val2 <- round((plotDF3$meanvalue[plotDF3$Model=="D_LPJGP"]-plotDF3$meanvalue[plotDF3$Model=="J_LPJGN"])/plotDF3$meanvalue[plotDF3$Model=="J_LPJGN"]*100, 1)
     
     
     ### Plotting C pools in CO2 pct response
@@ -422,18 +422,18 @@ compare_CNP_and_CN_model_output <- function() {
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
         ylab(expression(paste(Delta * C[veg] * " " * CO[2] * " effect (g C " * m^2 * " " * yr^-1 * ")")))+
-        scale_x_discrete(limit=c("I_GDAYN","B_GDAYP", 
-                                 "J_LPJGN","C_LPJGP"),
+        scale_x_discrete(limit=c("I_GDAYN","A_GDAYP", 
+                                 "J_LPJGN","D_LPJGP"),
                          label=c("GDAYN","GDAYP", 
                                  "LPJGN","LPJGP"))+
         xlab("")+
-        scale_alpha_manual(values=c("B_GDAYP" = 1.0, 
-                                    "C_LPJGP" = 1.0,
+        scale_alpha_manual(values=c("A_GDAYP" = 1.0, 
+                                    "D_LPJGP" = 1.0,
                                     "I_GDAYN" = 0.3, 
                                     "J_LPJGN" = 0.3),
                            label=c("GDAYP","LPJGP", 
                                    "GDAYN","LPJGN"))+
-        scale_fill_manual(values=c("B_GDAYP" = "black", "C_LPJGP" = "black",
+        scale_fill_manual(values=c("A_GDAYP" = "black", "D_LPJGP" = "black",
                                    "I_GDAYN" = "black", "J_LPJGN" = "black"),
                           label=c("GDAYP","LPJGP", 
                                   "GDAYN","LPJGN"));p4
@@ -498,8 +498,8 @@ compare_CNP_and_CN_model_output <- function() {
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
         ylab(expression(paste("Carbon fluxes (g C " * m^2 * " " * yr^-1 * ")")))+
-        scale_x_discrete(limit=c("I_GDAYN","B_GDAYP", 
-                                 "J_LPJGN","C_LPJGP"),
+        scale_x_discrete(limit=c("I_GDAYN","A_GDAYP", 
+                                 "J_LPJGN","D_LPJGP"),
                          label=c("GDAYN","GDAYP", 
                                  "LPJGN","LPJGP"))+
         xlab("")+
@@ -509,8 +509,8 @@ compare_CNP_and_CN_model_output <- function() {
                                    "RAU"="red"),
                           labels=c("GPP", "NPP", "RAU"))+
         scale_alpha_manual(name="Model",
-                           values=c("B_GDAYP" = 1.0, 
-                                    "C_LPJGP" = 1.0,
+                           values=c("A_GDAYP" = 1.0, 
+                                    "D_LPJGP" = 1.0,
                                     "I_GDAYN" = 0.3, 
                                     "J_LPJGN" = 0.3),
                            label=c("GDAYP","LPJGP", 
@@ -563,8 +563,8 @@ compare_CNP_and_CN_model_output <- function() {
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
         ylab(expression(paste("Carbon fluxes " * CO[2] *" response (%)")))+
-        scale_x_discrete(limit=c("I_GDAYN","B_GDAYP", 
-                                 "J_LPJGN","C_LPJGP"),
+        scale_x_discrete(limit=c("I_GDAYN","A_GDAYP", 
+                                 "J_LPJGN","D_LPJGP"),
                          label=c("GDAYN","GDAYP", 
                                  "LPJGN","LPJGP"))+
         xlab("")+
@@ -578,8 +578,8 @@ compare_CNP_and_CN_model_output <- function() {
                                                             "RAU"="red")),
                                    nrow=1, byrow=F))+
         scale_alpha_manual(name="Model",
-                           values=c("B_GDAYP" = 1.0, 
-                                    "C_LPJGP" = 1.0,
+                           values=c("A_GDAYP" = 1.0, 
+                                    "D_LPJGP" = 1.0,
                                     "I_GDAYN" = 0.3, 
                                     "J_LPJGN" = 0.3),
                            label=c("GDAYP","LPJGP", 

@@ -1,11 +1,11 @@
-compare_microbial_model_output <- function() {
+compare_microbial_model_output <- function(scenario) {
     
     
     ##################################################################
     #### Set up basics
     
     ### setting out path to store the files
-    out.dir <- paste0(getwd(), "/obs_fix_output")
+    out.dir <- paste0(getwd(), "/obs_", scenario, "_output")
     
     ### create output folder
     if(!dir.exists(out.dir)) {
@@ -13,15 +13,15 @@ compare_microbial_model_output <- function() {
     }
     
     ### read in anual datasets
-    ambDF <- readRDS(paste0(out.dir, "/MIP_obs_fix_amb_annual.rds"))
-    eleDF <- readRDS(paste0(out.dir, "/MIP_obs_fix_ele_annual.rds"))
+    ambDF <- readRDS(paste0(out.dir, "/MIP_obs_", scenario, "_amb_annual.rds"))
+    eleDF <- readRDS(paste0(out.dir, "/MIP_obs_", scenario, "_ele_annual.rds"))
     
     ### select GDAYN, GDAYP, LPJGN, LPJGP model output
-    ambDF <- subset(ambDF, ModName%in%c("D_OCHDP", "E_QUINC", #"F_ELMV1",
+    ambDF <- subset(ambDF, ModName%in%c("E_OCHDP", "F_QUINC", 
                                         "G_OCHDX", "H_QUJSM"))
     
     
-    eleDF <- subset(eleDF, ModName%in%c("D_OCHDP", "E_QUINC", #"F_ELMV1",
+    eleDF <- subset(eleDF, ModName%in%c("E_OCHDP", "F_QUINC", 
                                         "G_OCHDX", "H_QUJSM"))
     
     
@@ -32,20 +32,20 @@ compare_microbial_model_output <- function() {
     d <- dim(ambDF)[2]
     
     ### calculate the effect of P limitation as difference of advanced model - basic model
-    diffDF <- ambDF[ambDF$ModName%in%c("D_OCHDP", "E_QUINC"),]
+    diffDF <- ambDF[ambDF$ModName%in%c("E_OCHDP", "F_QUINC"),]
     
-    diffDF$ModName <- gsub("D_OCHDP", "ORCHIDEE", diffDF$ModName)
+    diffDF$ModName <- gsub("E_OCHDP", "ORCHIDEE", diffDF$ModName)
     diffDF$ModName <- gsub("QUINC", "QUINCY", diffDF$ModName)
     
-    diffDF[diffDF$ModName=="ORCHIDEE",3:d] <- ambDF[ambDF$ModName=="G_OCHDX",3:d] - ambDF[ambDF$ModName=="D_OCHDP",3:d]
-    diffDF[diffDF$ModName=="QUINCY",3:d] <- ambDF[ambDF$ModName=="H_QUJSM",3:d] - ambDF[ambDF$ModName=="E_QUINC",3:d]
+    diffDF[diffDF$ModName=="ORCHIDEE",3:d] <- ambDF[ambDF$ModName=="G_OCHDX",3:d] - ambDF[ambDF$ModName=="E_OCHDP",3:d]
+    diffDF[diffDF$ModName=="QUINCY",3:d] <- ambDF[ambDF$ModName=="H_QUJSM",3:d] - ambDF[ambDF$ModName=="F_QUINC",3:d]
     
     
     ### calculate the effect of P limitation as % difference of (CNP - CN)/CN
     pctdiffDF <- diffDF
     
-    pctdiffDF[pctdiffDF$ModName=="ORCHIDEE",3:d] <- diffDF[diffDF$ModName=="ORCHIDEE",3:d]/ambDF[ambDF$ModName=="D_OCHDP",3:d] * 100.0
-    pctdiffDF[pctdiffDF$ModName=="QUINCY",3:d] <- diffDF[diffDF$ModName=="QUINCY",3:d]/ambDF[ambDF$ModName=="E_QUINC",3:d] * 100.0
+    pctdiffDF[pctdiffDF$ModName=="ORCHIDEE",3:d] <- diffDF[diffDF$ModName=="ORCHIDEE",3:d]/ambDF[ambDF$ModName=="E_OCHDP",3:d] * 100.0
+    pctdiffDF[pctdiffDF$ModName=="QUINCY",3:d] <- diffDF[diffDF$ModName=="QUINCY",3:d]/ambDF[ambDF$ModName=="F_QUINC",3:d] * 100.0
     
     
     ### calculate the effect of CO2 effect in real magnitude, in both versions of model
@@ -85,7 +85,7 @@ compare_microbial_model_output <- function() {
     
     ##################################################################
     #### Plotting
-    mod.list1 <- c("D_OCHDP", "E_QUINC", "G_OCHDX", "H_QUJSM")
+    mod.list1 <- c("E_OCHDP", "F_QUINC", "G_OCHDX", "H_QUJSM")
     mod.list2 <- c("ORCHIDEE", "QUINCY")
     
     
@@ -141,8 +141,8 @@ compare_microbial_model_output <- function() {
     plotDF1 <- subset(vegDF1, Variable%in%c("CL", "CW", "CFR", "CCR", "CSTOR") & Trt=="amb")
     plotDF2 <- subset(vegDF1, Variable%in%c("Total") & Trt=="amb")
     
-    val1 <- round((plotDF2$meanvalue[plotDF2$Model=="G_OCHDX"]-plotDF2$meanvalue[plotDF2$Model=="D_OCHDP"])/plotDF2$meanvalue[plotDF2$Model=="D_OCHDP"]*100, 1)
-    val2 <- round((plotDF2$meanvalue[plotDF2$Model=="H_QUJSM"]-plotDF2$meanvalue[plotDF2$Model=="E_QUINC"])/plotDF2$meanvalue[plotDF2$Model=="E_QUINC"]*100, 1)
+    val1 <- round((plotDF2$meanvalue[plotDF2$Model=="G_OCHDX"]-plotDF2$meanvalue[plotDF2$Model=="E_OCHDP"])/plotDF2$meanvalue[plotDF2$Model=="E_OCHDP"]*100, 1)
+    val2 <- round((plotDF2$meanvalue[plotDF2$Model=="H_QUJSM"]-plotDF2$meanvalue[plotDF2$Model=="F_QUINC"])/plotDF2$meanvalue[plotDF2$Model=="F_QUINC"]*100, 1)
     
     
     ### Plotting C pools in ambient CO2
@@ -169,8 +169,8 @@ compare_microbial_model_output <- function() {
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
         ylab(expression(paste(C[veg] * " pools (g C " * m^2*")")))+
-        scale_x_discrete(limit=c("D_OCHDP","G_OCHDX", 
-                                 "E_QUINC","H_QUJSM"),
+        scale_x_discrete(limit=c("E_OCHDP","G_OCHDX", 
+                                 "F_QUINC","H_QUJSM"),
                          label=c("OCHDP","OCHDX", 
                                  "QUINC","QUJSM"))+
         xlab("")+
@@ -187,8 +187,8 @@ compare_microbial_model_output <- function() {
                                                             "CCR"=cbbPalette[7],
                                                             "CSTOR"=cbbPalette[8])),
                                    nrow=5, byrow=F))+
-        scale_alpha_manual(values=c("D_OCHDP" = 0.3, 
-                                    "E_QUINC" = 0.3,
+        scale_alpha_manual(values=c("E_OCHDP" = 0.3, 
+                                    "F_QUINC" = 0.3,
                                     "G_OCHDX" = 1.0, 
                                     "H_QUJSM" = 1.0),
                            label=c("OCHDP","QUINC",
@@ -199,8 +199,8 @@ compare_microbial_model_output <- function() {
     plotDF3$meanvalue <- vegDF1$meanvalue[vegDF1$Variable=="Total"&vegDF1$Trt=="ele"]/vegDF1$meanvalue[vegDF1$Variable=="Total"&vegDF1$Trt=="amb"]
     plotDF3$sdvalue <- NA #sqrt((vegDF1$sdvalue[vegDF1$Variable=="Total"&vegDF1$Trt=="ele"]^2 + vegDF1$sdvalue[vegDF1$Variable=="Total"&vegDF1$Trt=="amb"]^2)/2)
     
-    val1 <- round((plotDF3$meanvalue[plotDF3$Model=="G_OCHDX"]-plotDF3$meanvalue[plotDF3$Model=="D_OCHDP"])/plotDF3$meanvalue[plotDF3$Model=="D_OCHDP"]*100, 1)
-    val2 <- round((plotDF3$meanvalue[plotDF3$Model=="H_QUJSM"]-plotDF3$meanvalue[plotDF3$Model=="E_QUINC"])/plotDF3$meanvalue[plotDF3$Model=="E_QUINC"]*100, 1)
+    val1 <- round((plotDF3$meanvalue[plotDF3$Model=="G_OCHDX"]-plotDF3$meanvalue[plotDF3$Model=="E_OCHDP"])/plotDF3$meanvalue[plotDF3$Model=="E_OCHDP"]*100, 1)
+    val2 <- round((plotDF3$meanvalue[plotDF3$Model=="H_QUJSM"]-plotDF3$meanvalue[plotDF3$Model=="F_QUINC"])/plotDF3$meanvalue[plotDF3$Model=="F_QUINC"]*100, 1)
     
 
     ### Plotting C pools in CO2 pct response
@@ -227,18 +227,18 @@ compare_microbial_model_output <- function() {
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
         ylab(expression(paste(C[veg] * " " * CO[2] *" response ratio")))+
-        scale_x_discrete(limit=c("D_OCHDP","G_OCHDX", 
-                                 "E_QUINC","H_QUJSM"),
+        scale_x_discrete(limit=c("E_OCHDP","G_OCHDX", 
+                                 "F_QUINC","H_QUJSM"),
                          label=c("OCHDP","OCHDX", 
                                  "QUINC","QUJSM"))+
         xlab("")+
-        scale_alpha_manual(values=c("D_OCHDP" = 0.3, 
-                                    "E_QUINC" = 0.3,
+        scale_alpha_manual(values=c("E_OCHDP" = 0.3, 
+                                    "F_QUINC" = 0.3,
                                     "G_OCHDX" = 1.0, 
                                     "H_QUJSM" = 1.0),
                            label=c("OCHDP","QUINC",
                                    "OCHDX","QUJSM"))+
-        scale_fill_manual(values=c("D_OCHDP" = "purple", "E_QUINC" = "orange",
+        scale_fill_manual(values=c("E_OCHDP" = "purple", "F_QUINC" = "orange",
                                    "G_OCHDX" = "purple", "H_QUJSM" = "orange"),
                           label=c("OCHDP","QUINC",
                                   "OCHDX","QUJSM"))+
@@ -302,8 +302,8 @@ compare_microbial_model_output <- function() {
         plotDF2$sdvalue[plotDF2$Model==i] <- smDF$sdvalue[smDF$Model==i]
     }
     
-    val1 <- round((plotDF2$meanvalue[plotDF2$Model=="G_OCHDX"]-plotDF2$meanvalue[plotDF2$Model=="D_OCHDP"])/plotDF2$meanvalue[plotDF2$Model=="D_OCHDP"]*100, 1)
-    val2 <- round((plotDF2$meanvalue[plotDF2$Model=="H_QUJSM"]-plotDF2$meanvalue[plotDF2$Model=="E_QUINC"])/plotDF2$meanvalue[plotDF2$Model=="E_QUINC"]*100, 1)
+    val1 <- round((plotDF2$meanvalue[plotDF2$Model=="G_OCHDX"]-plotDF2$meanvalue[plotDF2$Model=="E_OCHDP"])/plotDF2$meanvalue[plotDF2$Model=="E_OCHDP"]*100, 1)
+    val2 <- round((plotDF2$meanvalue[plotDF2$Model=="H_QUJSM"]-plotDF2$meanvalue[plotDF2$Model=="F_QUINC"])/plotDF2$meanvalue[plotDF2$Model=="F_QUINC"]*100, 1)
     
     
     ### Plotting C pools in ambient CO2
@@ -336,8 +336,8 @@ compare_microbial_model_output <- function() {
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
         ylab(expression(paste(Delta * C[veg] * " (g C " * m^2 * " " * yr^-1 * ")")))+
-        scale_x_discrete(limit=c("D_OCHDP","G_OCHDX", 
-                                 "E_QUINC","H_QUJSM"),
+        scale_x_discrete(limit=c("E_OCHDP","G_OCHDX", 
+                                 "F_QUINC","H_QUJSM"),
                          label=c("OCHDP","OCHDX", 
                                  "QUINC","QUJSM"))+
         xlab("")+
@@ -354,8 +354,8 @@ compare_microbial_model_output <- function() {
                                                             "CCR"=cbbPalette[7],
                                                             "CSTOR"=cbbPalette[8])),
                                    nrow=1, byrow=F))+
-        scale_alpha_manual(values=c("D_OCHDP" = 0.3, 
-                                    "E_QUINC" = 0.3,
+        scale_alpha_manual(values=c("E_OCHDP" = 0.3, 
+                                    "F_QUINC" = 0.3,
                                     "G_OCHDX" = 1.0, 
                                     "H_QUJSM" = 1.0),
                            label=c("OCHDP","QUINC",
@@ -421,18 +421,18 @@ compare_microbial_model_output <- function() {
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
         ylab(expression(paste(Delta * C[veg] * " " * CO[2] * " effect (g C " * m^2 * " " * yr^-1 * ")")))+
-        scale_x_discrete(limit=c("D_OCHDP","G_OCHDX", 
-                                 "E_QUINC","H_QUJSM"),
+        scale_x_discrete(limit=c("E_OCHDP","G_OCHDX", 
+                                 "F_QUINC","H_QUJSM"),
                          label=c("OCHDP","OCHDX", 
                                  "QUINC","QUJSM"))+
         xlab("")+
-        scale_alpha_manual(values=c("D_OCHDP" = 0.3, 
-                                    "E_QUINC" = 0.3,
+        scale_alpha_manual(values=c("E_OCHDP" = 0.3, 
+                                    "F_QUINC" = 0.3,
                                     "G_OCHDX" = 1.0, 
                                     "H_QUJSM" = 1.0),
                            label=c("OCHDP","QUINC",
                                    "OCHDX","QUJSM"))+
-        scale_fill_manual(values=c("D_OCHDP" = "black", "E_QUINC" = "black",
+        scale_fill_manual(values=c("E_OCHDP" = "black", "F_QUINC" = "black",
                                    "G_OCHDX" = "black", "H_QUJSM" = "black"),
                           label=c("OCHDP","OCHDX", 
                                   "QUINC","QUJSM"));p4
@@ -497,8 +497,8 @@ compare_microbial_model_output <- function() {
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
         ylab(expression(paste("Carbon fluxes (g C " * m^2 * " " * yr^-1 * ")")))+
-        scale_x_discrete(limit=c("D_OCHDP","G_OCHDX", 
-                                 "E_QUINC","H_QUJSM"),
+        scale_x_discrete(limit=c("E_OCHDP","G_OCHDX", 
+                                 "F_QUINC","H_QUJSM"),
                          label=c("OCHDP","OCHDX", 
                                  "QUINC","QUJSM"))+
         xlab("")+
@@ -508,8 +508,8 @@ compare_microbial_model_output <- function() {
                                    "RAU"="red"),
                           labels=c("GPP", "NPP", "RAU"))+
         scale_alpha_manual(name="Model",
-                           values=c("D_OCHDP" = 0.3, 
-                                    "E_QUINC" = 0.3,
+                           values=c("E_OCHDP" = 0.3, 
+                                    "F_QUINC" = 0.3,
                                     "G_OCHDX" = 1.0, 
                                     "H_QUJSM" = 1.0),
                            label=c("OCHDP","QUINC",
@@ -562,8 +562,8 @@ compare_microbial_model_output <- function() {
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
         ylab(expression(paste("Carbon fluxes " * CO[2] *" response (%)")))+
-        scale_x_discrete(limit=c("D_OCHDP","G_OCHDX", 
-                                 "E_QUINC","H_QUJSM"),
+        scale_x_discrete(limit=c("E_OCHDP","G_OCHDX", 
+                                 "F_QUINC","H_QUJSM"),
                          label=c("OCHDP","OCHDX", 
                                  "QUINC","QUJSM"))+
         xlab("")+
@@ -577,8 +577,8 @@ compare_microbial_model_output <- function() {
                                                             "RAU"="red")),
                                    nrow=1, byrow=F))+
         scale_alpha_manual(name="Model",
-                           values=c("D_OCHDP" = 0.3, 
-                                    "E_QUINC" = 0.3,
+                           values=c("E_OCHDP" = 0.3, 
+                                    "F_QUINC" = 0.3,
                                     "G_OCHDX" = 1.0, 
                                     "H_QUJSM" = 1.0),
                            label=c("OCHDP","QUINC",

@@ -62,13 +62,19 @@ make_MIP_time_series_plot(scenario="fix")
 ##########################################################################
 ### show P effect with the two models that have CN and CNP versions
 ### based on fixed climate forcing
-compare_CNP_and_CN_model_output()
+scenario="var"
+compare_CNP_and_CN_model_output(scenario="var")
+
+scenario="fix"
+compare_CNP_and_CN_model_output(scenario="fix")
 
 
 ### show microbial effects with the two microbial enabled models
 ### based on fixed climate forcing
 ### add Csoil, Clit, Rh comparison plot
-compare_microbial_model_output()
+
+compare_microbial_model_output(scenario="fix")
+compare_microbial_model_output(scenario="var")
 
 ### show dynamic vegetation effect with the two DGVM models
 #compare_dynamic_vegetation_effect_model_output()
