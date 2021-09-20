@@ -89,12 +89,24 @@ eucDF <- prepare_EucFACE_observation_dataset()
 make_time_averaged_data_model_comparison_over_obs_period(eucDF)
 
 
-### plot photosynthesis vs leaf N & P relationships
+### plot photosynthesis response
 ### need to go into function to plot
 scenario="fix"
 plot_normalized_GPP_response(scenario="fix")
 scenario="var"
 plot_normalized_GPP_response(scenario="var")
+
+
+### plot allocation coefficients:
+### fast plant structural pools: leaf and fineroot
+### slow plant structural pools: wood and coarseroot
+### plant NSC pools: CSTOR, CEX, labile and reseve
+### respiration fluxes
+### need to go into function to plot
+plot_normalized_plant_allocation_response(scenario="fix")
+
+
+
 
 ### fate of carbon - go into function to plot
 scenario="var"

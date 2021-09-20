@@ -47,7 +47,7 @@ plot_normalized_GPP_response <- function(scenario) {
     eleDF4 <- summaryBy(LAI+Aleaf~YEAR+ModName, FUN=max,
                         na.rm=T, keep.names=T, data=eleDF)
     
-    
+
     
     ##################################################################
     mod.list <- unique(ambDF2$ModNmae)
@@ -250,7 +250,9 @@ plot_normalized_GPP_response <- function(scenario) {
                                             legend.box = 'horizontal',
                                             legend.box.just = 'left'))
     
-    plots_top_row <- plot_grid(p1, p2, p3, p4, p5, p6, 
+    plots_top_row <- plot_grid(p5, p6, 
+                               p1, p2, 
+                               p3, p4, 
                                labels=c("(a)", "(b)", "(c)", "(d)",
                                         "(e)", "(f)"),
                                ncol=2, align="vh", axis = "l",
@@ -267,6 +269,8 @@ plot_normalized_GPP_response <- function(scenario) {
     dev.off()
     
     
+    
+    ##################################################################
     ### plot time-averaged comparison
     ambDF2$Trt <- "amb"
     eleDF2$Trt <- "ele"
@@ -282,16 +286,46 @@ plot_normalized_GPP_response <- function(scenario) {
     sumDF2 <- summaryBy(GPP~ModName+Trt, FUN=c(mean, sd),
                         keep.names=T, na.rm=T, data=mgDF2)
     
+    
     mod.list <- unique(sumDF2$ModName)
+    
+    
+    ### calculate multi-model means and sds
+    multDF1 <- summaryBy(Aleaf.mean.mean+LAI.mean.mean~Trt, data=sumDF1,
+                         FUN=c(mean,sd), keep.names=T, na.rm=T)
+    
+    multDF2 <- summaryBy(GPP.mean~Trt, data=sumDF2,
+                         FUN=c(mean,sd), keep.names=T, na.rm=T)
+    
+    colnames(multDF1) <- c("Trt", "Aleaf.mean.mean", "LAI.mean.mean", "Aleaf.mean.sd",
+                           "LAI.mean.sd")
+    colnames(multDF2) <- c("Trt", "GPP.mean", "GPP.sd")
+    
+    #sumDF3 <- merge(multDF1, multDF2, by="Trt")
+    #colnames(sumDF3) <- c("Trt", "Aleaf.mean", "LAI.mean", "Aleaf.sd",
+    #                      "LAI.sd", "GPP.mean", "GPP.sd")
+    #sumDF3$ModName <- "Multi-model"
+    
+    multDF1$ModName <- "Multi-model"
+    multDF2$ModName <- "Multi-model"
+    
+    multDF1 <- multDF1[,c("ModName", "Trt", "Aleaf.mean.mean", "LAI.mean.mean", "Aleaf.mean.sd",
+                          "LAI.mean.sd")]
+    
+    multDF2 <- multDF2[,c("ModName", "Trt", "GPP.mean", "GPP.sd")]
+    
+    
+    sumDF1 <- rbind(sumDF1, multDF1)
+    sumDF2 <- rbind(sumDF2, multDF2)
     
     ### plotting
     p1 <- ggplot(data=sumDF1, 
                  aes(ModName, Aleaf.mean.mean, group=Trt)) +
       geom_bar(stat = "identity", aes(fill=ModName, alpha=Trt), 
                position=position_dodge(), col="black") +
-      geom_vline(xintercept=c(6.5, 8.5), lty=2)+
+      geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
       geom_errorbar(aes(x=ModName, ymin=Aleaf.mean.mean-Aleaf.mean.sd, 
-                        ymax=Aleaf.mean.mean+Aleaf.mean.sd), 
+                        ymax=Aleaf.mean.mean+Aleaf.mean.sd), width=0.4,
                     position=position_dodge(width=1)) +
       theme_linedraw() +
       theme(panel.grid.minor=element_blank(),
@@ -313,11 +347,13 @@ plot_normalized_GPP_response <- function(scenario) {
                                   "ele" = 1.0),
                          label=c("AMB", "ELE"))+
       scale_fill_manual(name="Model",
-                         values=col.values,
-                         labels=model.labels)+
+                         values=c(col.values, "black"),
+                         labels=c(model.labels, 
+                                  "Multi-model" = "Multi-model"))+
       guides(alpha=guide_legend("Treatment"), fill = FALSE)+
-      scale_x_discrete(limit=c(mod.list),
-                       label=c(model.labels))
+      scale_x_discrete(limit=c(mod.list, "Multi-model"),
+                       label=c(model.labels, 
+                               "Multi-model" = expression(bold("Multi-model"))))
     
     
     
@@ -325,9 +361,9 @@ plot_normalized_GPP_response <- function(scenario) {
                  aes(ModName, LAI.mean.mean, group=Trt)) +
       geom_bar(stat = "identity", aes(fill=ModName, alpha=Trt), 
                position=position_dodge(), col="black") +
-      geom_vline(xintercept=c(6.5, 8.5), lty=2)+
+      geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
       geom_errorbar(aes(x=ModName, ymin=LAI.mean.mean-LAI.mean.sd, 
-                        ymax=LAI.mean.mean+LAI.mean.sd), 
+                        ymax=LAI.mean.mean+LAI.mean.sd), width=0.4,
                     position=position_dodge(width=1)) +
       theme_linedraw() +
       theme(panel.grid.minor=element_blank(),
@@ -349,21 +385,22 @@ plot_normalized_GPP_response <- function(scenario) {
                                   "ele" = 1.0),
                          label=c("AMB", "ELE"))+
       scale_fill_manual(name="Model",
-                        values=col.values,
-                        labels=model.labels)+
+                        values=c(col.values, "black"),
+                        labels=c(model.labels, "Multi-model" = "Multi-model"))+
       guides(alpha=guide_legend("Treatment"), fill = FALSE)+
-      scale_x_discrete(limit=c(mod.list),
-                       label=c(model.labels))
+      scale_x_discrete(limit=c(mod.list, "Multi-model"),
+                       label=c(model.labels, 
+                               "Multi-model" = expression(bold("Multi-model"))))
     
     
     p3 <- ggplot(data=sumDF2, 
                  aes(ModName, GPP.mean, group=Trt)) +
       geom_bar(stat = "identity", aes(fill=ModName, alpha=Trt), 
                position=position_dodge(), col="black") +
-      geom_vline(xintercept=c(6.5, 8.5), lty=2)+
+      geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
       geom_errorbar(aes(x=ModName, ymin=GPP.mean-GPP.sd, 
-                        ymax=GPP.mean+GPP.sd), 
-                    position=position_dodge(width=1)) +
+                        ymax=GPP.mean+GPP.sd), width=0.4,
+                    position=position_dodge(width=0.9)) +
       theme_linedraw() +
       theme(panel.grid.minor=element_blank(),
             axis.text.x=element_text(size=12),
@@ -384,21 +421,22 @@ plot_normalized_GPP_response <- function(scenario) {
                                   "ele" = 1.0),
                          label=c("AMB", "ELE"))+
       scale_fill_manual(name="Model",
-                        values=col.values,
-                        labels=model.labels)+
+                        values=c(col.values, "black"),
+                        labels=c(model.labels, "Multi-model" = "Multi-model"))+
       guides(alpha=guide_legend("Treatment"), fill = FALSE)+
-      scale_x_discrete(limit=c(mod.list),
-                       label=c(model.labels))
+      scale_x_discrete(limit=c(mod.list, "Multi-model"),
+                       label=c(model.labels, 
+                               "Multi-model" = expression(bold("Multi-model"))))
     
     
     legend_top_row <- get_legend(p1 + theme(legend.position="bottom",
                                             legend.box = 'horizontal',
                                             legend.box.just = 'left'))
     
-    plots_top_row <- plot_grid(p1, p2, p3, 
+    plots_top_row <- plot_grid(p3, p1, p2, 
                                labels=c("(a)", "(b)", "(c)"),
                                ncol=1, align="vh", axis = "l",
-                               label_x=0.86, label_y=0.95,
+                               label_x=0.1, label_y=0.95,
                                label_size = 18)
     
     
