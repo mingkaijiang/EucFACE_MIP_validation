@@ -31,6 +31,7 @@ p.mod.list <- c("CABLP", "ELMV1",
 n.mod.list <- c("GDAYN", "LPJGN")
 
 ## DGVM model
+## we decided to not look at the DGVM output for the current paper
 d.mod.list <- c("CABLP", "LPJGP")
 
 ### compile all model results together, and save annual and daily datasets
@@ -41,10 +42,16 @@ compile_obs_var_dataset_across_models(p.mod.list, n.mod.list, d.mod.list)
 compile_obs_fix_dataset_across_models(p.mod.list, n.mod.list, d.mod.list)
 
 
+##########################################################################
+### check forcing data consistency
+check_forcing_data_consistency(scenario="var")
+
+##########################################################################
 ### make MIP time-series plot for both variable and fixed climate, over observed period
 ### when number of variables change in the input, need to revise the code
 make_MIP_time_series_plot(scenario="var")
 
+## check input data consistency and unit
 make_MIP_time_series_plot(scenario="fix")
 
 
@@ -117,16 +124,16 @@ trace_fate_of_carbon_MIP_plot(scenario="fix")
 ###    Waiting for input from ELM only,
 ###    Need to go through each model to confirm their entries.
 ### 3. Model structure diagrams 
-###    Received: GDAYP, GDAYN, CABLP, LPJGN, LPJGP, QUINC, QUJSM, OCHDX (cannot to use for pub)
-###    Received pointers: ELMXX (published paper but rough), OCHDP (nothing available)
+###    all completed except ORCHIDEE-MIC
 ### 4. Traceability analysis?
 ### 5. Leaf nutrient effect on Vcmax and Jmax - theoretical analysis
+###    Need to proceed even without the Ellsworth relationship
 ### 6. Data-model intercomparison figures:
 ###    Ambient + CO2 response (% and abs);
 ###    Time series plots;
 ###    Fate of C;
 ###    N + P variables;
-###    Projected future responses.
+###    Projected future response - can additional C sequestration under reduced P stress
 ### 7. CN cs. CNP model comparisons
 ###    GDAYN vs. GDAYP, LPJGN vs. LPJGP
 ###    Medlyn et al. 2016 model simulations
