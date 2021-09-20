@@ -91,8 +91,121 @@ plot_normalized_plant_allocation_response <- function(scenario="fix") {
                         na.rm=T)
     
     
+    ###################################################################
     ### we need to check mass balance first
+    
+    ## GPP = NPP+RAU
+    p1 <- ggplot(ambDF1, aes(x=GPP, y=NPP+RAU, group=ModName))+
+        geom_point(aes(fill=ModName), pch=21)+
+        geom_abline(slope=1,intercept=0)+
+        theme_linedraw() +
+        theme(panel.grid.minor=element_blank(),
+              axis.text.x=element_text(size=12),
+              axis.title.x=element_text(size=12),
+              axis.text.y=element_text(size=12),
+              axis.title.y=element_text(size=14),
+              legend.text=element_text(size=12),
+              legend.title=element_text(size=14),
+              panel.grid.major=element_blank(),
+              legend.position="none",
+              legend.box = 'horizontal',
+              legend.box.just = 'left',
+              plot.title = element_text(size=14, face="bold.italic", 
+                                        hjust = 0.5)); p1
+    
+    
+    ## NEP = NPP-RHET
+    p2 <- ggplot(ambDF1, aes(x=NEP, y=NPP-RHET, group=ModName))+
+        geom_point(aes(fill=ModName), pch=21)+
+        geom_abline(slope=1,intercept=0)+
+        theme_linedraw() +
+        theme(panel.grid.minor=element_blank(),
+              axis.text.x=element_text(size=12),
+              axis.title.x=element_text(size=12),
+              axis.text.y=element_text(size=12),
+              axis.title.y=element_text(size=14),
+              legend.text=element_text(size=12),
+              legend.title=element_text(size=14),
+              panel.grid.major=element_blank(),
+              legend.position="none",
+              legend.box = 'horizontal',
+              legend.box.just = 'left',
+              plot.title = element_text(size=14, face="bold.italic", 
+                                        hjust = 0.5)); p2
+
+    
+    ## NEP = all delta pools
+    p3 <- ggplot(ambDF1, aes(x=NEP, y=deltaCL+deltaCW+deltaCFR+deltaCCR+deltaCSTOR+deltaCSOIL+deltaCFLIT+deltaCCLITB,
+                             group=ModName))+
+        geom_point(aes(fill=ModName), pch=21)+
+        geom_abline(slope=1,intercept=0)+
+        theme_linedraw() +
+        theme(panel.grid.minor=element_blank(),
+              axis.text.x=element_text(size=12),
+              axis.title.x=element_text(size=12),
+              axis.text.y=element_text(size=12),
+              axis.title.y=element_text(size=14),
+              legend.text=element_text(size=12),
+              legend.title=element_text(size=14),
+              panel.grid.major=element_blank(),
+              legend.position="none",
+              legend.box = 'horizontal',
+              legend.box.just = 'left',
+              plot.title = element_text(size=14, face="bold.italic", 
+                                        hjust = 0.5))+
+        ylab("delta pools"); p3
+    
+    ## NPP = CGL + CGW + CGCR + CGFR + CREPR + CEX
+    p4 <- ggplot(ambDF1, aes(x=NPP, y=CGL+CGW+CGCR+CGFR+CREPR+CEX,
+                             group=ModName))+
+        geom_point(aes(fill=ModName), pch=21)+
+        geom_abline(slope=1,intercept=0)+
+        theme_linedraw() +
+        theme(panel.grid.minor=element_blank(),
+              axis.text.x=element_text(size=12),
+              axis.title.x=element_text(size=12),
+              axis.text.y=element_text(size=12),
+              axis.title.y=element_text(size=14),
+              legend.text=element_text(size=12),
+              legend.title=element_text(size=14),
+              panel.grid.major=element_blank(),
+              legend.position="none",
+              legend.box = 'horizontal',
+              legend.box.just = 'left',
+              plot.title = element_text(size=14, face="bold.italic", 
+                                        hjust = 0.5))+
+        ylab("CG fluxes + CEX + REPR"); p4
+    
+    
+    ### plot
+    legend_top_row <- get_legend(p1 + theme(legend.position="bottom",
+                                            legend.box = 'horizontal',
+                                            legend.box.just = 'left'))
+    
+    plots_top_row <- plot_grid(p1, p2, p3, p4,
+                               labels="AUTO",
+                               ncol=2, align="vh", axis = "l",
+                               label_x=0.1, label_y=0.95,
+                               label_size = 18)
+    
+    
+    pdf(paste0(out.dir, "/MIP_allocation_mass_balance_obs_", scenario, "_check.pdf"), 
+        width=8, height=8)
+    plot_grid(plots_top_row,
+              legend_top_row,
+              ncol=1, rel_heights=c(1,0.1))
+    
+    dev.off()
+    
+    ### Note:
+    ### 1. For LPJ-GUESS, there is no delta CSTOR involved in the original
+    ###    mass balance check.
+    ### 2. For CABLE-POP, 
+    
+    
+    ###################################################################
     ### then we can work out C allocation and fate of C
+    
     
     
     
