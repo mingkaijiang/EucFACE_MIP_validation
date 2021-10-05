@@ -85,7 +85,8 @@ compare_microbial_model_output(scenario="var")
 eucDF <- prepare_EucFACE_observation_dataset()
 
 ### compare to observed dataset
-### ambient treatment, real values
+### aCO2 + eCO2
+### go into function to plot
 make_time_averaged_data_model_comparison_over_obs_period(eucDF)
 
 

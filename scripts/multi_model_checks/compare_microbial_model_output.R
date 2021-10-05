@@ -9,6 +9,8 @@ compare_microbial_model_output <- function(scenario) {
     ### The key to explore here is the C-nutrient interaction modulated by
     ### microbial processes. 
     ### So we need to report nutrient variables. 
+    ### We will need additional figure on unique variables to microbial model
+    ### to understand their C-nutrient dynamics more. 
     
     
     ##################################################################

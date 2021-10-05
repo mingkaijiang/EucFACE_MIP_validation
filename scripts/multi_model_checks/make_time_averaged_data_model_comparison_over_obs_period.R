@@ -1,9 +1,18 @@
 make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF) {
     
     ##################################################################
-    #### Set up basics
+    ### Purpose:
+    ### to compare model predictions against data,
+    ### including ambient and elevated treatment means,
+    ### stoichiometry, efficiency, residence time, etc.,
+    ### and the CO2 response difference and ratio,
+    ### try to include all relevant variables.
     
+    
+    ##################################################################
+    #### Set up basics
     ### setting out path to store the files
+    ### this is only valid for variable climate
     out.dir <- paste0(getwd(), "/obs_var_output")
     
     ### create output folder
@@ -37,19 +46,15 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF) {
                                 keep.names=T, na.rm=T)
     
     
+    ### get the list of models
+    mod.list <- unique(annDF.amb.sum$ModName)
+    nmod <- length(mod.list)
+    
+    
     ##########################################################################
     #### add observation data to the model simulation dataset so that we can plot them together
     
-    
-    
-    
-    ##########################################################################
-    #### plot model simulated ambient
-    
-    
-    
-    mod.list <- unique(annDF.amb.sum$ModName)
-    nmod <- length(mod.list)
+
     
     ##########################################################################
     ####  Major carbon pools  
@@ -63,7 +68,8 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF) {
     
     ### create a DF to store observation data for vegetation carbon stocks
     vegDF <- data.frame(rep(c("CL", "CW", "CFR", "CCR"), (1+nmod)), 
-                        rep(c("obs", mod.list), each=4), NA, NA)
+                        rep(c("obs", mod.list), each=4), 
+                        rep(c("amb", "ele"), ), NA, NA)
     colnames(vegDF) <- c("Variable", 
                          "Group",
                          "meanvalue",
@@ -103,11 +109,11 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF) {
                  aes(Group, meanvalue)) +
         geom_bar(stat = "identity", aes(fill=Variable), 
                  position="stack", col="black") +
-        geom_vline(xintercept=c(5.5, 8.5, 10.5, 12.5), lty=2)+
+        geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
         #geom_errorbar(aes(x=Group, ymin=meanvalue-sevalue, 
         #                  ymax=meanvalue+sevalue), 
         #              position="dodge", width=0.2) +
-        ggtitle("Major ecosystem carbon pools")+
+        #ggtitle("Major ecosystem carbon pools")+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
               axis.text.x=element_text(size=12),
@@ -124,7 +130,7 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF) {
                                         hjust = 0.5))+
         ylab(expression(paste("Carbon pools (g C " * m^2*")")))+
         scale_x_discrete(limit=c(mod.list, "obs"),
-                         label=c(model.labels, "obs" = "OBS")); p1
+                         label=c(model.labels, "obs" = "OBS"))
     
     
     
@@ -162,8 +168,8 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF) {
                  aes(Group, meanvalue)) +
         geom_bar(stat = "identity", aes(fill=Variable), 
                  position="dodge", col="black") +
-        geom_vline(xintercept=c(5.5, 8.5, 10.5, 12.5), lty=2)+
-        ggtitle("Major carbon fluxes")+
+        geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
+        #ggtitle("Major carbon fluxes")+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
               axis.text.x=element_text(size=12),
@@ -180,7 +186,7 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF) {
                                         hjust = 0.5))+
         ylab(expression(paste("Carbon fluxes (g C " * m^2 * " " * yr^-1 * ")")))+
         scale_x_discrete(limit=c(mod.list, "obs"),
-                         label=c(model.labels, "obs" = "OBS")); p2
+                         label=c(model.labels, "obs" = "OBS"))
     
     
     
@@ -196,8 +202,8 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF) {
     
     ### create a DF to store observation data for allocation coefficients
     allocDF <- data.frame(rep(c("leaf", "wood",
-                                "belowground"), (nmod+1)),
-                          rep(c("obs", mod.list), each = 3), NA)
+                                "belowground", "other"), (nmod+1)),
+                          rep(c("obs", mod.list), each = 4), NA)
     colnames(allocDF) <- c("Variable", 
                            "Group",
                            "meanvalue")
@@ -207,6 +213,7 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF) {
     #allocDF$meanvalue[allocDF$Group=="obs"&allocDF$Variable=="root"] <- 0.22
     #allocDF$meanvalue[allocDF$Group=="obs"&allocDF$Variable=="exudation"] <- 0.10
     allocDF$meanvalue[allocDF$Group=="obs"&allocDF$Variable=="belowground"] <- 0.32
+    allocDF$meanvalue[allocDF$Group=="obs"&allocDF$Variable=="other"] <- 0.0
     
     
     ### calcualte annual means in the simulated data
@@ -217,6 +224,10 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF) {
         
         allocDF$meanvalue[allocDF$Group==i&allocDF$Variable=="belowground"] <- sum(annDF.amb.sum$CGFR.mean[annDF.amb.sum$ModName==i],annDF.amb.sum$CGCR.mean[annDF.amb.sum$ModName==i],annDF.amb.sum$CEX.mean[annDF.amb.sum$ModName==i], na.rm=T)/annDF.amb.sum$NPP.mean[annDF.amb.sum$ModName==i]
         
+        allocDF$meanvalue[allocDF$Group==i&allocDF$Variable=="other"] <- 1.0 - 
+            allocDF$meanvalue[allocDF$Group==i&allocDF$Variable=="leaf"] - 
+            allocDF$meanvalue[allocDF$Group==i&allocDF$Variable=="wood"] - 
+            allocDF$meanvalue[allocDF$Group==i&allocDF$Variable=="belowground"]
     }
 
     
@@ -226,8 +237,8 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF) {
                  aes(Group, meanvalue)) +
         geom_bar(stat = "identity", aes(fill=Variable), 
                  position="stack", col="black") +
-        geom_vline(xintercept=c(5.5, 8.5, 10.5, 12.5), lty=2)+
-        ggtitle("Allocation coefficient")+
+        geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
+        #ggtitle("Allocation coefficient")+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
               axis.text.x=element_text(size=12),
@@ -242,7 +253,7 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF) {
               legend.box.just = 'left',
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
-        ylab("allocation coefficients")+
+        ylab("Allocation coefficients")+
         scale_x_discrete(limit=c(mod.list, "obs"),
                          label=c(model.labels, "obs" = "OBS")); p3
     
