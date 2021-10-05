@@ -2,6 +2,16 @@ compare_microbial_model_output <- function(scenario) {
     
     
     ##################################################################
+    ### Note:
+    ### the default models and the microbial models have different
+    ### variable output. The microbial models have more variables to
+    ### capture microbial dynamics. 
+    ### The key to explore here is the C-nutrient interaction modulated by
+    ### microbial processes. 
+    ### So we need to report nutrient variables. 
+    
+    
+    ##################################################################
     #### Set up basics
     
     ### setting out path to store the files
@@ -192,7 +202,7 @@ compare_microbial_model_output <- function(scenario) {
                                     "G_OCHDX" = 1.0, 
                                     "H_QUJSM" = 1.0),
                            label=c("OCHDP","QUINC",
-                                   "OCHDX","QUJSM")); p1
+                                   "OCHDX","QUJSM"))
     
     ### calculate CO2 pct response difference
     plotDF3 <- plotDF2
@@ -242,7 +252,7 @@ compare_microbial_model_output <- function(scenario) {
                                    "G_OCHDX" = "purple", "H_QUJSM" = "orange"),
                           label=c("OCHDP","QUINC",
                                   "OCHDX","QUJSM"))+
-        coord_cartesian(ylim=c(1,1.1)); p2
+        coord_cartesian(ylim=c(1,1.1))
     
     
     ##################################################################
@@ -359,7 +369,7 @@ compare_microbial_model_output <- function(scenario) {
                                     "G_OCHDX" = 1.0, 
                                     "H_QUJSM" = 1.0),
                            label=c("OCHDP","QUINC",
-                                   "OCHDX","QUJSM")); p3
+                                   "OCHDX","QUJSM"))
     
     
     ### calculate CO2 pct response difference
@@ -435,7 +445,7 @@ compare_microbial_model_output <- function(scenario) {
         scale_fill_manual(values=c("E_OCHDP" = "black", "F_QUINC" = "black",
                                    "G_OCHDX" = "black", "H_QUJSM" = "black"),
                           label=c("OCHDP","OCHDX", 
-                                  "QUINC","QUJSM"));p4
+                                  "QUINC","QUJSM"))
     
     
     
@@ -518,7 +528,7 @@ compare_microbial_model_output <- function(scenario) {
         #                                                    "NPP"="green",
         #                                                    "RAU"="red")),
         #                           nrow=1, byrow=F))+
-        guides(fill=guide_legend(expression(C[flux])), alpha = FALSE); p5
+        guides(fill=guide_legend(expression(C[flux])), alpha = FALSE)
     
     
     ### pct CO2 effect
@@ -582,9 +592,9 @@ compare_microbial_model_output <- function(scenario) {
                                     "G_OCHDX" = 1.0, 
                                     "H_QUJSM" = 1.0),
                            label=c("OCHDP","QUINC",
-                                   "OCHDX","QUJSM")); p6
+                                   "OCHDX","QUJSM"))
     
-    
+
     #gg.gap::gg.gap(plot=p4,
     #               segments=list(c(-200,-100),c(400,600)),
     #               ylim=c(-1300,700),
@@ -616,7 +626,7 @@ compare_microbial_model_output <- function(scenario) {
                                   label_size = 18)
     
     
-    pdf(paste0(out.dir, "/MIP_microbial_model_combined.pdf"), 
+    pdf(paste0(out.dir, "/MIP_microbial_model_carbon_combined.pdf"), 
         width=10, height=12)
     #grid.arrange(p3, p4, p5, p6,
     #             ncol = 2)
@@ -627,6 +637,326 @@ compare_microbial_model_output <- function(scenario) {
               ncol=1, rel_heights=c(1,0.2,1,0.2))
     
     dev.off()
+    
+    
+    
+    
+    
+    
+    #### Nutrient cycling
+    ## P uptake, P mineralization flux, P biochemical mineralization flux
+    ## P leaching flux
+    ## delta PLAB
+    ## delta CSOIL
+    # N uptake, P mineralization flux, N leaching flux
+    # delta NPORG
+    
+    pfluxDF <- data.frame(rep(c("PUP", "PMIN", "PBIOCHMIN", "PLEACH", "PMINTOT"), 8), 
+                             rep(mod.list1, each=10), 
+                             rep(c("amb", "ele"), each = 5), NA, NA)
+    colnames(pfluxDF) <- c("Variable", 
+                          "Model",
+                          "Trt",
+                          "meanvalue",
+                          "sdvalue")
+    
+    for (i in c("amb", "ele")) {
+        pfluxDF$meanvalue[pfluxDF$Variable=="PUP"&pfluxDF$Trt==i] <- myDF1$PUP.mean[myDF1$Trt==i]
+        pfluxDF$sdvalue[pfluxDF$Variable=="PUP"&pfluxDF$Trt==i] <- myDF1$PUP.sd[myDF1$Trt==i]
+        
+        pfluxDF$meanvalue[pfluxDF$Variable=="PMIN"&pfluxDF$Trt==i] <- myDF1$PMIN.mean[myDF1$Trt==i]
+        pfluxDF$sdvalue[pfluxDF$Variable=="PMIN"&pfluxDF$Trt==i] <- myDF1$PMIN.sd[myDF1$Trt==i]
+        
+        pfluxDF$meanvalue[pfluxDF$Variable=="PBIOCHMIN"&pfluxDF$Trt==i] <- myDF1$PBIOCHMIN.mean[myDF1$Trt==i]
+        pfluxDF$sdvalue[pfluxDF$Variable=="PBIOCHMIN"&pfluxDF$Trt==i] <- myDF1$PBIOCHMIN.sd[myDF1$Trt==i]
+        
+        pfluxDF$meanvalue[pfluxDF$Variable=="PLEACH"&pfluxDF$Trt==i] <- myDF1$PLEACH.mean[myDF1$Trt==i]
+        pfluxDF$sdvalue[pfluxDF$Variable=="PLEACH"&pfluxDF$Trt==i] <- myDF1$PLEACH.sd[myDF1$Trt==i]
+
+    }
+    
+    
+    ### calculate total P mineralization flux
+    ### sum of PMIN and PBIOCHMIN
+    for (i in c("amb", "ele")) {
+        for (j in mod.list1) {
+            
+            ### calculate means
+            v1 <- sum(pfluxDF$meanvalue[pfluxDF$Model==j&pfluxDF$Trt==i&pfluxDF$Variable%in%c("PMIN", "PBIOCHMIN")],
+                      na.rm=T)
+            
+            ### calculate sd
+            v2 <- sqrt(sum(pfluxDF$sdvalue[pfluxDF$Model==j&pfluxDF$Trt==i&pfluxDF$Variable=="PMIN"]^2,
+                           pfluxDF$sdvalue[pfluxDF$Model==j&pfluxDF$Trt==i&pfluxDF$Variable=="PBIOCHMIN"]^2, na.rm=T)/2)
+            
+            ### assign values
+            pfluxDF$meanvalue[pfluxDF$Model==j&pfluxDF$Variable=="PMINTOT"&pfluxDF$Trt==i] <- v1
+            pfluxDF$sdvalue[pfluxDF$Model==j&pfluxDF$Variable=="PMINTOT"&pfluxDF$Trt==i] <- v2
+            
+        }
+    }
+    
+    
+    
+    plotDF1 <- subset(pfluxDF, Variable%in%c("PUP"))
+    plotDF2 <- subset(pfluxDF, Variable%in%c("PMINTOT"))
+    plotDF3 <- subset(pfluxDF, Variable%in%c("PLEACH"))
+    
+    
+    ### plot PUP
+    p1 <- ggplot(data=plotDF1, 
+                 aes(Model, meanvalue, group=Trt)) +
+        geom_bar(stat = "identity", aes(fill=Model, alpha=Trt), 
+                 position=position_dodge(), col="black") +
+        geom_errorbar(aes(x=Model, ymin=meanvalue-sdvalue, 
+                          ymax=meanvalue+sdvalue), width=0.4,
+                      position=position_dodge(width=0.9)) +
+        theme_linedraw() +
+        ylim(0, 1.25)+
+        theme(panel.grid.minor=element_blank(),
+              axis.text.x=element_text(size=12),
+              axis.title.x=element_text(size=14),
+              axis.text.y=element_text(size=12),
+              axis.title.y=element_text(size=14),
+              legend.text=element_text(size=12),
+              legend.title=element_text(size=14),
+              panel.grid.major=element_blank(),
+              legend.position="none",
+              legend.box = 'horizontal',
+              legend.box.just = 'left',
+              plot.title = element_text(size=14, face="bold.italic", 
+                                        hjust = 0.5))+
+        ylab(expression(paste(P[uptake] * " (g P " * m^2 * " " * yr^-1 * ")")))+
+        scale_x_discrete(limit=c("E_OCHDP","G_OCHDX", 
+                                 "F_QUINC","H_QUJSM"),
+                         label=c("OCHDP","OCHDX", 
+                                 "QUINC","QUJSM"))+
+        xlab("")+
+        scale_alpha_manual(name="Treatment",
+                           values=c("amb" = 0.3, 
+                                    "ele" = 1.0),
+                           label=c("AMB", "ELE"))+
+        scale_fill_manual(name="Model",
+                          values=c(col.values),
+                          labels=c(model.labels))+
+        guides(alpha=guide_legend("Treatment"), fill = FALSE)
+    
+    
+    ### plot PMINTOT
+    p2 <- ggplot(data=plotDF2, 
+                 aes(Model, meanvalue, group=Trt)) +
+        geom_bar(stat = "identity", aes(fill=Model, alpha=Trt), 
+                 position=position_dodge(), col="black") +
+        geom_errorbar(aes(x=Model, ymin=meanvalue-sdvalue, 
+                          ymax=meanvalue+sdvalue), width=0.4,
+                      position=position_dodge(width=0.9)) +
+        theme_linedraw() +
+        ylim(0, 1.25)+
+        theme(panel.grid.minor=element_blank(),
+              axis.text.x=element_text(size=12),
+              axis.title.x=element_text(size=14),
+              axis.text.y=element_text(size=12),
+              axis.title.y=element_text(size=14),
+              legend.text=element_text(size=12),
+              legend.title=element_text(size=14),
+              panel.grid.major=element_blank(),
+              legend.position="none",
+              legend.box = 'horizontal',
+              legend.box.just = 'left',
+              plot.title = element_text(size=14, face="bold.italic", 
+                                        hjust = 0.5))+
+        ylab(expression(paste(P[mineralization] * " (g P " * m^2 * " " * yr^-1 * ")")))+
+        scale_x_discrete(limit=c("E_OCHDP","G_OCHDX", 
+                                 "F_QUINC","H_QUJSM"),
+                         label=c("OCHDP","OCHDX", 
+                                 "QUINC","QUJSM"))+
+        xlab("")+
+        scale_alpha_manual(name="Treatment",
+                           values=c("amb" = 0.3, 
+                                    "ele" = 1.0),
+                           label=c("AMB", "ELE"))+
+        scale_fill_manual(name="Model",
+                          values=c(col.values),
+                          labels=c(model.labels))+
+        guides(alpha=guide_legend("Treatment"), fill = FALSE)
+    
+    
+    ### plot PLEACH
+    #p3 <- ggplot(data=plotDF3, 
+    #             aes(Model, meanvalue, group=Trt)) +
+    #    geom_bar(stat = "identity", aes(fill=Model, alpha=Trt), 
+    #             position=position_dodge(), col="black") +
+    #    geom_errorbar(aes(x=Model, ymin=meanvalue-sdvalue, 
+    #                      ymax=meanvalue+sdvalue), width=0.4,
+    #                  position=position_dodge(width=0.9)) +
+    #    theme_linedraw() +
+    #    theme(panel.grid.minor=element_blank(),
+    #          axis.text.x=element_text(size=12),
+    #          axis.title.x=element_text(size=14),
+    #          axis.text.y=element_text(size=12),
+    #          axis.title.y=element_text(size=14),
+    #          legend.text=element_text(size=12),
+    #          legend.title=element_text(size=14),
+    #          panel.grid.major=element_blank(),
+    #          legend.position="right",
+    #          legend.box = 'horizontal',
+    #          legend.box.just = 'left',
+    #          plot.title = element_text(size=14, face="bold.italic", 
+    #                                    hjust = 0.5))+
+    #    ylab(expression(paste(P[leach] * " (g P " * m^2 * " " * yr^-1 * ")")))+
+    #    scale_x_discrete(limit=c("E_OCHDP","G_OCHDX", 
+    #                             "F_QUINC","H_QUJSM"),
+    #                     label=c("OCHDP","OCHDX", 
+    #                             "QUINC","QUJSM"))+
+    #    xlab("")+
+    #    scale_alpha_manual(name="Treatment",
+    #                       values=c("amb" = 0.3, 
+    #                                "ele" = 1.0),
+    #                       label=c("AMB", "ELE"))+
+    #    scale_fill_manual(name="Model",
+    #                      values=c(col.values),
+    #                      labels=c(model.labels))+
+    #    guides(alpha=guide_legend("Treatment"), fill = FALSE); p3
+    
+    
+    ### N flux
+    # N uptake, N mineralization flux, N leaching flux
+
+    nfluxDF <- data.frame(rep(c("NUP", "NMIN", "NLEACH"), 8), 
+                          rep(mod.list1, each=6), 
+                          rep(c("amb", "ele"), each = 3), NA, NA)
+    colnames(nfluxDF) <- c("Variable", 
+                           "Model",
+                           "Trt",
+                           "meanvalue",
+                           "sdvalue")
+    
+    for (i in c("amb", "ele")) {
+        nfluxDF$meanvalue[nfluxDF$Variable=="NUP"&nfluxDF$Trt==i] <- myDF1$NUP.mean[myDF1$Trt==i]
+        nfluxDF$sdvalue[nfluxDF$Variable=="NUP"&nfluxDF$Trt==i] <- myDF1$NUP.sd[myDF1$Trt==i]
+        
+        nfluxDF$meanvalue[nfluxDF$Variable=="NMIN"&nfluxDF$Trt==i] <- myDF1$NMIN.mean[myDF1$Trt==i]
+        nfluxDF$sdvalue[nfluxDF$Variable=="NMIN"&nfluxDF$Trt==i] <- myDF1$NMIN.sd[myDF1$Trt==i]
+        
+        nfluxDF$meanvalue[nfluxDF$Variable=="NLEACH"&nfluxDF$Trt==i] <- myDF1$NLEACH.mean[myDF1$Trt==i]
+        nfluxDF$sdvalue[nfluxDF$Variable=="NLEACH"&nfluxDF$Trt==i] <- myDF1$NLEACH.sd[myDF1$Trt==i]
+        
+    }
+    
+    
+    plotDF1 <- subset(nfluxDF, Variable%in%c("NUP"))
+    plotDF2 <- subset(nfluxDF, Variable%in%c("NMIN"))
+    plotDF3 <- subset(nfluxDF, Variable%in%c("NLEACH"))
+    
+    
+    ### plot PUP
+    p3 <- ggplot(data=plotDF1, 
+                 aes(Model, meanvalue, group=Trt)) +
+        geom_bar(stat = "identity", aes(fill=Model, alpha=Trt), 
+                 position=position_dodge(), col="black") +
+        geom_errorbar(aes(x=Model, ymin=meanvalue-sdvalue, 
+                          ymax=meanvalue+sdvalue), width=0.4,
+                      position=position_dodge(width=0.9)) +
+        theme_linedraw() +
+        ylim(0, 12.0)+
+        theme(panel.grid.minor=element_blank(),
+              axis.text.x=element_text(size=12),
+              axis.title.x=element_text(size=14),
+              axis.text.y=element_text(size=12),
+              axis.title.y=element_text(size=14),
+              legend.text=element_text(size=12),
+              legend.title=element_text(size=14),
+              panel.grid.major=element_blank(),
+              legend.position="none",
+              legend.box = 'horizontal',
+              legend.box.just = 'left',
+              plot.title = element_text(size=14, face="bold.italic", 
+                                        hjust = 0.5))+
+        ylab(expression(paste(N[uptake] * " (g N " * m^2 * " " * yr^-1 * ")")))+
+        scale_x_discrete(limit=c("E_OCHDP","G_OCHDX", 
+                                 "F_QUINC","H_QUJSM"),
+                         label=c("OCHDP","OCHDX", 
+                                 "QUINC","QUJSM"))+
+        xlab("")+
+        scale_alpha_manual(name="Treatment",
+                           values=c("amb" = 0.3, 
+                                    "ele" = 1.0),
+                           label=c("AMB", "ELE"))+
+        scale_fill_manual(name="Model",
+                          values=c(col.values),
+                          labels=c(model.labels))+
+        guides(alpha=guide_legend("Treatment"), fill = FALSE)
+    
+    
+    ### plot PMINTOT
+    p4 <- ggplot(data=plotDF2, 
+                 aes(Model, meanvalue, group=Trt)) +
+        geom_bar(stat = "identity", aes(fill=Model, alpha=Trt), 
+                 position=position_dodge(), col="black") +
+        geom_errorbar(aes(x=Model, ymin=meanvalue-sdvalue, 
+                          ymax=meanvalue+sdvalue), width=0.4,
+                      position=position_dodge(width=0.9)) +
+        theme_linedraw() +
+        ylim(0, 12.0)+
+        theme(panel.grid.minor=element_blank(),
+              axis.text.x=element_text(size=12),
+              axis.title.x=element_text(size=14),
+              axis.text.y=element_text(size=12),
+              axis.title.y=element_text(size=14),
+              legend.text=element_text(size=12),
+              legend.title=element_text(size=14),
+              panel.grid.major=element_blank(),
+              legend.position="none",
+              legend.box = 'horizontal',
+              legend.box.just = 'left',
+              plot.title = element_text(size=14, face="bold.italic", 
+                                        hjust = 0.5))+
+        ylab(expression(paste(N[mineralization] * " (g N " * m^2 * " " * yr^-1 * ")")))+
+        scale_x_discrete(limit=c("E_OCHDP","G_OCHDX", 
+                                 "F_QUINC","H_QUJSM"),
+                         label=c("OCHDP","OCHDX", 
+                                 "QUINC","QUJSM"))+
+        xlab("")+
+        scale_alpha_manual(name="Treatment",
+                           values=c("amb" = 0.3, 
+                                    "ele" = 1.0),
+                           label=c("AMB", "ELE"))+
+        scale_fill_manual(name="Model",
+                          values=c(col.values),
+                          labels=c(model.labels))+
+        guides(alpha=guide_legend("Treatment"), fill = FALSE)
+    
+    
+    
+    legend_top_row <- get_legend(p1 + theme(legend.position="bottom",
+                                            legend.box = 'horizontal',
+                                            legend.box.just = 'left'))
+    
+    plots_top_row <- plot_grid(p1, p2, p3, p4, 
+                               labels=c("(a)", "(b)", "(c)", "(d)"),
+                               ncol=2, align="vh", axis = "l",
+                               label_x=c(0.86,0.16), label_y=0.95,
+                               label_size = 18)
+    
+    
+    
+    pdf(paste0(out.dir, "/MIP_microbial_model_nutrient_combined.pdf"), 
+        width=10, height=12)
+    plot_grid(plots_top_row,
+              legend_top_row,
+              ncol=1, rel_heights=c(1,0.2))
+    
+    dev.off()
+    
+    ### It looks like that it is more important to show the
+    ### CO2 response of these nutrient fluxes. So from this
+    ### point forward, need to make script to plot all the
+    ### relevant CO2 response variables. 
+    
+    
+    
+    
+    ### Plotting C pools in CO2 pct response
     
     
 ### end    

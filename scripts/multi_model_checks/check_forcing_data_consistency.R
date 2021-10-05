@@ -74,7 +74,7 @@ check_forcing_data_consistency <- function(scenario) {
     ### CO2 ambient
     p1 <- ggplot() +
       geom_line(data=plotDF, 
-                aes(YEAR, aCO2, col=ModName),lwd=1.5) +
+                aes(YEAR, aCO2, col=ModName, lty=ModName),lwd=1.5) +
       theme_linedraw() +
       theme(panel.grid.minor=element_blank(),
             axis.text.x=element_text(size=12),
@@ -89,12 +89,22 @@ check_forcing_data_consistency <- function(scenario) {
             legend.box.just = 'left',
             plot.title = element_text(size=14, face="bold.italic", 
                                       hjust = 0.5))+
+      scale_color_manual(name="Model",
+                         values=c(col.values, "OBS"="black"),
+                         labels=c(model.labels, "OBS"="OBS"))+
+      scale_linetype_manual(name="Model", 
+                            values=c(linetype.values, "OBS"=1),
+                            labels=c(model.labels, "OBS"="OBS"))+
+      guides(fill = guide_legend(override.aes = list(col = c(col.values, "OBS"="black"),
+                                                     lty = c(linetype.values, "OBS"=1))),
+             color = guide_legend(nrow=4, byrow=F),
+             linetype = guide_legend(override.aes = list(size = 0.5)))+
       ylab(expression(paste("Ambient " * CO[2])))
     
     ### CO2 elevated
     p2 <- ggplot() +
       geom_line(data=plotDF, 
-                aes(YEAR, eCO2, col=ModName),lwd=1.5) +
+                aes(YEAR, eCO2, col=ModName, lty=ModName),lwd=1.5) +
       theme_linedraw() +
       theme(panel.grid.minor=element_blank(),
             axis.text.x=element_text(size=12),
@@ -109,12 +119,22 @@ check_forcing_data_consistency <- function(scenario) {
             legend.box.just = 'left',
             plot.title = element_text(size=14, face="bold.italic", 
                                       hjust = 0.5))+
+      scale_color_manual(name="Model",
+                         values=c(col.values, "OBS"="black"),
+                         labels=c(model.labels, "OBS"="OBS"))+
+      scale_linetype_manual(name="Model", 
+                            values=c(linetype.values, "OBS"=1),
+                            labels=c(model.labels, "OBS"="OBS"))+
+      guides(fill = guide_legend(override.aes = list(col = c(col.values, "OBS"="black"),
+                                                     lty = c(linetype.values, "OBS"=1))),
+             color = guide_legend(nrow=6, byrow=F),
+             linetype = guide_legend(override.aes = list(size = 0.5)))+
       ylab(expression(paste("Elevated " * CO[2])))
     
     ### Tair
     p3 <- ggplot() +
       geom_line(data=plotDF, 
-                aes(YEAR, TAIR, col=ModName),lwd=1.5) +
+                aes(YEAR, TAIR, col=ModName, lty=ModName),lwd=1.5) +
       theme_linedraw() +
       theme(panel.grid.minor=element_blank(),
             axis.text.x=element_text(size=12),
@@ -129,13 +149,23 @@ check_forcing_data_consistency <- function(scenario) {
             legend.box.just = 'left',
             plot.title = element_text(size=14, face="bold.italic", 
                                       hjust = 0.5))+
+      scale_color_manual(name="Model",
+                         values=c(col.values, "OBS"="black"),
+                         labels=c(model.labels, "OBS"="OBS"))+
+      scale_linetype_manual(name="Model", 
+                            values=c(linetype.values, "OBS"=1),
+                            labels=c(model.labels, "OBS"="OBS"))+
+      guides(fill = guide_legend(override.aes = list(col = c(col.values, "OBS"="black"),
+                                                     lty = c(linetype.values, "OBS"=1))),
+             color = guide_legend(nrow=6, byrow=F),
+             linetype = guide_legend(override.aes = list(size = 0.5)))+
       ylab(expression(T[air] * " (degree C)"))
       
     
     ### Tsoil
     p4 <- ggplot() +
       geom_line(data=plotDF, 
-                aes(YEAR, TSOIL, col=ModName),lwd=1.5) +
+                aes(YEAR, TSOIL, col=ModName, lty=ModName),lwd=1.5) +
       theme_linedraw() +
       theme(panel.grid.minor=element_blank(),
             axis.text.x=element_text(size=12),
@@ -150,13 +180,23 @@ check_forcing_data_consistency <- function(scenario) {
             legend.box.just = 'left',
             plot.title = element_text(size=14, face="bold.italic", 
                                       hjust = 0.5))+
+      scale_color_manual(name="Model",
+                         values=c(col.values, "OBS"="black"),
+                         labels=c(model.labels, "OBS"="OBS"))+
+      scale_linetype_manual(name="Model", 
+                            values=c(linetype.values, "OBS"=1),
+                            labels=c(model.labels, "OBS"="OBS"))+
+      guides(fill = guide_legend(override.aes = list(col = c(col.values, "OBS"="black"),
+                                                     lty = c(linetype.values, "OBS"=1))),
+             color = guide_legend(nrow=6, byrow=F),
+             linetype = guide_legend(override.aes = list(size = 0.5)))+
       ylab(expression(T[soil] * " (degree C)"))
     
     
     ### prec
     p5 <- ggplot() +
       geom_line(data=plotDF, 
-                aes(YEAR, PREC, col=ModName),lwd=1.5) +
+                aes(YEAR, PREC, col=ModName, lty=ModName),lwd=1.5) +
       theme_linedraw() +
       theme(panel.grid.minor=element_blank(),
             axis.text.x=element_text(size=12),
@@ -171,13 +211,23 @@ check_forcing_data_consistency <- function(scenario) {
             legend.box.just = 'left',
             plot.title = element_text(size=14, face="bold.italic", 
                                       hjust = 0.5))+
+      scale_color_manual(name="Model",
+                         values=c(col.values, "OBS"="black"),
+                         labels=c(model.labels, "OBS"="OBS"))+
+      scale_linetype_manual(name="Model", 
+                            values=c(linetype.values, "OBS"=1),
+                            labels=c(model.labels, "OBS"="OBS"))+
+      guides(fill = guide_legend(override.aes = list(col = c(col.values, "OBS"="black"),
+                                                     lty = c(linetype.values, "OBS"=1))),
+             color = guide_legend(nrow=6, byrow=F),
+             linetype = guide_legend(override.aes = list(size = 0.5)))+
       ylab(expression(MAP * " (mm)"))
     
     
     ### NDEP
     p6 <- ggplot() +
       geom_line(data=plotDF, 
-                aes(YEAR, NDEP, col=ModName),lwd=1.5) +
+                aes(YEAR, NDEP, col=ModName, lty=ModName),lwd=1.5) +
       theme_linedraw() +
       theme(panel.grid.minor=element_blank(),
             axis.text.x=element_text(size=12),
@@ -192,6 +242,16 @@ check_forcing_data_consistency <- function(scenario) {
             legend.box.just = 'left',
             plot.title = element_text(size=14, face="bold.italic", 
                                       hjust = 0.5))+
+      scale_color_manual(name="Model",
+                         values=c(col.values, "OBS"="black"),
+                         labels=c(model.labels, "OBS"="OBS"))+
+      scale_linetype_manual(name="Model", 
+                            values=c(linetype.values, "OBS"=1),
+                            labels=c(model.labels, "OBS"="OBS"))+
+      guides(fill = guide_legend(override.aes = list(col = c(col.values, "OBS"="black"),
+                                                     lty = c(linetype.values, "OBS"=1))),
+             color = guide_legend(nrow=6, byrow=F),
+             linetype = guide_legend(override.aes = list(size = 0.5)))+
       ylab(expression(N[dep] * " (g N m-2 yr-1)"))
     
     
@@ -199,7 +259,7 @@ check_forcing_data_consistency <- function(scenario) {
     ### VPD
     p7 <- ggplot() +
       geom_line(data=plotDF, 
-                aes(YEAR, VPD, col=ModName),lwd=1.5) +
+                aes(YEAR, VPD, col=ModName, lty=ModName),lwd=1.5) +
       theme_linedraw() +
       theme(panel.grid.minor=element_blank(),
             axis.text.x=element_text(size=12),
@@ -214,12 +274,22 @@ check_forcing_data_consistency <- function(scenario) {
             legend.box.just = 'left',
             plot.title = element_text(size=14, face="bold.italic", 
                                       hjust = 0.5))+
+      scale_color_manual(name="Model",
+                         values=c(col.values, "OBS"="black"),
+                         labels=c(model.labels, "OBS"="OBS"))+
+      scale_linetype_manual(name="Model", 
+                            values=c(linetype.values, "OBS"=1),
+                            labels=c(model.labels, "OBS"="OBS"))+
+      guides(fill = guide_legend(override.aes = list(col = c(col.values, "OBS"="black"),
+                                                     lty = c(linetype.values, "OBS"=1))),
+             color = guide_legend(nrow=6, byrow=F),
+             linetype = guide_legend(override.aes = list(size = 0.5)))+
       ylab(expression(VPD * " (kPa)"))
     
     ### PAR
     p8 <- ggplot() +
       geom_line(data=plotDF, 
-                aes(YEAR, PAR, col=ModName),lwd=1.5) +
+                aes(YEAR, PAR, col=ModName, lty=ModName),lwd=1.5) +
       theme_linedraw() +
       theme(panel.grid.minor=element_blank(),
             axis.text.x=element_text(size=12),
@@ -234,6 +304,16 @@ check_forcing_data_consistency <- function(scenario) {
             legend.box.just = 'left',
             plot.title = element_text(size=14, face="bold.italic", 
                                       hjust = 0.5))+
+      scale_color_manual(name="Model",
+                         values=c(col.values, "OBS"="black"),
+                         labels=c(model.labels, "OBS"="OBS"))+
+      scale_linetype_manual(name="Model", 
+                            values=c(linetype.values, "OBS"=1),
+                            labels=c(model.labels, "OBS"="OBS"))+
+      guides(fill = guide_legend(override.aes = list(col = c(col.values, "OBS"="black"),
+                                                     lty = c(linetype.values, "OBS"=1))),
+             color = guide_legend(nrow=6, byrow=F),
+             linetype = guide_legend(override.aes = list(size = 0.5)))+
       ylab(expression(PAR * " (umol m-2 s-1)"))
     
     

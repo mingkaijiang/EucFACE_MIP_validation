@@ -97,6 +97,13 @@ scenario="var"
 plot_normalized_GPP_response(scenario="var")
 
 
+### Vegetation biomass response
+scenario="fix"
+plot_normalized_delta_Cveg_response(scenario="fix")
+scenario="var"
+plot_normalized_delta_Cveg_response(scenario="var")
+
+
 ### plot allocation coefficients:
 ### fast plant structural pools: leaf and fineroot
 ### slow plant structural pools: wood and coarseroot
