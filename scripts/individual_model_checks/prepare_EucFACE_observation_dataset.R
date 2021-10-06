@@ -22,9 +22,10 @@ prepare_EucFACE_observation_dataset <- function () {
     ### read in water data
     
     ### merge
+    outDF <- cbind(cDF, pDF[,-c(1:2)])
     
     ### return data
-    return(cDF)
+    return(outDF)
     
     
 }
