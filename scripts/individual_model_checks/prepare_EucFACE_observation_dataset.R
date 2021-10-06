@@ -16,6 +16,8 @@ prepare_EucFACE_observation_dataset <- function () {
     cDF <- read_and_process_EucFACE_C_budget_output()
     
     ### read in N and P budget data
+    pDF <- read_and_process_EucFACE_P_budget_output()
+    
     
     ### read in water data
     

@@ -99,14 +99,17 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF) {
               legend.text=element_text(size=12),
               legend.title=element_text(size=14),
               panel.grid.major=element_blank(),
-              legend.position="right",
+              legend.position=c(.1,.2),
               legend.box = 'horizontal',
               legend.box.just = 'left',
+              legend.background = element_rect(fill="grey",
+                                               size=0.5, linetype="solid", 
+                                               colour ="black"),
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
         ylab(expression(paste("Carbon pools (g C " * m^2*")")))+
         scale_x_discrete(limit=c(mod.list, "obs"),
-                         label=c(model.labels, "obs" = "OBS")); p1
+                         label=c(model.labels, "obs" = "OBS"))
     
     
     p2 <- ggplot(data=plotDF3, 
@@ -140,7 +143,7 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF) {
                            values=c(col.values, obs="black"),
                            labels=c(model.labels, "obs"= "OBS"))+
         guides(fill = guide_legend(override.aes = list(col = c(col.values, "obs"="black"))),
-               color = guide_legend(nrow=12, byrow=F)); p2
+               color = guide_legend(nrow=12, byrow=F))
     
     
     
@@ -180,9 +183,12 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF) {
               legend.text=element_text(size=12),
               legend.title=element_text(size=14),
               panel.grid.major=element_blank(),
-              legend.position="right",
+              legend.position=c(.1,.2),
               legend.box = 'horizontal',
               legend.box.just = 'left',
+              legend.background = element_rect(fill="grey",
+                                               size=0.5, linetype="solid", 
+                                               colour ="black"),
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
         ylab(expression(paste("Carbon fluxes (g C " * m^2 * " " * yr^-1 * ")")))+
@@ -227,6 +233,179 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF) {
     
     
     ################# Delta C pools  ####################
+    vegDF <- prepare_plot_DF_for_time_averaged_data_model_intercomparison(eucDF=eucDF,
+                                                                          ambDF=annDF.amb.sum,
+                                                                          eleDF=annDF.ele.sum,
+                                                                          difDF=annDF.diff.sum,
+                                                                          var.list=c("deltaCL", "deltaCW", "deltaCFR", "deltaCCR", "deltaCSTOR"),
+                                                                          calculate.total=T)
+    
+    ### split into ambDF, pctDF
+    plotDF1 <- vegDF[vegDF$Trt=="aCO2"&vegDF$Variable%in%c("deltaCL", "deltaCW", "deltaCFR", "deltaCCR", "deltaCSTOR"),]
+    plotDF2 <- vegDF[vegDF$Trt=="aCO2"&vegDF$Variable%in%c("Tot"),]
+    
+    plotDF3 <- vegDF[vegDF$Trt=="diff"&vegDF$Variable%in%c("Tot"),]
+    
+    ### Plotting
+    ### additional to-do list:
+    ### 1. fill color by manual selection
+    p5 <- ggplot(data=plotDF1, 
+                 aes(Group, meanvalue)) +
+        geom_bar(stat = "identity", aes(fill=Variable), 
+                 position="stack", col="black") +
+        geom_point(data=plotDF2, aes(x=Group, y=meanvalue), col="black",
+                   fill="red", pch=21)+
+        geom_errorbar(data=plotDF2, 
+                      aes(x=Group, ymin=meanvalue-sdvalue,
+                          ymax=meanvalue+sdvalue), 
+                      col="black", 
+                      position=position_dodge2(), width=0.3)+
+        geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
+        xlab("")+
+        theme_linedraw() +
+        theme(panel.grid.minor=element_blank(),
+              axis.text.x=element_text(size=12),
+              axis.title.x=element_text(size=14),
+              axis.text.y=element_text(size=12),
+              axis.title.y=element_text(size=14),
+              legend.text=element_text(size=12),
+              legend.title=element_text(size=14),
+              panel.grid.major=element_blank(),
+              legend.position="right",
+              legend.box = 'horizontal',
+              legend.box.just = 'left',
+              plot.title = element_text(size=14, face="bold.italic", 
+                                        hjust = 0.5))+
+        ylab(expression(paste(Delta * " Carbon pools (g C " * m^2 * " " * yr^-1 * ")")))+
+        scale_x_discrete(limit=c(mod.list, "obs"),
+                         label=c(model.labels, "obs" = "OBS")); p5
+    
+    
+    p6 <- ggplot(data=plotDF3, 
+                 aes(Group, meanvalue)) +
+        geom_bar(stat = "identity", aes(fill=Group),
+                 position="stack", col="black") +
+        geom_errorbar(aes(x=Group, ymin=meanvalue-sdvalue,
+                          ymax=meanvalue+sdvalue), 
+                      col="black", 
+                      position=position_dodge2(), width=0.3)+
+        geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
+        xlab("")+
+        theme_linedraw() +
+        theme(panel.grid.minor=element_blank(),
+              axis.text.x=element_text(size=12),
+              axis.title.x=element_text(size=14),
+              axis.text.y=element_text(size=12),
+              axis.title.y=element_text(size=14),
+              legend.text=element_text(size=12),
+              legend.title=element_text(size=14),
+              panel.grid.major=element_blank(),
+              legend.position="none",
+              legend.box = 'horizontal',
+              legend.box.just = 'left',
+              plot.title = element_text(size=14, face="bold.italic", 
+                                        hjust = 0.5))+
+        ylab(expression(CO[2] * " effect (g C " * m^2 * " " * yr-1 * ")"))+
+        scale_x_discrete(limit=c(mod.list, "obs"),
+                         label=c(model.labels, "obs" = "OBS"))+
+        scale_fill_manual(name="Model",
+                          values=c(col.values, obs="black"),
+                          labels=c(model.labels, "obs"= "OBS"))+
+        guides(fill = guide_legend(override.aes = list(col = c(col.values, "obs"="black"))),
+               color = guide_legend(nrow=12, byrow=F)); p6
+    
+    
+    
+    
+    ################# NEP ####################
+    cfluxDF <- prepare_plot_DF_for_time_averaged_data_model_intercomparison(eucDF=eucDF,
+                                                                            ambDF=annDF.amb.sum,
+                                                                            eleDF=annDF.ele.sum,
+                                                                            difDF=annDF.diff.sum,
+                                                                            var.list=c("NEP"),
+                                                                            calculate.total=F)
+    
+    ### split into ambDF, pctDF
+    plotDF1 <- cfluxDF[cfluxDF$Trt=="aCO2",]
+
+    plotDF2 <- cfluxDF[cfluxDF$Trt=="diff",]
+    
+    
+    ### plotting GPP, NPP, and RAU
+    p7 <- ggplot(data=plotDF1, 
+                 aes(Group, meanvalue)) +
+        geom_bar(stat = "identity", aes(fill=Group), 
+                 position="stack", col="black") +
+        geom_errorbar(aes(x=Group, ymin=meanvalue-sdvalue,
+                          ymax=meanvalue+sdvalue), 
+                      col="black", 
+                      position=position_dodge2(), width=0.3)+
+        geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
+        xlab("")+
+        theme_linedraw() +
+        theme(panel.grid.minor=element_blank(),
+              axis.text.x=element_text(size=12),
+              axis.title.x=element_text(size=14),
+              axis.text.y=element_text(size=12),
+              axis.title.y=element_text(size=14),
+              legend.text=element_text(size=12),
+              legend.title=element_text(size=14),
+              panel.grid.major=element_blank(),
+              legend.position="none",
+              legend.box = 'horizontal',
+              legend.box.just = 'left',
+              plot.title = element_text(size=14, face="bold.italic", 
+                                        hjust = 0.5))+
+        ylab(expression(paste("NEP (g C " * m^2 * " " * yr^-1 * ")")))+
+        scale_x_discrete(limit=c(mod.list, "obs"),
+                         label=c(model.labels, "obs" = "OBS"))+
+        scale_fill_manual(name="Model",
+                          values=c(col.values, obs="black"),
+                          labels=c(model.labels, "obs"= "OBS"))+
+        guides(fill = guide_legend(override.aes = list(col = c(col.values, "obs"="black"))),
+               color = guide_legend(nrow=12, byrow=F)); p7
+    
+    
+    p8 <- ggplot(data=plotDF2, 
+                 aes(Group, meanvalue)) +
+        geom_bar(stat = "identity", aes(fill=Group), 
+                 position="stack", col="black") +
+        geom_errorbar(aes(x=Group, ymin=meanvalue-sdvalue,
+                          ymax=meanvalue+sdvalue), 
+                      col="black", 
+                      position=position_dodge2(), width=0.3)+
+        geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
+        xlab("")+
+        theme_linedraw() +
+        theme(panel.grid.minor=element_blank(),
+              axis.text.x=element_text(size=12),
+              axis.title.x=element_text(size=14),
+              axis.text.y=element_text(size=12),
+              axis.title.y=element_text(size=14),
+              legend.text=element_text(size=12),
+              legend.title=element_text(size=14),
+              panel.grid.major=element_blank(),
+              legend.position="none",
+              legend.box = 'horizontal',
+              legend.box.just = 'left',
+              plot.title = element_text(size=14, face="bold.italic", 
+                                        hjust = 0.5))+
+        ylab(expression(CO[2] * " effect (g C " * m^2 * " " * yr-1 * ")"))+
+        scale_x_discrete(limit=c(mod.list, "obs"),
+                         label=c(model.labels, "obs" = "OBS"))+
+        scale_fill_manual(name="Model",
+                          values=c(col.values, obs="black"),
+                          labels=c(model.labels, "obs"= "OBS"))+
+        guides(fill = guide_legend(override.aes = list(col = c(col.values, "obs"="black"))),
+               color = guide_legend(nrow=12, byrow=F)); p8
+    
+    
+    
+    pdf(paste0(out.dir, "/MIP_time_averaged_", scenario, "_comparison_C_variables.pdf"), 
+        width=16, height=16)
+    plot_grid(p1, p2, p3, p4, p7, p8,
+              ncol=2)
+    dev.off()
     
     
     
