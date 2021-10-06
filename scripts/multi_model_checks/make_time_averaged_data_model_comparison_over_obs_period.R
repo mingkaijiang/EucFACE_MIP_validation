@@ -1,4 +1,5 @@
-make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF) {
+make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
+                                                                     scenario) {
     
     
     ##################################################################
@@ -14,7 +15,7 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF) {
     #### Set up basics
     ### setting out path to store the files
     ### this is only valid for variable climate
-    out.dir <- paste0(getwd(), "/obs_var_output")
+    out.dir <- paste0(getwd(), "/obs_", scenario, "_output")
     
     ### create output folder
     if(!dir.exists(out.dir)) {
@@ -22,8 +23,8 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF) {
     }
     
     ### read in anual datasets
-    annDF.amb <- readRDS(paste0(out.dir, "/MIP_obs_var_amb_annual.rds"))
-    annDF.ele <- readRDS(paste0(out.dir, "/MIP_obs_var_ele_annual.rds"))
+    annDF.amb <- readRDS(paste0(out.dir, "/MIP_obs_", scenario, "_amb_annual.rds"))
+    annDF.ele <- readRDS(paste0(out.dir, "/MIP_obs_", scenario, "_ele_annual.rds"))
     
     d <- dim(annDF.amb)[2]
     
@@ -99,7 +100,7 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF) {
               legend.text=element_text(size=12),
               legend.title=element_text(size=14),
               panel.grid.major=element_blank(),
-              legend.position=c(.1,.2),
+              legend.position=c(.85,.2),
               legend.box = 'horizontal',
               legend.box.just = 'left',
               legend.background = element_rect(fill="grey",
@@ -109,7 +110,8 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF) {
                                         hjust = 0.5))+
         ylab(expression(paste("Carbon pools (g C " * m^2*")")))+
         scale_x_discrete(limit=c(mod.list, "obs"),
-                         label=c(model.labels, "obs" = "OBS"))
+                         label=c(model.labels, "obs" = "OBS"))+
+        guides(fill=guide_legend(nrow=3)); p1
     
     
     p2 <- ggplot(data=plotDF3, 
@@ -278,7 +280,7 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF) {
                                         hjust = 0.5))+
         ylab(expression(paste(Delta * " Carbon pools (g C " * m^2 * " " * yr^-1 * ")")))+
         scale_x_discrete(limit=c(mod.list, "obs"),
-                         label=c(model.labels, "obs" = "OBS")); p5
+                         label=c(model.labels, "obs" = "OBS"))
     
     
     p6 <- ggplot(data=plotDF3, 
@@ -305,14 +307,14 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF) {
               legend.box.just = 'left',
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
-        ylab(expression(CO[2] * " effect (g C " * m^2 * " " * yr-1 * ")"))+
+        ylab(expression(CO[2] * " effect (g C " * m^2 * " " * yr^-1 * ")"))+
         scale_x_discrete(limit=c(mod.list, "obs"),
                          label=c(model.labels, "obs" = "OBS"))+
         scale_fill_manual(name="Model",
                           values=c(col.values, obs="black"),
                           labels=c(model.labels, "obs"= "OBS"))+
         guides(fill = guide_legend(override.aes = list(col = c(col.values, "obs"="black"))),
-               color = guide_legend(nrow=12, byrow=F)); p6
+               color = guide_legend(nrow=12, byrow=F))
     
     
     
@@ -327,7 +329,6 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF) {
     
     ### split into ambDF, pctDF
     plotDF1 <- cfluxDF[cfluxDF$Trt=="aCO2",]
-
     plotDF2 <- cfluxDF[cfluxDF$Trt=="diff",]
     
     
@@ -363,7 +364,7 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF) {
                           values=c(col.values, obs="black"),
                           labels=c(model.labels, "obs"= "OBS"))+
         guides(fill = guide_legend(override.aes = list(col = c(col.values, "obs"="black"))),
-               color = guide_legend(nrow=12, byrow=F)); p7
+               color = guide_legend(nrow=12, byrow=F))
     
     
     p8 <- ggplot(data=plotDF2, 
@@ -397,70 +398,33 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF) {
                           values=c(col.values, obs="black"),
                           labels=c(model.labels, "obs"= "OBS"))+
         guides(fill = guide_legend(override.aes = list(col = c(col.values, "obs"="black"))),
-               color = guide_legend(nrow=12, byrow=F)); p8
+               color = guide_legend(nrow=12, byrow=F))
     
     
     
-    pdf(paste0(out.dir, "/MIP_time_averaged_", scenario, "_comparison_C_variables.pdf"), 
-        width=16, height=16)
-    plot_grid(p1, p2, p3, p4, p7, p8,
-              ncol=2)
-    dev.off()
-    
-    
-    
-    
-    
-    
-    ################# allocation coefficient  ####################
+    #################### allocation coefficient  ####################
     ### Allocation coefficients are calculated different comparing the data and the model. 
     ### In the EucFACE data, allocation to leaf includes allocation to overstorey and understorey leaves, 
     ### and allocation to root includes allocation to overstorey and understorey roots. 
     ### In the data, there is also an additional allocation coefficient to Mycorrhizae, 
     ### which can be grouped with allocation to root as total belowground allocation. 
     ### This total belowground allocation is comparable to allocation coefficient to root in the model. 
-    
-    annDF.amb.sum[annDF.amb.sum<= -1000] <- NA
-    
-    ### create a DF to store observation data for allocation coefficients
-    allocDF <- data.frame(rep(c("leaf", "wood",
-                                "belowground", "other"), (nmod+1)),
-                          rep(c("obs", mod.list), each = 4), NA)
-    colnames(allocDF) <- c("Variable", 
-                           "Group",
-                           "meanvalue")
-    
-    allocDF$meanvalue[allocDF$Group=="obs"&allocDF$Variable=="leaf"] <- 0.48
-    allocDF$meanvalue[allocDF$Group=="obs"&allocDF$Variable=="wood"] <- 0.20
-    #allocDF$meanvalue[allocDF$Group=="obs"&allocDF$Variable=="root"] <- 0.22
-    #allocDF$meanvalue[allocDF$Group=="obs"&allocDF$Variable=="exudation"] <- 0.10
-    allocDF$meanvalue[allocDF$Group=="obs"&allocDF$Variable=="belowground"] <- 0.32
-    allocDF$meanvalue[allocDF$Group=="obs"&allocDF$Variable=="other"] <- 0.0
+    allocDF <- prepare_allocation_coef_DF_for_time_averaged_data_model_intercomparison(eucDF=eucDF,
+                                                                                       ambDF=annDF.amb.sum,
+                                                                                       eleDF=annDF.ele.sum,
+                                                                                       difDF=annDF.diff.sum)
     
     
-    ### calcualte annual means in the simulated data
-    for (i in mod.list) {
-        ### assign values
-        allocDF$meanvalue[allocDF$Group==i&allocDF$Variable=="leaf"] <- annDF.amb.sum$CGL.mean[annDF.amb.sum$ModName==i]/annDF.amb.sum$NPP.mean[annDF.amb.sum$ModName==i]
-        allocDF$meanvalue[allocDF$Group==i&allocDF$Variable=="wood"] <- annDF.amb.sum$CGW.mean[annDF.amb.sum$ModName==i]/annDF.amb.sum$NPP.mean[annDF.amb.sum$ModName==i]
-        
-        allocDF$meanvalue[allocDF$Group==i&allocDF$Variable=="belowground"] <- sum(annDF.amb.sum$CGFR.mean[annDF.amb.sum$ModName==i],annDF.amb.sum$CGCR.mean[annDF.amb.sum$ModName==i],annDF.amb.sum$CEX.mean[annDF.amb.sum$ModName==i], na.rm=T)/annDF.amb.sum$NPP.mean[annDF.amb.sum$ModName==i]
-        
-        allocDF$meanvalue[allocDF$Group==i&allocDF$Variable=="other"] <- 1.0 - 
-            allocDF$meanvalue[allocDF$Group==i&allocDF$Variable=="leaf"] - 
-            allocDF$meanvalue[allocDF$Group==i&allocDF$Variable=="wood"] - 
-            allocDF$meanvalue[allocDF$Group==i&allocDF$Variable=="belowground"]
-    }
-
+    ### split into ambDF, pctDF
+    plotDF1 <- allocDF[allocDF$Trt=="aCO2",]
+    plotDF2 <- allocDF[allocDF$Trt=="diff",]
     
-
     ### Plotting
-    p3 <- ggplot(data=allocDF, 
+    p9 <- ggplot(data=plotDF1, 
                  aes(Group, meanvalue)) +
         geom_bar(stat = "identity", aes(fill=Variable), 
                  position="stack", col="black") +
         geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
-        #ggtitle("Allocation coefficient")+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
               axis.text.x=element_text(size=12),
@@ -470,14 +434,71 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF) {
               legend.text=element_text(size=12),
               legend.title=element_text(size=14),
               panel.grid.major=element_blank(),
-              legend.position="right",
+              legend.position="none",
               legend.box = 'horizontal',
               legend.box.just = 'left',
+              legend.background = element_rect(fill="grey",
+                                               size=0.5, linetype="solid", 
+                                               colour ="black"),
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
         ylab("Allocation coefficients")+
         scale_x_discrete(limit=c(mod.list, "obs"),
-                         label=c(model.labels, "obs" = "OBS")); p3
+                         label=c(model.labels, "obs" = "OBS"))+
+        scale_fill_manual(name="Variable",
+                          values=c("Canopy"=cbbPalette[4], 
+                                   "Wood"=cbbPalette[3],
+                                   "Root"=cbbPalette[8],
+                                   "Other"=cbbPalette[2]))+
+        guides(fill=guide_legend(nrow=2))
+    
+    
+    p10 <- ggplot(data=plotDF2, 
+                 aes(Group, meanvalue)) +
+        geom_bar(stat = "identity", aes(fill=Variable), 
+                 position=position_dodge2(), col="black") +
+        geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
+        xlab("")+
+        theme_linedraw() +
+        theme(panel.grid.minor=element_blank(),
+              axis.text.x=element_text(size=12),
+              axis.title.x=element_text(size=14),
+              axis.text.y=element_text(size=12),
+              axis.title.y=element_text(size=14),
+              legend.text=element_text(size=12),
+              legend.title=element_text(size=14),
+              panel.grid.major=element_blank(),
+              legend.position=c(.3,.8),
+              legend.box = 'horizontal',
+              legend.box.just = 'left',
+              legend.background = element_rect(fill="grey",
+                                               size=0.5, linetype="solid", 
+                                               colour ="black"),
+              plot.title = element_text(size=14, face="bold.italic", 
+                                        hjust = 0.5))+
+        ylab(expression(CO[2] * " effect (unitless)"))+
+        scale_x_discrete(limit=c(mod.list, "obs"),
+                         label=c(model.labels, "obs" = "OBS"))+
+        scale_fill_manual(name="Variable",
+                          values=c("Canopy"=cbbPalette[4], 
+                                   "Wood"=cbbPalette[3],
+                                   "Root"=cbbPalette[8],
+                                   "Other"=cbbPalette[2]))+
+        guides(fill=guide_legend(nrow=2))
+    
+    
+    pdf(paste0(out.dir, "/MIP_time_averaged_", scenario, "_comparison_C_variables.pdf"), 
+        width=16, height=16)
+    plot_grid(p1, p2, p3, p4, p9, p10, p7, p8, 
+              labels="auto", label_x=0.1, label_y=0.95,
+              label_size=24,
+              ncol=2)
+    dev.off()
+    
+    
+    
+    
+    
     
     
     

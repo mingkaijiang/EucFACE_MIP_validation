@@ -87,7 +87,9 @@ eucDF <- prepare_EucFACE_observation_dataset()
 ### compare to observed dataset
 ### aCO2 + eCO2
 ### go into function to plot
-make_time_averaged_data_model_comparison_over_obs_period(eucDF)
+### only plot the variable scenario because this is used to compare against data
+make_time_averaged_data_model_comparison_over_obs_period(eucDF,
+                                                         scenario="var")
 
 
 ### plot photosynthesis response
