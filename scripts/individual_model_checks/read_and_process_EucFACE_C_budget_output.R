@@ -7,10 +7,27 @@ read_and_process_EucFACE_C_budget_output <- function() {
     poolDF <- read.csv("validation_dataset/EucFACE_C_Budget_data/summary/pool.csv")
     nepDF <- read.csv("validation_dataset/EucFACE_C_Budget_data/summary/nep_normalized_summary_with_NPPmyco.csv")
     
+    ### revise Ra root to exclude understorey contribution (assume 50%)
+    newDF <- inoutDF[inoutDF$term=="Ra root",]
+    newDF$term <- "Ra overstorey root"
+    newDF[,2:9] <- newDF[,2:9]/2
+    inoutDF <- rbind(inoutDF, newDF)
+    
+    ### add NPP allocation to mycorrhizae flux
+    tmpDF <- read.csv("validation_dataset/EucFACE_C_Budget_data/summary/NEP_normalized_method_comparison.csv")
+    
+    nppDF[nppDF$term=="Mycorrhizal production", 2:9] <- tmpDF[tmpDF$Category=="Figure3inset"&tmpDF$Method=="NPP-Rh",3:10]-tmpDF[tmpDF$Category=="Figure3"&tmpDF$Method=="NPP-Rh",3:10]
+    nppDF$diff[nppDF$term=="Mycorrhizal production"] <- nppDF$eCO2[nppDF$term=="Mycorrhizal production"] - nppDF$aCO2[nppDF$term=="Mycorrhizal production"] 
+    nppDF$aCO2_sd[nppDF$term=="Mycorrhizal production"] <- sqrt((tmpDF$aCO2_sd[tmpDF$Category=="Figure3inset"&tmpDF$Method=="NPP-Rh"]^2+tmpDF$aCO2_sd[tmpDF$Category=="Figure3"&tmpDF$Method=="NPP-Rh"]^2)/2)
+    nppDF$eCO2_sd[nppDF$term=="Mycorrhizal production"] <- sqrt((tmpDF$eCO2_sd[tmpDF$Category=="Figure3inset"&tmpDF$Method=="NPP-Rh"]^2+tmpDF$eCO2_sd[tmpDF$Category=="Figure3"&tmpDF$Method=="NPP-Rh"]^2)/2)
+    
+    nppDF$percent_diff[nppDF$term=="Mycorrhizal production"] <- (nppDF$diff[nppDF$term=="Mycorrhizal production"])/nppDF$aCO2[nppDF$term=="Mycorrhizal production"] *100.0
+    
+    
     ### prepare a list to store all variables
     c.var.list <- c("GPP", "LAI", "NPP", "CGL", "CGW", "CGFR", "CGCR", "CEX",
                     "RL", "RW", "RFR", "RGR", "RAU", "CVOC", "RHET", "RECO",
-                    "NEP_inout", "NEP_npprh", "NEP_pool", "NEP_all",
+                    "NEP_inout", "NEP_npprh", "NEP_pool", "NEP",
                     "CL", "CW", "CFR", "CCR", "CFLITA", "CMIC", "CSOIL", "CMYC",
                     "deltaCL", "deltaCW", "deltaCFR", "deltaCCR", "deltaCFLIT", 
                     "deltaCMIC", "deltaCSOIL", "deltaCMYC")
@@ -257,7 +274,7 @@ read_and_process_EucFACE_C_budget_output <- function() {
     tmp <- colSums(nppDF[nppDF$term%in%c("Leaf NPP", "Stem NPP", 
                                          "Fine Root NPP", "Intermediate Root NPP",
                                          "Coarse Root NPP", "Other NPP",
-                                         "Leaf consumption"),2:7])
+                                         "Leaf consumption", "Mycorrhizal production"),2:7])
     amean <- mean(c(tmp[2], tmp[3], tmp[6]))
     emean <- mean(c(tmp[1], tmp[4], tmp[5]))
     asd <- sd(c(tmp[2], tmp[3], tmp[6]))
@@ -303,13 +320,13 @@ read_and_process_EucFACE_C_budget_output <- function() {
     
     
     ### RFR
-    outDF$RFR[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- inoutDF$aCO2[inoutDF$term=="Ra root"]
-    outDF$RFR[outDF$Group=="mean"&outDF$Trt=="eCO2"] <- inoutDF$eCO2[inoutDF$term=="Ra root"]
-    outDF$RFR[outDF$Group=="sd"&outDF$Trt=="aCO2"] <- inoutDF$aCO2_sd[inoutDF$term=="Ra root"]
-    outDF$RFR[outDF$Group=="sd"&outDF$Trt=="eCO2"] <- inoutDF$eCO2_sd[inoutDF$term=="Ra root"]
-    outDF$RFR[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- inoutDF$percent_diff[inoutDF$term=="Ra root"]
-    outDF$RFR[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((inoutDF$aCO2_sd[inoutDF$term=="Ra root"]^2+inoutDF$aCO2_sd[inoutDF$term=="Ra root"]^2+
-                                                                  inoutDF$eCO2_sd[inoutDF$term=="Ra root"]^2)/3)/inoutDF$aCO2[inoutDF$term=="Ra root"]*100
+    outDF$RFR[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- inoutDF$aCO2[inoutDF$term=="Ra overstorey root"]
+    outDF$RFR[outDF$Group=="mean"&outDF$Trt=="eCO2"] <- inoutDF$eCO2[inoutDF$term=="Ra overstorey root"]
+    outDF$RFR[outDF$Group=="sd"&outDF$Trt=="aCO2"] <- inoutDF$aCO2_sd[inoutDF$term=="Ra overstorey root"]
+    outDF$RFR[outDF$Group=="sd"&outDF$Trt=="eCO2"] <- inoutDF$eCO2_sd[inoutDF$term=="Ra overstorey root"]
+    outDF$RFR[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- inoutDF$percent_diff[inoutDF$term=="Ra overstorey root"]
+    outDF$RFR[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((inoutDF$aCO2_sd[inoutDF$term=="Ra overstorey root"]^2+inoutDF$aCO2_sd[inoutDF$term=="Ra overstorey root"]^2+
+                                                                  inoutDF$eCO2_sd[inoutDF$term=="Ra overstorey root"]^2)/3)/inoutDF$aCO2[inoutDF$term=="Ra overstorey root"]*100
     
     
     ### CVOC
@@ -331,9 +348,9 @@ read_and_process_EucFACE_C_budget_output <- function() {
     outDF$RGR[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((inoutDF$aCO2_sd[inoutDF$term=="Rgrowth"]^2+inoutDF$aCO2_sd[inoutDF$term=="Rgrowth"]^2+
                                                                     inoutDF$eCO2_sd[inoutDF$term=="Rgrowth"]^2)/3)/inoutDF$aCO2[inoutDF$term=="Rgrowth"]*100
     
-    ### RAU
+    ### RAU, assume half of root respiration is overstorey
     tmp <- colSums(inoutDF[inoutDF$term%in%c("Ra leaf", "Ra stem", 
-                                         "Ra root", "Rgrowth"),2:7])
+                                         "Ra overstorey root", "Rgrowth"),2:7])
     amean <- mean(c(tmp[2], tmp[3], tmp[6]))
     emean <- mean(c(tmp[1], tmp[4], tmp[5]))
     asd <- sd(c(tmp[2], tmp[3], tmp[6]))
@@ -366,11 +383,11 @@ read_and_process_EucFACE_C_budget_output <- function() {
     
     
     ### CEX
-    outDF$CEX[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- NA
-    outDF$CEX[outDF$Group=="mean"&outDF$Trt=="eCO2"] <- NA
-    outDF$CEX[outDF$Group=="sd"&outDF$Trt=="aCO2"] <- NA
-    outDF$CEX[outDF$Group=="sd"&outDF$Trt=="eCO2"] <- NA
-    outDF$CEX[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- NA
+    outDF$CEX[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- nppDF$aCO2[nppDF$term=="Mycorrhizal production"]
+    outDF$CEX[outDF$Group=="mean"&outDF$Trt=="eCO2"] <- nppDF$eCO2[nppDF$term=="Mycorrhizal production"]
+    outDF$CEX[outDF$Group=="sd"&outDF$Trt=="aCO2"] <- nppDF$aCO2_sd[nppDF$term=="Mycorrhizal production"]
+    outDF$CEX[outDF$Group=="sd"&outDF$Trt=="eCO2"] <- nppDF$eCO2_sd[nppDF$term=="Mycorrhizal production"]
+    outDF$CEX[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- nppDF$percent_diff[nppDF$term=="Mycorrhizal production"]
     
     
     ### NEP in - out
@@ -402,27 +419,27 @@ read_and_process_EucFACE_C_budget_output <- function() {
     
     
     ### NEP all
-    outDF$NEP_all[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- (outDF$NEP_inout[outDF$Group=="mean"&outDF$Trt=="aCO2"]+
+    outDF$NEP[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- (outDF$NEP_inout[outDF$Group=="mean"&outDF$Trt=="aCO2"]+
                                                                  outDF$NEP_npprh[outDF$Group=="mean"&outDF$Trt=="aCO2"]+
                                                                  outDF$NEP_pools[outDF$Group=="mean"&outDF$Trt=="aCO2"])/3
     
-    outDF$NEP_all[outDF$Group=="mean"&outDF$Trt=="eCO2"] <- (outDF$NEP_inout[outDF$Group=="mean"&outDF$Trt=="eCO2"]+
+    outDF$NEP[outDF$Group=="mean"&outDF$Trt=="eCO2"] <- (outDF$NEP_inout[outDF$Group=="mean"&outDF$Trt=="eCO2"]+
                                                                  outDF$NEP_npprh[outDF$Group=="mean"&outDF$Trt=="eCO2"]+
                                                                  outDF$NEP_pools[outDF$Group=="mean"&outDF$Trt=="eCO2"])/3
     
-    outDF$NEP_all[outDF$Group=="sd"&outDF$Trt=="aCO2"] <- sqrt((outDF$NEP_inout[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+
+    outDF$NEP[outDF$Group=="sd"&outDF$Trt=="aCO2"] <- sqrt((outDF$NEP_inout[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+
                                                                outDF$NEP_npprh[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+
                                                                outDF$NEP_pools[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2)/3)
     
-    outDF$NEP_all[outDF$Group=="sd"&outDF$Trt=="eCO2"] <- sqrt((outDF$NEP_inout[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2+
+    outDF$NEP[outDF$Group=="sd"&outDF$Trt=="eCO2"] <- sqrt((outDF$NEP_inout[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2+
                                                                     outDF$NEP_npprh[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2+
                                                                     outDF$NEP_pools[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2)/3)
     
-    outDF$NEP_all[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- (outDF$NEP_inout[outDF$Group=="mean"&outDF$Trt=="pct_diff"]+
+    outDF$NEP[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- (outDF$NEP_inout[outDF$Group=="mean"&outDF$Trt=="pct_diff"]+
                                                                      outDF$NEP_npprh[outDF$Group=="mean"&outDF$Trt=="pct_diff"]+
                                                                      outDF$NEP_pools[outDF$Group=="mean"&outDF$Trt=="pct_diff"])/3
     
-    outDF$NEP_all[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((outDF$NEP_inout[outDF$Group=="sd"&outDF$Trt=="pct_diff"]^2+
+    outDF$NEP[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((outDF$NEP_inout[outDF$Group=="sd"&outDF$Trt=="pct_diff"]^2+
                                                                         outDF$NEP_npprh[outDF$Group=="sd"&outDF$Trt=="pct_diff"]^2+
                                                                         outDF$NEP_pools[outDF$Group=="sd"&outDF$Trt=="pct_diff"]^2)/3)
     

@@ -1,5 +1,6 @@
 make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF) {
     
+    
     ##################################################################
     ### Purpose:
     ### to compare model predictions against data,
@@ -33,6 +34,7 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF) {
     annDF.pct.diff <- annDF.amb
     annDF.pct.diff[,3:d] <- (annDF.ele[,3:d]-annDF.amb[,3:d])/annDF.amb[,3:d] * 100.0
     
+    
     annDF.amb.sum <- summaryBy(.~ModName, FUN=c(mean,sd),
                                data=annDF.amb,
                                keep.names=T, na.rm=T)
@@ -52,68 +54,42 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF) {
     
     
     ##########################################################################
-    #### add observation data to the model simulation dataset so that we can plot them together
+    ### Plotting
     
-
-    
-    ##########################################################################
-    ####  Major carbon pools  
+    ################# Major carbon pools  ####################
     ### Firstly we will check the major carbon pools, 
     ### as these data are provided in Table 1 in the parameter file. 
     ### Note that:
     ### * CFR combines fineroot (< 2 mm in diameter) and intermediate root (2-3 mm) in the observation;
-    ### * CSOIL is for top 10 cm of soil in the observation;
     ### * CL includes overstorey leaf only in the observation;
     ### * CW includes branch and stem in the model simulation.
+    vegDF <- prepare_plot_DF_for_time_averaged_data_model_intercomparison(eucDF=eucDF,
+                                                                          ambDF=annDF.amb.sum,
+                                                                          eleDF=annDF.ele.sum,
+                                                                          difDF=annDF.diff.sum,
+                                                                          var.list=c("CL", "CW", "CFR", "CCR", "CSTOR"),
+                                                                          calculate.total=T)
     
-    ### create a DF to store observation data for vegetation carbon stocks
-    vegDF <- data.frame(rep(c("CL", "CW", "CFR", "CCR"), (1+nmod)), 
-                        rep(c("obs", mod.list), each=4), 
-                        rep(c("amb", "ele"), ), NA, NA)
-    colnames(vegDF) <- c("Variable", 
-                         "Group",
-                         "meanvalue",
-                         "sevalue")
+    ### split into ambDF, pctDF
+    plotDF1 <- vegDF[vegDF$Trt=="aCO2"&vegDF$Variable%in%c("CL","CW","CCR","CFR","CSTOR"),]
+    plotDF2 <- vegDF[vegDF$Trt=="aCO2"&vegDF$Variable%in%c("Tot"),]
     
-    vegDF$meanvalue[vegDF$Group=="obs"&vegDF$Variable=="CL"] <- 151
-    vegDF$meanvalue[vegDF$Group=="obs"&vegDF$Variable=="CW"] <- 4558
-    vegDF$meanvalue[vegDF$Group=="obs"&vegDF$Variable=="CFR"] <- 227
-    vegDF$meanvalue[vegDF$Group=="obs"&vegDF$Variable=="CCR"] <- 606
-    #vegDF$meanvalue[vegDF$Group=="obs"&vegDF$Variable=="CSOIL"] <- 2183
-    
-    vegDF$sevalue[vegDF$Group=="obs"&vegDF$Variable=="CL"] <- 14
-    vegDF$sevalue[vegDF$Group=="obs"&vegDF$Variable=="CW"] <- 321
-    vegDF$sevalue[vegDF$Group=="obs"&vegDF$Variable=="CFR"] <- 5
-    vegDF$sevalue[vegDF$Group=="obs"&vegDF$Variable=="CCR"] <- 60
-    #vegDF$sevalue[vegDF$Group=="obs"&vegDF$Variable=="CSOIL"] <- 280
-    
-    for (i in mod.list) {
-        vegDF$meanvalue[vegDF$Group==i&vegDF$Variable=="CL"] <- annDF.amb.sum$CL.mean[annDF.amb.sum$ModName==i]
-        vegDF$meanvalue[vegDF$Group==i&vegDF$Variable=="CW"] <- annDF.amb.sum$CW.mean[annDF.amb.sum$ModName==i]
-        vegDF$meanvalue[vegDF$Group==i&vegDF$Variable=="CFR"] <- annDF.amb.sum$CFR.mean[annDF.amb.sum$ModName==i]
-        vegDF$meanvalue[vegDF$Group==i&vegDF$Variable=="CCR"] <- annDF.amb.sum$CCR.mean[annDF.amb.sum$ModName==i]
-        #vegDF$meanvalue[vegDF$Group==i&vegDF$Variable=="CSOIL"] <- annDF.amb.sum$CSOIL.mean[annDF.amb.sum$ModName==i]
-        
-        vegDF$sevalue[vegDF$Group==i&vegDF$Variable=="CL"] <- annDF.amb.sum$CL.sd[annDF.amb.sum$ModName==i]/sqrt(4)
-        vegDF$sevalue[vegDF$Group==i&vegDF$Variable=="CW"] <- annDF.amb.sum$CW.sd[annDF.amb.sum$ModName==i]/sqrt(4)
-        vegDF$sevalue[vegDF$Group==i&vegDF$Variable=="CFR"] <- annDF.amb.sum$CFR.sd[annDF.amb.sum$ModName==i]/sqrt(4)
-        vegDF$sevalue[vegDF$Group==i&vegDF$Variable=="CCR"] <- annDF.amb.sum$CCR.sd[annDF.amb.sum$ModName==i]/sqrt(4)
-        #vegDF$sevalue[vegDF$Group==i&vegDF$Variable=="CSOIL"] <- annDF.amb.sum$CSOIL.sd[annDF.amb.sum$ModName==i]/sqrt(4)
-    }
-    
-    vegDF$meanvalue <- ifelse(vegDF$meanvalue<0, NA, vegDF$meanvalue)
-    
+    plotDF3 <- vegDF[vegDF$Trt=="pct_diff"&vegDF$Variable%in%c("Tot"),]
     
     ### Plotting
-    p1 <- ggplot(data=vegDF, 
+    ### additional to-do list:
+    ### 1. fill color by manual selection
+    p1 <- ggplot(data=plotDF1, 
                  aes(Group, meanvalue)) +
         geom_bar(stat = "identity", aes(fill=Variable), 
                  position="stack", col="black") +
+        geom_errorbar(data=plotDF2, 
+                      aes(x=Group, ymin=meanvalue-sdvalue,
+                          ymax=meanvalue+sdvalue), 
+                      col="black", 
+                      position=position_dodge2(), width=0.3)+
         geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
-        #geom_errorbar(aes(x=Group, ymin=meanvalue-sevalue, 
-        #                  ymax=meanvalue+sevalue), 
-        #              position="dodge", width=0.2) +
-        #ggtitle("Major ecosystem carbon pools")+
+        xlab("")+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
               axis.text.x=element_text(size=12),
@@ -130,46 +106,71 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF) {
                                         hjust = 0.5))+
         ylab(expression(paste("Carbon pools (g C " * m^2*")")))+
         scale_x_discrete(limit=c(mod.list, "obs"),
-                         label=c(model.labels, "obs" = "OBS"))
+                         label=c(model.labels, "obs" = "OBS")); p1
+    
+    
+    p2 <- ggplot(data=plotDF3, 
+                 aes(Group, meanvalue)) +
+        geom_bar(stat = "identity", aes(fill=Group),
+                 position="stack", col="black") +
+        geom_errorbar(aes(x=Group, ymin=meanvalue-sdvalue,
+                          ymax=meanvalue+sdvalue), 
+                      col="black", 
+                      position=position_dodge2(), width=0.3)+
+        geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
+        xlab("")+
+        theme_linedraw() +
+        theme(panel.grid.minor=element_blank(),
+              axis.text.x=element_text(size=12),
+              axis.title.x=element_text(size=14),
+              axis.text.y=element_text(size=12),
+              axis.title.y=element_text(size=14),
+              legend.text=element_text(size=12),
+              legend.title=element_text(size=14),
+              panel.grid.major=element_blank(),
+              legend.position="none",
+              legend.box = 'horizontal',
+              legend.box.just = 'left',
+              plot.title = element_text(size=14, face="bold.italic", 
+                                        hjust = 0.5))+
+        ylab(expression(CO[2] * " effect (%)"))+
+        scale_x_discrete(limit=c(mod.list, "obs"),
+                         label=c(model.labels, "obs" = "OBS"))+
+        scale_fill_manual(name="Model",
+                           values=c(col.values, obs="black"),
+                           labels=c(model.labels, "obs"= "OBS"))+
+        guides(fill = guide_legend(override.aes = list(col = c(col.values, "obs"="black"))),
+               color = guide_legend(nrow=12, byrow=F)); p2
     
     
     
     ################# Major carbon fluxes  ####################
-    ### create a DF to store observation data for allocation coefficients
-    outDF <- data.frame(rep(c("NEP", "GPP", "NPP", "CUE", "RAU"), (1+nmod)), 
-                        rep(c("obs", mod.list), each = 5), NA)
-    colnames(outDF) <- c("Variable", 
-                         "Group",
-                         "meanvalue")
+    cfluxDF <- prepare_plot_DF_for_time_averaged_data_model_intercomparison(eucDF=eucDF,
+                                                                            ambDF=annDF.amb.sum,
+                                                                            eleDF=annDF.ele.sum,
+                                                                            difDF=annDF.diff.sum,
+                                                                            var.list=c("NPP", "RAU"),
+                                                                            calculate.total=T)
     
-    outDF$meanvalue[outDF$Group=="obs"&outDF$Variable=="NEP"] <- -8
-    outDF$meanvalue[outDF$Group=="obs"&outDF$Variable=="GPP"] <- 1563
-    outDF$meanvalue[outDF$Group=="obs"&outDF$Variable=="NPP"] <- 484
-    outDF$meanvalue[outDF$Group=="obs"&outDF$Variable=="CUE"] <- 0.31
-    outDF$meanvalue[outDF$Group=="obs"&outDF$Variable=="RAU"] <- 1079
+    ### split into ambDF, pctDF
+    plotDF1 <- cfluxDF[cfluxDF$Trt=="aCO2"&cfluxDF$Variable%in%c("NPP","RAU"),]
+    plotDF2 <- cfluxDF[cfluxDF$Trt=="aCO2"&cfluxDF$Variable%in%c("Tot"),]
     
+    plotDF3 <- cfluxDF[cfluxDF$Trt=="pct_diff"&cfluxDF$Variable%in%c("Tot"),]
     
-    ### these fluxes were calculated above already
-    for (i in mod.list) {
-    ### assign values
-    outDF$meanvalue[outDF$Group==i&outDF$Variable=="NEP"] <- annDF.amb.sum$NEP.mean[annDF.amb.sum$ModName==i]
-    outDF$meanvalue[outDF$Group==i&outDF$Variable=="GPP"] <- annDF.amb.sum$GPP.mean[annDF.amb.sum$ModName==i]
-    outDF$meanvalue[outDF$Group==i&outDF$Variable=="NPP"] <- annDF.amb.sum$NPP.mean[annDF.amb.sum$ModName==i]
-    #outDF$meanvalue[outDF$Group==i&outDF$Variable=="CUE"] <- annDF.amb.sum$GPP.mean[annDF.amb.sum$ModName==i]
-    outDF$meanvalue[outDF$Group==i&outDF$Variable=="RAU"] <- annDF.amb.sum$RAU.mean[annDF.amb.sum$ModName==i]
-    
-    }
-    
-    ### plotDF1
-    plotDF1 <- outDF[outDF$Variable%in%c("GPP", "NPP", "RAU", "NEP"),]
     
     ### plotting GPP, NPP, and RAU
-    p2 <- ggplot(data=plotDF1, 
+    p3 <- ggplot(data=plotDF1, 
                  aes(Group, meanvalue)) +
         geom_bar(stat = "identity", aes(fill=Variable), 
-                 position="dodge", col="black") +
+                 position="stack", col="black") +
+        geom_errorbar(data=plotDF2,
+                      aes(x=Group, ymin=meanvalue-sdvalue,
+                          ymax=meanvalue+sdvalue), 
+                      col="black", 
+                      position=position_dodge2(), width=0.3)+
         geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
-        #ggtitle("Major carbon fluxes")+
+        xlab("")+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
               axis.text.x=element_text(size=12),
@@ -186,7 +187,49 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF) {
                                         hjust = 0.5))+
         ylab(expression(paste("Carbon fluxes (g C " * m^2 * " " * yr^-1 * ")")))+
         scale_x_discrete(limit=c(mod.list, "obs"),
-                         label=c(model.labels, "obs" = "OBS"))
+                         label=c(model.labels, "obs" = "OBS"))+
+        scale_fill_manual(name="Variable",
+                          values=c("NPP"="green", "RAU"="yellow")); p3
+    
+    
+    p4 <- ggplot(data=plotDF3, 
+                 aes(Group, meanvalue)) +
+        geom_bar(stat = "identity", aes(fill=Group), 
+                 position="stack", col="black") +
+        geom_errorbar(aes(x=Group, ymin=meanvalue-sdvalue,
+                          ymax=meanvalue+sdvalue), 
+                      col="black", 
+                      position=position_dodge2(), width=0.3)+
+        geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
+        xlab("")+
+        theme_linedraw() +
+        theme(panel.grid.minor=element_blank(),
+              axis.text.x=element_text(size=12),
+              axis.title.x=element_text(size=14),
+              axis.text.y=element_text(size=12),
+              axis.title.y=element_text(size=14),
+              legend.text=element_text(size=12),
+              legend.title=element_text(size=14),
+              panel.grid.major=element_blank(),
+              legend.position="none",
+              legend.box = 'horizontal',
+              legend.box.just = 'left',
+              plot.title = element_text(size=14, face="bold.italic", 
+                                        hjust = 0.5))+
+        ylab(expression(CO[2] * " effect (%)"))+
+        scale_x_discrete(limit=c(mod.list, "obs"),
+                         label=c(model.labels, "obs" = "OBS"))+
+        scale_fill_manual(name="Model",
+                          values=c(col.values, obs="black"),
+                          labels=c(model.labels, "obs"= "OBS"))+
+        guides(fill = guide_legend(override.aes = list(col = c(col.values, "obs"="black"))),
+               color = guide_legend(nrow=12, byrow=F))
+    
+    
+    ################# Delta C pools  ####################
+    
+    
+    
     
     
     
