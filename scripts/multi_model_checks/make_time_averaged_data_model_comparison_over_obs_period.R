@@ -513,37 +513,37 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
     ### the majority of the P in the soil is stored as occluded form unavailable for plants. 
     ### Note that in the table below, simulated results are for top 30 cm of the soil, 
     ### but observed data are for top 10 cm only. 
-    
-    ### create a DF to store observation data for vegetation carbon stocks
-    pDF <- data.frame(rep(c("PLAB", "PMIN", "NMIN"), (1+nmod)), 
-                      rep(c("obs", mod.list), each = 3), NA)
-    colnames(pDF) <- c("Variable", 
-                       "Group",
-                       "meanvalue")
-    
-    pDF$meanvalue[pDF$Group=="obs"&pDF$Variable=="PLAB"] <- 0.17
-    pDF$meanvalue[pDF$Group=="obs"&pDF$Variable=="PMIN"] <- 0.3
-    pDF$meanvalue[pDF$Group=="obs"&pDF$Variable=="NMIN"] <- 8.81
+    vegDF <- prepare_plot_DF_for_time_averaged_data_model_intercomparison(eucDF=eucDF,
+                                                                          ambDF=annDF.amb.sum,
+                                                                          eleDF=annDF.ele.sum,
+                                                                          difDF=annDF.diff.sum,
+                                                                          var.list=c("PL", "PW", "PFR", "PCR", "PSTOR"),
+                                                                          calculate.total=T)
     
     
-    ### calcualte annual means in the simulated data
-    for (i in mod.list) {
-        ### assign values
-        pDF$meanvalue[pDF$Group==i&pDF$Variable=="PLAB"] <- annDF.amb.sum$PLAB.mean[annDF.amb.sum$ModName==i]
-        pDF$meanvalue[pDF$Group==i&pDF$Variable=="PMIN"] <- annDF.amb.sum$PMIN.mean[annDF.amb.sum$ModName==i]
-        pDF$meanvalue[pDF$Group==i&pDF$Variable=="NMIN"] <- annDF.amb.sum$NMIN.mean[annDF.amb.sum$ModName==i]
-    }
     
-    plotDF1 <- pDF[pDF$Variable%in%c("PLAB"),]
-    plotDF2 <- pDF[pDF$Variable%in%c("NMIN"),]
     
-    ### plotting
-    p4 <- ggplot(data=plotDF1, 
+    ### split into ambDF, pctDF
+    plotDF1 <- vegDF[vegDF$Trt=="aCO2"&vegDF$Variable%in%c("PL","PW","PCR","PFR","PSTOR"),]
+    plotDF2 <- vegDF[vegDF$Trt=="aCO2"&vegDF$Variable%in%c("Tot"),]
+    
+    plotDF3 <- vegDF[vegDF$Trt=="pct_diff"&vegDF$Variable%in%c("Tot"),]
+    plotDF4 <- vegDF[vegDF$Trt=="pct_diff"&vegDF$Variable%in%c("PL","PW","PFR","PSTOR"),]
+    
+    ### Plotting
+    ### additional to-do list:
+    ### 1. fill color by manual selection
+    p1 <- ggplot(data=plotDF1, 
                  aes(Group, meanvalue)) +
         geom_bar(stat = "identity", aes(fill=Variable), 
-                 position="dodge", col="black") +
-        geom_vline(xintercept=c(5.5, 8.5, 10.5, 12.5), lty=2)+
-        ggtitle("Major phosphorus pools")+
+                 position="stack", col="black") +
+        geom_errorbar(data=plotDF2, 
+                      aes(x=Group, ymin=meanvalue-sdvalue,
+                          ymax=meanvalue+sdvalue), 
+                      col="black", 
+                      position=position_dodge2(), width=0.3)+
+        geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
+        xlab("")+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
               axis.text.x=element_text(size=12),
@@ -553,22 +553,93 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
               legend.text=element_text(size=12),
               legend.title=element_text(size=14),
               panel.grid.major=element_blank(),
-              legend.position="right",
+              legend.position=c(0.85,0.8),
               legend.box = 'horizontal',
               legend.box.just = 'left',
+              legend.background = element_rect(fill="grey",
+                                               size=0.5, linetype="solid", 
+                                               colour ="black"),
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
-        ylab(expression(paste("Phosphorus pools (g P " * m^2 * ")")))+
+        ylab(expression(paste("Phosphorus pools (g C " * m^2*")")))+
         scale_x_discrete(limit=c(mod.list, "obs"),
-                         label=c(model.labels, "obs" = "OBS")); p4
+                         label=c(model.labels, "obs" = "OBS"))+
+        scale_fill_manual(name="Variable",
+                          values=c("PL"=cbbPalette[4], 
+                                   "PW"=cbbPalette[3],
+                                   "PFR"=cbbPalette[8],
+                                   "PSTOR"=cbbPalette[2],
+                                   "PCR"=cbbPalette[6]))+
+        guides(fill=guide_legend(nrow=3))
     
     
-    p5 <- ggplot(data=plotDF2, 
+    p2 <- ggplot(data=plotDF4, 
+                 aes(Group, meanvalue)) +
+        geom_bar(stat = "identity", aes(fill=Variable),
+                 position=position_dodge2(), col="black") +
+        #geom_errorbar(aes(x=Group, ymin=meanvalue-sdvalue,
+        #                  ymax=meanvalue+sdvalue), 
+        #              col="black", 
+        #              position=position_dodge2(), width=0.3)+
+        geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
+        xlab("")+
+        theme_linedraw() +
+        theme(panel.grid.minor=element_blank(),
+              axis.text.x=element_text(size=12),
+              axis.title.x=element_text(size=14),
+              axis.text.y=element_text(size=12),
+              axis.title.y=element_text(size=14),
+              legend.text=element_text(size=12),
+              legend.title=element_text(size=14),
+              panel.grid.major=element_blank(),
+              legend.position=c(.85,.2),
+              legend.box = 'horizontal',
+              legend.box.just = 'left',
+              legend.background = element_rect(fill="grey",
+                                               size=0.5, linetype="solid", 
+                                               colour ="black"),
+              plot.title = element_text(size=14, face="bold.italic", 
+                                        hjust = 0.5))+
+        ylab(expression(CO[2] * " effect (%)"))+
+        scale_x_discrete(limit=c(mod.list, "obs"),
+                         label=c(model.labels, "obs" = "OBS"))+
+        scale_fill_manual(name="Variable",
+                          values=c("PL"=cbbPalette[4], 
+                                   "PW"=cbbPalette[3],
+                                   "PFR"=cbbPalette[8],
+                                   "PSTOR"=cbbPalette[2]))+
+        guides(fill=guide_legend(nrow=2))
+    
+    
+    
+    ################# Major growth P fluxes  ####################
+    pfluxDF <- prepare_plot_DF_for_time_averaged_data_model_intercomparison(eucDF=eucDF,
+                                                                            ambDF=annDF.amb.sum,
+                                                                            eleDF=annDF.ele.sum,
+                                                                            difDF=annDF.diff.sum,
+                                                                            var.list=c("PGL", "PGW", "PGCR", "PGFR"),
+                                                                            calculate.total=T)
+    
+    
+    ### split into ambDF, pctDF
+    plotDF1 <- pfluxDF[pfluxDF$Trt=="aCO2"&pfluxDF$Variable%in%c("PGL", "PGW", "PGCR", "PGFR"),]
+    plotDF2 <- pfluxDF[pfluxDF$Trt=="aCO2"&pfluxDF$Variable%in%c("Tot"),]
+    
+    plotDF3 <- pfluxDF[pfluxDF$Trt=="pct_diff"&pfluxDF$Variable%in%c("Tot"),]
+    
+    
+    ### plotting 
+    p3 <- ggplot(data=plotDF1, 
                  aes(Group, meanvalue)) +
         geom_bar(stat = "identity", aes(fill=Variable), 
-                 position="dodge", col="black") +
-        geom_vline(xintercept=c(5.5, 8.5, 10.5, 12.5), lty=2)+
-        ggtitle("Major nitrogen pool")+
+                 position="stack", col="black") +
+        geom_errorbar(data=plotDF2,
+                      aes(x=Group, ymin=meanvalue-sdvalue,
+                          ymax=meanvalue+sdvalue), 
+                      col="black", 
+                      position=position_dodge2(), width=0.3)+
+        geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
+        xlab("")+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
               axis.text.x=element_text(size=12),
@@ -578,113 +649,94 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
               legend.text=element_text(size=12),
               legend.title=element_text(size=14),
               panel.grid.major=element_blank(),
-              legend.position="right",
+              legend.position=c(.1,.8),
+              legend.box = 'horizontal',
+              legend.box.just = 'left',
+              legend.background = element_rect(fill="grey",
+                                               size=0.5, linetype="solid", 
+                                               colour ="black"),
+              plot.title = element_text(size=14, face="bold.italic", 
+                                        hjust = 0.5))+
+        ylab(expression(paste("Growth P fluxes (g C " * m^2 * " " * yr^-1 * ")")))+
+        scale_x_discrete(limit=c(mod.list, "obs"),
+                         label=c(model.labels, "obs" = "OBS"))
+    
+    
+    p4 <- ggplot(data=plotDF3, 
+                 aes(Group, meanvalue)) +
+        geom_bar(stat = "identity", aes(fill=Group), 
+                 position="stack", col="black") +
+        geom_errorbar(aes(x=Group, ymin=meanvalue-sdvalue,
+                          ymax=meanvalue+sdvalue), 
+                      col="black", 
+                      position=position_dodge2(), width=0.3)+
+        geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
+        xlab("")+
+        theme_linedraw() +
+        theme(panel.grid.minor=element_blank(),
+              axis.text.x=element_text(size=12),
+              axis.title.x=element_text(size=14),
+              axis.text.y=element_text(size=12),
+              axis.title.y=element_text(size=14),
+              legend.text=element_text(size=12),
+              legend.title=element_text(size=14),
+              panel.grid.major=element_blank(),
+              legend.position="none",
               legend.box = 'horizontal',
               legend.box.just = 'left',
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
-        ylab(expression(paste("Nitrogen pool (g N " * m^2 * ")")))+
+        ylab(expression(CO[2] * " effect (%)"))+
         scale_x_discrete(limit=c(mod.list, "obs"),
-                         label=c(model.labels, "obs" = "OBS")); p5
+                         label=c(model.labels, "obs" = "OBS"))+
+        scale_fill_manual(name="Model",
+                          values=c(col.values, obs="black"),
+                          labels=c(model.labels, "obs"= "OBS"))+
+        guides(fill = guide_legend(override.aes = list(col = c(col.values, "obs"="black"))),
+               color = guide_legend(nrow=12, byrow=F))
     
     
-    
-    ################# stoichiometry  ####################
-    ### create a DF to store observation data 
-    stDF <- data.frame(rep(c("leaf", #"sapwood", 
-                             "wood", "fineroot", "soil"), (1+nmod)), 
-                       rep(c("obs", mod.list), each = 4), 
-                       NA, NA, NA, NA, NA, NA)
-    colnames(stDF) <- c("Variable", "Group", 
-                        "CN.mean", "CP.mean",  "NP.mean",
-                        "CN.se", "CP.se",  "NP.se")
-    
-    stDF$CN.mean[stDF$Group=="obs"&stDF$Variable=="leaf"] <- 35.5
-    #stDF$CN.mean[stDF$Group=="obs"&stDF$Variable=="sapwood"] <- 101.6
-    stDF$CN.mean[stDF$Group=="obs"&stDF$Variable=="wood"] <- 110.2 
-    stDF$CN.mean[stDF$Group=="obs"&stDF$Variable=="fineroot"] <- 56.9
-    stDF$CN.mean[stDF$Group=="obs"&stDF$Variable=="soil"] <- 13.8 
-    
-    stDF$CP.mean[stDF$Group=="obs"&stDF$Variable=="leaf"] <- 722 
-    #stDF$CP.mean[stDF$Group=="obs"&stDF$Variable=="sapwood"] <- 3705 
-    stDF$CP.mean[stDF$Group=="obs"&stDF$Variable=="wood"] <- 7696 
-    stDF$CP.mean[stDF$Group=="obs"&stDF$Variable=="fineroot"] <- 1626
-    stDF$CP.mean[stDF$Group=="obs"&stDF$Variable=="soil"] <- 224
-    
-    stDF$NP.mean[stDF$Group=="obs"&stDF$Variable=="leaf"] <- 22.9 
-    #stDF$NP.mean[stDF$Group=="obs"&stDF$Variable=="sapwood"] <- 35.6
-    stDF$NP.mean[stDF$Group=="obs"&stDF$Variable=="wood"] <- 33.7 
-    stDF$NP.mean[stDF$Group=="obs"&stDF$Variable=="fineroot"] <- 28.7
-    stDF$NP.mean[stDF$Group=="obs"&stDF$Variable=="soil"] <- 16.4 
+    ################# P uptake and mineralization ####################
+    pfluxDF1 <- prepare_plot_DF_for_time_averaged_data_model_intercomparison(eucDF=eucDF,
+                                                                             ambDF=annDF.amb.sum,
+                                                                             eleDF=annDF.ele.sum,
+                                                                             difDF=annDF.diff.sum,
+                                                                             var.list=c("PUP"),
+                                                                             calculate.total=F)
     
     
-    stDF$CN.se[stDF$Group=="obs"&stDF$Variable=="leaf"] <- 2.7
-    #stDF$CN.se[stDF$Group=="obs"&stDF$Variable=="sapwood"] <- 14.7
-    stDF$CN.se[stDF$Group=="obs"&stDF$Variable=="wood"] <- 30.3
-    stDF$CN.se[stDF$Group=="obs"&stDF$Variable=="fineroot"] <- 4.6
-    stDF$CN.se[stDF$Group=="obs"&stDF$Variable=="soil"] <- 1.0
-    
-    stDF$CP.se[stDF$Group=="obs"&stDF$Variable=="leaf"] <- 33
-    #stDF$CP.se[stDF$Group=="obs"&stDF$Variable=="sapwood"] <- 702
-    stDF$CP.se[stDF$Group=="obs"&stDF$Variable=="wood"] <- 982
-    stDF$CP.se[stDF$Group=="obs"&stDF$Variable=="fineroot"] <- 81
-    stDF$CP.se[stDF$Group=="obs"&stDF$Variable=="soil"] <- 39
-    
-    stDF$NP.se[stDF$Group=="obs"&stDF$Variable=="leaf"] <-  0.1
-    #stDF$NP.se[stDF$Group=="obs"&stDF$Variable=="sapwood"] <- 2.1
-    stDF$NP.se[stDF$Group=="obs"&stDF$Variable=="wood"] <- 2.7
-    stDF$NP.se[stDF$Group=="obs"&stDF$Variable=="fineroot"] <- 3.3
-    stDF$NP.se[stDF$Group=="obs"&stDF$Variable=="soil"] <- 3.4
-    
-    for (i in mod.list) {
-        ### assign values
-        stDF$CN.mean[stDF$Group==i&stDF$Variable=="leaf"] <- annDF.amb.sum$CL.mean[annDF.amb.sum$ModName==i]/annDF.amb.sum$NL.mean[annDF.amb.sum$ModName==i]
-        stDF$CN.mean[stDF$Group==i&stDF$Variable=="wood"] <-  annDF.amb.sum$CW.mean[annDF.amb.sum$ModName==i]/annDF.amb.sum$NW.mean[annDF.amb.sum$ModName==i]
-        stDF$CN.mean[stDF$Group==i&stDF$Variable=="fineroot"] <-  annDF.amb.sum$CFR.mean[annDF.amb.sum$ModName==i]/annDF.amb.sum$NFR.mean[annDF.amb.sum$ModName==i]
-        stDF$CN.mean[stDF$Group==i&stDF$Variable=="soil"] <-  annDF.amb.sum$CSOIL.mean[annDF.amb.sum$ModName==i]/annDF.amb.sum$NSOIL.mean[annDF.amb.sum$ModName==i]
-        
-        
-        stDF$CP.mean[stDF$Group==i&stDF$Variable=="leaf"] <-  annDF.amb.sum$CL.mean[annDF.amb.sum$ModName==i]/annDF.amb.sum$PL.mean[annDF.amb.sum$ModName==i]
-        stDF$CP.mean[stDF$Group==i&stDF$Variable=="wood"] <-  annDF.amb.sum$CW.mean[annDF.amb.sum$ModName==i]/annDF.amb.sum$PW.mean[annDF.amb.sum$ModName==i]
-        stDF$CP.mean[stDF$Group==i&stDF$Variable=="fineroot"] <- annDF.amb.sum$CFR.mean[annDF.amb.sum$ModName==i]/annDF.amb.sum$PFR.mean[annDF.amb.sum$ModName==i]
-        stDF$CP.mean[stDF$Group==i&stDF$Variable=="soil"] <-  annDF.amb.sum$CSOIL.mean[annDF.amb.sum$ModName==i]/annDF.amb.sum$PSOIL.mean[annDF.amb.sum$ModName==i]
-        
-        stDF$NP.mean[stDF$Group==i&stDF$Variable=="leaf"] <- annDF.amb.sum$NL.mean[annDF.amb.sum$ModName==i]/annDF.amb.sum$PL.mean[annDF.amb.sum$ModName==i]
-        stDF$NP.mean[stDF$Group==i&stDF$Variable=="wood"] <- annDF.amb.sum$NW.mean[annDF.amb.sum$ModName==i]/annDF.amb.sum$PW.mean[annDF.amb.sum$ModName==i]
-        stDF$NP.mean[stDF$Group==i&stDF$Variable=="fineroot"] <- annDF.amb.sum$NFR.mean[annDF.amb.sum$ModName==i]/annDF.amb.sum$PFR.mean[annDF.amb.sum$ModName==i]
-        stDF$NP.mean[stDF$Group==i&stDF$Variable=="soil"] <- annDF.amb.sum$NSOIL.mean[annDF.amb.sum$ModName==i]/annDF.amb.sum$PSOIL.mean[annDF.amb.sum$ModName==i]
-        
-        
-        
-        #stDF$CN.se[stDF$Group=="sim"&stDF$Variable=="leaf"] <- tmpDF2$CN.se[tmpDF2$Variable=="leaf"]
-        #stDF$CN.se[stDF$Group=="sim"&stDF$Variable=="wood"] <-  tmpDF2$CN.se[tmpDF2$Variable=="wood"]
-        #stDF$CN.se[stDF$Group=="sim"&stDF$Variable=="fineroot"] <-  tmpDF2$CN.se[tmpDF2$Variable=="fineroot"]
-        #stDF$CN.se[stDF$Group=="sim"&stDF$Variable=="soil"] <-  tmpDF2$CN.se[tmpDF2$Variable=="soil"]
-        #
-        #
-        #stDF$CP.se[stDF$Group=="sim"&stDF$Variable=="leaf"] <-  tmpDF2$CP.se[tmpDF2$Variable=="leaf"]
-        #stDF$CP.se[stDF$Group=="sim"&stDF$Variable=="wood"] <-  tmpDF2$CP.se[tmpDF2$Variable=="wood"]
-        #stDF$CP.se[stDF$Group=="sim"&stDF$Variable=="fineroot"] <- tmpDF2$CP.se[tmpDF2$Variable=="fineroot"]
-        #stDF$CP.se[stDF$Group=="sim"&stDF$Variable=="soil"] <- tmpDF2$CP.se[tmpDF2$Variable=="soil"]
-        #
-        #
-        #stDF$NP.se[stDF$Group=="sim"&stDF$Variable=="leaf"] <- tmpDF2$NP.se[tmpDF2$Variable=="leaf"]
-        #stDF$NP.se[stDF$Group=="sim"&stDF$Variable=="wood"] <- tmpDF2$NP.se[tmpDF2$Variable=="wood"]
-        #stDF$NP.se[stDF$Group=="sim"&stDF$Variable=="fineroot"] <- tmpDF2$NP.se[tmpDF2$Variable=="fineroot"]
-        #stDF$NP.se[stDF$Group=="sim"&stDF$Variable=="soil"] <- tmpDF2$NP.se[tmpDF2$Variable=="soil"]
-    }
+    pfluxDF2 <- prepare_plot_DF_for_time_averaged_data_model_intercomparison(eucDF=eucDF,
+                                                                             ambDF=annDF.amb.sum,
+                                                                             eleDF=annDF.ele.sum,
+                                                                             difDF=annDF.diff.sum,
+                                                                             var.list=c("PMIN", "PBIOCHMIN"),
+                                                                             calculate.total=T)
     
     
-    ### plot
-    p6 <- ggplot(data=stDF, 
-                 aes(Group, CN.mean, group=Variable)) +
+    pfluxDF2 <- pfluxDF2[pfluxDF2$Variable=="Tot",]
+    pfluxDF2$Variable <- "PMIN"
+    
+    pfluxDF <- rbind(pfluxDF1, pfluxDF2)
+    
+    ### split into ambDF, pctDF
+    plotDF1 <- pfluxDF[pfluxDF$Trt=="aCO2",]
+    plotDF2 <- pfluxDF[pfluxDF$Trt=="aCO2",]
+    
+    plotDF3 <- pfluxDF[pfluxDF$Trt=="pct_diff",]
+    
+    
+    ### plotting 
+    p5 <- ggplot(data=plotDF1, 
+                 aes(Group, meanvalue, group=Variable)) +
         geom_bar(stat = "identity", aes(fill=Variable), 
-                 position="dodge", col="black") +
-        geom_vline(xintercept=c(5.5, 8.5, 10.5, 12.5), lty=2)+
-        #geom_errorbar(aes(x=Group, ymin=CN.mean-CN.se, 
-        #                  ymax=CN.mean+CN.se), 
-        #              position=position_dodge2(), width=0.2) +
-        ggtitle("CN stoichiometry")+
+                 position=position_dodge2(), col="black") +
+        geom_errorbar(data=plotDF2,
+                      aes(x=Group, ymin=meanvalue-sdvalue,
+                          ymax=meanvalue+sdvalue), 
+                      col="black", 
+                      position=position_dodge2())+
+        geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
+        xlab("")+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
               axis.text.x=element_text(size=12),
@@ -694,24 +746,70 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
               legend.text=element_text(size=12),
               legend.title=element_text(size=14),
               panel.grid.major=element_blank(),
-              legend.position="right",
+              legend.position=c(.1,.2),
+              legend.box = 'horizontal',
+              legend.box.just = 'left',
+              legend.background = element_rect(fill="grey",
+                                               size=0.5, linetype="solid", 
+                                               colour ="black"),
+              plot.title = element_text(size=14, face="bold.italic", 
+                                        hjust = 0.5))+
+        ylab(expression(paste("Phosphorus fluxes (g C " * m^2 * " " * yr^-1 * ")")))+
+        scale_x_discrete(limit=c(mod.list, "obs"),
+                         label=c(model.labels, "obs" = "OBS"))
+    
+    
+    p6 <- ggplot(data=plotDF3, 
+                 aes(Group, meanvalue, group=Variable)) +
+        geom_bar(stat = "identity", aes(fill=Variable), 
+                 position=position_dodge2(), col="black") +
+        #geom_errorbar(aes(x=Group, ymin=meanvalue-sdvalue,
+        #                  ymax=meanvalue+sdvalue, grou=Variable), 
+        #              col="black", 
+        #              position=position_dodge2(), width=0.3)+
+        geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
+        xlab("")+
+        theme_linedraw() +
+        theme(panel.grid.minor=element_blank(),
+              axis.text.x=element_text(size=12),
+              axis.title.x=element_text(size=14),
+              axis.text.y=element_text(size=12),
+              axis.title.y=element_text(size=14),
+              legend.text=element_text(size=12),
+              legend.title=element_text(size=14),
+              panel.grid.major=element_blank(),
+              legend.position="none",
               legend.box = 'horizontal',
               legend.box.just = 'left',
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
-        ylab("CN stoichiometry")+
+        ylab(expression(CO[2] * " effect (%)"))+
         scale_x_discrete(limit=c(mod.list, "obs"),
-                         label=c(model.labels, "obs" = "OBS")); p6
+                         label=c(model.labels, "obs" = "OBS"))
+    
+
     
     
+    ################# P uptake and mineralization ####################
+    budgetDF <- prepare_P_budget_DF_for_time_averaged_data_model_intercomparison(eucDF=eucDF,
+                                                                                 ambDF=annDF.amb.sum,
+                                                                                 eleDF=annDF.ele.sum,
+                                                                                 difDF=annDF.diff.sum)
+    
+    subDF1 <- subset(budgetDF, Variable%in%c("PUPREQ"))
     
     
-    p7 <- ggplot(data=stDF, 
-                 aes(Group, CP.mean, group=Variable)) +
-        geom_bar(stat = "identity", aes(fill=Variable), 
-                 position="dodge", col="black") +
-        geom_vline(xintercept=c(5.5, 8.5, 10.5, 12.5), lty=2)+
-        ggtitle("CP stoichiometry")+
+    plotDF1 <- subDF1[subDF1$Trt=="aCO2",]
+    plotDF2 <- subDF1[subDF1$Trt=="pct_diff",]
+    
+    
+    ### plotting 
+    p7 <- ggplot(data=plotDF1, 
+                 aes(Group, meanvalue)) +
+        geom_bar(stat = "identity", aes(fill=Group), 
+                 position=position_dodge2(), col="black") +
+        geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
+        xlab("")+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
               axis.text.x=element_text(size=12),
@@ -721,22 +819,101 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
               legend.text=element_text(size=12),
               legend.title=element_text(size=14),
               panel.grid.major=element_blank(),
-              legend.position="right",
+              legend.position="none",
               legend.box = 'horizontal',
               legend.box.just = 'left',
+              legend.background = element_rect(fill="grey",
+                                               size=0.5, linetype="solid", 
+                                               colour ="black"),
+              plot.title = element_text(size=14, face="bold.italic", 
+                                        hjust = 0.5))+
+        ylab(expression(P[up] * " / " * P[req]))+
+        scale_x_discrete(limit=c(mod.list, "obs"),
+                         label=c(model.labels, "obs" = "OBS"))
+    
+    
+    p8 <- ggplot(data=plotDF2, 
+                 aes(Group, meanvalue)) +
+        geom_bar(stat = "identity", aes(fill=Group), 
+                 position=position_dodge2(), col="black") +
+        geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
+        xlab("")+
+        theme_linedraw() +
+        theme(panel.grid.minor=element_blank(),
+              axis.text.x=element_text(size=12),
+              axis.title.x=element_text(size=14),
+              axis.text.y=element_text(size=12),
+              axis.title.y=element_text(size=14),
+              legend.text=element_text(size=12),
+              legend.title=element_text(size=14),
+              panel.grid.major=element_blank(),
+              legend.position="none",
+              legend.box = 'horizontal',
+              legend.box.just = 'left',
+              plot.title = element_text(size=14, face="bold.italic", 
+                                        hjust = 0.5))+
+        ylab(expression(CO[2] * " effect (%)"))+
+        scale_x_discrete(limit=c(mod.list, "obs"),
+                         label=c(model.labels, "obs" = "OBS"))
+    
+    
+    
+    ################# P uptake and mineralization ####################
+    subDF2 <- subset(budgetDF, Variable%in%c("CPL", "CPW", "CPFR", "CPFLIT", "CPSOIL"))
+    
+    
+    plotDF1 <- subDF2[subDF2$Trt=="aCO2",]
+    plotDF2 <- subDF2[subDF2$Trt=="pct_diff",]
+  
+    
+    ## stoichiometry
+    p9 <- ggplot(data=plotDF1, 
+                 aes(Group, meanvalue, group=Variable)) +
+        geom_bar(stat = "identity", aes(fill=Variable), 
+                 position="dodge", col="black") +
+        geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
+        theme_linedraw() +
+        theme(panel.grid.minor=element_blank(),
+              axis.text.x=element_text(size=12),
+              axis.title.x=element_text(size=14),
+              axis.text.y=element_text(size=12),
+              axis.title.y=element_text(size=14),
+              legend.text=element_text(size=12),
+              legend.title=element_text(size=14),
+              panel.grid.major=element_blank(),
+              legend.position=c(.75,.8),
+              legend.box = 'horizontal',
+              legend.box.just = 'left',
+              legend.background = element_rect(fill="grey",
+                                               size=0.5, linetype="solid", 
+                                               colour ="black"),
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
         ylab("CP stoichiometry")+
         scale_x_discrete(limit=c(mod.list, "obs"),
-                         label=c(model.labels, "obs" = "OBS")); p7
+                         label=c(model.labels, "obs" = "OBS"))+
+        scale_fill_manual(name="Variable",
+                          values=c("CPL"=cbbPalette[4], 
+                                   "CPW"=cbbPalette[3],
+                                   "CPFR"=cbbPalette[8],
+                                   "CPFLIT"=cbbPalette[2],
+                                   "CPSOIL"=cbbPalette[6]),
+                          label=c(expression(CP[L]),
+                                  expression(CP[W]),
+                                  expression(CP[FR]),
+                                  expression(CP[FLIT]),
+                                  expression(CP[SOIL])))+
+        guides(fill=guide_legend(nrow=2))
     
     
-    p8 <- ggplot(data=stDF, 
-                 aes(Group, NP.mean, group=Variable)) +
+    
+    
+    p10 <- ggplot(data=plotDF2, 
+                 aes(Group, meanvalue)) +
         geom_bar(stat = "identity", aes(fill=Variable), 
-                 position="dodge", col="black") +
-        geom_vline(xintercept=c(5.5, 8.5, 10.5, 12.5), lty=2)+
-        ggtitle("NP stoichiometry")+
+                 position=position_dodge2(), col="black") +
+        geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
+        xlab("")+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
               axis.text.x=element_text(size=12),
@@ -746,81 +923,38 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
               legend.text=element_text(size=12),
               legend.title=element_text(size=14),
               panel.grid.major=element_blank(),
-              legend.position="right",
+              legend.position="none",
               legend.box = 'horizontal',
               legend.box.just = 'left',
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
-        ylab("NP stoichiometry")+
+        ylab(expression(CO[2] * " effect (%)"))+
         scale_x_discrete(limit=c(mod.list, "obs"),
-                         label=c(model.labels, "obs" = "OBS")); p8
+                         label=c(model.labels, "obs" = "OBS"))+
+        scale_fill_manual(name="Variable",
+                          values=c("CPL"=cbbPalette[4], 
+                                   "CPW"=cbbPalette[3],
+                                   "CPFR"=cbbPalette[8],
+                                   "CPFLIT"=cbbPalette[2],
+                                   "CPSOIL"=cbbPalette[6]),
+                          label=c(expression(CP[L]),
+                                  expression(CP[W]),
+                                  expression(CP[FR]),
+                                  expression(CP[FLIT]),
+                                  expression(CP[SOIL])))+
+        guides(fill=guide_legend(nrow=2))
     
     
     
-    ################# Nutrient retranslocation coefficients  ####################
-    
-    ### create DF for output
-    rtDF <- data.frame(rep(c("leafN", "leafP"), (1+nmod)), 
-                       rep(c("obs", mod.list), each = 2), NA)
-    colnames(rtDF) <- c("Variable", "Group", "meanvalue")
-    
-    ### assign values
-    rtDF$meanvalue[rtDF$Group=="obs"&rtDF$Variable=="leafN"] <- 0.31
-    rtDF$meanvalue[rtDF$Group=="obs"&rtDF$Variable=="leafP"] <- 0.53
-    
-    for (i in mod.list) {
-        rtDF$meanvalue[rtDF$Group==i&rtDF$Variable=="leafN"] <- annDF.amb.sum$NLRETR.mean[annDF.amb.sum$ModName==i]/annDF.amb.sum$NGL.mean[annDF.amb.sum$ModName==i]
-        rtDF$meanvalue[rtDF$Group==i&rtDF$Variable=="leafP"] <- annDF.amb.sum$PLRETR.mean[annDF.amb.sum$ModName==i]/annDF.amb.sum$PGL.mean[annDF.amb.sum$ModName==i]
-    }
-    
-    ### hard wired, check with modelers to make sure
-    rtDF$meanvalue[rtDF$Group=="D_OCHDP"&rtDF$Variable=="leafN"] <- 0.31
-    rtDF$meanvalue[rtDF$Group=="D_OCHDP"&rtDF$Variable=="leafP"] <- 0.53
-    
-    rtDF$meanvalue[rtDF$Group=="G_OCHDX"&rtDF$Variable=="leafN"] <- 0.31
-    rtDF$meanvalue[rtDF$Group=="G_OCHDX"&rtDF$Variable=="leafP"] <- 0.53
-    
-    rtDF$meanvalue[rtDF$Group=="E_QUINC"&rtDF$Variable=="leafN"] <- 0.31
-    rtDF$meanvalue[rtDF$Group=="E_QUINC"&rtDF$Variable=="leafP"] <- 0.53
-    
-    rtDF$meanvalue[rtDF$Group=="H_QUJSM"&rtDF$Variable=="leafN"] <- 0.31
-    rtDF$meanvalue[rtDF$Group=="H_QUJSM"&rtDF$Variable=="leafP"] <- 0.53
-    
-    rtDF$meanvalue[rtDF$Group=="F_ELMV1"&rtDF$Variable=="leafN"] <- 0.31
-    rtDF$meanvalue[rtDF$Group=="F_ELMV1"&rtDF$Variable=="leafP"] <- 0.53
-    
-    ### plotting
-    p9 <- ggplot(data=rtDF, 
-                 aes(Group, meanvalue, group=Variable)) +
-        geom_bar(stat = "identity", aes(fill=Variable), 
-                 position="dodge", col="black") +
-        geom_vline(xintercept=c(5.5, 8.5, 10.5, 12.5), lty=2)+
-        ggtitle("Leaf retranslocation")+
-        theme_linedraw() +
-        theme(panel.grid.minor=element_blank(),
-              axis.text.x=element_text(size=12),
-              axis.title.x=element_text(size=14),
-              axis.text.y=element_text(size=12),
-              axis.title.y=element_text(size=14),
-              legend.text=element_text(size=12),
-              legend.title=element_text(size=14),
-              panel.grid.major=element_blank(),
-              legend.position="right",
-              legend.box = 'horizontal',
-              legend.box.just = 'left',
-              plot.title = element_text(size=14, face="bold.italic", 
-                                        hjust = 0.5))+
-        ylab("Leaf retranslocation")+
-        scale_x_discrete(limit=c(mod.list, "obs"),
-                         label=c(model.labels, "obs" = "OBS")); p9
-    
-    
-    ### print plots to file, change numbering if needed
-    pdf(paste0(out.dir, '/MIP_Time_averaged_validation_.pdf',sep=''),width=12, height=8)
-    for (i in 1:9) {
-        print(get(paste("p",i,sep="")))
-    }
+    pdf(paste0(out.dir, "/MIP_time_averaged_", scenario, "_comparison_P_variables.pdf"), 
+        width=16, height=16)
+    plot_grid(p1, p2, p5, p6, p7, p8, p9, p10,
+              labels="auto", label_x=0.1, label_y=0.95,
+              label_size=24,
+              ncol=2)
     dev.off()
+    
+    
     
     
     ##########################################################################
