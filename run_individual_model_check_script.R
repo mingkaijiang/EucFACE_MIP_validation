@@ -56,8 +56,8 @@ source("prepare.R")
 
 
 ### ORCHIDEE: add PFERT variable
-translate_ORCHD_simulation_into_EucFACE_MIP_format(mod.abb="OCHDP")
-translate_ORCHD_simulation_into_EucFACE_MIP_format(mod.abb="OCHDX")
+#translate_ORCHD_simulation_into_EucFACE_MIP_format(mod.abb="OCHDP")
+#translate_ORCHD_simulation_into_EucFACE_MIP_format(mod.abb="OCHDX")
 
 
 

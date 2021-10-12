@@ -120,10 +120,10 @@ compile_pred_dataset_across_models <- function (p.mod.list,
                     ## read in individual models
                     if (mod.abb=="GDAYN") {
                         modDF <- read.csv(paste0("simulation_output/", mod.abb, 
-                                                 "/EUC_", mod.abb, "_PRD_", k, "_", j, "_", i, "_D.csv"))
+                                                 "/EUC_", mod.abb, "_PRD_", k, "_", j, "_NOP_D.csv"))
                     } else if (mod.abb=="LPJGN") {
                         modDF <- read.csv(paste0("simulation_output/", mod.abb, 
-                                                 "/new_soil/euc_ter/EUC_", mod.abb, "_PRD_", k, "_", j, "_", i, "_D.csv"))
+                                                 "/new_soil/euc_ter/EUC_", mod.abb, "_PRD_", k, "_", j, "_NOP_D.csv"))
                     } 
                     
                     ## select consistent columns

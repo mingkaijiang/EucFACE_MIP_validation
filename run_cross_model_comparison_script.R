@@ -37,6 +37,9 @@ d.mod.list <- c("CABLP", "LPJGP")
 ### compile all model results together, and save annual and daily datasets
 ### for observed period under variable climate only.
 ### run once only
+### !!!
+### Note that, OCHDX and QUJSM has many more additional variables that could be
+### useful, but are currently not included here. 
 compile_obs_var_dataset_across_models(p.mod.list, n.mod.list, d.mod.list)
 
 compile_obs_fix_dataset_across_models(p.mod.list, n.mod.list, d.mod.list)
