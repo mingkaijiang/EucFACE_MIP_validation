@@ -157,12 +157,24 @@ trace_fate_of_carbon_MIP_plot(scenario="fix")
 ### 1. real magnitude of P fertilization from different model starting point
 ### 2. normalized magnitude of P fertilization normalized to the same starting point
 
+### ignore ELM for now because no simulation has been provided
 p.mod.list.rev <- c("CABLP", #"ELMV1",
                     "GDAYP", "LPJGP",
                     "OCHDP", "OCHDX", 
                     "QUINC", "QUJSM")
+
+### compile all datasets together, generate daily and annual output
 compile_pred_dataset_across_models(p.mod.list.rev, n.mod.list)
 
+
+### normalize all the variables to year 2020, so that we can compare
+### cross models.
+### Note that just do it for the ambient CO2 treatment.
+normalize_pred_amb_dataset_across_models(p.mod.list.rev, n.mod.list)
+
+
+### now we can look at the normalized trajectory as well as the CO2 effect
+plot_normalized_pred_trajectories()
 
 ##########################################################################
 ### to do list:
