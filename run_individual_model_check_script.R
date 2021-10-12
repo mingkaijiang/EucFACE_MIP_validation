@@ -55,6 +55,13 @@ source("prepare.R")
 #translate_ELMV1_simulation_into_EucFACE_MIP_format(source.dir = "simulation_output/ELMV1/")
 
 
+### ORCHIDEE: add PFERT variable
+translate_ORCHD_simulation_into_EucFACE_MIP_format(mod.abb="OCHDP")
+translate_ORCHD_simulation_into_EucFACE_MIP_format(mod.abb="OCHDX")
+
+
+
+
 ##########################################################################
 #### Step 3: Run individual model mass balance checks
 

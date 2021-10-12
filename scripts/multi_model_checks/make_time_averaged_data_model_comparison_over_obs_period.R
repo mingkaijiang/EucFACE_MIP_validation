@@ -957,137 +957,137 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
     
     
     
-    ##########################################################################
-    #### Step 4. Time-varying validation
-    
-    #### Leaf area index
-    ### A time series LAI data over the period of 2012 - 2016 was provided for validation purpose. 
-    ### Models should aim to match the magnitude of LAI as well as its temporal patterns. 
-    ### Note that in the observed dataset, the LAI data is really indicative of the vegetation structure as well as canopy leaf area. 
-    ### validation LAI
-    laiDF <- read.csv("validation_dataset/EucFACE_LAI_2012_2016.csv")
-    laiDF <- laiDF[laiDF$Trt=="aCO2",]
-    laiDF$Date <- as.Date(as.character(laiDF$Date))
-    laiDF$ModName <- "OBS"
-    names(laiDF)[names(laiDF)=="lai"] <- "LAI"
-    laiDF <- laiDF[,c("Date", "LAI", "ModName")]
-    
-    
-    ### read in multi-model lai data
-    modDF <- readRDS(paste0(out.dir, "/MIP_obs_var_amb_daily.rds"))
-    
-    ### simulated LAI, subset
-    subDF <- subset(modDF, YEAR <= 2016)
-    subDF <- subDF[,c("YEAR", "DOY", "Date", "LAI", "ModName")]
-    subDF$Date <- as.Date(as.character(subDF$Date))
-    subDF <- subDF[,c("Date", "LAI", "ModName")]
-        
-    ### there is something wrong with LPJGP-VD, we may need to do something about it later
-    #tDF <- subDF[subDF$ModName=="L_LPJGP-VD",]
-    #summary(tDF$LAI)
-    
-    ### merge the two dataset
-    testDF1 <- rbind(subDF, laiDF)
-    
-    ### plot all data
-    p1 <- ggplot(testDF1, aes(x=Date)) +
-        geom_line(aes(y=LAI, color=ModName, lty=ModName), lwd = 1) +
-        theme_linedraw() +
-        theme(panel.grid.minor=element_blank(),
-              axis.title.x = element_text(size=14), 
-              axis.text.x = element_text(size=12),
-              axis.text.y=element_text(size=12),
-              axis.title.y=element_text(size=14),
-              legend.text=element_text(size=12),
-              legend.title=element_text(size=12),
-              panel.grid.major=element_blank(),
-              plot.title = element_text(size = 10, face = "bold"),
-              legend.position="right")+
-        scale_color_manual(name="Model",
-                           values=c(col.values, "OBS"="black"),
-                           labels=c(model.labels, "OBS"= "OBS"))+
-        scale_linetype_manual(name="Model", 
-                              values=c(linetype.values, "OBS"=1),
-                              labels=c(model.labels, "OBS"="OBS"))+
-        guides(fill = guide_legend(override.aes = list(col = c(col.values, "OBS"="black"),
-                                                       lty = c(linetype.values, "OBS"=1))),
-               color = guide_legend(nrow=12, byrow=F))+
-        ylab("LAI"); p1
-    
-    
-    #### Soil respiration
-    ### The measured soil respiration rate represents both root 
-    ### and soil heterotrophic respiration flux. 
-    ### It was up-scaled from the LICOR chambers by averaging 
-    ### all measurements within the same treatment. 
-    ### It was a model product, 
-    ### in that we used DAMM model to establish relationship with soil temperature, 
-    ### and then obtained the daily rate throughout the year. 
-    ### Nevertheless, we expect modelers to provide a good match simulation to this dataset. 
-    
-    ### Note that we didn't ask the modelers to output soil respiration flux in the output protocol. 
-    ### Please add heterotrophic respiration and root respiration to obtain soil respiration flux. 
-    ### Also, please note that, the unit for all carbon fluxes is given in the output protocol, as gC m-2 d-1. 
-    ### validation Rsoil
-    rsoilDF <- read.csv("validation_dataset/EucFACE_daily_soil_respiration_flux_2013_2015.csv")
-    rsoilDF <- rsoilDF[rsoilDF$Trt=="aCO2",]
-    rsoilDF$Date <- as.Date(as.character(rsoilDF$Date))
-    
-    ### convert unit, from mg m-2 d-1 to g m-2 d-1
-    rsoilDF$Rsoil <- rsoilDF$Rsoil_mg_m2_d / 1000.0
-    rsoilDF$ModName <- "OBS"
-    rsoilDF <- rsoilDF[,c("Date", "Rsoil", "ModName")]
-    
-    ### simulated Rsoil, subset
-    subDF <- subset(modDF, YEAR <= 2015 & YEAR > 2012)
-    subDF <- subDF[,c("YEAR", "DOY", "Date", "RHET", "RCR", "RFR", "ModName")]
-    subDF$Date <- as.Date(as.character(subDF$Date))
-    
-    subDF[subDF<=-999.] <- NA
-    
-    subDF$Rsoil<- rowSums(data.frame(subDF$RHET, subDF$RCR, subDF$RFR), na.rm=T)
-    subDF <- subDF[,c("Date", "Rsoil", "ModName")]
-    
-    
-    ### merge the two dataset
-    testDF1 <- rbind(subDF, rsoilDF)
-    
-    ### plot all data
-    p2 <- ggplot(testDF1, aes(x=Date)) +
-        geom_line(aes(y=Rsoil, color=ModName, lty=ModName), lwd = 1) +
-        theme_linedraw() +
-        theme(panel.grid.minor=element_blank(),
-              axis.title.x = element_text(size=14), 
-              axis.text.x = element_text(size=12),
-              axis.text.y=element_text(size=12),
-              axis.title.y=element_text(size=14),
-              legend.text=element_text(size=12),
-              legend.title=element_text(size=12),
-              panel.grid.major=element_blank(),
-              plot.title = element_text(size = 10, face = "bold"),
-              legend.position="right")+
-        scale_color_manual(name="Model",
-                           values=c(col.values, "OBS"="black"),
-                           labels=c(model.labels, "OBS"= "OBS"))+
-        scale_linetype_manual(name="Model", 
-                              values=c(linetype.values, "OBS"=1),
-                              labels=c(model.labels, "OBS"="OBS"))+
-        guides(fill = guide_legend(override.aes = list(col = c(col.values, "OBS"="black"),
-                                                       lty = c(linetype.values, "OBS"=1))),
-               color = guide_legend(nrow=12, byrow=F))+
-    ylab("Soil respiration flux"); p2
-    
-    
-    
-    
-    ### print plots to file, change numbering if needed
-    pdf(paste0(out.dir, '/MIP_Time_varying_variables.pdf',sep=''),width=12,height=8)
-    for (i in 1:2) {
-        print(get(paste("p",i,sep="")))
-    }
-    dev.off()
-    
-    ##########################################################################
+    ###########################################################################
+    ##### Step 4. Time-varying validation
+    #
+    ##### Leaf area index
+    #### A time series LAI data over the period of 2012 - 2016 was provided for validation purpose. 
+    #### Models should aim to match the magnitude of LAI as well as its temporal patterns. 
+    #### Note that in the observed dataset, the LAI data is really indicative of the vegetation structure as well as canopy leaf area. 
+    #### validation LAI
+    #laiDF <- read.csv("validation_dataset/EucFACE_LAI_2012_2016.csv")
+    #laiDF <- laiDF[laiDF$Trt=="aCO2",]
+    #laiDF$Date <- as.Date(as.character(laiDF$Date))
+    #laiDF$ModName <- "OBS"
+    #names(laiDF)[names(laiDF)=="lai"] <- "LAI"
+    #laiDF <- laiDF[,c("Date", "LAI", "ModName")]
+    #
+    #
+    #### read in multi-model lai data
+    #modDF <- readRDS(paste0(out.dir, "/MIP_obs_var_amb_daily.rds"))
+    #
+    #### simulated LAI, subset
+    #subDF <- subset(modDF, YEAR <= 2016)
+    #subDF <- subDF[,c("YEAR", "DOY", "Date", "LAI", "ModName")]
+    #subDF$Date <- as.Date(as.character(subDF$Date))
+    #subDF <- subDF[,c("Date", "LAI", "ModName")]
+    #    
+    #### there is something wrong with LPJGP-VD, we may need to do something about it later
+    ##tDF <- subDF[subDF$ModName=="L_LPJGP-VD",]
+    ##summary(tDF$LAI)
+    #
+    #### merge the two dataset
+    #testDF1 <- rbind(subDF, laiDF)
+    #
+    #### plot all data
+    #p1 <- ggplot(testDF1, aes(x=Date)) +
+    #    geom_line(aes(y=LAI, color=ModName, lty=ModName), lwd = 1) +
+    #    theme_linedraw() +
+    #    theme(panel.grid.minor=element_blank(),
+    #          axis.title.x = element_text(size=14), 
+    #          axis.text.x = element_text(size=12),
+    #          axis.text.y=element_text(size=12),
+    #          axis.title.y=element_text(size=14),
+    #          legend.text=element_text(size=12),
+    #          legend.title=element_text(size=12),
+    #          panel.grid.major=element_blank(),
+    #          plot.title = element_text(size = 10, face = "bold"),
+    #          legend.position="right")+
+    #    scale_color_manual(name="Model",
+    #                       values=c(col.values, "OBS"="black"),
+    #                       labels=c(model.labels, "OBS"= "OBS"))+
+    #    scale_linetype_manual(name="Model", 
+    #                          values=c(linetype.values, "OBS"=1),
+    #                          labels=c(model.labels, "OBS"="OBS"))+
+    #    guides(fill = guide_legend(override.aes = list(col = c(col.values, "OBS"="black"),
+    #                                                   lty = c(linetype.values, "OBS"=1))),
+    #           color = guide_legend(nrow=12, byrow=F))+
+    #    ylab("LAI"); p1
+    #
+    #
+    ##### Soil respiration
+    #### The measured soil respiration rate represents both root 
+    #### and soil heterotrophic respiration flux. 
+    #### It was up-scaled from the LICOR chambers by averaging 
+    #### all measurements within the same treatment. 
+    #### It was a model product, 
+    #### in that we used DAMM model to establish relationship with soil temperature, 
+    #### and then obtained the daily rate throughout the year. 
+    #### Nevertheless, we expect modelers to provide a good match simulation to this dataset. 
+    #
+    #### Note that we didn't ask the modelers to output soil respiration flux in the output protocol. 
+    #### Please add heterotrophic respiration and root respiration to obtain soil respiration flux. 
+    #### Also, please note that, the unit for all carbon fluxes is given in the output protocol, as gC m-2 d-1. 
+    #### validation Rsoil
+    #rsoilDF <- read.csv("validation_dataset/EucFACE_daily_soil_respiration_flux_2013_2015.csv")
+    #rsoilDF <- rsoilDF[rsoilDF$Trt=="aCO2",]
+    #rsoilDF$Date <- as.Date(as.character(rsoilDF$Date))
+    #
+    #### convert unit, from mg m-2 d-1 to g m-2 d-1
+    #rsoilDF$Rsoil <- rsoilDF$Rsoil_mg_m2_d / 1000.0
+    #rsoilDF$ModName <- "OBS"
+    #rsoilDF <- rsoilDF[,c("Date", "Rsoil", "ModName")]
+    #
+    #### simulated Rsoil, subset
+    #subDF <- subset(modDF, YEAR <= 2015 & YEAR > 2012)
+    #subDF <- subDF[,c("YEAR", "DOY", "Date", "RHET", "RCR", "RFR", "ModName")]
+    #subDF$Date <- as.Date(as.character(subDF$Date))
+    #
+    #subDF[subDF<=-999.] <- NA
+    #
+    #subDF$Rsoil<- rowSums(data.frame(subDF$RHET, subDF$RCR, subDF$RFR), na.rm=T)
+    #subDF <- subDF[,c("Date", "Rsoil", "ModName")]
+    #
+    #
+    #### merge the two dataset
+    #testDF1 <- rbind(subDF, rsoilDF)
+    #
+    #### plot all data
+    #p2 <- ggplot(testDF1, aes(x=Date)) +
+    #    geom_line(aes(y=Rsoil, color=ModName, lty=ModName), lwd = 1) +
+    #    theme_linedraw() +
+    #    theme(panel.grid.minor=element_blank(),
+    #          axis.title.x = element_text(size=14), 
+    #          axis.text.x = element_text(size=12),
+    #          axis.text.y=element_text(size=12),
+    #          axis.title.y=element_text(size=14),
+    #          legend.text=element_text(size=12),
+    #          legend.title=element_text(size=12),
+    #          panel.grid.major=element_blank(),
+    #          plot.title = element_text(size = 10, face = "bold"),
+    #          legend.position="right")+
+    #    scale_color_manual(name="Model",
+    #                       values=c(col.values, "OBS"="black"),
+    #                       labels=c(model.labels, "OBS"= "OBS"))+
+    #    scale_linetype_manual(name="Model", 
+    #                          values=c(linetype.values, "OBS"=1),
+    #                          labels=c(model.labels, "OBS"="OBS"))+
+    #    guides(fill = guide_legend(override.aes = list(col = c(col.values, "OBS"="black"),
+    #                                                   lty = c(linetype.values, "OBS"=1))),
+    #           color = guide_legend(nrow=12, byrow=F))+
+    #ylab("Soil respiration flux"); p2
+    #
+    #
+    #
+    #
+    #### print plots to file, change numbering if needed
+    #pdf(paste0(out.dir, '/MIP_Time_varying_variables.pdf',sep=''),width=12,height=8)
+    #for (i in 1:2) {
+    #    print(get(paste("p",i,sep="")))
+    #}
+    #dev.off()
+    #
+    ###########################################################################
     
     
 }

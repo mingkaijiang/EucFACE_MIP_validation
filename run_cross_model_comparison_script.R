@@ -150,8 +150,21 @@ trace_fate_of_carbon_MIP_plot(scenario="fix")
 
 
 ##########################################################################
+### Investigate P fertilization treatment
+### 1. real magnitude of P fertilization from different model starting point
+### 2. normalized magnitude of P fertilization normalized to the same starting point
+
+p.mod.list.rev <- c("CABLP", #"ELMV1",
+                    "GDAYP", "LPJGP",
+                    "OCHDP", "OCHDX", 
+                    "QUINC", "QUJSM")
+compile_pred_dataset_across_models(p.mod.list.rev, n.mod.list)
+
+
+##########################################################################
 ### to do list:
-### 1. Check individual model to include unaccounted fluxes and pools that are necesary for mass balance closure (e.g. allocation)
+### 1. Check individual model to include unaccounted fluxes and pools 
+###    that are necesary for mass balance closure (e.g. allocation)
 ### 2. Storyline development
 ### 2. Generate summary table on key model features:
 ###    Waiting for input from ELM only,
