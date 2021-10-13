@@ -2,10 +2,15 @@
 #### Create data folder
 output.folders <- c(paste0(getwd(), "/output"),
                     paste0(getwd(), "/output/QC"),
-                    paste0(getwd(), "/output/analysis_output"),
+                    paste0(getwd(), "/output/analysis_output"), # individual analysis output
                     paste0(getwd(), "/output/MIP_output"),
-                    paste0(getwd(), "/output/MIP_output/obs_fix_output"),
-                    paste0(getwd(), "/output/MIP_output/obs_var_output"))
+                    paste0(getwd(), "/output/MIP_output/processed_simulation"),
+                    paste0(getwd(), "/output/MIP_output/OBS_output"),
+                    paste0(getwd(), "/output/MIP_output/OBS_output/FIX/"),
+                    paste0(getwd(), "/output/MIP_output/OBS_output/VAR/"),
+                    paste0(getwd(), "/output/MIP_output/PRD_output"),
+                    paste0(getwd(), "/output/MIP_output/PRD_output/FIX/"),
+                    paste0(getwd(), "/output/MIP_output/PRD_output/VAR/"))
 
 
 #### Create output folder

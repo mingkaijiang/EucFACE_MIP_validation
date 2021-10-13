@@ -40,9 +40,7 @@ p.mod.list.rev <- c("CABLP", #"ELMV1",
 ###       Note that, OCHDX and QUJSM has many more additional variables 
 ###       that could be useful, 
 ###       but are currently not included here. 
-compile_obs_var_dataset_across_models(p.mod.list, n.mod.list)
-
-compile_obs_fix_dataset_across_models(p.mod.list, n.mod.list)
+compile_obs_dataset_across_models(p.mod.list, n.mod.list)
 
 
 ### 2.3. Compile all future predicted datasets together.
@@ -51,7 +49,14 @@ compile_pred_dataset_across_models(p.mod.list=p.mod.list.rev,
                                    n.mod.list=n.mod.list)
 
 
-### 2.4. Normalize all the variables to year 2012 or 2019, 
+### 2.4. Compile both historic and future period together.
+###      Use daily data to compute annual data, including delta pools,
+###      so that we can calculate normalized responses in the next step.
+compile_all_dataset_across_models(p.mod.list=p.mod.list.rev,
+                                  n.mod.list=n.mod.list)
+
+
+### 2.5. Normalize all the variables to year 2012 or 2019, 
 ### so that we can compare cross models.
 ### Note that just do it for the each CO2 treatment.
 ### Also generated CO2 effect comparison.
@@ -60,7 +65,7 @@ normalize_pred_amb_dataset_across_models(p.mod.list=p.mod.list.rev,
 
 
 
-#### 2.5. Prepare observed dataset at annual timestep wherever possible
+#### 2.6. Prepare observed dataset at annual timestep wherever possible
 ####      Including C budget but also P and N budget and the
 ####      associated stoichiometry, water budget, etc.
 ####      Use model variable names
@@ -74,10 +79,9 @@ eucDF <- prepare_EucFACE_observation_dataset()
 ##########################################################################
 #### Step 3. Cross-model comparison 
 
-
-#### 3.1. Check forcing data consistency,
-####      Only focusing on historic period
-####      Go into function to plot.
+### 3.1. Check forcing data consistency,
+###      Only focusing on historic period
+###      Go into function to plot.
 scenario="var"
 check_forcing_data_consistency(scenario="var")
 
@@ -86,11 +90,11 @@ check_forcing_data_consistency(scenario="fix")
 
 
 
-#### 3.2. Make MIP time-series plot for both variable and fixed climate, 
-####      over observed period only.
-####      Note: When number of variables change in the input, 
-####      need to revise the code.
-####      Go into function to plot
+### 3.2. Make MIP time-series plot for both variable and fixed climate, 
+###      over observed period only.
+###      Note: When number of variables change in the input, 
+###      need to revise the code.
+###      Go into function to plot
 scenario="var"
 make_MIP_time_series_plot(scenario="var")
 

@@ -16,20 +16,12 @@ compile_pred_dataset_across_models <- function (p.mod.list,
     clim.levels <- c("VAR", "FIX")
     
     ### setting out path to store the files
-    for (k in clim.levels) {
-        out.dir <- paste0(getwd(), "/output/MIP_output/pred_", k, "_output")
-        
-        ### create output folder
-        if(!dir.exists(out.dir)) {
-            dir.create(out.dir, showWarnings = FALSE)
-        }
+    out.dir <- paste0(getwd(), "/output/MIP_output/processed_simulation")
+    
+    ### create output folder
+    if(!dir.exists(out.dir)) {
+        dir.create(out.dir, showWarnings = FALSE)
     }
-    
-    out.dir.var <- paste0(getwd(), "/output/MIP_output/pred_VAR_output")
-    out.dir.fix <- paste0(getwd(), "/output/MIP_output/pred_FIX_output")
-    
-    obs.dir.var <- paste0(getwd(), "/output/MIP_output/obs_var_output")
-    obs.dir.fix <- paste0(getwd(), "/output/MIP_output/obs_fix_output")
     
     
     ### prepare consistent column names for CNP models
@@ -169,10 +161,8 @@ compile_pred_dataset_across_models <- function (p.mod.list,
                 
         
                 ### save the rds
-                out.dir <- ifelse(k=="FIX", out.dir.fix, out.dir.var)
-                
                 saveRDS(outDF, paste0(out.dir, 
-                                      "/MIP_pred_", k, "_", i, "_", j, "_daily.rds"))
+                                      "/MIP_PRD_", k, "_", i, "_", j, "_daily.rds"))
                 
             } # k - clim.levels
         } # j - co2.levels
@@ -193,10 +183,10 @@ compile_pred_dataset_across_models <- function (p.mod.list,
     for (i in clim.levels) {
         for (j in p.fert.levels) {
             
-            out.dir <- ifelse(i=="FIX", out.dir.fix, out.dir.var)
+            #out.dir <- ifelse(i=="FIX", out.dir.fix, out.dir.var)
             
-            ambDF <- readRDS(paste0(out.dir, "/MIP_pred_", i, "_", j, "_amb_daily.rds"))
-            eleDF <- readRDS(paste0(out.dir, "/MIP_pred_", i, "_", j, "_ele_daily.rds"))
+            ambDF <- readRDS(paste0(out.dir, "/MIP_PRD_", i, "_", j, "_AMB_daily.rds"))
+            eleDF <- readRDS(paste0(out.dir, "/MIP_PRD_", i, "_", j, "_ELE_daily.rds"))
             
             ### summarize all fluxes first to obain annual rate
             fluxDF1 <- summaryBy(PREC+NDEP+NEP+GPP+NPP+CEX+CVOC+RECO+
@@ -309,9 +299,9 @@ compile_pred_dataset_across_models <- function (p.mod.list,
             
             ### save output
             saveRDS(annDF1, paste0(out.dir, 
-                                   "/MIP_pred_", i, "_", j, "_amb_annual.rds"))
+                                   "/MIP_PRD_", i, "_", j, "_AMB_annual.rds"))
             saveRDS(annDF2, paste0(out.dir, 
-                                   "/MIP_pred_", i, "_", j, "_ele_annual.rds"))
+                                   "/MIP_PRD_", i, "_", j, "_ELE_annual.rds"))
             
             
         }
