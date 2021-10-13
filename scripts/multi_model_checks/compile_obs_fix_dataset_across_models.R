@@ -1,4 +1,4 @@
-compile_obs_fix_dataset_across_models <- function(p.mod.list, n.mod.list, d.mod.list) {
+compile_obs_fix_dataset_across_models <- function(p.mod.list, n.mod.list) {
     
     
     ##################################################################

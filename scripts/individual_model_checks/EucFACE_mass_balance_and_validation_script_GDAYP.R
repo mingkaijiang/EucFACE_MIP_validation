@@ -50,7 +50,7 @@ EucFACE_mass_balance_and_validation_script_GDAYP <- function() {
     mod.abb <- "GDAYP"
     
     #### setting out path to store the files
-    out.dir <- paste0(getwd(), "/validation_output/", mod.abb)
+    out.dir <- paste0(getwd(), "/output/QC/", mod.abb)
 
     ### create output folder
     if(!dir.exists(out.dir)) {

@@ -128,7 +128,7 @@ EucFACE_mass_balance_and_validation_script_ELMXX()
 ### GDAY-CNP
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/GDAYP"),
                                              mod.abb = "GDAYP",
-                                             out.dir = paste0(getwd(), "/analysis_output/GDAYP"),
+                                             out.dir = paste0(getwd(), "/output/analysis_output/GDAYP"),
                                              sim.period = "OBS",
                                              nutrient.trt = "NOP")
 
@@ -136,21 +136,21 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
 ### GDAY-CN
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/GDAYN"),
                                              mod.abb = "GDAYN",
-                                             out.dir = paste0(getwd(), "/analysis_output/GDAYN"),
+                                             out.dir = paste0(getwd(), "/output/analysis_output/GDAYN"),
                                              sim.period = "OBS",
                                              nutrient.trt = "NOP")
 
 ### ORCHIDEE-CNP
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/OCHDP"),
                                              mod.abb = "OCHDP",
-                                             out.dir = paste0(getwd(), "/analysis_output/OCHDP"),
+                                             out.dir = paste0(getwd(), "/output/analysis_output/OCHDP"),
                                              sim.period = "OBS",
                                              nutrient.trt = "NOP")
 
 ### ORCHIDEE-MIC
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/OCHDX"),
                                              mod.abb = "OCHDX",
-                                             out.dir = paste0(getwd(), "/analysis_output/OCHDX"),
+                                             out.dir = paste0(getwd(), "/output/analysis_output/OCHDX"),
                                              sim.period = "OBS",
                                              nutrient.trt = "NOP")
 
@@ -158,14 +158,14 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
 ### CABLE-POP - forest
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/CABLP/forest"),
                                              mod.abb = "CABLP",
-                                             out.dir = paste0(getwd(), "/analysis_output/CABLP/forest"),
+                                             out.dir = paste0(getwd(), "/output/analysis_output/CABLP/forest"),
                                              sim.period = "OBS",
                                              nutrient.trt = "NOP")
 
 ### CABLE-POP - tile_averaged
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/CABLP/tile_averaged"),
                                              mod.abb = "CABLP",
-                                             out.dir = paste0(getwd(), "/analysis_output/CABLP/tile_averaged"),
+                                             out.dir = paste0(getwd(), "/output/analysis_output/CABLP/tile_averaged"),
                                              sim.period = "OBS",
                                              nutrient.trt = "NOP")
 
@@ -173,7 +173,7 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
 ### LPJ-GUESS-CNP - eucalyptus trees only
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGP/new_soil/euc_ter"),
                                              mod.abb = "LPJGP",
-                                             out.dir = paste0(getwd(), "/analysis_output/LPJGP/new_soil/euc_ter"),
+                                             out.dir = paste0(getwd(), "/output/analysis_output/LPJGP/new_soil/euc_ter"),
                                              sim.period = "OBS",
                                              nutrient.trt = "NOP")
 
@@ -182,7 +182,7 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
 ### LPJ-GUESS-CNP all pft
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGP/new_soil/all_pft"),
                                              mod.abb = "LPJGP",
-                                             out.dir = paste0(getwd(), "/analysis_output/LPJGP/new_soil/all_pft"),
+                                             out.dir = paste0(getwd(), "/output/analysis_output/LPJGP/new_soil/all_pft"),
                                              sim.period = "OBS",
                                              nutrient.trt = "NOP")
 
@@ -191,7 +191,7 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
 ### LPJ-GUESS-CN - eucalyptus trees only
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGN/new_soil/euc_ter"),
                                              mod.abb = "LPJGN",
-                                             out.dir = paste0(getwd(), "/analysis_output/LPJGN/new_soil/euc_ter"),
+                                             out.dir = paste0(getwd(), "/output/analysis_output/LPJGN/new_soil/euc_ter"),
                                              sim.period = "OBS",
                                              nutrient.trt = "NOP")
 
@@ -200,7 +200,7 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
 ### LPJ-GUESS-CN all pft
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGN/new_soil/all_pft"),
                                              mod.abb = "LPJGN",
-                                             out.dir = paste0(getwd(), "/analysis_output/LPJGN/new_soil/all_pft"),
+                                             out.dir = paste0(getwd(), "/output/analysis_output/LPJGN/new_soil/all_pft"),
                                              sim.period = "OBS",
                                              nutrient.trt = "NOP")
 
@@ -208,7 +208,7 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
 ### QUINCY
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/QUINC"),
                                              mod.abb = "QUINC",
-                                             out.dir = paste0(getwd(), "/analysis_output/QUINC"),
+                                             out.dir = paste0(getwd(), "/output/analysis_output/QUINC"),
                                              sim.period = "OBS",
                                              nutrient.trt = "NOP")
 
@@ -216,7 +216,7 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
 ### QUINCY-JSM
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/QUJSM"),
                                              mod.abb = "QUJSM",
-                                             out.dir = paste0(getwd(), "/analysis_output/QUJSM"),
+                                             out.dir = paste0(getwd(), "/output/analysis_output/QUJSM"),
                                              sim.period = "OBS",
                                              nutrient.trt = "NOP")
 
@@ -224,7 +224,7 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
 ### ELMV1
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/ELMV1"),
                                              mod.abb = "ELMV1",
-                                             out.dir = paste0(getwd(), "/analysis_output/ELMV1"),
+                                             out.dir = paste0(getwd(), "/output/analysis_output/ELMV1"),
                                              sim.period = "OBS",
                                              nutrient.trt = "NOP")
 
@@ -239,63 +239,63 @@ eucDF <- prepare_EucFACE_observation_dataset()
 ### GDAY-CNP
 plot_CO2_response_comparison_against_data_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/GDAYP"),
                                                                mod.abb = "GDAYP",
-                                                               out.dir = paste0(getwd(), "/analysis_output/GDAYP"),
+                                                               out.dir = paste0(getwd(), "/output/analysis_output/GDAYP"),
                                                                eucDF = eucDF)
 
 ### GDAY-CN
 plot_CO2_response_comparison_against_data_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/GDAYN"),
                                                                mod.abb = "GDAYN",
-                                                               out.dir = paste0(getwd(), "/analysis_output/GDAYN"),
+                                                               out.dir = paste0(getwd(), "/output/analysis_output/GDAYN"),
                                                                eucDF = eucDF)
 
 
 ### ORCHIDEE-CNP
 plot_CO2_response_comparison_against_data_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/OCHDP"),
                                                                mod.abb = "OCHDP",
-                                                               out.dir = paste0(getwd(), "/analysis_output/OCHDP"),
+                                                               out.dir = paste0(getwd(), "/output/analysis_output/OCHDP"),
                                                                eucDF = eucDF)
 
 ### ORCHIDEE-mic
 plot_CO2_response_comparison_against_data_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/OCHDX"),
                                                                mod.abb = "OCHDX",
-                                                               out.dir = paste0(getwd(), "/analysis_output/OCHDX"),
+                                                               out.dir = paste0(getwd(), "/output/analysis_output/OCHDX"),
                                                                eucDF = eucDF)
 
 ### CABLE-POP - forest
 plot_CO2_response_comparison_against_data_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/CABLP/forest"),
                                                                mod.abb = "CABLP",
-                                                               out.dir = paste0(getwd(), "/analysis_output/CABLP/forest"),
+                                                               out.dir = paste0(getwd(), "/output/analysis_output/CABLP/forest"),
                                                                eucDF = eucDF)
 
 
 ### CABLE-POP - tile_averaged
 plot_CO2_response_comparison_against_data_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/CABLP/tile_averaged"),
                                                                mod.abb = "CABLP",
-                                                               out.dir = paste0(getwd(), "/analysis_output/CABLP/tile_averaged"),
+                                                               out.dir = paste0(getwd(), "/output/analysis_output/CABLP/tile_averaged"),
                                                                eucDF = eucDF)
 
 
 ### LPJ-GUESS-CNP - eucalyptus trees
 plot_CO2_response_comparison_against_data_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGP/new_soil/euc_ter"),
                                                                mod.abb = "LPJGP",
-                                                               out.dir = paste0(getwd(), "/analysis_output/LPJGP/new_soil/euc_ter"),
+                                                               out.dir = paste0(getwd(), "/output/analysis_output/LPJGP/new_soil/euc_ter"),
                                                                eucDF = eucDF)
 
 #plot_CO2_response_comparison_against_data_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGP/old_soil/euc_ter"),
 #                                                               mod.abb = "LPJGP",
-#                                                               out.dir = paste0(getwd(), "/analysis_output/LPJGP/old_soil/euc_ter"),
+#                                                               out.dir = paste0(getwd(), "/output/analysis_output/LPJGP/old_soil/euc_ter"),
 #                                                               eucDF = eucDF)
 
 
 ### LPJ-GUESS-CNP - all pft
 plot_CO2_response_comparison_against_data_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGP/new_soil/all_pft"),
                                                                mod.abb = "LPJGP",
-                                                               out.dir = paste0(getwd(), "/analysis_output/LPJGP/new_soil/all_pft"),
+                                                               out.dir = paste0(getwd(), "/output/analysis_output/LPJGP/new_soil/all_pft"),
                                                                eucDF = eucDF)
 
 #plot_CO2_response_comparison_against_data_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGP/old_soil/all_pft"),
 #                                                               mod.abb = "LPJGP",
-#                                                               out.dir = paste0(getwd(), "/analysis_output/LPJGP/old_soil/all_pft"),
+#                                                               out.dir = paste0(getwd(), "/output/analysis_output/LPJGP/old_soil/all_pft"),
 #                                                               eucDF = eucDF)
 
 
@@ -303,45 +303,45 @@ plot_CO2_response_comparison_against_data_for_individual_model(source.dir=paste0
 ### LPJ-GUESS-CN - eucalyptus trees
 plot_CO2_response_comparison_against_data_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGN/new_soil/euc_ter"),
                                                                mod.abb = "LPJGN",
-                                                               out.dir = paste0(getwd(), "/analysis_output/LPJGN/new_soil/euc_ter"),
+                                                               out.dir = paste0(getwd(), "/output/analysis_output/LPJGN/new_soil/euc_ter"),
                                                                eucDF = eucDF)
 
 #plot_CO2_response_comparison_against_data_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGN/old_soil/euc_ter"),
 #                                                               mod.abb = "LPJGN",
-#                                                               out.dir = paste0(getwd(), "/analysis_output/LPJGN/old_soil/euc_ter"),
+#                                                               out.dir = paste0(getwd(), "/output/analysis_output/LPJGN/old_soil/euc_ter"),
 #                                                               eucDF = eucDF)
 
 
 ### LPJ-GUESS-CN - all pft
 plot_CO2_response_comparison_against_data_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGN/new_soil/all_pft"),
                                                                mod.abb = "LPJGN",
-                                                               out.dir = paste0(getwd(), "/analysis_output/LPJGN/new_soil/all_pft"),
+                                                               out.dir = paste0(getwd(), "/output/analysis_output/LPJGN/new_soil/all_pft"),
                                                                eucDF = eucDF)
 
 #plot_CO2_response_comparison_against_data_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGN/old_soil/all_pft"),
 #                                                               mod.abb = "LPJGN",
-#                                                               out.dir = paste0(getwd(), "/analysis_output/LPJGN/old_soil/all_pft"),
+#                                                               out.dir = paste0(getwd(), "/output/analysis_output/LPJGN/old_soil/all_pft"),
 #                                                               eucDF = eucDF)
 
 
 ### QUINCY
 plot_CO2_response_comparison_against_data_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/QUINC"),
                                                                mod.abb = "QUINC",
-                                                               out.dir = paste0(getwd(), "/analysis_output/QUINC"),
+                                                               out.dir = paste0(getwd(), "/output/analysis_output/QUINC"),
                                                                eucDF = eucDF)
 
 
 ### QUINCY-JSM
 plot_CO2_response_comparison_against_data_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/QUJSM"),
                                                                mod.abb = "QUJSM",
-                                                               out.dir = paste0(getwd(), "/analysis_output/QUJSM"),
+                                                               out.dir = paste0(getwd(), "/output/analysis_output/QUJSM"),
                                                                eucDF = eucDF)
 
 
 ### ELMXX
 plot_CO2_response_comparison_against_data_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/ELMXX"),
                                                                mod.abb = "ELMV1",
-                                                               out.dir = paste0(getwd(), "/analysis_output/ELMXX"),
+                                                               out.dir = paste0(getwd(), "/output/analysis_output/ELMXX"),
                                                                eucDF = eucDF)
 
 
@@ -351,19 +351,19 @@ plot_CO2_response_comparison_against_data_for_individual_model(source.dir=paste0
 ### GDAY-CNP
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/GDAYP"),
                                              mod.abb = "GDAYP",
-                                             out.dir = paste0(getwd(), "/analysis_output/GDAYP"),
+                                             out.dir = paste0(getwd(), "/output/analysis_output/GDAYP"),
                                              sim.period = "PRD",
                                              nutrient.trt = "NOP")
 
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/GDAYP"),
                                              mod.abb = "GDAYP",
-                                             out.dir = paste0(getwd(), "/analysis_output/GDAYP"),
+                                             out.dir = paste0(getwd(), "/output/analysis_output/GDAYP"),
                                              sim.period = "PRD",
                                              nutrient.trt = "MDP")
 
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/GDAYP"),
                                              mod.abb = "GDAYP",
-                                             out.dir = paste0(getwd(), "/analysis_output/GDAYP"),
+                                             out.dir = paste0(getwd(), "/output/analysis_output/GDAYP"),
                                              sim.period = "PRD",
                                              nutrient.trt = "HIP")
 
@@ -371,19 +371,19 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
 ### GDAY-CN
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/GDAYN"),
                                              mod.abb = "GDAYN",
-                                             out.dir = paste0(getwd(), "/analysis_output/GDAYN"),
+                                             out.dir = paste0(getwd(), "/output/analysis_output/GDAYN"),
                                              sim.period = "PRD",
                                              nutrient.trt = "NOP")
 
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/GDAYN"),
                                              mod.abb = "GDAYN",
-                                             out.dir = paste0(getwd(), "/analysis_output/GDAYN"),
+                                             out.dir = paste0(getwd(), "/output/analysis_output/GDAYN"),
                                              sim.period = "PRD",
                                              nutrient.trt = "MDP")
 
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/GDAYN"),
                                              mod.abb = "GDAYN",
-                                             out.dir = paste0(getwd(), "/analysis_output/GDAYN"),
+                                             out.dir = paste0(getwd(), "/output/analysis_output/GDAYN"),
                                              sim.period = "PRD",
                                              nutrient.trt = "HIP")
 
@@ -391,19 +391,19 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
 ### ORCHIDEE-CNP
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/OCHDP"),
                                              mod.abb = "OCHDP",
-                                             out.dir = paste0(getwd(), "/analysis_output/OCHDP"),
+                                             out.dir = paste0(getwd(), "/output/analysis_output/OCHDP"),
                                              sim.period = "PRD",
                                              nutrient.trt = "NOP")
 
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/OCHDP"),
                                              mod.abb = "OCHDP",
-                                             out.dir = paste0(getwd(), "/analysis_output/OCHDP"),
+                                             out.dir = paste0(getwd(), "/output/analysis_output/OCHDP"),
                                              sim.period = "PRD",
                                              nutrient.trt = "MDP")
 
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/OCHDP"),
                                              mod.abb = "OCHDP",
-                                             out.dir = paste0(getwd(), "/analysis_output/OCHDP"),
+                                             out.dir = paste0(getwd(), "/output/analysis_output/OCHDP"),
                                              sim.period = "PRD",
                                              nutrient.trt = "HIP")
 
@@ -413,19 +413,19 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
 ### ORCHIDEE-mic
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/OCHDX"),
                                              mod.abb = "OCHDX",
-                                             out.dir = paste0(getwd(), "/analysis_output/OCHDX"),
+                                             out.dir = paste0(getwd(), "/output/analysis_output/OCHDX"),
                                              sim.period = "PRD",
                                              nutrient.trt = "NOP")
 
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/OCHDX"),
                                              mod.abb = "OCHDX",
-                                             out.dir = paste0(getwd(), "/analysis_output/OCHDX"),
+                                             out.dir = paste0(getwd(), "/output/analysis_output/OCHDX"),
                                              sim.period = "PRD",
                                              nutrient.trt = "MDP")
 
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/OCHDX"),
                                              mod.abb = "OCHDX",
-                                             out.dir = paste0(getwd(), "/analysis_output/OCHDX"),
+                                             out.dir = paste0(getwd(), "/output/analysis_output/OCHDX"),
                                              sim.period = "PRD",
                                              nutrient.trt = "HIP")
 
@@ -433,19 +433,19 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
 ### CABLE-POP - forest
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/CABLP/forest"),
                                              mod.abb = "CABLP",
-                                             out.dir = paste0(getwd(), "/analysis_output/CABLP/forest"),
+                                             out.dir = paste0(getwd(), "/output/analysis_output/CABLP/forest"),
                                              sim.period = "PRD",
                                              nutrient.trt = "NOP")
 
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/CABLP/forest"),
                                              mod.abb = "CABLP",
-                                             out.dir = paste0(getwd(), "/analysis_output/CABLP/forest"),
+                                             out.dir = paste0(getwd(), "/output/analysis_output/CABLP/forest"),
                                              sim.period = "PRD",
                                              nutrient.trt = "MDP")
 
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/CABLP/forest"),
                                              mod.abb = "CABLP",
-                                             out.dir = paste0(getwd(), "/analysis_output/CABLP/forest"),
+                                             out.dir = paste0(getwd(), "/output/analysis_output/CABLP/forest"),
                                              sim.period = "PRD",
                                              nutrient.trt = "HIP")
 
@@ -453,19 +453,19 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
 ### CABLE-POP - tile_averaged
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/CABLP/tile_averaged"),
                                              mod.abb = "CABLP",
-                                             out.dir = paste0(getwd(), "/analysis_output/CABLP/tile_averaged"),
+                                             out.dir = paste0(getwd(), "/output/analysis_output/CABLP/tile_averaged"),
                                              sim.period = "PRD",
                                              nutrient.trt = "NOP")
 
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/CABLP/tile_averaged"),
                                              mod.abb = "CABLP",
-                                             out.dir = paste0(getwd(), "/analysis_output/CABLP/tile_averaged"),
+                                             out.dir = paste0(getwd(), "/output/analysis_output/CABLP/tile_averaged"),
                                              sim.period = "PRD",
                                              nutrient.trt = "MDP")
 
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/CABLP/tile_averaged"),
                                              mod.abb = "CABLP",
-                                             out.dir = paste0(getwd(), "/analysis_output/CABLP/tile_averaged"),
+                                             out.dir = paste0(getwd(), "/output/analysis_output/CABLP/tile_averaged"),
                                              sim.period = "PRD",
                                              nutrient.trt = "HIP")
 
@@ -473,38 +473,38 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
 ### LPJ-GUESS-CNP - eucalyptus trees only
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGP/new_soil/euc_ter"),
                                              mod.abb = "LPJGP",
-                                             out.dir = paste0(getwd(), "/analysis_output/LPJGP/new_soil/euc_ter"),
+                                             out.dir = paste0(getwd(), "/output/analysis_output/LPJGP/new_soil/euc_ter"),
                                              sim.period = "PRD",
                                              nutrient.trt = "NOP")
 
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGP/new_soil/euc_ter"),
                                              mod.abb = "LPJGP",
-                                             out.dir = paste0(getwd(), "/analysis_output/LPJGP/new_soil/euc_ter"),
+                                             out.dir = paste0(getwd(), "/output/analysis_output/LPJGP/new_soil/euc_ter"),
                                              sim.period = "PRD",
                                              nutrient.trt = "MDP")
 
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGP/new_soil/euc_ter"),
                                              mod.abb = "LPJGP",
-                                             out.dir = paste0(getwd(), "/analysis_output/LPJGP/new_soil/euc_ter"),
+                                             out.dir = paste0(getwd(), "/output/analysis_output/LPJGP/new_soil/euc_ter"),
                                              sim.period = "PRD",
                                              nutrient.trt = "HIP")
 
 
 #plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGP/old_soil/euc_ter"),
 #                                             mod.abb = "LPJGP",
-#                                             out.dir = paste0(getwd(), "/analysis_output/LPJGP/old_soil/euc_ter"),
+#                                             out.dir = paste0(getwd(), "/output/analysis_output/LPJGP/old_soil/euc_ter"),
 #                                             sim.period = "PRD",
 #                                             nutrient.trt = "NOP")
 #
 #plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGP/old_soil/euc_ter"),
 #                                             mod.abb = "LPJGP",
-#                                             out.dir = paste0(getwd(), "/analysis_output/LPJGP/old_soil/euc_ter"),
+#                                             out.dir = paste0(getwd(), "/output/analysis_output/LPJGP/old_soil/euc_ter"),
 #                                             sim.period = "PRD",
 #                                             nutrient.trt = "MDP")
 #
 #plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGP/old_soil/euc_ter"),
 #                                             mod.abb = "LPJGP",
-#                                             out.dir = paste0(getwd(), "/analysis_output/LPJGP/old_soil/euc_ter"),
+#                                             out.dir = paste0(getwd(), "/output/analysis_output/LPJGP/old_soil/euc_ter"),
 #                                             sim.period = "PRD",
 #                                             nutrient.trt = "HIP")
 
@@ -512,38 +512,38 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
 ### LPJ-GUESS-CNP - all pft
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGP/new_soil/all_pft"),
                                              mod.abb = "LPJGP",
-                                             out.dir = paste0(getwd(), "/analysis_output/LPJGP/new_soil/all_pft"),
+                                             out.dir = paste0(getwd(), "/output/analysis_output/LPJGP/new_soil/all_pft"),
                                              sim.period = "PRD",
                                              nutrient.trt = "NOP")
 
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGP/new_soil/all_pft"),
                                              mod.abb = "LPJGP",
-                                             out.dir = paste0(getwd(), "/analysis_output/LPJGP/new_soil/all_pft"),
+                                             out.dir = paste0(getwd(), "/output/analysis_output/LPJGP/new_soil/all_pft"),
                                              sim.period = "PRD",
                                              nutrient.trt = "MDP")
 
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGP/new_soil/all_pft"),
                                              mod.abb = "LPJGP",
-                                             out.dir = paste0(getwd(), "/analysis_output/LPJGP/new_soil/all_pft"),
+                                             out.dir = paste0(getwd(), "/output/analysis_output/LPJGP/new_soil/all_pft"),
                                              sim.period = "PRD",
                                              nutrient.trt = "HIP")
 
 
 #plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGP/old_soil/all_pft"),
 #                                             mod.abb = "LPJGP",
-#                                             out.dir = paste0(getwd(), "/analysis_output/LPJGP/old_soil/all_pft"),
+#                                             out.dir = paste0(getwd(), "/output/analysis_output/LPJGP/old_soil/all_pft"),
 #                                             sim.period = "PRD",
 #                                             nutrient.trt = "NOP")
 #
 #plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGP/old_soil/all_pft"),
 #                                             mod.abb = "LPJGP",
-#                                             out.dir = paste0(getwd(), "/analysis_output/LPJGP/old_soil/all_pft"),
+#                                             out.dir = paste0(getwd(), "/output/analysis_output/LPJGP/old_soil/all_pft"),
 #                                             sim.period = "PRD",
 #                                             nutrient.trt = "MDP")
 #
 #plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGP/old_soil/all_pft"),
 #                                             mod.abb = "LPJGP",
-#                                             out.dir = paste0(getwd(), "/analysis_output/LPJGP/old_soil/all_pft"),
+#                                             out.dir = paste0(getwd(), "/output/analysis_output/LPJGP/old_soil/all_pft"),
 #                                             sim.period = "PRD",
 #                                             nutrient.trt = "HIP")
 
@@ -552,7 +552,7 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
 ### LPJ-GUESS-CN - eucalyptus trees only
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGN/new_soil/euc_ter"),
                                              mod.abb = "LPJGN",
-                                             out.dir = paste0(getwd(), "/analysis_output/LPJGN/new_soil/euc_ter"),
+                                             out.dir = paste0(getwd(), "/output/analysis_output/LPJGN/new_soil/euc_ter"),
                                              sim.period = "PRD",
                                              nutrient.trt = "NOP")
 
@@ -560,7 +560,7 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
 
 #plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGN/old_soil/euc_ter"),
 #                                             mod.abb = "LPJGN",
-#                                             out.dir = paste0(getwd(), "/analysis_output/LPJGN/old_soil/euc_ter"),
+#                                             out.dir = paste0(getwd(), "/output/analysis_output/LPJGN/old_soil/euc_ter"),
 #                                             sim.period = "PRD",
 #                                             nutrient.trt = "NOP")
 
@@ -570,7 +570,7 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
 ### LPJ-GUESS-CN - all pft
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGN/new_soil/all_pft"),
                                              mod.abb = "LPJGN",
-                                             out.dir = paste0(getwd(), "/analysis_output/LPJGN/new_soil/all_pft"),
+                                             out.dir = paste0(getwd(), "/output/analysis_output/LPJGN/new_soil/all_pft"),
                                              sim.period = "PRD",
                                              nutrient.trt = "NOP")
 
@@ -578,7 +578,7 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
 
 #plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/LPJGN/old_soil/all_pft"),
 #                                             mod.abb = "LPJGN",
-#                                             out.dir = paste0(getwd(), "/analysis_output/LPJGN/old_soil/all_pft"),
+#                                             out.dir = paste0(getwd(), "/output/analysis_output/LPJGN/old_soil/all_pft"),
 #                                             sim.period = "PRD",
 #                                             nutrient.trt = "NOP")
 
@@ -588,19 +588,19 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
 ### QUINCY
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/QUINC"),
                                              mod.abb = "QUINC",
-                                             out.dir = paste0(getwd(), "/analysis_output/QUINC"),
+                                             out.dir = paste0(getwd(), "/output/analysis_output/QUINC"),
                                              sim.period = "PRD",
                                              nutrient.trt = "NOP")
 
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/QUINC"),
                                              mod.abb = "QUINC",
-                                             out.dir = paste0(getwd(), "/analysis_output/QUINC"),
+                                             out.dir = paste0(getwd(), "/output/analysis_output/QUINC"),
                                              sim.period = "PRD",
                                              nutrient.trt = "MDP")
 
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/QUINC"),
                                              mod.abb = "QUINC",
-                                             out.dir = paste0(getwd(), "/analysis_output/QUINC"),
+                                             out.dir = paste0(getwd(), "/output/analysis_output/QUINC"),
                                              sim.period = "PRD",
                                              nutrient.trt = "HIP")
 
@@ -608,19 +608,19 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
 ### QUINCY-JSM
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/QUJSM"),
                                              mod.abb = "QUJSM",
-                                             out.dir = paste0(getwd(), "/analysis_output/QUJSM"),
+                                             out.dir = paste0(getwd(), "/output/analysis_output/QUJSM"),
                                              sim.period = "PRD",
                                              nutrient.trt = "NOP")
 
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/QUJSM"),
                                              mod.abb = "QUJSM",
-                                             out.dir = paste0(getwd(), "/analysis_output/QUJSM"),
+                                             out.dir = paste0(getwd(), "/output/analysis_output/QUJSM"),
                                              sim.period = "PRD",
                                              nutrient.trt = "MDP")
 
 plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/QUJSM"),
                                              mod.abb = "QUJSM",
-                                             out.dir = paste0(getwd(), "/analysis_output/QUJSM"),
+                                             out.dir = paste0(getwd(), "/output/analysis_output/QUJSM"),
                                              sim.period = "PRD",
                                              nutrient.trt = "HIP")
 
@@ -628,19 +628,19 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
 ### ELMXX - not available yet
 #plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/ELMXX"),
 #                                             mod.abb = "ELMV1",
-#                                             out.dir = paste0(getwd(), "/analysis_output/ELMXX"),
+#                                             out.dir = paste0(getwd(), "/output/analysis_output/ELMXX"),
 #                                             sim.period = "PRD",
 #                                             nutrient.trt = "NOP")
 #
 #plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/ELMXX"),
 #                                             mod.abb = "ELMV1",
-#                                             out.dir = paste0(getwd(), "/analysis_output/ELMXX"),
+#                                             out.dir = paste0(getwd(), "/output/analysis_output/ELMXX"),
 #                                             sim.period = "PRD",
 #                                             nutrient.trt = "MDP")
 #
 #plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/ELMXX"),
 #                                             mod.abb = "ELMV1",
-#                                             out.dir = paste0(getwd(), "/analysis_output/ELMXX"),
+#                                             out.dir = paste0(getwd(), "/output/analysis_output/ELMXX"),
 #                                             sim.period = "PRD",
 #                                             nutrient.trt = "HIP")
 

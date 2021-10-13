@@ -1,9 +1,11 @@
 #### prepare all necessary global settings
 #### Create data folder
-output.folders <- c(paste0(getwd(), "/validation_output"),
-                    paste0(getwd(), "/analysis_output"),
-                    paste0(getwd(), "/obs_var_output"),
-                    paste0(getwd(), "/obs_fix_output"))
+output.folders <- c(paste0(getwd(), "/output"),
+                    paste0(getwd(), "/output/QC"),
+                    paste0(getwd(), "/output/analysis_output"),
+                    paste0(getwd(), "/output/MIP_output"),
+                    paste0(getwd(), "/output/MIP_output/obs_fix_output"),
+                    paste0(getwd(), "/output/MIP_output/obs_var_output"))
 
 
 #### Create output folder
