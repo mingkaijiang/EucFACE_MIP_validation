@@ -60,46 +60,48 @@ normalize_pred_amb_dataset_across_models(p.mod.list=p.mod.list.rev,
 
 
 
-
-##########################################################################
-#### Cross-model comparison 
-
-
-#### over the observed period (2013 - 19), 
-#### with variable climate
-#### Read in individual model results;
-#### Perform conversion on selected variables;
-#### Calculate multi-model means and variance;
-#### Merge together with observed data;
-#### Make plot with different factors: 
-####                                    nutrient cycle
-####                                    vegetation dynamics
-####                                    microbial processes
-
-
+#### 2.5. Prepare observed dataset at annual timestep wherever possible
+####      Including C budget but also P and N budget and the
+####      associated stoichiometry, water budget, etc.
+####      Use model variable names
+####      The confidence interval in the data indicates treatment variation,
+####      and less so about inter-annual variation.
+####      The model confidence interval is more about inter-annual variation.
+eucDF <- prepare_EucFACE_observation_dataset()
 
 
 
 ##########################################################################
-### check forcing data consistency
-### go into function to plot
+#### Step 3. Cross-model comparison 
+
+
+#### 3.1. Check forcing data consistency,
+####      Only focusing on historic period
+####      Go into function to plot.
+scenario="var"
 check_forcing_data_consistency(scenario="var")
 
+scenario="fix"
 check_forcing_data_consistency(scenario="fix")
 
 
-##########################################################################
-### make MIP time-series plot for both variable and fixed climate, over observed period
-### when number of variables change in the input, need to revise the code
+
+#### 3.2. Make MIP time-series plot for both variable and fixed climate, 
+####      over observed period only.
+####      Note: When number of variables change in the input, 
+####      need to revise the code.
+####      Go into function to plot
+scenario="var"
 make_MIP_time_series_plot(scenario="var")
 
+scenario="fix"
 make_MIP_time_series_plot(scenario="fix")
 
 
 
 ##########################################################################
-### show P effect with the two models that have CN and CNP versions
-### based on fixed climate forcing
+#### show P effect with the two models that have CN and CNP versions
+#### based on fixed climate forcing
 scenario="var"
 compare_CNP_and_CN_model_output(scenario="var")
 
@@ -117,10 +119,6 @@ compare_microbial_model_output(scenario="var")
 ### show dynamic vegetation effect with the two DGVM models
 #compare_dynamic_vegetation_effect_model_output()
 
-
-
-### prepare observed dataset at annual timestep wherever possible
-eucDF <- prepare_EucFACE_observation_dataset()
 
 ### compare to observed dataset
 ### aCO2 + eCO2

@@ -338,10 +338,10 @@ plot_CO2_response_comparison_against_data_for_individual_model(source.dir=paste0
                                                                eucDF = eucDF)
 
 
-### ELMXX
-plot_CO2_response_comparison_against_data_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/ELMXX"),
+### ELMV1
+plot_CO2_response_comparison_against_data_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/ELMV1"),
                                                                mod.abb = "ELMV1",
-                                                               out.dir = paste0(getwd(), "/output/analysis_output/ELMXX"),
+                                                               out.dir = paste0(getwd(), "/output/analysis_output/ELMV1"),
                                                                eucDF = eucDF)
 
 

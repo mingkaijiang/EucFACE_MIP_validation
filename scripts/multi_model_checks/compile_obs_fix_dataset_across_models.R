@@ -5,7 +5,7 @@ compile_obs_fix_dataset_across_models <- function(p.mod.list, n.mod.list) {
     #### Set up basics
     
     ### setting out path to store the files
-    out.dir <- paste0(getwd(), "/obs_fix_output")
+    out.dir <- paste0(getwd(), "/output/MIP_output/obs_fix_output")
     
     ### create output folder
     if(!dir.exists(out.dir)) {

@@ -17,7 +17,7 @@ normalize_pred_amb_dataset_across_models <- function (p.mod.list,
     
     ### setting out path to store the files
     for (k in clim.levels) {
-        out.dir <- paste0(getwd(), "/pred_", k, "_output")
+        out.dir <- paste0(getwd(), "/output/MIP_output/pred_", k, "_output")
         
         ### create output folder
         if(!dir.exists(out.dir)) {
@@ -25,8 +25,8 @@ normalize_pred_amb_dataset_across_models <- function (p.mod.list,
         }
     }
     
-    out.dir.var <- paste0(getwd(), "/pred_VAR_output")
-    out.dir.fix <- paste0(getwd(), "/pred_FIX_output")
+    out.dir.var <- paste0(getwd(), "/output/MIP_output/pred_VAR_output")
+    out.dir.fix <- paste0(getwd(), "/output/MIP_output/pred_FIX_output")
     
     
     ##################################################################

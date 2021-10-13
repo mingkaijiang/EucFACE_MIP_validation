@@ -17,7 +17,7 @@ compile_pred_dataset_across_models <- function (p.mod.list,
     
     ### setting out path to store the files
     for (k in clim.levels) {
-        out.dir <- paste0(getwd(), "/pred_", k, "_output")
+        out.dir <- paste0(getwd(), "/output/MIP_output/pred_", k, "_output")
         
         ### create output folder
         if(!dir.exists(out.dir)) {
@@ -25,11 +25,11 @@ compile_pred_dataset_across_models <- function (p.mod.list,
         }
     }
     
-    out.dir.var <- paste0(getwd(), "/pred_VAR_output")
-    out.dir.fix <- paste0(getwd(), "/pred_FIX_output")
+    out.dir.var <- paste0(getwd(), "/output/MIP_output/pred_VAR_output")
+    out.dir.fix <- paste0(getwd(), "/output/MIP_output/pred_FIX_output")
     
-    obs.dir.var <- paste0(getwd(), "/obs_var_output")
-    obs.dir.fix <- paste0(getwd(), "/obs_fix_output")
+    obs.dir.var <- paste0(getwd(), "/output/MIP_output/obs_var_output")
+    obs.dir.fix <- paste0(getwd(), "/output/MIP_output/obs_fix_output")
     
     
     ### prepare consistent column names for CNP models

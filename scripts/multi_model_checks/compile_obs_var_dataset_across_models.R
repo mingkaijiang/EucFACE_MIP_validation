@@ -7,7 +7,7 @@ compile_obs_var_dataset_across_models <- function(p.mod.list,
     #### Set up basics
     
     ### setting out path to store the files
-    out.dir <- paste0(getwd(), "/obs_var_output")
+    out.dir <- paste0(getwd(), "/output/MIP_output/obs_var_output")
     
     ### create output folder
     if(!dir.exists(out.dir)) {
