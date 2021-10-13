@@ -164,7 +164,14 @@ p.mod.list.rev <- c("CABLP", #"ELMV1",
                     "QUINC", "QUJSM")
 
 ### compile all datasets together, generate daily and annual output
-compile_pred_dataset_across_models(p.mod.list.rev, n.mod.list)
+compile_pred_dataset_across_models(p.mod.list.rev,
+                                   n.mod.list)
+
+
+### to do: 13-10-2021
+### add obs period data (2012-19) and re-compile
+### normalize all to 2012 value, or 2019 value
+
 
 
 ### normalize all the variables to year 2020, so that we can compare
@@ -175,6 +182,16 @@ normalize_pred_amb_dataset_across_models(p.mod.list.rev, n.mod.list)
 
 ### now we can look at the normalized trajectory as well as the CO2 effect
 plot_normalized_pred_trajectories()
+
+
+### the CO2 experimental design for future period is also interesting to explore
+### We have ambient conditions where CO2 rises linearly each year,
+### whereas elevated treatment has CO2 stop in year 2030 and then stays the same for the rest 40 years
+### Both scenarios land to the same CO2 concentration in year 2069.
+
+
+
+
 
 ##########################################################################
 ### to do list:

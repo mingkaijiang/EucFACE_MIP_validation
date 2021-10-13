@@ -28,6 +28,9 @@ compile_pred_dataset_across_models <- function (p.mod.list,
     out.dir.var <- paste0(getwd(), "/pred_VAR_output")
     out.dir.fix <- paste0(getwd(), "/pred_FIX_output")
     
+    obs.dir.var <- paste0(getwd(), "/obs_var_output")
+    obs.dir.fix <- paste0(getwd(), "/obs_fix_output")
+    
     
     ### prepare consistent column names for CNP models
     p.mod.names <- c("YEAR","DOY","CO2","PREC","PAR","TAIR","TSOIL","VPD","SW",
