@@ -4,7 +4,7 @@ plot_normalized_plant_allocation_response <- function(scenario="fix") {
     #### Set up basics
     
     ### setting out path to store the files
-    out.dir <- paste0(getwd(), "/obs_", scenario, "_output")
+    out.dir <- paste0(getwd(), "/output/MIP_output/OBS_output/", scenario, "/")
     
     ### create output folder
     if(!dir.exists(out.dir)) {
@@ -12,8 +12,8 @@ plot_normalized_plant_allocation_response <- function(scenario="fix") {
     }
     
     ### read in anual datasets
-    ambDF <- readRDS(paste0(out.dir, "/MIP_obs_", scenario, "_amb_daily.rds"))
-    eleDF <- readRDS(paste0(out.dir, "/MIP_obs_", scenario, "_ele_daily.rds"))
+    ambDF <- readRDS(paste0("output/MIP_output/processed_simulation/MIP_OBS_", scenario, "_AMB_daily.rds"))
+    eleDF <- readRDS(paste0("output/MIP_output/processed_simulation/MIP_OBS_", scenario, "_ELE_daily.rds"))
     
     ### ignore NAs
     ambDF[ambDF<=-999] <- NA
@@ -111,7 +111,7 @@ plot_normalized_plant_allocation_response <- function(scenario="fix") {
               legend.box = 'horizontal',
               legend.box.just = 'left',
               plot.title = element_text(size=14, face="bold.italic", 
-                                        hjust = 0.5)); p1
+                                        hjust = 0.5))
     
     
     ## NEP = NPP-RHET
@@ -131,7 +131,7 @@ plot_normalized_plant_allocation_response <- function(scenario="fix") {
               legend.box = 'horizontal',
               legend.box.just = 'left',
               plot.title = element_text(size=14, face="bold.italic", 
-                                        hjust = 0.5)); p2
+                                        hjust = 0.5))
 
     
     ## NEP = all delta pools
@@ -153,7 +153,7 @@ plot_normalized_plant_allocation_response <- function(scenario="fix") {
               legend.box.just = 'left',
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
-        ylab("delta pools"); p3
+        ylab("delta pools")
     
     ## NPP = CGL + CGW + CGCR + CGFR + CREPR + CEX
     p4 <- ggplot(ambDF1, aes(x=NPP, y=CGL+CGW+CGCR+CGFR+CREPR+CEX,
@@ -174,7 +174,7 @@ plot_normalized_plant_allocation_response <- function(scenario="fix") {
               legend.box.just = 'left',
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
-        ylab("CG fluxes + CEX + REPR"); p4
+        ylab("CG fluxes + CEX + REPR")
     
     
     ### plot
@@ -189,7 +189,7 @@ plot_normalized_plant_allocation_response <- function(scenario="fix") {
                                label_size = 18)
     
     
-    pdf(paste0(out.dir, "/MIP_allocation_mass_balance_obs_", scenario, "_check.pdf"), 
+    pdf(paste0(out.dir, "/MIP_allocation_mass_balance_OBS_", scenario, "_check.pdf"), 
         width=8, height=8)
     plot_grid(plots_top_row,
               legend_top_row,

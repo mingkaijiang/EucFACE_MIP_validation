@@ -3,16 +3,16 @@ plot_normalized_GPP_response <- function(scenario) {
     #### Set up basics
     
     ### setting out path to store the files
-    out.dir <- paste0(getwd(), "/obs_", scenario, "_output")
-    
+    out.dir <- paste0(getwd(), "/output/MIP_output/OBS_output/", scenario, "/")
+  
     ### create output folder
     if(!dir.exists(out.dir)) {
         dir.create(out.dir, showWarnings = FALSE)
     }
     
     ### read in anual datasets
-    ambDF <- readRDS(paste0(out.dir, "/MIP_obs_", scenario, "_amb_daily.rds"))
-    eleDF <- readRDS(paste0(out.dir, "/MIP_obs_", scenario, "_ele_daily.rds"))
+    ambDF <- readRDS(paste0("output/MIP_output/processed_simulation/MIP_OBS_", scenario, "_AMB_daily.rds"))
+    eleDF <- readRDS(paste0("output/MIP_output/processed_simulation/MIP_OBS_", scenario, "_ELE_daily.rds"))
     
     ### ignore NAs
     ambDF[ambDF<=-999] <- NA
@@ -260,7 +260,8 @@ plot_normalized_GPP_response <- function(scenario) {
                                label_size = 18)
     
     
-    pdf(paste0(out.dir, "/MIP_normalized_photosynthesis_response_obs_", scenario, "_amb_comparison.pdf"), 
+    pdf(paste0(out.dir, "/MIP_normalized_photosynthesis_response_OBS_", 
+               scenario, "_AMB_comparison.pdf"), 
         width=12, height=16)
     plot_grid(plots_top_row,
               legend_top_row,
@@ -440,7 +441,8 @@ plot_normalized_GPP_response <- function(scenario) {
                                label_size = 18)
     
     
-    pdf(paste0(out.dir, "/MIP_normalized_photosynthesis_response_obs_", scenario, "_comparison.pdf"), 
+    pdf(paste0(out.dir, "/MIP_normalized_photosynthesis_response_OBS_", 
+               scenario, "_comparison.pdf"), 
         width=12, height=16)
     plot_grid(plots_top_row,
               legend_top_row,

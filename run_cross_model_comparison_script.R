@@ -89,84 +89,103 @@ check_forcing_data_consistency(scenario="FIX")
 
 
 ### 3.2. Make MIP time-series plot for both variable and fixed climate, 
-###      over observed period only.
+###      over observed period only!!!
 ###      Note: When number of variables change in the input, 
 ###      need to revise the code.
-###      Go into function to plot
-scenario="VAR"
 make_MIP_time_series_plot(scenario="VAR")
 
-scenario="FIX"
 make_MIP_time_series_plot(scenario="FIX")
+
+
+### 3.3. Plot photosynthetic response.
+###      Need to go into function to plot
+scenario="FIX"
+plot_normalized_GPP_response(scenario="FIX")
+scenario="VAR"
+plot_normalized_GPP_response(scenario="VAR")
+
+
+### 3.4. Plot allocation coefficients:
+###      fast plant structural pools: leaf and fineroot
+###      slow plant structural pools: wood and coarseroot
+###      plant NSC pools: CSTOR, CEX, labile and reseve
+###      respiration fluxes
+###      need to go into function to plot
+###      unfinished
+plot_normalized_plant_allocation_response(scenario="FIX")
+
+
+### 3.5. Fate of carbon 
+###      Go into function to plot
+###      To make it comparable to the obs, we will subset 2013 - 2016 
+scenario="VAR"
+trace_fate_of_carbon_MIP_plot(scenario="VAR")
+
+scenario="FIX"
+trace_fate_of_carbon_MIP_plot(scenario="FIX")
+
+
+### 3.6. Plot normalized trajectory as well as the CO2 effect over time
+###      This function checks the P fertilization effect
+plot_normalized_pred_trajectories(climate.scenario="VAR",
+                                  yr.to.normalize=2012)
+
+plot_normalized_pred_trajectories(climate.scenario="FIX",
+                                  yr.to.normalize=2012)
+
+
+### 3.7. Check CO2 x drought interactions
+
+
+
 
 
 
 ##########################################################################
-#### show P effect with the two models that have CN and CNP versions
-#### based on fixed climate forcing
-scenario="var"
-compare_CNP_and_CN_model_output(scenario="var")
+#### Step 4: Model specific investigations
 
-scenario="fix"
-compare_CNP_and_CN_model_output(scenario="fix")
+### 4.1. show P effect with the two models that have CN and CNP versions
+###      based on fixed climate forcing
+###      Go into function to plot
+scenario="VAR"
+compare_CNP_and_CN_model_output(scenario="VAR")
+
+scenario="FIX"
+compare_CNP_and_CN_model_output(scenario="FIX")
 
 
-### show microbial effects with the two microbial enabled models
-### based on fixed climate forcing
-### add Csoil, Clit, Rh comparison plot
-
-compare_microbial_model_output(scenario="fix")
-compare_microbial_model_output(scenario="var")
+### 4.2. show microbial effects with the two microbial enabled models
+###      based on fixed climate forcing
+###      add Csoil, Clit, Rh comparison plot
+compare_microbial_model_output(scenario="FIX")
+compare_microbial_model_output(scenario="VAR")
 
 ### show dynamic vegetation effect with the two DGVM models
 #compare_dynamic_vegetation_effect_model_output()
 
 
-### compare to observed dataset
-### aCO2 + eCO2
-### go into function to plot
-### only plot the variable scenario because this is used to compare against data
+##########################################################################
+#### Step 5. Data-model intercomparison
+
+### 5.1. Compare to observed dataset
+###      aCO2 + eCO2
+###      Go into function to plot.
+###      Only plot the variable scenario.
+###      because this is used to compare against data
 make_time_averaged_data_model_comparison_over_obs_period(eucDF,
-                                                         scenario="var")
-
-
-### plot photosynthesis response
-### need to go into function to plot
-scenario="fix"
-plot_normalized_GPP_response(scenario="fix")
-scenario="var"
-plot_normalized_GPP_response(scenario="var")
-
-
-### Vegetation biomass response
-scenario="fix"
-plot_normalized_delta_Cveg_response(scenario="fix")
-scenario="var"
-plot_normalized_delta_Cveg_response(scenario="var")
-
-
-### plot allocation coefficients:
-### fast plant structural pools: leaf and fineroot
-### slow plant structural pools: wood and coarseroot
-### plant NSC pools: CSTOR, CEX, labile and reseve
-### respiration fluxes
-### need to go into function to plot
-plot_normalized_plant_allocation_response(scenario="fix")
+                                                         scenario="VAR")
 
 
 
 
-### fate of carbon - go into function to plot
-scenario="var"
-trace_fate_of_carbon_MIP_plot(scenario="var")
 
-scenario="fix"
-trace_fate_of_carbon_MIP_plot(scenario="fix")
+
+
 
 #plot_taylor_diagram()
 
-#plot_photosynthesis_relationships(scenario="fix")
-#plot_photosynthesis_relationships(scenario="var")
+#plot_photosynthesis_relationships(scenario="FIX")
+#plot_photosynthesis_relationships(scenario="VAR")
 
 
 ### ambient treatment, CO2 responses
@@ -192,16 +211,6 @@ trace_fate_of_carbon_MIP_plot(scenario="fix")
 ### 1. real magnitude of P fertilization from different model starting point
 ### 2. normalized magnitude of P fertilization normalized to the same starting point
 
-
-### to do: 13-10-2021
-### add obs period data (2012-19) and re-compile
-### normalize all to 2012 value, or 2019 value
-
-
-
-
-### now we can look at the normalized trajectory as well as the CO2 effect
-plot_normalized_pred_trajectories()
 
 
 ### the CO2 experimental design for future period is also interesting to explore
