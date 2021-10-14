@@ -19,44 +19,88 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
     
     d<-dim(ambDF)[2]
     
-    ### summaryby
+    ### calculate CO2 effect (real magnitude)
     co2DF <- ambDF
     co2DF[,3:d] <- eleDF[,3:d]-ambDF[,3:d]
     
-    ### extract only a subset of variables
-    outDF <- co2DF[,c("ModName", "YEAR", 
-                      "GPP", 
-                      "RAU", "RHET", "CVOC",
-                      "CGL", "CGW", "CGFR", "CGCR", "CEX", "CREPR", 
-                      "CLITIN", "CWLIN", "CFRLIN", "CCRLIN", 
-                      "CL", "CW", "CFR", "CCR", "CSOIL", "CFLIT", "CSTOR",
-                      "deltaCL", "deltaCW", "deltaCFR",
-                      "deltaCCR", "deltaCSOIL", "deltaCFLIT", "deltaCSTOR")]
+    ### prepare the variables to extract
+    var.list <- c("ModName", "YEAR", 
+                  "GPP", "NPP",
+                  "RAU", "RHET", "CVOC",
+                  "CGL", "CGW", "CGFR", "CGCR", "CEX", "CREPR", 
+                  "CLITIN", "CWLIN", "CFRLIN", "CCRLIN", 
+                  "CL", "CW", "CFR", "CCR", "CSOIL", "CFLIT", "CSTOR",
+                  "deltaCL", "deltaCW", "deltaCFR",
+                  "deltaCCR", "deltaCSOIL", "deltaCFLIT", "deltaCSTOR")
     
-    d <- dim(outDF)[2]
+    ### extract only a subset of variables
+    tmpDF1 <- ambDF[,var.list]
+    tmpDF2 <- eleDF[,var.list]
+    tmpDF3 <- co2DF[,var.list]
+    
+    
+    ### get some descriptive numbers
+    d <- dim(tmpDF3)[2]
     mod.list <- unique(outDF$ModName)
     nmod <- length(mod.list)
     
-    longDF <- reshape2::melt(outDF, id.vars = c("ModName", "YEAR"))
+    ### convert into long format
+    longDF1 <- reshape2::melt(tmpDF1, id.vars = c("ModName", "YEAR"))
+    longDF2 <- reshape2::melt(tmpDF2, id.vars = c("ModName", "YEAR"))
+    longDF3 <- reshape2::melt(tmpDF3, id.vars = c("ModName", "YEAR"))
     
-    sumDF <- summaryBy(value~ModName+variable, FUN=c(mean, sd),
-                      data=longDF, na.rm=T, keep.names=T)
+    sumDF1 <- summaryBy(value~ModName+variable, FUN=c(mean, sd),
+                       data=longDF1, na.rm=T, keep.names=T)
+    
+    sumDF2 <- summaryBy(value~ModName+variable, FUN=c(mean, sd),
+                       data=longDF2, na.rm=T, keep.names=T)
+    
+    sumDF3 <- summaryBy(value~ModName+variable, FUN=c(mean, sd),
+                      data=longDF3, na.rm=T, keep.names=T)
     
     
     #### exclude all pools
-    sumDF$Category <- rep(c(rep("gpp", 1),  
-                           rep("resp", 3), 
-                           rep("prod", 6),
-                           rep("litter", 4),
-                           rep("pool", 7), 
-                           rep("change_in_pool", 7)), 10)
+    lab.list <- c(rep("gpp", 1),  
+                  rep("npp", 1),
+                  rep("resp", 3), 
+                  rep("prod", 6),
+                  rep("litter", 4),
+                  rep("pool", 7), 
+                  rep("change_in_pool", 7))
+      
+      
+    #sumDF1$Category <- rep(lab.list, nmod)
+    #sumDF2$Category <- rep(lab.list, nmod)
+    sumDF3$Category <- rep(lab.list, nmod)
+    
+    #sumDF1$conf_low <- sumDF1$value.mean - sumDF1$value.sd
+    #sumDF1$conf_high <- sumDF1$value.mean + sumDF1$value.sd
+    #
+    #sumDF2$conf_low <- sumDF2$value.mean - sumDF2$value.sd
+    #sumDF2$conf_high <- sumDF2$value.mean + sumDF2$value.sd
+    #
+    #sumDF3$conf_low <- sumDF3$value.mean - sumDF3$value.sd
+    #sumDF3$conf_high <- sumDF3$value.mean + sumDF3$value.sd
     
     
-    sumDF$conf_low <- sumDF$value.mean - sumDF$value.sd
-    sumDF$conf_high <- sumDF$value.mean + sumDF$value.sd
+    ### prepare GPP = NPP + Ra plot
+    plotDF1 <- prepare_basic_GPP_plot(ambDF=sumDF1, eleDF=sumDF2)
+    
+    
+    ### stopped here as of 15:00 on 14th oct 2021.
+    ### next to do:
+    ### check gpp plot
+    ### add gpp = R + delta pools
+    ### work on co2 effect
+    ### merge all plots together
+    
+    
+    
+    
+    
     
     ### Subset GPP, NPP, change in pools, and out fluxes
-    plotDF1 <- subset(sumDF, variable %in% c("ModName", 
+    plotDF1 <- subset(sumDF3, variable %in% c("ModName", 
                                              "GPP", 
                                              "RAU", "RHET", "CVOC",
                                              "CGL", "CGW", "CGFR", "CGCR", "CEX", "CREPR", 
@@ -1544,13 +1588,6 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
     #  
 }
+
