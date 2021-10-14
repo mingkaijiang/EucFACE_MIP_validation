@@ -3,7 +3,7 @@ check_forcing_data_consistency <- function(scenario) {
     #### Set up basics
     
     ### setting out path to store the files
-    out.dir <- paste0(getwd(), "/obs_", scenario, "_output")
+    out.dir <- paste0(getwd(), "/output/MIP_output/OBS_output/", scenario, "/")
     
     ### create output folder
     if(!dir.exists(out.dir)) {
@@ -11,8 +11,10 @@ check_forcing_data_consistency <- function(scenario) {
     }
     
     ### read in anual datasets
-    ambDF <- readRDS(paste0(out.dir, "/MIP_obs_", scenario, "_amb_annual.rds"))
-    eleDF <- readRDS(paste0(out.dir, "/MIP_obs_", scenario, "_ele_annual.rds"))
+    ambDF <- readRDS(paste0("output/MIP_output/processed_simulation/MIP_OBS_", 
+                            scenario, "_AMB_annual.rds"))
+    eleDF <- readRDS(paste0("output/MIP_output/processed_simulation/MIP_OBS_", 
+                            scenario, "_ELE_annual.rds"))
     
     ambDF <- ambDF[,c("ModName", "YEAR", "CO2", "PAR",
                       "TAIR", "TSOIL", "VPD", "PREC",
@@ -30,13 +32,11 @@ check_forcing_data_consistency <- function(scenario) {
     ambDF[ambDF<=-999] <- NA
 
     ### add forcing data
-    if (scenario == "var") {
+    if (scenario == "VAR") {
       
-      obsDF <- read.csv(paste0("/Users/mingkaijiang/Documents/Research/Projects/EucFACE_Modeling/Met_data/output/observed/csv/daily/EUC_met_observed_", 
-                               scenario, "_daily_2012_2019.csv"), skip=3, header=F)
-    } else if (scenario == "fix") {
-      obsDF <- read.csv(paste0("/Users/mingkaijiang/Documents/Research/Projects/EucFACE_Modeling/Met_data/output/observed/csv/daily/EUC_met_observed_", 
-                               scenario, "_daily_2012_2019.csv"), skip=3, header=F)
+      obsDF <- read.csv(paste0("/Users/mingkaijiang/Documents/Research/Projects/EucFACE_Modeling/Met_data/output/observed/csv/daily/EUC_met_observed_var_daily_2012_2019.csv"), skip=3, header=F)
+    } else if (scenario == "FIX") {
+      obsDF <- read.csv(paste0("/Users/mingkaijiang/Documents/Research/Projects/EucFACE_Modeling/Met_data/output/observed/csv/daily/EUC_met_observed_fix_daily_2012_2019.csv"), skip=3, header=F)
     }
     
     

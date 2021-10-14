@@ -1,5 +1,4 @@
-normalize_pred_amb_dataset_across_models <- function (p.mod.list, 
-                                                      n.mod.list) {
+normalize_dataset_across_models <- function (yr.to.normalize) {
     
     
     
@@ -16,18 +15,12 @@ normalize_pred_amb_dataset_across_models <- function (p.mod.list,
     clim.levels <- c("VAR", "FIX")
     
     ### setting out path to store the files
-    for (k in clim.levels) {
-        out.dir <- paste0(getwd(), "/output/MIP_output/pred_", k, "_output")
-        
-        ### create output folder
-        if(!dir.exists(out.dir)) {
-            dir.create(out.dir, showWarnings = FALSE)
-        }
+    out.dir <- paste0(getwd(), "/output/MIP_output/processed_simulation")
+    
+    ### create output folder
+    if(!dir.exists(out.dir)) {
+        dir.create(out.dir, showWarnings = FALSE)
     }
-    
-    out.dir.var <- paste0(getwd(), "/output/MIP_output/pred_VAR_output")
-    out.dir.fix <- paste0(getwd(), "/output/MIP_output/pred_FIX_output")
-    
     
     ##################################################################
     #### loop through the datasets to generate dataframes on fluxes, pools, delta pools,
@@ -37,16 +30,13 @@ normalize_pred_amb_dataset_across_models <- function (p.mod.list,
     for (i in clim.levels) {
         for (j in p.fert.levels) {
             
-            ### prepare dir
-            out.dir <- ifelse(i=="FIX", out.dir.fix, out.dir.var)
-            
             ### read input
-            ambDF <- readRDS(paste0(out.dir, "/MIP_pred_", i, "_", j, "_amb_annual.rds"))
-            eleDF <- readRDS(paste0(out.dir, "/MIP_pred_", i, "_", j, "_ele_annual.rds"))
+            ambDF <- readRDS(paste0(out.dir, "/MIP_ALL_", i, "_", j, "_AMB_annual.rds"))
+            eleDF <- readRDS(paste0(out.dir, "/MIP_ALL_", i, "_", j, "_ELE_annual.rds"))
             
-            ### subset year 2020 as baseline of normalization
-            baseDF1 <- subset(ambDF, YEAR==2020)
-            baseDF2 <- subset(eleDF, YEAR==2020)
+            ### subset year as baseline of normalization
+            baseDF1 <- subset(ambDF, YEAR==yr.to.normalize)
+            baseDF2 <- subset(eleDF, YEAR==yr.to.normalize)
             
             ### get the model list
             mod.list <- unique(ambDF$ModName)
@@ -69,9 +59,9 @@ normalize_pred_amb_dataset_across_models <- function (p.mod.list,
             
             ### save output
             saveRDS(outDF1, paste0(out.dir, 
-                                   "/MIP_normalized_pred_", i, "_", j, "_amb_annual.rds"))
+                                   "/MIP_normalized_", yr.to.normalize,"_", i, "_", j, "_AMB_annual.rds"))
             saveRDS(outDF2, paste0(out.dir, 
-                                   "/MIP_normalized_pred_", i, "_", j, "_ele_annual.rds"))
+                                   "/MIP_normalized_", yr.to.normalize,"_", i, "_", j, "_ELE_annual.rds"))
             
             
             ### now we calculate the CO2 effect for each year (ele / amb)
@@ -80,7 +70,7 @@ normalize_pred_amb_dataset_across_models <- function (p.mod.list,
             
             ### save
             saveRDS(outDF3, paste0(out.dir, 
-                                   "/MIP_normalized_pred_", i, "_", j, "_co2_effect_annual.rds"))
+                                   "/MIP_normalized_ALL_", i, "_", j, "_co2_effect_annual.rds"))
             
             
         }

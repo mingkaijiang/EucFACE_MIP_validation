@@ -52,16 +52,14 @@ compile_pred_dataset_across_models(p.mod.list=p.mod.list.rev,
 ### 2.4. Compile both historic and future period together.
 ###      Use daily data to compute annual data, including delta pools,
 ###      so that we can calculate normalized responses in the next step.
-compile_all_dataset_across_models(p.mod.list=p.mod.list.rev,
-                                  n.mod.list=n.mod.list)
+compile_all_dataset_across_models()
 
 
 ### 2.5. Normalize all the variables to year 2012 or 2019, 
 ### so that we can compare cross models.
 ### Note that just do it for the each CO2 treatment.
 ### Also generated CO2 effect comparison.
-normalize_pred_amb_dataset_across_models(p.mod.list=p.mod.list.rev, 
-                                         n.mod.list=n.mod.list)
+normalize_dataset_across_models(yr.to.normalize=2012)
 
 
 
@@ -82,11 +80,11 @@ eucDF <- prepare_EucFACE_observation_dataset()
 ### 3.1. Check forcing data consistency,
 ###      Only focusing on historic period
 ###      Go into function to plot.
-scenario="var"
-check_forcing_data_consistency(scenario="var")
+scenario="VAR"
+check_forcing_data_consistency(scenario="VAR")
 
-scenario="fix"
-check_forcing_data_consistency(scenario="fix")
+scenario="FIX"
+check_forcing_data_consistency(scenario="FIX")
 
 
 
@@ -95,11 +93,11 @@ check_forcing_data_consistency(scenario="fix")
 ###      Note: When number of variables change in the input, 
 ###      need to revise the code.
 ###      Go into function to plot
-scenario="var"
-make_MIP_time_series_plot(scenario="var")
+scenario="VAR"
+make_MIP_time_series_plot(scenario="VAR")
 
-scenario="fix"
-make_MIP_time_series_plot(scenario="fix")
+scenario="FIX"
+make_MIP_time_series_plot(scenario="FIX")
 
 
 

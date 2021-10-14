@@ -1,5 +1,4 @@
-compile_all_dataset_across_models <- function (p.mod.list, 
-                                               n.mod.list) {
+compile_all_dataset_across_models <- function () {
     
     
     
@@ -31,54 +30,54 @@ compile_all_dataset_across_models <- function (p.mod.list,
     obsDF4 <- readRDS(paste0(out.dir, "/MIP_OBS_VAR_ELE_daily.rds"))
     
     
+    ### get var list
+    var.list <- colnames(obsDF1)
     
+    ## get model list
+    mod.list1 <- unique(obsDF1$ModName)
     
     ##################################################################
     #### loop through models for observed period, ambient CO2 treatment, variable climate
     #### to create rds files 
     
     for (i in clim.levels) {
+        
+        ### prepare obs DF
+        if (i == "FIX") {
+            obsDF.amb <- obsDF1
+            obsDF.ele <- obsDF3
+        } else {
+            obsDF.amb <- obsDF2
+            obsDF.ele <- obsDF4
+        }
+        
+        
         for (j in p.fert.levels) {
             
+            ### read input
             ambDF <- readRDS(paste0(out.dir, 
                                     "/MIP_PRD_", i, "_", j, "_AMB_daily.rds"))
             eleDF <- readRDS(paste0(out.dir, 
                                     "/MIP_PRD_", i, "_", j, "_ELE_daily.rds"))
             
-            
-            ### save the rds
-            saveRDS(outDF, paste0(out.dir, 
-                                  "/MIP_PRD_", k, "_", i, "_", j, "_daily.rds"))
-            
-            
-            ### merge all models
-            outDF <- plyr::rbind.fill(outDF, modDF)
+            ### update order of variables
+            ambDF <- ambDF[,var.list]
+            eleDF <- eleDF[,var.list]
             
             
+            ### get model list
+            mod.list2 <- unique(ambDF$ModName)
+            mod.list <- mod.list1[table(c(mod.list1, mod.list2))==2]
             
-        } # j
-    } # i 
-    
-    
-    
-    
-    
-    
-    
-    
-    ##################################################################
-    #### loop through the datasets to generate dataframes on fluxes, pools, delta pools,
-    #### at annual timesteps
-    
-    ### read in amb and ele dataframes
-    for (i in clim.levels) {
-        for (j in p.fert.levels) {
+            ### add historic data
+            outDF1 <- rbind(obsDF.amb, ambDF)
+            outDF2 <- rbind(obsDF.ele, eleDF)
             
-            #out.dir <- ifelse(i=="FIX", out.dir.fix, out.dir.var)
+            ### remove incomplete model results
+            outDF1 <- outDF1[outDF1$ModName%in%mod.list,]
+            outDF2 <- outDF2[outDF2$ModName%in%mod.list,]
             
-            ambDF <- readRDS(paste0(out.dir, "/MIP_PRD_", i, "_", j, "_AMB_daily.rds"))
-            eleDF <- readRDS(paste0(out.dir, "/MIP_PRD_", i, "_", j, "_ELE_daily.rds"))
-            
+        
             ### summarize all fluxes first to obain annual rate
             fluxDF1 <- summaryBy(PREC+NDEP+NEP+GPP+NPP+CEX+CVOC+RECO+
                                      RAU+RL+RW+RCR+RFR+RGR+RHET+ET+
@@ -91,7 +90,7 @@ compile_all_dataset_across_models <- function (p.mod.list,
                                      PWLIN+PUP+PGMIN+PMIN+PBIOCHMIN+PLEACH+
                                      PGL+PGW+PGCR+PGFR+PLRETR+PWRETR+PCRRETR+
                                      PFRRETR+PWEA+PDEP+PFERT~YEAR+ModName, 
-                                 data=ambDF, FUN=sum, keep.names=T, na.rm=T)
+                                 data=outDF1, FUN=sum, keep.names=T, na.rm=T)
             
             fluxDF2 <- summaryBy(PREC+NDEP+NEP+GPP+NPP+CEX+CVOC+RECO+
                                      RAU+RL+RW+RCR+RFR+RGR+RHET+ET+
@@ -104,11 +103,11 @@ compile_all_dataset_across_models <- function (p.mod.list,
                                      PWLIN+PUP+PGMIN+PMIN+PBIOCHMIN+PLEACH+
                                      PGL+PGW+PGCR+PGFR+PLRETR+PWRETR+PCRRETR+
                                      PFRRETR+PWEA+PDEP+PFERT~YEAR+ModName, 
-                                 data=eleDF, FUN=sum, keep.names=T, na.rm=T)
+                                 data=outDF2, FUN=sum, keep.names=T, na.rm=T)
             
             
             ### subset first day within a year of all pools
-            poolDF1 <- ambDF[,c("ModName", "YEAR", "DOY", 
+            poolDF1 <- outDF1[,c("ModName", "YEAR", "DOY", 
                                 "SW",
                                 "CL","LAI","CW","CFR","CCR",
                                 "NL","NW","NFR","NCR",
@@ -125,7 +124,7 @@ compile_all_dataset_across_models <- function (p.mod.list,
                                 "NPORG", "PPORG")]
             
             
-            poolDF2 <- eleDF[,c("ModName", "YEAR", "DOY", 
+            poolDF2 <- outDF2[,c("ModName", "YEAR", "DOY", 
                                 "SW",
                                 "CL","LAI","CW","CFR","CCR",
                                 "NL","NW","NFR","NCR",
@@ -154,11 +153,11 @@ compile_all_dataset_across_models <- function (p.mod.list,
             
             l <- dim(deltaDF1)[2]
             
-            for (m in c(2020:2068)) {
+            for (m in c(2012:2068)) {
                 deltaDF1[deltaDF1$YEAR==m,3:l] <- poolDF1[poolDF1$YEAR==(m+1),3:l]-poolDF1[poolDF1$YEAR==m,3:l]
             }
             
-            for (m in c(2020:2068)) {
+            for (m in c(2012:2068)) {
                 deltaDF2[deltaDF2$YEAR==m,3:l] <- poolDF2[poolDF2$YEAR==(m+1),3:l]-poolDF2[poolDF2$YEAR==m,3:l]
             }
             
@@ -169,8 +168,8 @@ compile_all_dataset_across_models <- function (p.mod.list,
             
             
             ### climate
-            climDFx <- ambDF[,c("ModName", "YEAR", "DOY", "CO2", "PAR","TAIR","TSOIL","VPD")]
-            climDFy <- eleDF[,c("ModName", "YEAR", "DOY", "CO2", "PAR","TAIR","TSOIL","VPD")]
+            climDFx <- outDF1[,c("ModName", "YEAR", "DOY", "CO2", "PAR","TAIR","TSOIL","VPD")]
+            climDFy <- outDF2[,c("ModName", "YEAR", "DOY", "CO2", "PAR","TAIR","TSOIL","VPD")]
             
             climDF1 <- summaryBy(CO2+PAR+TAIR+TSOIL+VPD~ModName+YEAR, FUN=mean,
                                  data=climDFx, na.rm=T, keep.names=T)
@@ -190,13 +189,13 @@ compile_all_dataset_across_models <- function (p.mod.list,
             
             ### save output
             saveRDS(annDF1, paste0(out.dir, 
-                                   "/MIP_PRD_", i, "_", j, "_AMB_annual.rds"))
+                                   "/MIP_ALL_", i, "_", j, "_AMB_annual.rds"))
             saveRDS(annDF2, paste0(out.dir, 
-                                   "/MIP_PRD_", i, "_", j, "_ELE_annual.rds"))
+                                   "/MIP_ALL_", i, "_", j, "_ELE_annual.rds"))
             
             
-        }
-    }
+        } # j
+    } # i 
     
     
 }
