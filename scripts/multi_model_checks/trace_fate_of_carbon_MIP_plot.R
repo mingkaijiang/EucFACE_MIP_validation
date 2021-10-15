@@ -86,12 +86,16 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
     for (i in mod.list) {
         
         ### get the data
+        ## gpp
         plotDF1 <- gppciDF[gppciDF$ModName==i,]
         plotDF2 <- gppstackDF[gppstackDF$ModName==i,]
         
+        ## fate of C
         plotDF3 <- fateciDF[fateciDF$ModName==i,]
         plotDF4 <- fatestackDF[fatestackDF$ModName==i,]
         
+        ### alloc
+        plotDF5 <- allocDF[allocDF$ModName==i,]
         
         ### aCO2 vs. eCO2
         p1 <- ggplot() +  
@@ -135,7 +139,8 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
                   legend.title=element_text(size=14),
                   panel.grid.major=element_blank(),
                   legend.position="none",
-                  legend.text.align=0)
+                  legend.text.align=0,
+                  strip.text.x = element_text(size = 20))
         
         ### CO2 effect
         p2 <- ggplot() +  
@@ -187,13 +192,52 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
         #annotate(geom="text", x=1, y=-100, label="CABLP", size=7); p2
         
         
+        
+        
+        p3 <- ggplot(data=plotDF5, 
+                      aes(ymax=ymax, ymin=ymin, 
+                          xmax=4, xmin=3, fill=Variable)) +
+          geom_rect() +
+          geom_label( x=3.5, aes(y=labelPosition, label=label)) +
+          coord_polar(theta="y") + 
+          xlim(c(2, 4)) +
+          facet_wrap( ~ Trt)+
+          #theme_void() +
+          theme(axis.ticks = element_blank(),
+                panel.grid.minor=element_blank(),
+                axis.text.x=element_blank(),
+                axis.title.x=element_text(size=14),
+                axis.text.y=element_blank(),
+                axis.title.y=element_text(size=14),
+                legend.text=element_text(size=12),
+                legend.title=element_text(size=14),
+                panel.grid.major=element_blank(),
+                legend.position="none",
+                legend.box = 'horizontal',
+                legend.box.just = 'left',
+                plot.title = element_text(size=14, face="bold.italic", 
+                                          hjust = 0.5),
+                strip.text.x = element_text(size = 20))+
+          ylab("Allocation coefficient")+
+          scale_fill_manual(name="Variable",
+                            values=c("Canopy"=cbbPalette[4], 
+                                     "Wood"=cbbPalette[3],
+                                     "Root"=cbbPalette[8],
+                                     "Other"=cbbPalette[5]))+
+          guides(fill=guide_legend(nrow=2))
+        
+        
+        
+        lay <- rbind(c(1,1),
+                     c(2,3))
+        
         ### Plotting
         pdf(paste0(out.dir, "/fate_of_C_", i, ".pdf"), width=12, height=10)
         
         #plot_grid(p1, p2,
         #          ncol=1)
         
-        grid.arrange(p1, p2, nrow=2, ncol=1)
+        grid.arrange(p1, p2, p3, layout_matrix=lay)
         dev.off()
         
     }
