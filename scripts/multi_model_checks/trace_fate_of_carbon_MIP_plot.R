@@ -242,9 +242,7 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
         
     }
     
-    
-
-    
+  
     
     #  end
 }

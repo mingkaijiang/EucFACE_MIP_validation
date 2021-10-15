@@ -135,6 +135,13 @@ plot_normalized_pred_trajectories(climate.scenario="FIX",
                                   yr.to.normalize=2012)
 
 
+### to do next: as of 15 oct 2021
+### 1. work on co2 x drought interaction
+### 2. check gradual increase in CO2 and sharp increase in CO2
+### 3. model specific checks, esp. microbial models (prepare their own dataset)
+### 4. Data-model intercomparison
+### 5. 
+
 ### 3.7. Check CO2 x drought interaction
 
 
