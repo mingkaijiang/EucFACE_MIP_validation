@@ -59,23 +59,9 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
                       data=longDF3, na.rm=T, keep.names=T)
     
     
-    #### exclude all pools
-    #lab.list <- c(rep("gpp", 1),  
-    #              rep("npp", 1),
-    #              rep("resp", 3), 
-    #              rep("prod", 6),
-    #              rep("litter", 4),
-    #              rep("pool", 7), 
-    #              rep("change_in_pool", 7))
-      
-      
-    
     ### prepare GPP = NPP + Ra plot
     ### and GPP = R + delta C pools
     gppDF <- prepare_basic_GPP_plot(ambDF=sumDF1, eleDF=sumDF2)
-    
-    
-    
     
     ### plotting script, GPP
     gppciDF <- gppDF$ciDF
@@ -87,6 +73,13 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
     ### plotting script, GPP
     fateciDF <- fateDF$ciDF
     fatestackDF <- fateDF$stackDF
+    
+    
+    ### allocation coefficients
+    allocDF <- prepare_alloc_for_individual_model_plot(ambDF=sumDF1,
+                                                       eleDF=sumDF2)
+    
+    
     
     
     ### loop through each model to plot

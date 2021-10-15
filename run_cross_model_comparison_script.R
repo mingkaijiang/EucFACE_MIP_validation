@@ -126,7 +126,8 @@ trace_fate_of_carbon_MIP_plot(scenario="FIX")
 
 
 ### 3.6. Plot normalized trajectory as well as the CO2 effect over time
-###      This function checks the P fertilization effect
+###      This function checks the P fertilization effect for the future period
+###      but does not look at the drought effect
 plot_normalized_pred_trajectories(climate.scenario="VAR",
                                   yr.to.normalize=2012)
 
@@ -134,7 +135,11 @@ plot_normalized_pred_trajectories(climate.scenario="FIX",
                                   yr.to.normalize=2012)
 
 
-### 3.7. Check CO2 x drought interactions
+### 3.7. Check CO2 x drought interaction
+
+
+
+### 3.8 check gradual increase in CO2 vs. sharp increase in CO2
 
 
 
