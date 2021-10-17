@@ -135,15 +135,23 @@ plot_normalized_pred_trajectories(climate.scenario="FIX",
                                   yr.to.normalize=2012)
 
 
+
+### 3.7. Check CO2 x drought interaction
+###      1. Firstly check historic period with NOP
+###         to see whether we have soil water savings under eCO2
+###         and how that translates into drought response and post-drought
+###         recovery.
+###      2. Check how continued increase in CO2 affects the drought year response,
+###         and the long-term cumulative C storage in plants and soils.
+###      3. Check if additional P alleviates plant drought stress under eCO2.
+plot_CO2_water_interaction()
+
+
 ### to do next: as of 15 oct 2021
 ### 1. work on co2 x drought interaction
 ### 2. check gradual increase in CO2 and sharp increase in CO2
 ### 3. model specific checks, esp. microbial models (prepare their own dataset)
 ### 4. Data-model intercomparison
-### 5. 
-
-### 3.7. Check CO2 x drought interaction
-
 
 
 ### 3.8 check gradual increase in CO2 vs. sharp increase in CO2

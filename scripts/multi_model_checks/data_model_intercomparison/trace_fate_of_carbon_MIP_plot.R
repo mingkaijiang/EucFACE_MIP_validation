@@ -41,7 +41,7 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
     
     ### get some descriptive numbers
     d <- dim(tmpDF3)[2]
-    mod.list <- unique(outDF$ModName)
+    mod.list <- unique(tmpDF3$ModName)
     nmod <- length(mod.list)
     
     ### convert into long format

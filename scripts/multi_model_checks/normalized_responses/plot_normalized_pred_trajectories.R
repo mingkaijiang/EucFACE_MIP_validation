@@ -259,6 +259,8 @@ plot_normalized_pred_trajectories <- function (climate.scenario,
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))
     
+    p8 <- plot.new()
+    
     
     p9 <- ggplot(data=myDF, 
                  aes(x=YEAR, y=LAI))+
