@@ -155,9 +155,7 @@ plot_CO2_water_interaction()
 ### eleDF: 2013 - 2018
 plot_gradual_increase_CO2_trajectories(climate.scenario="FIX")
 
-
-
-
+plot_gradual_increase_CO2_trajectories(climate.scenario="VAR")
 
 
 ##########################################################################
@@ -176,7 +174,10 @@ compare_CNP_and_CN_model_output(scenario="FIX")
 ### 4.2. show microbial effects with the two microbial enabled models
 ###      based on fixed climate forcing
 ###      add Csoil, Clit, Rh comparison plot
+scenario="FIX"
 compare_microbial_model_output(scenario="FIX")
+
+scenario="VAR"
 compare_microbial_model_output(scenario="VAR")
 
 ### show dynamic vegetation effect with the two DGVM models

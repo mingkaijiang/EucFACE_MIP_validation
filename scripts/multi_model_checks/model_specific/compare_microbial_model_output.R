@@ -17,16 +17,17 @@ compare_microbial_model_output <- function(scenario) {
     #### Set up basics
     
     ### setting out path to store the files
-    out.dir <- paste0(getwd(), "/obs_", scenario, "_output")
+    out.dir <- paste0(getwd(), "/output/MIP_output/OBS_output/", scenario, "/")
     
     ### create output folder
     if(!dir.exists(out.dir)) {
         dir.create(out.dir, showWarnings = FALSE)
     }
     
-    ### read in anual datasets
-    ambDF <- readRDS(paste0(out.dir, "/MIP_obs_", scenario, "_amb_annual.rds"))
-    eleDF <- readRDS(paste0(out.dir, "/MIP_obs_", scenario, "_ele_annual.rds"))
+    
+    ### prepare microbial model input
+    prepare_microbial_model_input()
+    
     
     ### select GDAYN, GDAYP, LPJGN, LPJGP model output
     ambDF <- subset(ambDF, ModName%in%c("E_OCHDP", "F_QUINC", 
