@@ -78,6 +78,8 @@ GreensPalette <- rev(brewer.pal(n = 9, name = "Greens"))
 
 SpectralPalette <- brewer.pal(n = 8, name = "Spectral")
 
+Diverge_hsv_Palette <- colorspace::diverge_hcl(8)
+
 
 #col.values <- c("A_CABLP" = YlOrRdPalette[1],
 #                "B_GDAYP" = YlOrRdPalette[3],

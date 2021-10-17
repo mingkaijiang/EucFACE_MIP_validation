@@ -147,14 +147,13 @@ plot_normalized_pred_trajectories(climate.scenario="FIX",
 plot_CO2_water_interaction()
 
 
-### to do next: as of 15 oct 2021
-### 1. work on co2 x drought interaction
-### 2. check gradual increase in CO2 and sharp increase in CO2
-### 3. model specific checks, esp. microbial models (prepare their own dataset)
-### 4. Data-model intercomparison
-
-
 ### 3.8 check gradual increase in CO2 vs. sharp increase in CO2
+### compare the eCO2 response with aCO2, i.e.:
+### aCO2, eCO2 with sharp increase, eCO2 with gradual increase
+### Subset a period of future only and historic only under NOP
+### ambDF: 2013 - 2018, 2064 - 2069
+### eleDF: 2013 - 2018
+plot_gradual_increase_CO2_trajectories(climate.scenario="FIX")
 
 
 
