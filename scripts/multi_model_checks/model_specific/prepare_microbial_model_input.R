@@ -153,7 +153,7 @@ prepare_microbial_model_input <- function() {
                                  PWLIN+PUP+PGMIN+PMIN+PBIOCHMIN+PLEACH+
                                  PGL+PGW+PGCR+PGFR+PLRETR+PWRETR+PCRRETR+
                                  PFRRETR+PWEA+PDEP+PFERT+RMAIN+RNTRANS+
-                                 NREPR+NRECYC+PGSTR+PREPR+
+                                 NGSTR+NREPR+NRECYC+PGSTR+PREPR+
                                  PRECYC~YEAR+ModName, 
                              data=ambDF, FUN=sum, keep.names=T, na.rm=T)
         

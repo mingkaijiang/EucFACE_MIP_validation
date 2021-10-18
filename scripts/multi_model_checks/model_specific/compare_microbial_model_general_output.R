@@ -1,4 +1,4 @@
-compare_microbial_model_output <- function(scenario) {
+compare_microbial_model_general_output <- function(scenario) {
     
     
     ##################################################################

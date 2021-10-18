@@ -175,18 +175,24 @@ compare_CNP_and_CN_model_output(scenario="FIX")
 ###      based on fixed climate forcing
 ###      add Csoil, Clit, Rh comparison plot
 
-### prepare microbial model input
+### 4.2.1. prepare microbial model input
 prepare_microbial_model_input()
 
 
+### 4.2.2. compare general variables
 scenario="FIX"
-compare_microbial_model_output(scenario="FIX")
+compare_microbial_model_general_output(scenario="FIX")
 
 scenario="VAR"
-compare_microbial_model_output(scenario="VAR")
+compare_microbial_model_general_output(scenario="VAR")
 
-### show dynamic vegetation effect with the two DGVM models
-#compare_dynamic_vegetation_effect_model_output()
+
+### 4.2.3. Investigate the MIMICS-like ORCHX performance
+scenario="FIX"
+investigate_OCHDX_microbial_responses(scenario="FIX")
+
+investigate_OCHDX_microbial_responses(scenario="FIX")
+
 
 
 ##########################################################################
