@@ -68,12 +68,18 @@ plot_taylor_diagram <- function(scenario) {
     
     pdf(paste0(out.dir, "/Taylor_diagrams_", scenario, ".pdf",sep=''),
         width=12,height=8)
-    TaylorDiagram(gppDF1, obs="OBS", mod = "GPP", group="ModName", cols=c(col.values))
-    TaylorDiagram(gppDF2, obs="OBS", mod = "GPP", group="ModName", cols=c(col.values))
-    TaylorDiagram(laiDF1, obs="OBS", mod = "LAI", group="ModName", cols=c(col.values))
-    TaylorDiagram(laiDF2, obs="OBS", mod = "LAI", group="ModName", cols=c(col.values))
-    TaylorDiagram(rsoilDF1, obs="OBS", mod = "Rsoil", group="ModName", cols=c(col.values))
-    TaylorDiagram(rsoilDF2, obs="OBS", mod = "Rsoil", group="ModName", cols=c(col.values))
+    TaylorDiagram(gppDF1, obs="OBS", mod = "GPP", group="ModName", cols=c(col.values),
+                  main="Amb GPP")
+    TaylorDiagram(gppDF2, obs="OBS", mod = "GPP", group="ModName", cols=c(col.values),
+                  main="Ele GPP")
+    TaylorDiagram(laiDF1, obs="OBS", mod = "LAI", group="ModName", cols=c(col.values),
+                  main="Amb LAI")
+    TaylorDiagram(laiDF2, obs="OBS", mod = "LAI", group="ModName", cols=c(col.values),
+                  main="Ele LAI")
+    TaylorDiagram(rsoilDF1, obs="OBS", mod = "Rsoil", group="ModName", cols=c(col.values),
+                  main="Amb Rsoil")
+    TaylorDiagram(rsoilDF2, obs="OBS", mod = "Rsoil", group="ModName", cols=c(col.values),
+                  main="Ele Rsoil")
     dev.off()
     
     
