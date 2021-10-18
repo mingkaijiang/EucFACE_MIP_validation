@@ -56,9 +56,9 @@ compile_all_dataset_across_models()
 
 
 ### 2.5. Normalize all the variables to year 2012 or 2019, 
-### so that we can compare cross models.
-### Note that just do it for the each CO2 treatment.
-### Also generated CO2 effect comparison.
+###      so that we can compare cross models.
+###      Note that just do it for the each CO2 treatment.
+###      Also generated CO2 effect comparison.
 normalize_dataset_across_models(yr.to.normalize=2012)
 
 

@@ -192,7 +192,7 @@ EucFACE_mass_balance_and_validation_script_ELMXX <- function() {
                    panel.abline(a=0,b=1)}) 
     
     ### sum of all autotrophic respiration fluxes
-    p4<-xyplot(I(RL+RW+RFR+RGR-CVOC)~RAU,annDF,
+    p4<-xyplot(I(RL+RW+RFR+RGR)~RAU,annDF,
                #main='RL+RW+RCR+RFR+RGR~RAU',
                auto.key=T,
                scales=list(relation='free'),
@@ -200,7 +200,7 @@ EucFACE_mass_balance_and_validation_script_ELMXX <- function() {
                    panel.xyplot(...)
                    panel.abline(a=0,b=1)}) 
     
-    #plot(p4)
+    plot(p4)
     # this flux is not balanced, but it's alright, 
     # because we are not particularly interested to see
     # respiration fluxes of the individual component.
@@ -365,7 +365,7 @@ EucFACE_mass_balance_and_validation_script_ELMXX <- function() {
     ##################### Nitrogen balance check ################################
     ### Firstly, we check Delta$NL, Delta$NW, Delta$NFR and Delta$NCR. 
     ### Here, Delta$NL = NGL + NLITIN - NLRETR, where NLRETR is the retranslocation flux. 
-    p1<-xyplot(I(NGL-NLITIN)~deltaNL,annDF,
+    p1<-xyplot(I(NGL-NLITIN-NLRETR)~deltaNL,annDF,
                main='no retranslocation flux',
                auto.key=T,
                scales=list(relation='free'),
@@ -373,7 +373,7 @@ EucFACE_mass_balance_and_validation_script_ELMXX <- function() {
                    panel.xyplot(...)
                    panel.abline(a=0,b=1)}) 
     
-    p2<-xyplot(I(NGW)~deltaNW,annDF,
+    p2<-xyplot(I(NGW-NWLIN-NWRETR)~deltaNW,annDF,
                main='no litter and retranslocation fluxes',
                auto.key=T,
                scales=list(relation='free'),
@@ -382,7 +382,7 @@ EucFACE_mass_balance_and_validation_script_ELMXX <- function() {
                    panel.abline(a=0,b=1)}) 
     
     
-    p3<-xyplot(I(NGFR)~deltaNFR,annDF,
+    p3<-xyplot(I(NGFR-NFRLIN-NFRRETR)~deltaNFR,annDF,
                main='no litter and retranslocation fluxes',
                auto.key=T,
                scales=list(relation='free'),
@@ -402,7 +402,7 @@ EucFACE_mass_balance_and_validation_script_ELMXX <- function() {
     #
     
     ### This is to check finelitter influx. Total NFLIT = NFLITA + NFLITB. 
-    p5<-xyplot(I(NFLITB)~NFLIT,annDF,
+    p5<-xyplot(I(NFLITB+NFLITA)~NFLIT,annDF,
                #main='I(NFLITA+NFLITB)~NFLIT',
                auto.key=T,
                scales=list(relation='free'),
@@ -563,7 +563,7 @@ EucFACE_mass_balance_and_validation_script_ELMXX <- function() {
     
     
     ### This is to check P litter flux. 
-    p7<-xyplot(I(PFLITB)~PFLIT,annDF,
+    p7<-xyplot(I(PFLITB+PFLITA)~PFLIT,annDF,
                #main='I(PFLITA+PFLITB)~PFLIT',
                auto.key=T,
                scales=list(relation='free'),

@@ -52,6 +52,7 @@ source("prepare.R")
 ### ELM output error correction
 # the model output CFLITA = -9999, which should be revised using CFLIT
 # then CFLIT is the total of CFLITA + CFLITB. Same for N and P 
+# one additional variable XR, which is the turnover rate of C from storage C pool
 #translate_ELMV1_simulation_into_EucFACE_MIP_format(source.dir = "simulation_output/ELMV1/")
 
 

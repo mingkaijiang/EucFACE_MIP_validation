@@ -22,9 +22,11 @@ translate_ELMV1_simulation_into_EucFACE_MIP_format <- function(source.dir) {
         ### ignore missing variables
         myDF[myDF<=-9999.] <- NA
         
+        myDF$PAR <- myDF$PAR * 24.0
+        
         myDF$CFLITA <- myDF$CFLIT
         myDF$CFLIT <- rowSums(data.frame(myDF$CFLITA, myDF$CFLITB), na.rm=T)
-
+        
         myDF$NFLITA <- myDF$NFLIT
         myDF$NFLIT <- rowSums(data.frame(myDF$NFLITA, myDF$NFLITB), na.rm=T)
         
