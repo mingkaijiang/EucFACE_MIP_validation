@@ -200,14 +200,15 @@ investigate_OCHDX_microbial_responses(scenario="VAR")
 ### 5.1. Compare to observed dataset
 ###      aCO2 + eCO2
 ###      Go into function to plot.
-###      Only plot the variable scenario.
+###      Only plot the variable scenario,
 ###      because this is used to compare against data
 make_time_averaged_data_model_comparison_over_obs_period(eucDF,
                                                          scenario="VAR")
 
 
-
-
+### time-varying response
+### LAI, Rsoil
+make_time_varying_data_model_comparison_over_obs_period(scenario="VAR")
 
 
 

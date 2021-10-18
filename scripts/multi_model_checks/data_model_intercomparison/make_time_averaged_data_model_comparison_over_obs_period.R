@@ -15,34 +15,36 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
     #### Set up basics
     ### setting out path to store the files
     ### this is only valid for variable climate
-    out.dir <- paste0(getwd(), "/obs_", scenario, "_output")
-    
+    out.dir <- paste0(getwd(), "/output/MIP_output/OBS_output/", scenario, "/")
+  
     ### create output folder
     if(!dir.exists(out.dir)) {
-        dir.create(out.dir, showWarnings = FALSE)
+      dir.create(out.dir, showWarnings = FALSE)
     }
+  
     
     ### read in anual datasets
-    annDF.amb <- readRDS(paste0(out.dir, "/MIP_obs_", scenario, "_amb_annual.rds"))
-    annDF.ele <- readRDS(paste0(out.dir, "/MIP_obs_", scenario, "_ele_annual.rds"))
+    ambDF <- readRDS(paste0("output/MIP_output/processed_simulation/MIP_OBS_", scenario, "_AMB_annual.rds"))
+    eleDF <- readRDS(paste0("output/MIP_output/processed_simulation/MIP_OBS_", scenario, "_ELE_annual.rds"))
     
-    d <- dim(annDF.amb)[2]
+    d <- dim(ambDF)[2]
     
     #### calculate 4-yr means in the simulation datasets
-    annDF.amb <- subset(annDF.amb, YEAR>2012 & YEAR<2017)
-    annDF.ele <- subset(annDF.ele, YEAR>2012 & YEAR<2017)
+    ambDF <- subset(ambDF, YEAR>2012 & YEAR<2017)
+    eleDF <- subset(eleDF, YEAR>2012 & YEAR<2017)
     
-    annDF.pct.diff <- annDF.amb
-    annDF.pct.diff[,3:d] <- (annDF.ele[,3:d]-annDF.amb[,3:d])/annDF.amb[,3:d] * 100.0
+    ### calculate % difference
+    annDF.pct.diff <- ambDF
+    annDF.pct.diff[,3:d] <- (eleDF[,3:d]-ambDF[,3:d])/ambDF[,3:d] * 100.0
     
     
-    annDF.amb.sum <- summaryBy(.~ModName, FUN=c(mean,sd),
-                               data=annDF.amb,
-                               keep.names=T, na.rm=T)
+    ambDF.sum <- summaryBy(.~ModName, FUN=c(mean,sd),
+                           data=ambDF,
+                           keep.names=T, na.rm=T)
     
-    annDF.ele.sum <- summaryBy(.~ModName, FUN=c(mean,sd),
-                               data=annDF.ele,
-                               keep.names=T, na.rm=T)
+    eleDF.sum <- summaryBy(.~ModName, FUN=c(mean,sd),
+                           data=eleDF,
+                           keep.names=T, na.rm=T)
     
     annDF.diff.sum <- summaryBy(.~ModName, FUN=c(mean,sd),
                                 data=annDF.pct.diff,
@@ -50,7 +52,7 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
     
     
     ### get the list of models
-    mod.list <- unique(annDF.amb.sum$ModName)
+    mod.list <- unique(ambDF.sum$ModName)
     nmod <- length(mod.list)
     
     
@@ -65,8 +67,8 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
     ### * CL includes overstorey leaf only in the observation;
     ### * CW includes branch and stem in the model simulation.
     vegDF <- prepare_plot_DF_for_time_averaged_data_model_intercomparison(eucDF=eucDF,
-                                                                          ambDF=annDF.amb.sum,
-                                                                          eleDF=annDF.ele.sum,
+                                                                          ambDF=ambDF.sum,
+                                                                          eleDF=eleDF.sum,
                                                                           difDF=annDF.diff.sum,
                                                                           var.list=c("CL", "CW", "CFR", "CCR", "CSTOR"),
                                                                           calculate.total=T)
@@ -111,7 +113,7 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
         ylab(expression(paste("Carbon pools (g C " * m^2*")")))+
         scale_x_discrete(limit=c(mod.list, "obs"),
                          label=c(model.labels, "obs" = "OBS"))+
-        guides(fill=guide_legend(nrow=3)); p1
+        guides(fill=guide_legend(nrow=3))
     
     
     p2 <- ggplot(data=plotDF3, 
@@ -151,8 +153,8 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
     
     ################# Major carbon fluxes  ####################
     cfluxDF <- prepare_plot_DF_for_time_averaged_data_model_intercomparison(eucDF=eucDF,
-                                                                            ambDF=annDF.amb.sum,
-                                                                            eleDF=annDF.ele.sum,
+                                                                            ambDF=ambDF.sum,
+                                                                            eleDF=eleDF.sum,
                                                                             difDF=annDF.diff.sum,
                                                                             var.list=c("NPP", "RAU"),
                                                                             calculate.total=T)
@@ -197,7 +199,7 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
         scale_x_discrete(limit=c(mod.list, "obs"),
                          label=c(model.labels, "obs" = "OBS"))+
         scale_fill_manual(name="Variable",
-                          values=c("NPP"="green", "RAU"="yellow")); p3
+                          values=c("NPP"="green", "RAU"="yellow"))
     
     
     p4 <- ggplot(data=plotDF3, 
@@ -236,8 +238,8 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
     
     ################# Delta C pools  ####################
     vegDF <- prepare_plot_DF_for_time_averaged_data_model_intercomparison(eucDF=eucDF,
-                                                                          ambDF=annDF.amb.sum,
-                                                                          eleDF=annDF.ele.sum,
+                                                                          ambDF=ambDF.sum,
+                                                                          eleDF=eleDF.sum,
                                                                           difDF=annDF.diff.sum,
                                                                           var.list=c("deltaCL", "deltaCW", "deltaCFR", "deltaCCR", "deltaCSTOR"),
                                                                           calculate.total=T)
@@ -321,8 +323,8 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
     
     ################# NEP ####################
     cfluxDF <- prepare_plot_DF_for_time_averaged_data_model_intercomparison(eucDF=eucDF,
-                                                                            ambDF=annDF.amb.sum,
-                                                                            eleDF=annDF.ele.sum,
+                                                                            ambDF=ambDF.sum,
+                                                                            eleDF=eleDF.sum,
                                                                             difDF=annDF.diff.sum,
                                                                             var.list=c("NEP"),
                                                                             calculate.total=F)
@@ -410,8 +412,8 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
     ### which can be grouped with allocation to root as total belowground allocation. 
     ### This total belowground allocation is comparable to allocation coefficient to root in the model. 
     allocDF <- prepare_allocation_coef_DF_for_time_averaged_data_model_intercomparison(eucDF=eucDF,
-                                                                                       ambDF=annDF.amb.sum,
-                                                                                       eleDF=annDF.ele.sum,
+                                                                                       ambDF=ambDF.sum,
+                                                                                       eleDF=eleDF.sum,
                                                                                        difDF=annDF.diff.sum)
     
     
@@ -514,8 +516,8 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
     ### Note that in the table below, simulated results are for top 30 cm of the soil, 
     ### but observed data are for top 10 cm only. 
     vegDF <- prepare_plot_DF_for_time_averaged_data_model_intercomparison(eucDF=eucDF,
-                                                                          ambDF=annDF.amb.sum,
-                                                                          eleDF=annDF.ele.sum,
+                                                                          ambDF=ambDF.sum,
+                                                                          eleDF=eleDF.sum,
                                                                           difDF=annDF.diff.sum,
                                                                           var.list=c("PL", "PW", "PFR", "PCR", "PSTOR"),
                                                                           calculate.total=T)
@@ -614,8 +616,8 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
     
     ################# Major growth P fluxes  ####################
     pfluxDF <- prepare_plot_DF_for_time_averaged_data_model_intercomparison(eucDF=eucDF,
-                                                                            ambDF=annDF.amb.sum,
-                                                                            eleDF=annDF.ele.sum,
+                                                                            ambDF=ambDF.sum,
+                                                                            eleDF=eleDF.sum,
                                                                             difDF=annDF.diff.sum,
                                                                             var.list=c("PGL", "PGW", "PGCR", "PGFR"),
                                                                             calculate.total=T)
@@ -698,16 +700,16 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
     
     ################# P uptake and mineralization ####################
     pfluxDF1 <- prepare_plot_DF_for_time_averaged_data_model_intercomparison(eucDF=eucDF,
-                                                                             ambDF=annDF.amb.sum,
-                                                                             eleDF=annDF.ele.sum,
+                                                                             ambDF=ambDF.sum,
+                                                                             eleDF=eleDF.sum,
                                                                              difDF=annDF.diff.sum,
                                                                              var.list=c("PUP"),
                                                                              calculate.total=F)
     
     
     pfluxDF2 <- prepare_plot_DF_for_time_averaged_data_model_intercomparison(eucDF=eucDF,
-                                                                             ambDF=annDF.amb.sum,
-                                                                             eleDF=annDF.ele.sum,
+                                                                             ambDF=ambDF.sum,
+                                                                             eleDF=eleDF.sum,
                                                                              difDF=annDF.diff.sum,
                                                                              var.list=c("PMIN", "PBIOCHMIN"),
                                                                              calculate.total=T)
@@ -792,8 +794,8 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
     
     ################# P uptake and mineralization ####################
     budgetDF <- prepare_P_budget_DF_for_time_averaged_data_model_intercomparison(eucDF=eucDF,
-                                                                                 ambDF=annDF.amb.sum,
-                                                                                 eleDF=annDF.ele.sum,
+                                                                                 ambDF=ambDF.sum,
+                                                                                 eleDF=eleDF.sum,
                                                                                  difDF=annDF.diff.sum)
     
     subDF1 <- subset(budgetDF, Variable%in%c("PUPREQ"))
