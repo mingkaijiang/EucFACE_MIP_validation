@@ -112,16 +112,13 @@ plot_normalized_GPP_response(scenario="VAR")
 ###      respiration fluxes
 ###      need to go into function to plot
 ###      unfinished
-plot_normalized_plant_allocation_response(scenario="FIX")
+#plot_normalized_plant_allocation_response(scenario="FIX")
 
 
 ### 3.5. Fate of carbon 
-###      Go into function to plot
 ###      To make it comparable to the obs, we will subset 2013 - 2016 
-scenario="VAR"
 trace_fate_of_carbon_MIP_plot(scenario="VAR")
 
-scenario="FIX"
 trace_fate_of_carbon_MIP_plot(scenario="FIX")
 
 
@@ -202,6 +199,7 @@ investigate_OCHDX_microbial_responses(scenario="VAR")
 ###      Go into function to plot.
 ###      Only plot the variable scenario,
 ###      because this is used to compare against data
+scenario="VAR"
 make_time_averaged_data_model_comparison_over_obs_period(eucDF,
                                                          scenario="VAR")
 

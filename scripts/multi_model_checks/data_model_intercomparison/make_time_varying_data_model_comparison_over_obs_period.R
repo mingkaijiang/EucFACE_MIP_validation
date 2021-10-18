@@ -94,30 +94,6 @@ make_time_varying_data_model_comparison_over_obs_period <- function(scenario) {
         ylab("LAI")
     
     
-    ### prepare taylor diagram
-    tmpDF1 <- ambDF3$GPP[ambDF3$ModName=="A_CABLP"]
-    tmpDF2 <- ambDF3$GPP[ambDF3$ModName=="B_GDAYP"]
-    tmpDF3 <- ambDF3$GPP[ambDF3$ModName=="C_LPJGP"]
-    tmpDF4 <- ambDF3$GPP[ambDF3$ModName=="D_OCHDP"]
-    tmpDF5 <- ambDF3$GPP[ambDF3$ModName=="E_QUINC"]
-    #tmpDF6 <- ambDF3$GPP[ambDF3$ModName=="F_ELMXX"]
-    tmpDF7 <- ambDF3$GPP[ambDF3$ModName=="G_OCHDX"]
-    tmpDF8 <- ambDF3$GPP[ambDF3$ModName=="H_QUJSM"]
-    tmpDF9 <- ambDF3$GPP[ambDF3$ModName=="I_GDAYN"]
-    tmpDF10 <- ambDF3$GPP[ambDF3$ModName=="J_LPJGN"]
-    tmpDF11 <- ambDF3$GPP[ambDF3$ModName=="K_CABLP-VD"]
-    tmpDF12 <- ambDF3$GPP[ambDF3$ModName=="L_LPJGP-VD"]
-    
-    require(plotrix)
-    taylor.diagram(testDF1$LAI[testDF1$ModName=="OBS"],
-                   testDF1$LAI[testDF1$ModName=="A_GDAYP"], col=col.values[1])    
-    taylor.diagram(mambDF$GPP,tmpDF2, col=col.values[2], add=T)   
-    taylor.diagram(mambDF$GPP,tmpDF3, col=col.values[3], add=T)   
-    taylor.diagram(mambDF$GPP,tmpDF4, col=col.values[4], add=T)   
-    taylor.diagram(mambDF$GPP,tmpDF5, col=col.values[5], add=T) 
-    
-    
-    
     #### Soil respiration
     ### The measured soil respiration rate represents both root 
     ### and soil heterotrophic respiration flux. 
@@ -162,6 +138,7 @@ make_time_varying_data_model_comparison_over_obs_period <- function(scenario) {
     
     ### merge the two dataset
     testDF1 <- rbind(subDF, rsoilDF)
+    
     
     ### plot all data
     p2 <- ggplot(testDF1, aes(x=Date)) +
