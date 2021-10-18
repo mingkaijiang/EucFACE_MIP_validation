@@ -188,10 +188,9 @@ compare_microbial_model_general_output(scenario="VAR")
 
 
 ### 4.2.3. Investigate the MIMICS-like ORCHX performance
-scenario="FIX"
 investigate_OCHDX_microbial_responses(scenario="FIX")
 
-investigate_OCHDX_microbial_responses(scenario="FIX")
+investigate_OCHDX_microbial_responses(scenario="VAR")
 
 
 

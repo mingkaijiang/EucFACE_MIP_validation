@@ -1,4 +1,4 @@
-investigate_OCHDX_microbial_responses <- function (scenario="FIX") {
+investigate_OCHDX_microbial_responses <- function (scenario) {
     
     ### setting out path to store the files
     out.dir <- paste0(getwd(), "/output/MIP_output/OBS_output/", scenario, "/")
@@ -37,7 +37,15 @@ investigate_OCHDX_microbial_responses <- function (scenario="FIX") {
     
     sumDF <- sumDF[sumDF$ModName=="G_OCHDX",]
     
-    ### convert from wide to long
+    ### y.range
+    if (scenario == "FIX") {
+        p1.y.range <- c(12, 15)
+        p2.y.range <- c(1.8, 2.2)
+    } else {
+        p1.y.range <- c(12, 18)
+        p2.y.range <- c(2.0, 2.5)
+    }
+    
     
     
     ### plot
@@ -67,11 +75,11 @@ investigate_OCHDX_microbial_responses <- function (scenario="FIX") {
                          label=c("amb"= "AMB",
                                  "ele"= "ELE"))+
         xlab("")+
-        coord_cartesian(ylim=c(12,15))+
+        coord_cartesian(ylim=p1.y.range)+
         scale_fill_manual(name="",
                           values=c("amb"="blue3",
                                    "ele"="red2"),
-                          labels=c("amb", "ele")); p1
+                          labels=c("amb", "ele"))
         
     
     p2 <- ggplot(data=sumDF, 
@@ -100,11 +108,11 @@ investigate_OCHDX_microbial_responses <- function (scenario="FIX") {
                          label=c("amb"= "AMB",
                                  "ele"= "ELE"))+
         xlab("")+
-        coord_cartesian(ylim=c(1.8, 2.2))+
+        coord_cartesian(ylim=p2.y.range)+
         scale_fill_manual(name="",
                           values=c("amb"="blue3",
                                    "ele"="red2"),
-                          labels=c("amb", "ele")); p2
+                          labels=c("amb", "ele"))
     
 
     pdf(paste0(out.dir, "/ORCHIDEE_microbial_pools.pdf"), 
