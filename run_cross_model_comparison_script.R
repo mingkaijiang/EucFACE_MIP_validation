@@ -174,6 +174,11 @@ compare_CNP_and_CN_model_output(scenario="FIX")
 ### 4.2. show microbial effects with the two microbial enabled models
 ###      based on fixed climate forcing
 ###      add Csoil, Clit, Rh comparison plot
+
+### prepare microbial model input
+prepare_microbial_model_input()
+
+
 scenario="FIX"
 compare_microbial_model_output(scenario="FIX")
 

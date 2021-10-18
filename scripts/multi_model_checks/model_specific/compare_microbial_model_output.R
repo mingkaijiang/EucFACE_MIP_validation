@@ -25,8 +25,11 @@ compare_microbial_model_output <- function(scenario) {
     }
     
     
-    ### prepare microbial model input
-    prepare_microbial_model_input()
+    ### read in prepared microbial model
+    ### here we don't need to read in the model-specific variables
+    ### because we are only interested in the general variable responses. 
+    ambDF <- readRDS(paste0("output/MIP_output/processed_simulation/MIP_OBS_", scenario, "_AMB_annual.rds"))
+    eleDF <- readRDS(paste0("output/MIP_output/processed_simulation/MIP_OBS_", scenario, "_ELE_annual.rds"))
     
     
     ### select GDAYN, GDAYP, LPJGN, LPJGP model output
@@ -48,7 +51,7 @@ compare_microbial_model_output <- function(scenario) {
     diffDF <- ambDF[ambDF$ModName%in%c("E_OCHDP", "F_QUINC"),]
     
     diffDF$ModName <- gsub("E_OCHDP", "ORCHIDEE", diffDF$ModName)
-    diffDF$ModName <- gsub("QUINC", "QUINCY", diffDF$ModName)
+    diffDF$ModName <- gsub("F_QUINC", "QUINCY", diffDF$ModName)
     
     diffDF[diffDF$ModName=="ORCHIDEE",3:d] <- ambDF[ambDF$ModName=="G_OCHDX",3:d] - ambDF[ambDF$ModName=="E_OCHDP",3:d]
     diffDF[diffDF$ModName=="QUINCY",3:d] <- ambDF[ambDF$ModName=="H_QUJSM",3:d] - ambDF[ambDF$ModName=="F_QUINC",3:d]
