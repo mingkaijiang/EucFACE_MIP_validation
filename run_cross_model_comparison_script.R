@@ -221,10 +221,10 @@ plot_taylor_diagram(scenario="VAR")
 #### Step 6. Theoretical analyses
 
 ### 6.1. Compare against Medlyn 2016
+###      The Medlyn 2016 is simulated based on fixed climate (hypothetical, wet)
+###      and so we will need to compare it against the FIX climate scenario in this MIP.
 prepare_Medlyn_2016_input()
 
-### The Medlyn 2016 is simulated based on fixed climate (hypothetical, wet)
-### and so we will need to compare it against the FIX climate scenario in this MIP.
 compare_two_MIP_results()
 
 
