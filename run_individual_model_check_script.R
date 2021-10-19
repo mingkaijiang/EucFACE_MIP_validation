@@ -626,24 +626,24 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
                                              nutrient.trt = "HIP")
 
 
-### ELMXX - not available yet
-#plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/ELMXX"),
-#                                             mod.abb = "ELMV1",
-#                                             out.dir = paste0(getwd(), "/output/analysis_output/ELMXX"),
-#                                             sim.period = "PRD",
-#                                             nutrient.trt = "NOP")
-#
-#plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/ELMXX"),
-#                                             mod.abb = "ELMV1",
-#                                             out.dir = paste0(getwd(), "/output/analysis_output/ELMXX"),
-#                                             sim.period = "PRD",
-#                                             nutrient.trt = "MDP")
-#
-#plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/ELMXX"),
-#                                             mod.abb = "ELMV1",
-#                                             out.dir = paste0(getwd(), "/output/analysis_output/ELMXX"),
-#                                             sim.period = "PRD",
-#                                             nutrient.trt = "HIP")
+### ELMV1
+plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/ELMV1"),
+                                             mod.abb = "ELMV1",
+                                             out.dir = paste0(getwd(), "/output/analysis_output/ELMV1"),
+                                             sim.period = "PRD",
+                                             nutrient.trt = "NOP")
+
+plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/ELMV1"),
+                                             mod.abb = "ELMV1",
+                                             out.dir = paste0(getwd(), "/output/analysis_output/ELMV1"),
+                                             sim.period = "PRD",
+                                             nutrient.trt = "MDP")
+
+plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/ELMV1"),
+                                             mod.abb = "ELMV1",
+                                             out.dir = paste0(getwd(), "/output/analysis_output/ELMV1"),
+                                             sim.period = "PRD",
+                                             nutrient.trt = "HIP")
 
 ##########################################################################
 ##########################################################################
