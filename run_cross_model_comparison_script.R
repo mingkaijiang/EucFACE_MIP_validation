@@ -27,13 +27,6 @@ n.mod.list <- c("GDAYN", "LPJGN")
 ## we decided to not look at the DGVM output for the current paper
 #d.mod.list <- c("CABLP", "LPJGP")
 
-## ignore ELM for future period because no simulation has been provided
-p.mod.list.rev <- c("CABLP", #"ELMV1",
-                    "GDAYP", "LPJGP",
-                    "OCHDP", "OCHDX", 
-                    "QUINC", "QUJSM")
-
-
 
 #### 2.2. Compile all model results together, 
 ####      and save annual and daily datasets
@@ -45,7 +38,7 @@ compile_obs_dataset_across_models(p.mod.list, n.mod.list)
 
 ### 2.3. Compile all future predicted datasets together.
 ###      Generate daily and annual output.
-compile_pred_dataset_across_models(p.mod.list=p.mod.list.rev,
+compile_pred_dataset_across_models(p.mod.list=p.mod.list,
                                    n.mod.list=n.mod.list)
 
 

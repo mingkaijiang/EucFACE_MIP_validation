@@ -14,6 +14,33 @@ translate_ELMV1_simulation_into_EucFACE_MIP_format <- function(source.dir) {
     file.names <- list.files(source.dir)
     n <- length(file.names)
     
+    mod.abb <- "ELMV1"
+    
+    
+    ### prepare a bunch of P fertilization scenarios
+    nop <- c(paste0("EUC_", mod.abb, "_OBS_FIX_AMB_NOP_D.csv"),
+             paste0("EUC_", mod.abb, "_OBS_VAR_AMB_NOP_D.csv"),
+             paste0("EUC_", mod.abb, "_OBS_FIX_ELE_NOP_D.csv"),
+             paste0("EUC_", mod.abb, "_OBS_VAR_ELE_NOP_D.csv"),
+             paste0("EUC_", mod.abb, "_PRD_FIX_AMB_NOP_D.csv"),
+             paste0("EUC_", mod.abb, "_PRD_VAR_AMB_NOP_D.csv"),
+             paste0("EUC_", mod.abb, "_PRD_FIX_ELE_NOP_D.csv"),
+             paste0("EUC_", mod.abb, "_PRD_VAR_ELE_NOP_D.csv"))
+    
+    
+    mdp <- c(paste0("EUC_", mod.abb, "_PRD_FIX_AMB_MDP_D.csv"),
+             paste0("EUC_", mod.abb, "_PRD_VAR_AMB_MDP_D.csv"),
+             paste0("EUC_", mod.abb, "_PRD_FIX_ELE_MDP_D.csv"),
+             paste0("EUC_", mod.abb, "_PRD_VAR_ELE_MDP_D.csv"))
+    
+    hip <- c(paste0("EUC_", mod.abb, "_PRD_FIX_AMB_HIP_D.csv"),
+             paste0("EUC_", mod.abb, "_PRD_VAR_AMB_HIP_D.csv"),
+             paste0("EUC_", mod.abb, "_PRD_FIX_ELE_HIP_D.csv"),
+             paste0("EUC_", mod.abb, "_PRD_VAR_ELE_HIP_D.csv"))
+    
+    mdp.daily.value <- 0.004109589
+    hip.daily.value <- 0.008219178
+    
     ### loop through all data
     for (i in 1:n) {
         ### read in corresponding simulation file
@@ -32,6 +59,29 @@ translate_ELMV1_simulation_into_EucFACE_MIP_format <- function(source.dir) {
         
         myDF$PFLITA <- myDF$PFLIT
         myDF$PFLIT <- rowSums(data.frame(myDF$PFLITA, myDF$PFLITB), na.rm=T)
+        
+        
+        ### add PFERT variable, depending on runs
+        if (file.names[i]%in%nop) {
+            
+            myDF$PFERT <- 0.0
+            
+        } else if (file.names[i]%in%mdp) {
+            
+            myDF$PFERT <- 0.0
+            myDF$PFERT[myDF$YEAR<=2022&myDF$YEAR>=2020] <- mdp.daily.value
+            
+        } else if (file.names[i]%in%hip) {
+            
+            myDF$PFERT <- 0.0
+            myDF$PFERT[myDF$YEAR<=2022&myDF$YEAR>=2020] <- hip.daily.value
+            
+        } else {
+            print("no P fertilization scenarios")
+            
+            myDF$PFERT <- 0.0
+        }
+        
         
         ### end changing variable names
         ############################################
