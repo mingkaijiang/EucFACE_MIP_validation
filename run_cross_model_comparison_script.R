@@ -150,6 +150,15 @@ plot_gradual_increase_CO2_trajectories(climate.scenario="FIX")
 plot_gradual_increase_CO2_trajectories(climate.scenario="VAR")
 
 
+
+### 3.9 
+
+
+
+
+
+
+
 ##########################################################################
 #### Step 4: Model specific investigations
 
@@ -226,9 +235,6 @@ plot_taylor_diagram(scenario="VAR")
 prepare_Medlyn_2016_input()
 
 compare_two_MIP_results()
-
-
-
 
 
 

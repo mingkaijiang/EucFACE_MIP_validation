@@ -114,11 +114,10 @@ EucFACE_mass_balance_and_validation_script_LPJGN(mod.version="new_soil",
                                                  pft.group="all_pft")
 
 
-### ELMXX - should be renamed to ELM V1
+### ELMV1
 # summary of ELM: retranslocation flux needed
 # respiration flux needed to check
 # litter pool check
-# Plab too large. If divide by 40, CSOIL too small (and Pmineralization flux)
 EucFACE_mass_balance_and_validation_script_ELMXX()
 
 
