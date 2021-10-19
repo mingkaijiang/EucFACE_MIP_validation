@@ -124,7 +124,9 @@ trace_fate_of_carbon_MIP_plot(scenario="FIX")
 
 ### 3.6. Plot normalized trajectory as well as the CO2 effect over time
 ###      This function checks the P fertilization effect for the future period
-###      but does not look at the drought effect
+###      but does not look at the drought effect:
+###      1. real magnitude of P fertilization from different model starting point
+###      2. normalized magnitude of P fertilization normalized to the same starting point
 plot_normalized_pred_trajectories(climate.scenario="VAR",
                                   yr.to.normalize=2012)
 
@@ -205,6 +207,11 @@ make_time_averaged_data_model_comparison_over_obs_period(eucDF,
                                                          scenario="VAR")
 
 
+### ambient treatment, CO2 responses
+### incomplete
+#plot_MIP_CO2_response_comparison(eucDF)
+
+
 ### 5.2. time-varying response
 ###      LAI, Rsoil
 make_time_varying_data_model_comparison_over_obs_period(scenario="VAR")
@@ -215,13 +222,26 @@ make_time_varying_data_model_comparison_over_obs_period(scenario="VAR")
 plot_taylor_diagram(scenario="VAR")
 
 
+
+
+##########################################################################
+#### Step 6. Theoretical analyses
+
+### 6.1. Compare against Medlyn 2016
+prepare_Medlyn_2016_input()
+
+### The Medlyn 2016 is simulated based on fixed climate (hypothetical, wet)
+### and so we will need to compare it against the FIX climate scenario in this MIP.
+compare_two_MIP_results()
+
+
+
+
+
+
+### 6.2. Photosynthesis and relationship with leaf nutrients
 #plot_photosynthesis_relationships(scenario="FIX")
 #plot_photosynthesis_relationships(scenario="VAR")
-
-
-### ambient treatment, CO2 responses
-### incomplete
-#plot_MIP_CO2_response_comparison(eucDF)
 
 
 
@@ -238,16 +258,8 @@ plot_taylor_diagram(scenario="VAR")
 
 
 ##########################################################################
-### Investigate P fertilization treatment
-### 1. real magnitude of P fertilization from different model starting point
-### 2. normalized magnitude of P fertilization normalized to the same starting point
+#### Step 7. Other work
 
-
-
-### the CO2 experimental design for future period is also interesting to explore
-### We have ambient conditions where CO2 rises linearly each year,
-### whereas elevated treatment has CO2 stop in year 2030 and then stays the same for the rest 40 years
-### Both scenarios land to the same CO2 concentration in year 2069.
 
 
 
