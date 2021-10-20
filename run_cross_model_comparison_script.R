@@ -151,11 +151,14 @@ plot_gradual_increase_CO2_trajectories(climate.scenario="VAR")
 
 
 
-### 3.9 
-
-
-
-
+### 3.9 Investigate gross mineralization rate and its relationship to
+###     plant nutrient uptake.
+###     Expectation: microbial models should have a large component of
+###     the gross mineralization flux to be immobilized by microbes,
+###     and hence the ratio of plant nutrient uptake to gross mineralization
+###     is tiny.
+investigate_gross_mineralization(scenario="VAR")
+investigate_gross_mineralization(scenario="FIX")
 
 
 
