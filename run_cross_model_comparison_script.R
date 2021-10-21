@@ -268,33 +268,11 @@ compare_two_MIP_results()
 
 ##########################################################################
 ### to do list:
-### 1. Check individual model to include unaccounted fluxes and pools 
-###    that are necesary for mass balance closure (e.g. allocation)
-### 2. Storyline development
-### 2. Generate summary table on key model features:
-###    Waiting for input from ELM only,
-###    Need to go through each model to confirm their entries.
-### 3. Model structure diagrams 
-###    all completed except ORCHIDEE-MIC
-### 4. Traceability analysis?
-### 5. Leaf nutrient effect on Vcmax and Jmax - theoretical analysis
+
+### 1. Leaf nutrient effect on Vcmax and Jmax - theoretical analysis
 ###    Need to proceed even without the Ellsworth relationship
-### 6. Data-model intercomparison figures:
-###    Ambient + CO2 response (% and abs);
-###    Time series plots;
-###    Fate of C;
-###    N + P variables;
-###    Projected future response - can additional C sequestration under reduced P stress
-### 7. CN cs. CNP model comparisons
-###    GDAYN vs. GDAYP, LPJGN vs. LPJGP
-###    Medlyn et al. 2016 model simulations
-### 8. Microbial processes analysis
-###    Explicit microbial processes: QUJSM, OCHDX
-###    Semi-explicit microbial processes: ELMXX
-###    Exudation and priming: GDAYP
-### 9. DGVM analysis:
-###    CABLE-POP + LPJ-GUESS, waiting for ED2 and possibly FATES (noting that BiomeEES also available)
-### 10. CO2 x water: conceptual diagram + soil hydrology
+### 2. PUE figure
+
 
 ##########################################################################
 ####
