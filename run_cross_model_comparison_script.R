@@ -136,6 +136,7 @@ plot_normalized_pred_trajectories(climate.scenario="FIX",
 ###      2. Check how continued increase in CO2 affects the drought year response,
 ###         and the long-term cumulative C storage in plants and soils.
 ###      3. Check if additional P alleviates plant drought stress under eCO2.
+###      4. Check water use efficiency
 plot_CO2_water_interaction()
 
 
