@@ -35,6 +35,9 @@ compare_two_MIP_results <- function() {
                           ymax=meanvalue+sdvalue), 
                       col="black", 
                       position=position_dodge(width=0.9), width=0.2)+
+        geom_point(data=subDF1, aes(ModVersion, meanvalue, group=Trt,
+                                    col=ModName), 
+                   position=position_dodge(width=0.9), size=4)+
         xlab("")+
         theme_linedraw() +
         facet_wrap(~MIP)+
@@ -56,11 +59,22 @@ compare_two_MIP_results <- function() {
                                         hjust = 0.5))+
         ylab(expression(paste("GPP (g C " * m^2 * " " * yr^-1 * ")")))+
         scale_fill_manual(name="Trt",
-                          values=c("amb"="blue3", "ele"="red3")); p1
+                          values=c("amb"="blue3", "ele"="red3"))+
+        scale_color_manual(name="Model",
+                           values=c(col.values, 
+                                    "CLM4"=Diverge_hsv_Palette[1],
+                                    "CLMP"=Diverge_hsv_Palette[2],
+                                    "CABL"=Diverge_hsv_Palette[3],
+                                    "GDAY"=Diverge_hsv_Palette[4],
+                                    "LPJW"=Diverge_hsv_Palette[5],
+                                    "LPJX"=Diverge_hsv_Palette[6],
+                                    "OCNX"=Diverge_hsv_Palette[7],
+                                    "SDVM"=Diverge_hsv_Palette[8]))
     
     
     
     plotDF2 <- myDF[myDF$variable=="NPP",]
+    subDF2 <- myDF2[myDF2$variable=="NPP",]
     
     p2 <- ggplot(data=plotDF2, 
                  aes(ModVersion, meanvalue, group=Trt)) +
@@ -70,6 +84,9 @@ compare_two_MIP_results <- function() {
                           ymax=meanvalue+sdvalue), 
                       col="black", 
                       position=position_dodge(width=0.9), width=0.2)+
+        geom_point(data=subDF2, aes(ModVersion, meanvalue, group=Trt,
+                                    col=ModName), 
+                   position=position_dodge(width=0.9), size=4)+
         xlab("")+
         theme_linedraw() +
         facet_wrap(~MIP)+
@@ -91,10 +108,21 @@ compare_two_MIP_results <- function() {
                                         hjust = 0.5))+
         ylab(expression(paste("NPP (g C " * m^2 * " " * yr^-1 * ")")))+
         scale_fill_manual(name="Trt",
-                          values=c("amb"="blue3", "ele"="red3"))
+                          values=c("amb"="blue3", "ele"="red3"))+
+        scale_color_manual(name="Model",
+                           values=c(col.values, 
+                                    "CLM4"=Diverge_hsv_Palette[1],
+                                    "CLMP"=Diverge_hsv_Palette[2],
+                                    "CABL"=Diverge_hsv_Palette[3],
+                                    "GDAY"=Diverge_hsv_Palette[4],
+                                    "LPJW"=Diverge_hsv_Palette[5],
+                                    "LPJX"=Diverge_hsv_Palette[6],
+                                    "OCNX"=Diverge_hsv_Palette[7],
+                                    "SDVM"=Diverge_hsv_Palette[8]))
     
     
     plotDF3 <- myDF[myDF$variable=="NEP",]
+    subDF3 <- myDF2[myDF2$variable=="NEP",]
     
     p3 <- ggplot(data=plotDF3, 
                  aes(ModVersion, meanvalue, group=Trt)) +
@@ -104,6 +132,9 @@ compare_two_MIP_results <- function() {
                           ymax=meanvalue+sdvalue), 
                       col="black", 
                       position=position_dodge(width=0.9), width=0.2)+
+        geom_point(data=subDF3, aes(ModVersion, meanvalue, group=Trt,
+                                    col=ModName), 
+                   position=position_dodge(width=0.9), size=4)+
         xlab("")+
         theme_linedraw() +
         facet_wrap(~MIP)+
@@ -115,18 +146,28 @@ compare_two_MIP_results <- function() {
               legend.text=element_text(size=12),
               legend.title=element_text(size=14),
               panel.grid.major=element_blank(),
-              legend.position=c(.85,.75),
+              legend.position="bottom",
               legend.box = 'horizontal',
               legend.box.just = 'left')+
         ylab(expression(paste("NEP (g C " * m^2 * " " * yr^-1 * ")")))+
         scale_fill_manual(name="",
-                          values=c("amb"="blue3", "ele"="red3"))
+                          values=c("amb"="blue3", "ele"="red3"))+
+        scale_color_manual(name="Model",
+                           values=c(col.values, 
+                                    "CLM4"=Diverge_hsv_Palette[1],
+                                    "CLMP"=Diverge_hsv_Palette[2],
+                                    "CABL"=Diverge_hsv_Palette[3],
+                                    "GDAY"=Diverge_hsv_Palette[4],
+                                    "LPJW"=Diverge_hsv_Palette[5],
+                                    "LPJX"=Diverge_hsv_Palette[6],
+                                    "OCNX"=Diverge_hsv_Palette[7],
+                                    "SDVM"=Diverge_hsv_Palette[8]))
     
     
     ### Plotting
-    pdf(paste0(out.dir, "/Comparison_to_Medlyn_2016.pdf"), width=4, height=8)
+    pdf(paste0(out.dir, "/Comparison_to_Medlyn_2016.pdf"), width=6, height=12)
     
-    grid.arrange(p1, p2, p3, nrow=3)
+    grid.arrange(p1, p2, p3, nrow=3, heights=c(1,1,1.6))
     
     dev.off()
     
