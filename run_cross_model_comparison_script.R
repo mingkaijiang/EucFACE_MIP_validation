@@ -207,7 +207,6 @@ investigate_OCHDX_microbial_responses(scenario="VAR")
 ###      Only plot the variable scenario,
 ###      because this is used to compare against data
 ###      Go into function to plot.
-
 scenario="VAR"
 make_time_averaged_data_model_comparison_over_obs_period(eucDF,
                                                          scenario="VAR")

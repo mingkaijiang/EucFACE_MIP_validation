@@ -56,6 +56,11 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
     nmod <- length(mod.list)
     
     
+    ### check GDAY PUP
+    #ambDF.sum$PUP.mean[ambDF.sum$ModName=="A_GDAYP"]
+    #eleDF.sum$PUP.mean[eleDF.sum$ModName=="A_GDAYP"]
+    
+    
     ##########################################################################
     ### Plotting
     

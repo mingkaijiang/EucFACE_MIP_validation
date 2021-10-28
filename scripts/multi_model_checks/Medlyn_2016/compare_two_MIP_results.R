@@ -11,16 +11,21 @@ compare_two_MIP_results <- function() {
     
     ### calculate 2016 multi-model means for CNP and CN models
     medDF <- calculate_Medlyn_2016_ModVersion_means(time.period=c(2012, 2019))
+    medDF2 <- calculate_Medlyn_2016_individual_model_means(time.period=c(2012, 2019))
     
     ### prepare the current MIP output
     thisDF <- calculate_this_MIP_ModVersion_means(time.period=c(2012, 2019))
+    thisDF2 <- calculate_this_MIP_individual_model_means(time.period=c(2012, 2019))
+    
     
     ### compare the two
     myDF <- merge_this_MIP_and_Medlyn_2016(medDF=medDF, thisDF=thisDF)
+    myDF2 <- merge_this_MIP_and_Medlyn_2016_individual_model(medDF=medDF2, thisDF=thisDF2)
     
     
     ### compare the two with plotting
     plotDF1 <- myDF[myDF$variable=="GPP",]
+    subDF1 <- myDF2[myDF2$variable=="GPP",]
     
     p1 <- ggplot(data=plotDF1, 
                  aes(ModVersion, meanvalue, group=Trt)) +
@@ -51,7 +56,7 @@ compare_two_MIP_results <- function() {
                                         hjust = 0.5))+
         ylab(expression(paste("GPP (g C " * m^2 * " " * yr^-1 * ")")))+
         scale_fill_manual(name="Trt",
-                          values=c("amb"="blue3", "ele"="red3"))
+                          values=c("amb"="blue3", "ele"="red3")); p1
     
     
     
