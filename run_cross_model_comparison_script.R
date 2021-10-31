@@ -140,6 +140,9 @@ plot_normalized_pred_trajectories(climate.scenario="FIX",
 plot_CO2_water_interaction()
 
 
+plot_CO2_water_interaction_drought_year(deficit.year=2019)
+
+
 ### 3.8 check gradual increase in CO2 vs. sharp increase in CO2
 ### compare the eCO2 response with aCO2, i.e.:
 ### aCO2, eCO2 with sharp increase, eCO2 with gradual increase
