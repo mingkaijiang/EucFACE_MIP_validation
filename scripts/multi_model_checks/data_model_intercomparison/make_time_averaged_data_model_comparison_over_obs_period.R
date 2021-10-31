@@ -953,9 +953,84 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
     
     
     
+    
+    ################# PUE ####################
+    subDF1 <- subset(budgetDF, Variable%in%c("PUE"))
+    subDF1$meanvalue <- ifelse(is.infinite(subDF1$meanvalue), NA, subDF1$meanvalue)  
+    
+    
+    plotDF1 <- subDF1[subDF1$Trt=="aCO2",]
+    plotDF2 <- subDF1[subDF1$Trt=="pct_diff",]
+    
+    
+    ## stoichiometry
+    p11 <- ggplot(data=plotDF1, 
+                 aes(Group, meanvalue, group=Group)) +
+      geom_bar(stat = "identity", aes(fill=Group), 
+               position="dodge", col="black") +
+      geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
+      theme_linedraw() +
+      theme(panel.grid.minor=element_blank(),
+            axis.text.x=element_text(size=12),
+            axis.title.x=element_text(size=14),
+            axis.text.y=element_text(size=12),
+            axis.title.y=element_text(size=14),
+            legend.text=element_text(size=12),
+            legend.title=element_text(size=14),
+            panel.grid.major=element_blank(),
+            legend.position="none",
+            legend.box = 'horizontal',
+            legend.box.just = 'left',
+            legend.background = element_rect(fill="grey",
+                                             size=0.5, linetype="solid", 
+                                             colour ="black"),
+            plot.title = element_text(size=14, face="bold.italic", 
+                                      hjust = 0.5))+
+      ylab(expression("PUE (g C " * g^-1 * " P)"))+
+      scale_x_discrete(limit=c(mod.list, "obs"),
+                       label=c(model.labels, "obs" = "OBS"))+
+      scale_fill_manual(name="Model",
+                        values=c(col.values, obs="black"),
+                        labels=c(model.labels, "obs"= "OBS"))+
+      guides(fill=guide_legend(nrow=6));p11
+    
+    
+    
+    
+    p12 <- ggplot(data=plotDF2, 
+                  aes(Group, meanvalue)) +
+      geom_bar(stat = "identity", aes(fill=Group), 
+               position=position_dodge2(), col="black") +
+      geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
+      xlab("")+
+      theme_linedraw() +
+      theme(panel.grid.minor=element_blank(),
+            axis.text.x=element_text(size=12),
+            axis.title.x=element_text(size=14),
+            axis.text.y=element_text(size=12),
+            axis.title.y=element_text(size=14),
+            legend.text=element_text(size=12),
+            legend.title=element_text(size=14),
+            panel.grid.major=element_blank(),
+            legend.position="none",
+            legend.box = 'horizontal',
+            legend.box.just = 'left',
+            plot.title = element_text(size=14, face="bold.italic", 
+                                      hjust = 0.5))+
+      ylab(expression(CO[2] * " effect (%)"))+
+      scale_x_discrete(limit=c(mod.list, "obs"),
+                       label=c(model.labels, "obs" = "OBS"))+
+      scale_fill_manual(name="Model",
+                        values=c(col.values, obs="black"),
+                        labels=c(model.labels, "obs"= "OBS"))+
+      guides(fill=guide_legend(nrow=6)); p12
+    
+    
+    
+    
     pdf(paste0(out.dir, "/MIP_time_averaged_", scenario, "_comparison_P_variables.pdf"), 
         width=16, height=16)
-    plot_grid(p1, p2, p5, p6, p7, p8, p9, p10,
+    plot_grid(p1, p2, p5, p6, p11, p12, p9, p10,
               labels="auto", label_x=0.1, label_y=0.95,
               label_size=24,
               ncol=2)
