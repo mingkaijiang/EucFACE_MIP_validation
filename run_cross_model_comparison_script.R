@@ -201,6 +201,18 @@ investigate_OCHDX_microbial_responses(scenario="FIX")
 investigate_OCHDX_microbial_responses(scenario="VAR")
 
 
+### 4.2.4. Investigate QUJSM
+investigate_QUJSM_microbial_responses(scenario="FIX")
+
+investigate_QUJSM_microbial_responses(scenario="VAR")
+
+
+### 4.2.5. Combine the two
+investigate_microbial_responses(scenario="FIX", compare.to.obs=F)
+
+investigate_microbial_responses(scenario="VAR", compare.to.obs=T)
+
+
 
 ##########################################################################
 #### Step 5. Data-model intercomparison

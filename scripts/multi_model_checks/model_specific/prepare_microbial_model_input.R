@@ -42,13 +42,16 @@ prepare_microbial_model_input <- function() {
                              "PCRRETR","PFRRETR","PWEA","PDEP") 
     
     
-    p.mod.names.ochdx <- c("YEAR","DOY", "NMICR", "PMICR") # QUJSM-specific
+    p.mod.names.ochdx <- c("YEAR","DOY", "NMICR", "PMICR") # OCHDX-specific
     
     
-    p.mod.names.qujsm <- c("YEAR","DOY", "PTPMIN", "PTPORG", "RMAIN", "RNTRANS", "CSTRLIN",  
-                             "NGSTR", "NREPR", "NRECYC", "NSTRLIN", "NVEGLIN", "NSEED",  
-                             "NFRUIT", "PGSTR", "PREPR", "PRECYC", "PSTRLIN", "PVEGLIN",
-                             "PSEED", "PFRUIT") # QUJSM-specific
+    p.mod.names.qujsm <- c("YEAR","DOY", 
+                           "CMIC10", "CMIC30", "CMIC60",
+                           "CMOC", "CTMOC",
+                           "NMIC10", "NMIC30", "NMIC60",
+                           "NMOC", "NTMOC",
+                           "PMIC10", "PMIC30", "PMIC60",
+                           "PMOC", "PTMOC") # QUJSM-specific
     
     
     
@@ -88,6 +91,26 @@ prepare_microbial_model_input <- function() {
                 outDF <- rbind(outDF, modDF)
             }
             
+            
+            ### add additional variables to outDF
+            #outDF$NMICR <- NA
+            #outDF$PMICR <- NA
+            #
+            #outDF$CMIC10 <- NA
+            #outDF$CMIC30 <- NA
+            #outDF$CMIC60 <- NA
+            #outDF$NMIC10 <- NA
+            #outDF$NMIC30 <- NA
+            #outDF$NMIC60 <- NA
+            #outDF$PMIC10 <- NA
+            #outDF$PMIC30 <- NA
+            #outDF$PMIC60 <- NA
+            #outDF$CMOC <- NA
+            #outDF$NMOC <- NA
+            #outDF$PMOC <- NA
+            #outDF$CTMOC <- NA
+            #outDF$NTMOC <- NA
+            #outDF$PTMOC <- NA
             
             
             ## read in individual models
@@ -152,9 +175,7 @@ prepare_microbial_model_input <- function() {
                                  NCRRETR+NFRRETR+PLITIN+PCRLIN+PFRLIN+
                                  PWLIN+PUP+PGMIN+PMIN+PBIOCHMIN+PLEACH+
                                  PGL+PGW+PGCR+PGFR+PLRETR+PWRETR+PCRRETR+
-                                 PFRRETR+PWEA+PDEP+PFERT+RMAIN+RNTRANS+
-                                 NGSTR+NREPR+NRECYC+PGSTR+PREPR+
-                                 PRECYC~YEAR+ModName, 
+                                 PFRRETR+PWEA+PDEP+PFERT~YEAR+ModName, 
                              data=ambDF, FUN=sum, keep.names=T, na.rm=T)
         
         fluxDF2 <- summaryBy(PREC+NDEP+NEP+GPP+NPP+CEX+CVOC+RECO+
@@ -167,9 +188,7 @@ prepare_microbial_model_input <- function() {
                                  NCRRETR+NFRRETR+PLITIN+PCRLIN+PFRLIN+
                                  PWLIN+PUP+PGMIN+PMIN+PBIOCHMIN+PLEACH+
                                  PGL+PGW+PGCR+PGFR+PLRETR+PWRETR+PCRRETR+
-                                 PFRRETR+PWEA+PDEP+PFERT+RMAIN+RNTRANS+
-                                 NGSTR+NREPR+NRECYC+PGSTR+PREPR+
-                                 PRECYC~YEAR+ModName, 
+                                 PFRRETR+PWEA+PDEP+PFERT~YEAR+ModName, 
                              data=eleDF, FUN=sum, keep.names=T, na.rm=T)
         
         
@@ -189,13 +208,14 @@ prepare_microbial_model_input <- function() {
                             "CCLITB","NCLITB","PCLITB",
                             "NFLIT","PFLIT", 
                             "NPORG", "PPORG", 
-                            "NSEED", "NFRUIT",
-                            "PSEED", "PFRUIT",
-                            #"CTSOIL", 
-                            #"NTPMIN", "NTPORG",
-                            #"NTSOIL", "PTSOIL", 
-                            "PTPMIN", "PTPORG",
-                            "NMICR",  "PMICR")]
+                            #"PTPMIN", "PTPORG",
+                            "NMICR",  "PMICR",
+                            "CMIC10", "CMIC30", "CMIC60",
+                            "CMOC", "CTMOC",
+                            "NMIC10", "NMIC30", "NMIC60",
+                            "NMOC", "NTMOC",
+                            "PMIC10", "PMIC30", "PMIC60",
+                            "PMOC", "PTMOC")]
         
         
         poolDF2 <- eleDF[,c("ModName", "YEAR", "DOY", 
@@ -212,14 +232,15 @@ prepare_microbial_model_input <- function() {
                             "PFLITA","PFLITB",
                             "CCLITB","NCLITB","PCLITB",
                             "NFLIT","PFLIT", 
-                            "NPORG", "PPORG",
-                            "NSEED", "NFRUIT",
-                            "PSEED", "PFRUIT",
-                            #"CTSOIL", "NTPMIN", 
-                            #"NTPORG",
-                            #"NTSOIL", "PTSOIL", 
-                            "PTPMIN", "PTPORG",
-                            "NMICR", "PMICR")]
+                            "NPORG", "PPORG", 
+                            #"PTPMIN", "PTPORG",
+                            "NMICR", "PMICR",
+                            "CMIC10", "CMIC30", "CMIC60",
+                            "CMOC", "CTMOC",
+                            "NMIC10", "NMIC30", "NMIC60",
+                            "NMOC", "NTMOC",
+                            "PMIC10", "PMIC30", "PMIC60",
+                            "PMOC", "PTMOC")]
         
         
         poolDF1 <- subset(poolDF1, DOY==1)
