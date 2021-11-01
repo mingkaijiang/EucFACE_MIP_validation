@@ -115,16 +115,28 @@ trace_fate_of_carbon_MIP_plot(scenario="VAR")
 trace_fate_of_carbon_MIP_plot(scenario="FIX")
 
 
-### 3.6. Plot normalized trajectory as well as the CO2 effect over time
-###      This function checks the P fertilization effect for the future period
-###      but does not look at the drought effect:
-###      1. real magnitude of P fertilization from different model starting point
-###      2. normalized magnitude of P fertilization normalized to the same starting point
+### 3.6. CO2 x P interaction
+
+### 3.6.1. Plot normalized trajectory as well as the CO2 effect over time
+###        This function checks the P fertilization effect for the future period
+###        but does not look at the drought effect:
+###        1. real magnitude of P fertilization from different model starting point
+###        2. normalized magnitude of P fertilization normalized to the same starting point
 plot_normalized_pred_trajectories(climate.scenario="VAR",
                                   yr.to.normalize=2012)
 
 plot_normalized_pred_trajectories(climate.scenario="FIX",
                                   yr.to.normalize=2012)
+
+
+### 3.6.2. plot time slice comparison:
+###        hist: 2013 - 19 (7 yrs)
+###        P fertilization: 2020 - 22 (3 yrs)
+###        future: 2023 - 29 (7 yrs)
+###        long-term: 2063 - 2069 (7 yrs)
+plot_timeslice_CO2_by_P_interaction(climate.scenario="VAR")
+
+plot_timeslice_CO2_by_P_interaction(climate.scenario="FIX")
 
 
 
@@ -285,7 +297,7 @@ compare_two_MIP_results()
 
 ### 1. Leaf nutrient effect on Vcmax and Jmax - theoretical analysis
 ###    Need to proceed even without the Ellsworth relationship
-### 2. PUE figure
+### 2. P fertilization treatment and interaction with eCO2
 
 
 ##########################################################################
