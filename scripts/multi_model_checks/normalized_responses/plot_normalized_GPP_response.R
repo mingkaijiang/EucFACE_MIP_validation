@@ -26,6 +26,10 @@ plot_normalized_GPP_response <- function(scenario) {
     ambDF$Aleaf <- with(ambDF, GPP/LAI)
     eleDF$Aleaf <- with(eleDF, GPP/LAI)
     
+    
+    ### ignore N only models
+    
+    
     ### calculate annual mean
     ambDF2 <- summaryBy(GPP+LAI+Aleaf~YEAR+ModName, FUN=c(mean,sd),
                         na.rm=T, keep.names=T, data=ambDF)
@@ -50,7 +54,7 @@ plot_normalized_GPP_response <- function(scenario) {
 
     
     ##################################################################
-    mod.list <- unique(ambDF2$ModNmae)
+    mod.list <- unique(ambDF2$ModName)
     
     #require(gridExtra)
   

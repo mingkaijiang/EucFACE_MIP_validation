@@ -75,42 +75,104 @@ plot_timeslice_CO2_by_P_interaction <- function (climate.scenario) {
     plotDF2 <- subset(plotDF2, PTRT == "NOP")
     
     plotDF <- rbind(plotDF1, plotDF2)
-    #plotDF$PTRT <- as.factor(plotDF$PTRT)
+    
+    
+    ### remove two CN models
+    plotDF <- plotDF[plotDF$ModName%in%c("A_GDAYP", "B_ELMV1", "C_CABLP",
+                                         "D_LPJGP", "E_OCHDP", "F_QUINC",
+                                         "G_OCHDX", "H_QUJSM"),]
+    
+    
+    model.names <- c("A_GDAYP", "B_ELMV1", "C_CABLP",
+                     "D_LPJGP", "E_OCHDP", "F_QUINC",
+                     "G_OCHDX", "H_QUJSM")
+    
+    model.labels <- c("A_GDAYP" = "GDAYP",
+                      "B_ELMV1" = "ELMV1",
+                      "C_CABLP" = "CABLP",
+                      "D_LPJGP" = "LPJGP",
+                      "E_OCHDP" = "OCDHP",
+                      "F_QUINC" = "QUINC",
+                      "G_OCHDX" = "OCHDX",
+                      "H_QUJSM" = "QUJSM")
+    
     
     #### Plot responses
+    #p1 <- ggplot(data=plotDF, 
+    #             aes(x=Period, y=GPP.mean, group=PTRT))+
+    #    geom_bar(plotDF, stat = "identity", 
+    #             mapping=aes(Period, GPP.mean, fill=PTRT),
+    #             position=position_dodge(), col="black") +
+    #    geom_errorbar(plotDF, stat = "identity", 
+    #             mapping=aes(Period, ymax=GPP.mean+GPP.sd, 
+    #                         ymin=GPP.mean-GPP.sd),
+    #             position=position_dodge(width=0.9), 
+    #             width=0.5, col="black") +
+    #    coord_cartesian(ylim=c(0.9, 1.4))+
+    #    geom_hline(yintercept=1.0, col="black", lty=2)+
+    #    scale_fill_manual(name="Fertilization",
+    #                       values=c("NOP"="pink",
+    #                                "MDP"="orange",
+    #                                "HIP"="red3"))+
+    #    scale_x_discrete(name="",
+    #                     limits=c("1_HIST", "2_SHORT", "3_LONG"),
+    #                     labels=c("2013-19", "2023-29", "2063-69"))+
+    #    ylab(expression(CO[2] * " response of GPP"))+
+    #    facet_wrap(ModName~., ncol=2)+
+    #    theme_linedraw() +
+    #    theme(panel.grid.minor=element_blank(),
+    #          axis.text.x=element_text(size=12),
+    #          axis.title.x=element_text(size=12),
+    #          axis.text.y=element_text(size=12),
+    #          axis.title.y=element_text(size=14),
+    #          legend.text=element_text(size=12),
+    #          legend.title=element_text(size=14),
+    #          panel.grid.major=element_blank(),
+    #          legend.position="bottom",
+    #          legend.box = 'horizontal',
+    #          legend.box.just = 'left',
+    #          plot.title = element_text(size=14, face="bold.italic", 
+    #                                    hjust = 0.5));p1
+    
+    
+    
     p1 <- ggplot(data=plotDF, 
-                 aes(x=Period, y=GPP.mean, group=PTRT))+
+                 aes(x=ModName, y=GPP.mean, group=PTRT))+
         geom_bar(plotDF, stat = "identity", 
-                 mapping=aes(Period, GPP.mean, fill=PTRT),
+                 mapping=aes(ModName, GPP.mean, fill=PTRT),
                  position=position_dodge(), col="black") +
         geom_errorbar(plotDF, stat = "identity", 
-                 mapping=aes(Period, ymax=GPP.mean+GPP.sd, 
-                             ymin=GPP.mean-GPP.sd),
-                 position=position_dodge(width=0.9), 
-                 width=0.5, col="black") +
+                      mapping=aes(ModName, ymax=GPP.mean+GPP.sd, 
+                                  ymin=GPP.mean-GPP.sd),
+                      position=position_dodge(width=0.9), 
+                      width=0.5, col="black") +
         coord_cartesian(ylim=c(0.9, 1.4))+
         geom_hline(yintercept=1.0, col="black", lty=2)+
         scale_fill_manual(name="Fertilization",
-                           values=c("NOP"="pink",
-                                    "MDP"="orange",
-                                    "HIP"="red3"))+
+                          values=c("NOP"="pink",
+                                   "MDP"="orange",
+                                   "HIP"="red3"))+
         scale_x_discrete(name="",
-                         limits=c("1_HIST", "2_SHORT", "3_LONG"),
-                         labels=c("2013-19", "2023-29", "2063-69"))+
+                         limits=model.names,
+                         labels=model.labels)+
         ylab(expression(CO[2] * " response of GPP"))+
-        facet_wrap(ModName~., ncol=2)+
+        facet_wrap(Period~., ncol=3, 
+                   labeller=as_labeller(c("1_HIST"="2013-19", 
+                                          "2_SHORT"="2023-29", 
+                                          "3_LONG"="2063-69")))+
         theme_linedraw() +
-        theme(panel.grid.minor=element_blank(),
+        theme(panel.grid.minor=element_line(),
               axis.text.x=element_text(size=12),
               axis.title.x=element_text(size=12),
               axis.text.y=element_text(size=12),
               axis.title.y=element_text(size=14),
               legend.text=element_text(size=12),
               legend.title=element_text(size=14),
-              panel.grid.major=element_blank(),
+              panel.grid.major=element_line(),
               legend.position="bottom",
               legend.box = 'horizontal',
               legend.box.just = 'left',
+              strip.text = element_text(size=20),
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5));p1
     
@@ -118,12 +180,12 @@ plot_timeslice_CO2_by_P_interaction <- function (climate.scenario) {
     
     #### Plot responses
     p2 <- ggplot(data=plotDF, 
-                 aes(x=Period, y=NPP.mean, group=PTRT))+
+                 aes(x=ModName, y=NPP.mean, group=PTRT))+
         geom_bar(plotDF, stat = "identity", 
-                 mapping=aes(Period, NPP.mean, fill=PTRT),
+                 mapping=aes(ModName, NPP.mean, fill=PTRT),
                  position=position_dodge(), col="black") +
         geom_errorbar(plotDF, stat = "identity", 
-                      mapping=aes(Period, ymax=NPP.mean+NPP.sd, 
+                      mapping=aes(ModName, ymax=NPP.mean+NPP.sd, 
                                   ymin=NPP.mean-NPP.sd),
                       position=position_dodge(width=0.9), 
                       width=0.5, col="black") +
@@ -134,22 +196,26 @@ plot_timeslice_CO2_by_P_interaction <- function (climate.scenario) {
                                    "MDP"="orange",
                                    "HIP"="red3"))+
         scale_x_discrete(name="",
-                         limits=c("1_HIST", "2_SHORT", "3_LONG"),
-                         labels=c("2013-19", "2023-29", "2063-69"))+
+                         limits=model.names,
+                         labels=model.labels)+
         ylab(expression(CO[2] * " response of NPP"))+
-        facet_wrap(ModName~., ncol=2)+
+        facet_wrap(Period~., ncol=3, 
+                   labeller=as_labeller(c("1_HIST"="2013-19", 
+                                          "2_SHORT"="2023-29", 
+                                          "3_LONG"="2063-69")))+
         theme_linedraw() +
-        theme(panel.grid.minor=element_blank(),
+        theme(panel.grid.minor=element_line(),
               axis.text.x=element_text(size=12),
               axis.title.x=element_text(size=12),
               axis.text.y=element_text(size=12),
               axis.title.y=element_text(size=14),
               legend.text=element_text(size=12),
               legend.title=element_text(size=14),
-              panel.grid.major=element_blank(),
+              panel.grid.major=element_line(),
               legend.position="bottom",
               legend.box = 'horizontal',
               legend.box.just = 'left',
+              strip.text = element_text(size=20),
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5));p2
     
@@ -157,12 +223,12 @@ plot_timeslice_CO2_by_P_interaction <- function (climate.scenario) {
     
     #### Plot responses
     p3 <- ggplot(data=plotDF, 
-                 aes(x=Period, y=PL.mean, group=PTRT))+
+                 aes(x=ModName, y=PL.mean, group=PTRT))+
         geom_bar(plotDF, stat = "identity", 
-                 mapping=aes(Period, PL.mean, fill=PTRT),
+                 mapping=aes(ModName, PL.mean, fill=PTRT),
                  position=position_dodge(), col="black") +
         geom_errorbar(plotDF, stat = "identity", 
-                      mapping=aes(Period, ymax=PL.mean+PL.sd, 
+                      mapping=aes(ModName, ymax=PL.mean+PL.sd, 
                                   ymin=PL.mean-PL.sd),
                       position=position_dodge(width=0.9), 
                       width=0.5, col="black") +
@@ -173,24 +239,29 @@ plot_timeslice_CO2_by_P_interaction <- function (climate.scenario) {
                                    "MDP"="orange",
                                    "HIP"="red3"))+
         scale_x_discrete(name="",
-                         limits=c("1_HIST", "2_SHORT", "3_LONG"),
-                         labels=c("2013-19", "2023-29", "2063-69"))+
+                         limits=model.names,
+                         labels=model.labels)+
         ylab(expression(CO[2] * " response of PL"))+
-        facet_wrap(ModName~., ncol=2)+
+        facet_wrap(Period~., ncol=3, 
+                   labeller=as_labeller(c("1_HIST"="2013-19", 
+                                          "2_SHORT"="2023-29", 
+                                          "3_LONG"="2063-69")))+
         theme_linedraw() +
-        theme(panel.grid.minor=element_blank(),
+        theme(panel.grid.minor=element_line(),
               axis.text.x=element_text(size=12),
               axis.title.x=element_text(size=12),
               axis.text.y=element_text(size=12),
               axis.title.y=element_text(size=14),
               legend.text=element_text(size=12),
               legend.title=element_text(size=14),
-              panel.grid.major=element_blank(),
+              panel.grid.major=element_line(),
               legend.position="bottom",
               legend.box = 'horizontal',
               legend.box.just = 'left',
+              strip.text = element_text(size=20),
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5));p3
+    
     
     
     
