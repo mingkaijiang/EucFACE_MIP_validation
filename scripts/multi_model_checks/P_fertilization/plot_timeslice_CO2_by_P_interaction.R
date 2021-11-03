@@ -168,7 +168,8 @@ plot_timeslice_CO2_by_P_interaction <- function (climate.scenario) {
               axis.title.y=element_text(size=14),
               legend.text=element_text(size=12),
               legend.title=element_text(size=14),
-              panel.grid.major=element_line(),
+              panel.grid.major.x=element_blank(),
+              panel.grid.major.y=element_line(),
               legend.position="bottom",
               legend.box = 'horizontal',
               legend.box.just = 'left',
@@ -211,7 +212,8 @@ plot_timeslice_CO2_by_P_interaction <- function (climate.scenario) {
               axis.title.y=element_text(size=14),
               legend.text=element_text(size=12),
               legend.title=element_text(size=14),
-              panel.grid.major=element_line(),
+              panel.grid.major.x=element_blank(),
+              panel.grid.major.y=element_line(),
               legend.position="bottom",
               legend.box = 'horizontal',
               legend.box.just = 'left',
@@ -254,7 +256,8 @@ plot_timeslice_CO2_by_P_interaction <- function (climate.scenario) {
               axis.title.y=element_text(size=14),
               legend.text=element_text(size=12),
               legend.title=element_text(size=14),
-              panel.grid.major=element_line(),
+              panel.grid.major.x=element_blank(),
+              panel.grid.major.y=element_line(),
               legend.position="bottom",
               legend.box = 'horizontal',
               legend.box.just = 'left',
@@ -270,7 +273,7 @@ plot_timeslice_CO2_by_P_interaction <- function (climate.scenario) {
     ### plot
     pdf(paste0(out.dir, 
                "CO2_response_of_P_treatments_", climate.scenario, 
-               ".pdf"))
+               ".pdf"), width=16, height=6)
     for (i in 1:3) {
         print(get(paste("p",i,sep="")))
     }
