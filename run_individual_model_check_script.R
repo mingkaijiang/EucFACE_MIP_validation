@@ -25,8 +25,6 @@ source("prepare.R")
 #                                                     sim.path = "simulation_output/GDAYN/default_output",
 #                                                     out.path = "simulation_output")
 
-### ORCHIDEE - no need for both models
-
 
 ### CABLE-POP
 #translate_CABLP_simulation_into_EucFACE_MIP_format(source.dir = paste0(getwd(), "/simulation_output/CABLP/"), 
@@ -56,9 +54,16 @@ source("prepare.R")
 #translate_ELMV1_simulation_into_EucFACE_MIP_format(source.dir = "simulation_output/ELMV1/")
 
 
-### ORCHIDEE: add PFERT variable
-#translate_ORCHD_simulation_into_EucFACE_MIP_format(mod.abb="OCHDP")
-#translate_ORCHD_simulation_into_EucFACE_MIP_format(mod.abb="OCHDX")
+### ORCHIDEE: 
+### add PFERT variable
+### revise PMIN: which currently includes PBIOCHMIN (gross) and net biological mineralization
+###              redo the calculation so that PMIN is net biological mineralization (i.e. old PMIN - PBIOCHMIN)
+### for OCRHIDEE-MICROBE: we have additional variables on microbes. 
+
+translate_ORCHD_simulation_into_EucFACE_MIP_format(mod.abb="OCHDP")
+translate_ORCHD_simulation_into_EucFACE_MIP_format(mod.abb="OCHDX")
+
+
 
 
 

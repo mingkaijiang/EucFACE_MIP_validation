@@ -73,6 +73,11 @@ translate_ORCHD_simulation_into_EucFACE_MIP_format <- function(mod.abb) {
             myDF$PFERT <- 0.0
         }
         
+        ############################################
+        ### revise PMIN variable
+        #myDF$PMIN <- with(myDF, PMIN - PBIOCHMIN)
+        
+        
         
         ### end changing variable names
         ############################################
