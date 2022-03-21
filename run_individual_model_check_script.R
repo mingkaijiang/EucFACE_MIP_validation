@@ -60,8 +60,8 @@ source("prepare.R")
 ###              redo the calculation so that PMIN is net biological mineralization (i.e. old PMIN - PBIOCHMIN)
 ### for OCRHIDEE-MICROBE: we have additional variables on microbes. 
 
-translate_ORCHD_simulation_into_EucFACE_MIP_format(mod.abb="OCHDP")
-translate_ORCHD_simulation_into_EucFACE_MIP_format(mod.abb="OCHDX")
+#translate_ORCHD_simulation_into_EucFACE_MIP_format(mod.abb="OCHDP")
+#translate_ORCHD_simulation_into_EucFACE_MIP_format(mod.abb="OCHDX")
 
 
 

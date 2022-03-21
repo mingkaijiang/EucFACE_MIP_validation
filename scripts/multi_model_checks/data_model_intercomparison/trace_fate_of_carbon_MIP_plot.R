@@ -244,6 +244,102 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
     
   
     
+    #### Normalize to the CO2 effect on GPP
+    subDF1 <- subset(fatestackDF, variable=="GPP")
+    subDF2 <- subset(fatestackDF, variable!="GPP")
+    
+    for (i in mod.list) {
+      subDF2$norm.value[subDF2$ModName==i]<-subDF2$value.mean[subDF2$ModName==i]/subDF1$value.mean[subDF1$ModName==i]
+    }
+    
+    plotDF1 <- subset(subDF2, Method=="NPP+RAU")
+    plotDF2 <- subset(subDF2, Method=="R+deltaC")
+    
+    
+    ### plotting
+    p1 <- ggplot(data=plotDF1, 
+                 aes(ModName, norm.value, group=variable)) +
+      geom_hline(yintercept=c(0,1), lty=1)+
+      geom_bar(stat = "identity", aes(fill=variable), 
+               position=position_stack(), col="black") +
+      geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
+      theme_linedraw() +
+      theme(panel.grid.minor=element_blank(),
+            axis.text.x=element_text(size=12),
+            axis.title.x=element_blank(),
+            axis.text.y=element_text(size=12),
+            axis.title.y=element_text(size=14),
+            legend.text=element_text(size=12),
+            legend.title=element_text(size=14),
+            panel.grid.major=element_blank(),
+            legend.position="bottom",
+            legend.box = 'horizontal',
+            legend.box.just = 'left',
+            plot.title = element_text(size=14, face="bold.italic", 
+                                      hjust = 0.5))+
+      ylab(expression(paste("Normalized " * CO[2] * " responses")))+
+      scale_fill_manual(name="Component",
+                        values=c("NPP"=GreensPalette[3],
+                                 "RAU"=YlOrRdPalette[2]),
+                        labels=c("NPP"="NPP",
+                                 "RAU"="RAU"))+
+      scale_x_discrete(limit=c(mod.list),
+                       label=c(model.labels))
+    
+    
+    
+    p2 <- ggplot(data=plotDF2, 
+                 aes(ModName, norm.value, group=variable)) +
+      geom_hline(yintercept=c(0,1), lty=1)+
+      geom_bar(stat = "identity", aes(fill=variable), 
+               position=position_stack(), col="black") +
+      geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
+      theme_linedraw() +
+      theme(panel.grid.minor=element_blank(),
+            axis.text.x=element_text(size=12),
+            axis.title.x=element_blank(),
+            axis.text.y=element_text(size=12),
+            axis.title.y=element_text(size=14),
+            legend.text=element_text(size=12),
+            legend.title=element_text(size=14),
+            panel.grid.major=element_blank(),
+            legend.position="bottom",
+            legend.box = 'horizontal',
+            legend.box.just = 'left',
+            plot.title = element_text(size=14, face="bold.italic", 
+                                      hjust = 0.5))+
+      ylab(expression(paste("Normalized " * CO[2] * " responses")))+
+      scale_fill_manual(name="Component",
+                        values=c("RAU"=YlOrRdPalette[2],
+                                 "RHET"=YlOrRdPalette[6],
+                                 "deltaCVEG"=GreensPalette[5],
+                                 "deltaCSOIL"=GreensPalette[8]),
+                        labels=c("RAU"="RAU",
+                                 "RHET"="RHET",
+                                 "deltaCVEG"=expression(Delta * C[VEG]),
+                                 "deltaCSOIL"=expression(Delta * C[SOIL])))+
+      scale_x_discrete(limit=c(mod.list),
+                       label=c(model.labels))
+    
+    
+    plot(p2)
+    
+    
+    plots_top_row <- plot_grid(p1, p2, 
+                               labels=c("(a)", "(b)"),
+                               ncol=1, align="vh", axis = "l",
+                               label_x=0.9, label_y=0.96,
+                               label_size = 18)
+    
+    
+    pdf(paste0(out.dir, "/MIP_normalized_fate_of_C_", 
+               scenario, "_comparison.pdf"), 
+        width=8, height=8)
+    plot_grid(plots_top_row,
+              ncol=1, rel_heights=c(1,0.1))
+    
+    dev.off()
+    
     #  end
 }
 

@@ -152,7 +152,7 @@ EucFACE_mass_balance_and_validation_script_CABLP <- function(forest) {
     ### NPP + RAU = GPP
     ### all models should get this right,
     ### but note that some models may simply assume a fixed CUE to get RAU (e.g. GDAY)
-    p1<-xyplot(I(NPP+RAU+CSTORFLX)~GPP,fluxDF,
+    p1<-xyplot(I(NPP+RAU)~GPP,fluxDF,
                #main='NPP+RAU~GPP',
                auto.key=T,
                scales=list(relation='free'),
@@ -162,7 +162,7 @@ EucFACE_mass_balance_and_validation_script_CABLP <- function(forest) {
     
     
     ### NEP + RECO = GPP
-    p2<-xyplot(I(NEP+RECO+CSTORFLX)~GPP,fluxDF,
+    p2<-xyplot(I(NEP+RECO)~GPP,fluxDF,
                #main='NEP+RECO~GPP',
                auto.key=T,
                scales=list(relation='free'),
@@ -243,7 +243,7 @@ EucFACE_mass_balance_and_validation_script_CABLP <- function(forest) {
     ### Here production fluxes include: CGL, CGFR, CGCR, CGW and CREPR, 
     ### and the respiratory flux is RAU. 
     ### If there is an exudation flux, make it part of GPP too.
-    p10<-xyplot(I(RAU+CGL+CGFR+CGW+CSTORFLX)~GPP,annDF,
+    p10<-xyplot(I(RAU+CGL+CGFR+CGW)~GPP,annDF,
                 #main='I(RAU+CGL+CGFR+CGCR+CGW+CREPR)~GPP',
                 auto.key=T,
                 scales=list(relation='free'),
