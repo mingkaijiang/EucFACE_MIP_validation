@@ -1,5 +1,6 @@
 plot_normalized_pred_trajectories <- function (climate.scenario,
-                                               yr.to.normalize) {
+                                               yr.to.normalize,
+                                               yr.to.end) {
     
     ### purpose:
     ### to plot the normalized predicted trajectories
@@ -32,6 +33,14 @@ plot_normalized_pred_trajectories <- function (climate.scenario,
     inDF3$PTRT <- "HIP"
     
     myDF <- rbind(inDF1, rbind(inDF2, inDF3))
+    
+    ### remove two N only models
+    myDF <- subset(myDF, ModName%in%c("A_GDAYP", "B_ELMV1", "C_CABLP",
+                                      "D_LPJGP", "E_OCHDP", "F_QUINC",
+                                      "G_OCHDX", "H_QUJSM"))
+    
+    ### end year
+    myDF <- subset(myDF, YEAR<=yr.to.end)
     
  
     
@@ -417,6 +426,13 @@ plot_normalized_pred_trajectories <- function (climate.scenario,
     
     myDF <- rbind(inDF1, rbind(inDF2, inDF3))
     
+    ### remove two N only models
+    myDF <- subset(myDF, ModName%in%c("A_GDAYP", "B_ELMV1", "C_CABLP",
+                                      "D_LPJGP", "E_OCHDP", "F_QUINC",
+                                      "G_OCHDX", "H_QUJSM"))
+    
+    ### end year
+    myDF <- subset(myDF, YEAR<=yr.to.end)
     
     
     #### Plot normalized responses

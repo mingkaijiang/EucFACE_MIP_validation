@@ -280,4 +280,139 @@ plot_timeslice_CO2_by_P_interaction <- function (climate.scenario) {
     dev.off()
     
     
+    
+    #### Plot responses
+    p1 <- ggplot(data=plotDF, 
+                 aes(x=ModName, y=CL.mean, group=PTRT))+
+        geom_bar(plotDF, stat = "identity", 
+                 mapping=aes(ModName, CL.mean, fill=PTRT),
+                 position=position_dodge(), col="black") +
+        geom_errorbar(plotDF, stat = "identity", 
+                      mapping=aes(ModName, ymax=CL.mean+CL.sd, 
+                                  ymin=CL.mean-CL.sd),
+                      position=position_dodge(width=0.9), 
+                      width=0.5, col="black") +
+        coord_cartesian(ylim=c(0.9, 1.4))+
+        geom_hline(yintercept=1.0, col="black", lty=2)+
+        scale_fill_manual(name="Fertilization",
+                          values=c("NOP"="pink",
+                                   "MDP"="orange",
+                                   "HIP"="red3"))+
+        scale_x_discrete(name="",
+                         limits=model.names,
+                         labels=model.labels)+
+        ylab(expression(CO[2] * " response of CL"))+
+        facet_wrap(Period~., ncol=3, 
+                   labeller=as_labeller(c("1_HIST"="2013-19", 
+                                          "2_SHORT"="2023-29", 
+                                          "3_LONG"="2063-69")))+
+        theme_linedraw() +
+        theme(panel.grid.minor=element_line(),
+              axis.text.x=element_text(size=12),
+              axis.title.x=element_text(size=12),
+              axis.text.y=element_text(size=12),
+              axis.title.y=element_text(size=14),
+              legend.text=element_text(size=12),
+              legend.title=element_text(size=14),
+              panel.grid.major.x=element_blank(),
+              panel.grid.major.y=element_line(),
+              legend.position="bottom",
+              legend.box = 'horizontal',
+              legend.box.just = 'left',
+              strip.text = element_text(size=20),
+              plot.title = element_text(size=14, face="bold.italic", 
+                                        hjust = 0.5));p1
+    
+    
+    p2 <- ggplot(data=plotDF, 
+                 aes(x=ModName, y=CW.mean, group=PTRT))+
+        geom_bar(plotDF, stat = "identity", 
+                 mapping=aes(ModName, CW.mean, fill=PTRT),
+                 position=position_dodge(), col="black") +
+        geom_errorbar(plotDF, stat = "identity", 
+                      mapping=aes(ModName, ymax=CW.mean+CW.sd, 
+                                  ymin=CW.mean-CW.sd),
+                      position=position_dodge(width=0.9), 
+                      width=0.5, col="black") +
+        coord_cartesian(ylim=c(0.9, 1.3))+
+        geom_hline(yintercept=1.0, col="black", lty=2)+
+        scale_fill_manual(name="Fertilization",
+                          values=c("NOP"="pink",
+                                   "MDP"="orange",
+                                   "HIP"="red3"))+
+        scale_x_discrete(name="",
+                         limits=model.names,
+                         labels=model.labels)+
+        ylab(expression(CO[2] * " response of CW"))+
+        facet_wrap(Period~., ncol=3, 
+                   labeller=as_labeller(c("1_HIST"="2013-19", 
+                                          "2_SHORT"="2023-29", 
+                                          "3_LONG"="2063-69")))+
+        theme_linedraw() +
+        theme(panel.grid.minor=element_line(),
+              axis.text.x=element_text(size=12),
+              axis.title.x=element_text(size=12),
+              axis.text.y=element_text(size=12),
+              axis.title.y=element_text(size=14),
+              legend.text=element_text(size=12),
+              legend.title=element_text(size=14),
+              panel.grid.major.x=element_blank(),
+              panel.grid.major.y=element_line(),
+              legend.position="bottom",
+              legend.box = 'horizontal',
+              legend.box.just = 'left',
+              strip.text = element_text(size=20),
+              plot.title = element_text(size=14, face="bold.italic", 
+                                        hjust = 0.5));p2
+    
+    
+    p3 <- ggplot(data=plotDF, 
+                 aes(x=ModName, y=CFR.mean, group=PTRT))+
+        geom_bar(plotDF, stat = "identity", 
+                 mapping=aes(ModName, CFR.mean, fill=PTRT),
+                 position=position_dodge(), col="black") +
+        geom_errorbar(plotDF, stat = "identity", 
+                      mapping=aes(ModName, ymax=CFR.mean+CFR.sd, 
+                                  ymin=CFR.mean-CFR.sd),
+                      position=position_dodge(width=0.9), 
+                      width=0.5, col="black") +
+        coord_cartesian(ylim=c(0.9, 2.0))+
+        geom_hline(yintercept=1.0, col="black", lty=2)+
+        scale_fill_manual(name="Fertilization",
+                          values=c("NOP"="pink",
+                                   "MDP"="orange",
+                                   "HIP"="red3"))+
+        scale_x_discrete(name="",
+                         limits=model.names,
+                         labels=model.labels)+
+        ylab(expression(CO[2] * " response of CFR"))+
+        facet_wrap(Period~., ncol=3, 
+                   labeller=as_labeller(c("1_HIST"="2013-19", 
+                                          "2_SHORT"="2023-29", 
+                                          "3_LONG"="2063-69")))+
+        theme_linedraw() +
+        theme(panel.grid.minor=element_line(),
+              axis.text.x=element_text(size=12),
+              axis.title.x=element_text(size=12),
+              axis.text.y=element_text(size=12),
+              axis.title.y=element_text(size=14),
+              legend.text=element_text(size=12),
+              legend.title=element_text(size=14),
+              panel.grid.major.x=element_blank(),
+              panel.grid.major.y=element_line(),
+              legend.position="bottom",
+              legend.box = 'horizontal',
+              legend.box.just = 'left',
+              strip.text = element_text(size=20),
+              plot.title = element_text(size=14, face="bold.italic", 
+                                        hjust = 0.5));p3
+    
+    ### plot
+    pdf(paste0(out.dir, 
+               "CO2_response_of_P_treatments_", climate.scenario, 
+               "_vegetation_biomass.pdf"), width=16, height=6)
+    for (i in 1:3) {
+        print(get(paste("p",i,sep="")))
+    }
+    dev.off()
 }
