@@ -42,8 +42,8 @@ translate_CABLP_simulation_into_EucFACE_MIP_format <- function(source.dir, pft.v
         myDF$PFERT <- NA
         myDF$TSOIL <- myDF$TSOIL - 273.15
         
-        ### NPP is the sum of NPP and CSTORFLX
-        myDF$NPP <- myDF$NPP + myDF$CSTORFLX
+        ### RAUTO is the sum of RAUTO and CSTORFLX
+        myDF$RAU <- myDF$RAU + myDF$CSTORFLX
         
         ### end changing variable names
         ############################################

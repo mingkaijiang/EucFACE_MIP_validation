@@ -41,6 +41,9 @@ prepare_fate_of_C_plot <- function(inDF) {
     
     tmpDF1$variable2[tmpDF1$variable%in%c("deltaCSOIL")] <- "deltaCSOIL"
     
+    tmpDF1$variable2[tmpDF1$variable%in%c("deltaCSTOR")] <- "deltaCSTOR"
+    
+    
     ### calculate means and sd of the new variable
     sumDF2 <- summaryBy(value.mean~ModName+variable2, data=tmpDF1, FUN=sum,
                         keep.names=T, na.rm=T)
@@ -51,11 +54,13 @@ prepare_fate_of_C_plot <- function(inDF) {
                                                                                        tmpDF1$value.sd[tmpDF1$ModName==j&tmpDF1$variable=="deltaCW"]^2,
                                                                                        tmpDF1$value.sd[tmpDF1$ModName==j&tmpDF1$variable=="deltaCFR"]^2,
                                                                                        tmpDF1$value.sd[tmpDF1$ModName==j&tmpDF1$variable=="deltaCCR"]^2,
-                                                                                       tmpDF1$value.sd[tmpDF1$ModName==j&tmpDF1$variable=="deltaCSTOR"]^2,
                                                                                        tmpDF1$value.sd[tmpDF1$ModName==j&tmpDF1$variable=="deltaCFLIT"]^2), 
-                                                                                     na.rm=T)/6)
+                                                                                     na.rm=T)/5)
         
         sumDF2$value.sd[sumDF2$ModName==j&sumDF2$variable2=="deltaCSOIL"] <- tmpDF1$value.sd[tmpDF1$ModName==j&tmpDF1$variable=="deltaCSOIL"]
+        sumDF2$value.sd[sumDF2$ModName==j&sumDF2$variable2=="deltaCSTOR"] <- tmpDF1$value.sd[tmpDF1$ModName==j&tmpDF1$variable=="deltaCSTOR"]
+        
+        
     }
     
     
@@ -74,8 +79,9 @@ prepare_fate_of_C_plot <- function(inDF) {
         totDF1$value.sd[totDF1$ModName==j] <- sqrt(sum(c(subDF3$value.sd[subDF3$ModName==j&subDF3$variable=="RHET"]^2,
                                                          subDF3$value.sd[subDF3$ModName==j&subDF3$variable=="RAU"]^2,
                                                          subDF3$value.sd[subDF3$ModName==j&subDF3$variable=="deltaCVEG"]^2,
+                                                         subDF3$value.sd[subDF3$ModName==j&subDF3$variable=="deltaCSTOR"]^2,
                                                          subDF3$value.sd[subDF3$ModName==j&subDF3$variable=="deltaCSOIL"]^2), 
-                                                       na.rm=T)/4)
+                                                       na.rm=T)/5)
     }
     
     
