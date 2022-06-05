@@ -260,6 +260,23 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
     plotDF2 <- subset(subDF2, Method=="R+deltaC")
     
     
+    ### only include CNP models
+    plotDF1 <- plotDF1[plotDF1$ModName!="I_GDAYN",]
+    plotDF2 <- plotDF2[plotDF2$ModName!="I_GDAYN",]
+    
+    plotDF1 <- plotDF1[plotDF1$ModName!="J_LPJGN",]
+    plotDF2 <- plotDF2[plotDF2$ModName!="J_LPJGN",]
+    
+    
+    ### add obs
+    myobsDF <- add_obs_normalized_allocation_response()
+    
+    
+    
+    ### add observation
+    mod.list.rev <- mod.list[1:8]
+    
+    
     ### plotting
     p1 <- ggplot(data=plotDF1, 
                  aes(ModName, norm.value, group=variable)) +
@@ -281,13 +298,13 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
             legend.box.just = 'left',
             plot.title = element_text(size=14, face="bold.italic", 
                                       hjust = 0.5))+
-      ylab(expression(paste("Normalized " * CO[2] * " responses")))+
+      ylab(expression(paste("Normalized " * CO[2] * " response")))+
       scale_fill_manual(name="Component",
                         values=c("NPP"=GreensPalette[3],
                                  "RAU"=YlOrRdPalette[2]),
                         labels=c("NPP"="NPP",
                                  "RAU"="RAU"))+
-      scale_x_discrete(limit=c(mod.list),
+      scale_x_discrete(limit=c(mod.list.rev),
                        label=c(model.labels))
     
     
@@ -312,7 +329,7 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
             legend.box.just = 'left',
             plot.title = element_text(size=14, face="bold.italic", 
                                       hjust = 0.5))+
-      ylab(expression(paste("Normalized " * CO[2] * " responses")))+
+      ylab(expression(paste("Normalized " * CO[2] * " response")))+
       scale_fill_manual(name="Component",
                         values=c("RAU"=YlOrRdPalette[2],
                                  "RHET"=YlOrRdPalette[6],
@@ -324,7 +341,7 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
                                  "deltaCVEG"=expression(Delta * C[VEG]),
                                  "deltaCSTOR"=expression(Delta * C[STOR]),
                                  "deltaCSOIL"=expression(Delta * C[SOIL])))+
-      scale_x_discrete(limit=c(mod.list),
+      scale_x_discrete(limit=c(mod.list.rev),
                        label=c(model.labels))
     
     
