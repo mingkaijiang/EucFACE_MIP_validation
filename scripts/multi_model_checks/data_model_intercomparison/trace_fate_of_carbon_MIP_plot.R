@@ -276,6 +276,13 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
     ### add observation
     mod.list.rev <- mod.list[1:8]
     
+    ### merge
+    plotDF1 <- plotDF1[,c("ModName", "variable", "norm.value")]
+    plotDF2 <- plotDF2[,c("ModName", "variable", "norm.value")]
+    
+    plotDF1 <- rbind(plotDF1, myobsDF$outDF1)
+    plotDF2 <- rbind(plotDF2, myobsDF$outDF2)
+    
     
     ### plotting
     p1 <- ggplot(data=plotDF1, 
@@ -303,9 +310,10 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
                         values=c("NPP"=GreensPalette[3],
                                  "RAU"=YlOrRdPalette[2]),
                         labels=c("NPP"="NPP",
-                                 "RAU"="RAU"))+
-      scale_x_discrete(limit=c(mod.list.rev),
-                       label=c(model.labels))
+                                 "RAU"=expression(R[auto])))+
+      scale_x_discrete(limit=c(mod.list.rev, "OBS"),
+                       label=c(model.labels, 
+                               "OBS"=expression(bold("OBS"))))
     
     
     
@@ -334,19 +342,18 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
                         values=c("RAU"=YlOrRdPalette[2],
                                  "RHET"=YlOrRdPalette[6],
                                  "deltaCVEG"=GreensPalette[6],
-                                 "deltaCSTOR"=GreensPalette[9],
-                                 "deltaCSOIL"=GreensPalette[4]),
-                        labels=c("RAU"="RAU",
-                                 "RHET"="RHET",
+                                 "deltaCSTOR"=GreensPalette[4],
+                                 "deltaCSOIL"=GreensPalette[9]),
+                        labels=c("RAU"=expression(R[auto]),
+                                 "RHET"=expression(R[het]),
                                  "deltaCVEG"=expression(Delta * C[VEG]),
                                  "deltaCSTOR"=expression(Delta * C[STOR]),
                                  "deltaCSOIL"=expression(Delta * C[SOIL])))+
-      scale_x_discrete(limit=c(mod.list.rev),
-                       label=c(model.labels))
-    
+      scale_x_discrete(limit=c(mod.list.rev, "OBS"),
+                       label=c(model.labels, 
+                               "OBS"=expression(bold("OBS"))))
     
     plot(p2)
-    
     
     plots_top_row <- plot_grid(p1, p2, 
                                labels=c("(a)", "(b)"),
