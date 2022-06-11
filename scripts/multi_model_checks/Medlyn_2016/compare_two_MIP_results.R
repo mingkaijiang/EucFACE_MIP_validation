@@ -83,8 +83,7 @@ compare_two_MIP_results <- function() {
                                     "SDVM"=Diverge_hsv_Palette[8]))
     
     
-    plot(p1)
-    
+
     plotDF2 <- myDF[myDF$variable=="NPP",]
     subDF2 <- myDF2[myDF2$variable=="NPP",]
     
@@ -158,7 +157,7 @@ compare_two_MIP_results <- function() {
               legend.text=element_text(size=12),
               legend.title=element_text(size=14),
               panel.grid.major=element_blank(),
-              legend.position="bottom",
+              legend.position="none",
               legend.box = 'horizontal',
               legend.box.just = 'left')+
         ylab(expression(paste("NEP (g C " * m^2 * " " * yr^-1 * ")")))+
@@ -224,12 +223,72 @@ compare_two_MIP_results <- function() {
                                     "OCNX"=Diverge_hsv_Palette[7],
                                     "SDVM"=Diverge_hsv_Palette[8]))
     
-    plot(p4)
+    
+    plotDF5 <- myDF[myDF$variable=="deltaC",]
+    subDF5 <- myDF2[myDF2$variable=="deltaC",]
+    
+    p5 <- ggplot(data=plotDF5, 
+                 aes(ModVersion, meanvalue, group=Trt)) +
+        geom_bar(stat = "identity", aes(fill=Trt), 
+                 position=position_dodge(), col="black") +
+        geom_point(data=subDF5, aes(ModVersion, meanvalue, group=Trt,
+                                    col=ModName), 
+                   position=position_jitterdodge(jitter.width=0.2, dodge.width=0.9), size=4)+
+        geom_errorbar(aes(x=ModVersion, ymin=meanvalue-sdvalue,
+                          ymax=meanvalue+sdvalue), 
+                      col="black", 
+                      position=position_dodge(width=0.9), width=0.2)+
+        xlab("")+
+        theme_linedraw() +
+        facet_wrap(~MIP)+
+        theme(panel.grid.minor=element_blank(),
+              axis.text.x=element_text(size=12),
+              axis.title.x=element_text(size=14),
+              axis.text.y=element_text(size=12),
+              axis.title.y=element_text(size=14),
+              legend.text=element_text(size=12),
+              legend.title=element_text(size=14),
+              panel.grid.major=element_blank(),
+              legend.position="none",
+              legend.box = 'horizontal',
+              legend.box.just = 'left',
+              legend.background = element_rect(fill="grey",
+                                               size=0.5, linetype="solid", 
+                                               colour ="black"),
+              plot.title = element_text(size=14, face="bold.italic", 
+                                        hjust = 0.5))+
+        ylab(expression(paste("BP (g C " * m^2 * " " * yr^-1 * ")")))+
+        scale_fill_manual(name="Trt",
+                          values=c("amb"="white", "ele"="grey"))+
+        scale_color_manual(name="Model",
+                           values=c(col.values, 
+                                    "CLM4"=Diverge_hsv_Palette[1],
+                                    "CLMP"=Diverge_hsv_Palette[2],
+                                    "CABL"=Diverge_hsv_Palette[3],
+                                    "GDAY"=Diverge_hsv_Palette[4],
+                                    "LPJW"=Diverge_hsv_Palette[5],
+                                    "LPJX"=Diverge_hsv_Palette[6],
+                                    "OCNX"=Diverge_hsv_Palette[7],
+                                    "SDVM"=Diverge_hsv_Palette[8]))
+    
+    
+    legend_top_row <- get_legend(p1 + theme(legend.position="bottom",
+                                            legend.box = 'horizontal',
+                                            legend.box.just = 'left'))
+    
+    plots_top_row <- plot_grid(p1, p5, p3, 
+                               labels=NA,
+                               ncol=1, align="vh", axis = "l",
+                               label_x=0.1, label_y=0.95,
+                               label_size = 18)
     
     ### Plotting
-    pdf(paste0(out.dir, "/Comparison_to_Medlyn_2016.pdf"), width=6, height=12)
+    pdf(paste0(out.dir, "/Comparison_to_Medlyn_2016.pdf"), width=6, height=10)
     
-    grid.arrange(p1, p2, p3, nrow=3, heights=c(1,1,1.6))
+    #grid.arrange(p1, p5, p3, nrow=3, heights=c(1,1,1.2))
+    plot_grid(plots_top_row,
+              legend_top_row,
+              ncol=1, rel_heights=c(1,0.1))
     
     dev.off()
     
