@@ -115,6 +115,9 @@ trace_fate_of_carbon_MIP_plot(scenario="VAR")
 trace_fate_of_carbon_MIP_plot(scenario="FIX")
 
 
+### sankey plots?
+
+
 ### 3.6. CO2 x P interaction
 
 ### 3.6.1. Plot normalized trajectory as well as the CO2 effect over time

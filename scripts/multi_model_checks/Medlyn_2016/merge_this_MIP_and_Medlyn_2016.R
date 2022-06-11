@@ -4,13 +4,15 @@ merge_this_MIP_and_Medlyn_2016 <- function(medDF, thisDF) {
     medDF <- medDF[,c("ModVersion", "Trt", "CO2.mean", "PREC.mean",
                       #"CO2.sd", "PREC.sd",
                       "NEP.mean", "GPP.mean", "NPP.mean", 
-                      "NEP.sd", "GPP.sd", "NPP.sd")]
+                      "NEP.sd", "GPP.sd", "NPP.sd",
+                      "LAI.mean", "LAI.sd")]
     
     ### variables to select
     thisDF <- thisDF[,c("ModVersion", "Trt", "CO2.mean", "PREC.mean",
                         #"CO2.sd", "PREC.sd",
                       "NEP.mean", "GPP.mean", "NPP.mean", 
-                      "NEP.sd", "GPP.sd", "NPP.sd")]
+                      "NEP.sd", "GPP.sd", "NPP.sd",
+                      "LAI.mean", "LAI.sd")]
     
     ### add MIP version
     medDF$MIP <- "Medlyn_2016"
@@ -21,10 +23,10 @@ merge_this_MIP_and_Medlyn_2016 <- function(medDF, thisDF) {
     
     ### split
     myDF1 <- myDF[,c("MIP", "ModVersion", "Trt", "CO2.mean", "PREC.mean",
-                     "NEP.mean", "GPP.mean", "NPP.mean")]
+                     "NEP.mean", "GPP.mean", "NPP.mean","LAI.mean")]
     
     myDF2 <- myDF[,c("MIP", "ModVersion", "Trt", 
-                       "NEP.sd", "GPP.sd", "NPP.sd")]
+                       "NEP.sd", "GPP.sd", "NPP.sd", "LAI.sd")]
     
     ### convert from wide to long
     outDF1 <- reshape::melt(myDF1, id.vars=c("MIP", "ModVersion", "Trt", 

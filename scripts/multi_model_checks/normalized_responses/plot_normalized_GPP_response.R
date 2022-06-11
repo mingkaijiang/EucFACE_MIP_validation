@@ -617,5 +617,10 @@ plot_normalized_GPP_response <- function(scenario) {
     dev.off()
     
     
+    
+    
+    ### plot CO2 response ratios
+    
+    
 }    
 
