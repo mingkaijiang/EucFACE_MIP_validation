@@ -151,10 +151,16 @@ compare_CNP_and_CN_model_output <- function(scenario) {
                  aes(Model, meanvalue)) +
         geom_bar(stat = "identity", aes(fill=Variable, alpha=Model), 
                  position="stack", col="black") +
-        annotate("text", x=2, y=plotDF2$meanvalue[plotDF2$Model=="A_GDAYP"]*1.15, 
-                 label=(paste0(val1, "%")), size=10)+
-        annotate("text", x=4, y=plotDF2$meanvalue[plotDF2$Model=="D_LPJGP"]*1.15, 
-                 label=(paste0(val2, "%")), size=10)+
+        geom_errorbar(data=plotDF2, 
+                      aes(x=Model, ymin=meanvalue-sdvalue, ymax=meanvalue+sdvalue), 
+                      position="dodge", width=0.2, col="black") +
+        geom_point(data=plotDF2, 
+                      aes(x=Model, y=meanvalue), 
+                      position="dodge", col="black", size=2, fill="white", pch=21) +
+        #annotate("text", x=2, y=plotDF2$meanvalue[plotDF2$Model=="A_GDAYP"]*1.15, 
+        #         label=(paste0(val1, "%")), size=10)+
+        #annotate("text", x=4, y=plotDF2$meanvalue[plotDF2$Model=="D_LPJGP"]*1.15, 
+        #         label=(paste0(val2, "%")), size=10)+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
               axis.text.x=element_text(size=12),
@@ -164,9 +170,9 @@ compare_CNP_and_CN_model_output <- function(scenario) {
               legend.text=element_text(size=12),
               legend.title=element_text(size=14),
               panel.grid.major=element_blank(),
-              legend.position="right",
+              legend.position="none",
               legend.box = 'horizontal',
-              legend.box.just = 'left',
+              legend.box.just = 'none',
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
         ylab(expression(paste(C[veg] * " pools (g C " * m^2*")")))+
@@ -181,7 +187,11 @@ compare_CNP_and_CN_model_output <- function(scenario) {
                                    "CFR"=cbbPalette[4],
                                    "CCR"=cbbPalette[7],
                                    "CSTOR"=cbbPalette[8]),
-                          labels=c("CL", "CW", "CFR", "CCR","CSTOR"))+
+                          labels=c(expression(C[leaf]), 
+                                   expression(C[wood]), 
+                                   expression(C[froot]), 
+                                   expression(C[croot]),
+                                   expression(C[store])))+
         guides(fill = guide_legend(override.aes=list(fill=c("CL"=cbbPalette[2],
                                                             "CW"=cbbPalette[3],
                                                             "CFR"=cbbPalette[4],
@@ -198,8 +208,8 @@ compare_CNP_and_CN_model_output <- function(scenario) {
     
     ### calculate CO2 pct response difference
     plotDF3 <- plotDF2
-    plotDF3$meanvalue <- vegDF1$meanvalue[vegDF1$Variable=="Total"&vegDF1$Trt=="ele"]/vegDF1$meanvalue[vegDF1$Variable=="Total"&vegDF1$Trt=="amb"]
-    plotDF3$sdvalue <- NA #sqrt((vegDF1$sdvalue[vegDF1$Variable=="Total"&vegDF1$Trt=="ele"]^2 + vegDF1$sdvalue[vegDF1$Variable=="Total"&vegDF1$Trt=="amb"]^2)/2)
+    plotDF3$meanvalue <- (vegDF1$meanvalue[vegDF1$Variable=="Total"&vegDF1$Trt=="ele"]/vegDF1$meanvalue[vegDF1$Variable=="Total"&vegDF1$Trt=="amb"]-1)*100
+    plotDF3$sdvalue <- NA#sqrt((vegDF1$sdvalue[vegDF1$Variable=="Total"&vegDF1$Trt=="ele"]^2 + vegDF1$sdvalue[vegDF1$Variable=="Total"&vegDF1$Trt=="amb"]^2)/2)
     
     val1 <- round((plotDF3$meanvalue[plotDF3$Model=="A_GDAYP"]-plotDF3$meanvalue[plotDF3$Model=="I_GDAYN"])/plotDF3$meanvalue[plotDF3$Model=="I_GDAYN"]*100, 1)
     val2 <- round((plotDF3$meanvalue[plotDF3$Model=="D_LPJGP"]-plotDF3$meanvalue[plotDF3$Model=="J_LPJGN"])/plotDF3$meanvalue[plotDF3$Model=="J_LPJGN"]*100, 1)
@@ -208,12 +218,14 @@ compare_CNP_and_CN_model_output <- function(scenario) {
     ### Plotting C pools in CO2 pct response
     p2 <- ggplot(data=plotDF3, 
                  aes(Model, meanvalue)) +
-        geom_bar(stat = "identity", aes(fill=Model, alpha=Model), 
+        geom_bar(stat = "identity", aes(fill=Model), 
                  position="stack", col="black") +
-        annotate("text", x=2, y=plotDF3$meanvalue[plotDF3$Model=="A_GDAYP"]*1.01, 
-                 label=(paste0(val1, "%")), size=10)+
-        annotate("text", x=4, y=plotDF3$meanvalue[plotDF3$Model=="D_LPJGP"]*1.01, 
-                 label=(paste0(val2, "%")), size=10)+
+        #geom_errorbar(aes(x=Model, ymin=meanvalue-sdvalue, ymax=meanvalue+sdvalue), 
+        #              position="dodge", width=0.2, col="black") +
+        #annotate("text", x=2, y=plotDF3$meanvalue[plotDF3$Model=="A_GDAYP"]*1.01, 
+        #         label=(paste0(val1, "%")), size=10)+
+        #annotate("text", x=4, y=plotDF3$meanvalue[plotDF3$Model=="D_LPJGP"]*1.01, 
+        #         label=(paste0(val2, "%")), size=10)+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
               axis.text.x=element_text(size=12),
@@ -223,28 +235,28 @@ compare_CNP_and_CN_model_output <- function(scenario) {
               legend.text=element_text(size=12),
               legend.title=element_text(size=14),
               panel.grid.major=element_blank(),
-              legend.position="right",
+              legend.position="none",
               legend.box = 'horizontal',
               legend.box.just = 'left',
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
-        ylab(expression(paste(C[veg] * " " * CO[2] *" response ratio")))+
+        ylab(expression(paste(C[veg] * " " * CO[2] *" response ratio (%)")))+
         scale_x_discrete(limit=c("I_GDAYN","A_GDAYP", 
                                  "J_LPJGN","D_LPJGP"),
                          label=c("GDAYN","GDAYP", 
                                  "LPJGN","LPJGP"))+
         xlab("")+
-        scale_alpha_manual(values=c("A_GDAYP" = 1.0, 
-                                    "D_LPJGP" = 1.0,
-                                    "I_GDAYN" = 0.3, 
-                                    "J_LPJGN" = 0.3),
-                           label=c("GDAYP","LPJGP", 
-                                   "GDAYN","LPJGN"))+
-        scale_fill_manual(values=c("A_GDAYP" = "purple", "D_LPJGP" = "orange",
-                                   "I_GDAYN" = "purple", "J_LPJGN" = "orange"),
+        #scale_alpha_manual(values=c("A_GDAYP" = 1.0, 
+        #                            "D_LPJGP" = 1.0,
+        #                            "I_GDAYN" = 0.3, 
+        #                            "J_LPJGN" = 0.3),
+        #                   label=c("GDAYP","LPJGP", 
+        #                           "GDAYN","LPJGN"))+
+        scale_fill_manual(values=c("A_GDAYP" = "grey", "D_LPJGP" = "grey",
+                                   "I_GDAYN" = "white", "J_LPJGN" = "white"),
                           label=c("GDAYP","LPJGP", 
                                   "GDAYN","LPJGN"))+
-        coord_cartesian(ylim=c(1,1.1)); p2
+        coord_cartesian(ylim=c(0,10)); p2
     
     
     ##################################################################
@@ -349,7 +361,11 @@ compare_CNP_and_CN_model_output <- function(scenario) {
                                    "CFR"=cbbPalette[4],
                                    "CCR"=cbbPalette[7],
                                    "CSTOR"=cbbPalette[8]),
-                          labels=c("CL", "CW", "CFR", "CCR", "CSTOR"))+
+                          labels=c(expression(C[leaf]), 
+                                   expression(C[wood]), 
+                                   expression(C[froot]), 
+                                   expression(C[croot]),
+                                   expression(C[store])))+
         guides(fill = guide_legend(override.aes=list(fill=c("CL"=cbbPalette[2],
                                                             "CW"=cbbPalette[3],
                                                             "CFR"=cbbPalette[4],
@@ -428,14 +444,14 @@ compare_CNP_and_CN_model_output <- function(scenario) {
                          label=c("GDAYN","GDAYP", 
                                  "LPJGN","LPJGP"))+
         xlab("")+
-        scale_alpha_manual(values=c("A_GDAYP" = 1.0, 
-                                    "D_LPJGP" = 1.0,
-                                    "I_GDAYN" = 0.3, 
-                                    "J_LPJGN" = 0.3),
-                           label=c("GDAYP","LPJGP", 
-                                   "GDAYN","LPJGN"))+
-        scale_fill_manual(values=c("A_GDAYP" = "black", "D_LPJGP" = "black",
-                                   "I_GDAYN" = "black", "J_LPJGN" = "black"),
+        #scale_alpha_manual(values=c("A_GDAYP" = 1.0, 
+        #                            "D_LPJGP" = 1.0,
+        #                            "I_GDAYN" = 0.3, 
+        #                            "J_LPJGN" = 0.3),
+        #                   label=c("GDAYP","LPJGP", 
+        #                           "GDAYN","LPJGN"))+
+        scale_fill_manual(values=c("A_GDAYP" = "grey", "D_LPJGP" = "grey",
+                                   "I_GDAYN" = "white", "J_LPJGN" = "white"),
                           label=c("GDAYP","LPJGP", 
                                   "GDAYN","LPJGN"));p4
     
@@ -508,7 +524,8 @@ compare_CNP_and_CN_model_output <- function(scenario) {
                           values=c("GPP"="purple",
                                    "NPP"="green",
                                    "RAU"="red"),
-                          labels=c("GPP", "NPP", "RAU"))+
+                          labels=c("GPP", "NPP", 
+                                   expression(R[auto])))+
         scale_alpha_manual(name="Model",
                            values=c("A_GDAYP" = 1.0, 
                                     "D_LPJGP" = 1.0,
@@ -573,7 +590,8 @@ compare_CNP_and_CN_model_output <- function(scenario) {
                           values=c("GPP"="purple",
                                    "NPP"="green",
                                    "RAU"="red"),
-                          labels=c("GPP", "NPP", "RAU"))+
+                          labels=c("GPP", "NPP", 
+                                   expression(R[auto])))+
         guides(fill = guide_legend(override.aes=list(fill=c("GPP"="purple",
                                                             "NPP"="green",
                                                             "RAU"="red")),
@@ -596,23 +614,33 @@ compare_CNP_and_CN_model_output <- function(scenario) {
     #                              bottom = 450, left = 1))
     #
     
-    legend_top_row <- get_legend(p3 + theme(legend.position="bottom",
+    legend_bottom_row <- get_legend(p3 + theme(legend.position="bottom",
                                             legend.box = 'horizontal',
                                             legend.box.just = 'left'))
     
-    legend_bottom_row <- get_legend(p5 + theme(legend.position="bottom",
+    legend_top_row <- get_legend(p5 + theme(legend.position="bottom",
                                                legend.box = 'horizontal',
                                                legend.box.just = 'left'))
     
-    plots_top_row <- plot_grid(p3, p4, 
-                                labels=c("(a)", "(b)"),
+    legend_middle_row <- get_legend(p3 + theme(legend.position="bottom",
+                                            legend.box = 'horizontal',
+                                            legend.box.just = 'left'))
+    
+    plots_middle_row <- plot_grid(p1, p2, 
+                               labels=c("(c)", "(d)"),
+                               ncol=2, align="vh", axis = "l",
+                               label_x=c(0.86,0.16), label_y=0.95,
+                               label_size = 18)
+    
+    plots_bottom_row <- plot_grid(p3, p4, 
+                                labels=c("(e)", "(f)"),
                                 ncol=2, align="vh", axis = "l",
                                 label_x=c(0.86,0.16), label_y=0.95,
                                 label_size = 18)
     
     
-    plots_bottom_row <- plot_grid(p5, p6, 
-                                labels=c("(c)", "(d)"),
+    plots_top_row <- plot_grid(p5, p6, 
+                                labels=c("(a)", "(b)"),
                                 ncol=2, align="vh", axis = "l",
                                 label_x=c(0.86,0.16), label_y=0.95,
                                 label_size = 18)
@@ -624,278 +652,17 @@ compare_CNP_and_CN_model_output <- function(scenario) {
     #             ncol = 2)
     plot_grid(plots_top_row,
               legend_top_row,
+              plots_middle_row,
+              legend_middle_row,
               plots_bottom_row,
               legend_bottom_row,
-              ncol=1, rel_heights=c(1,0.2,1,0.2))
+              ncol=1, rel_heights=c(1,0.2,1,0.2,1,0.2))
     
     dev.off()
     
     
     
     
-    
-    
-   # ##################################################################
-   # #### N pools
-   # ### prepare vegetation biomass datasets
-   # vegDF2 <- data.frame(rep(c("NL", "NW", "NFR", "NCR", "NVEG"), 8), 
-   #                      rep(mod.list1, each=10), 
-   #                      rep(c("amb", "ele"), each = 5), NA, NA)
-   # colnames(vegDF2) <- c("Variable", 
-   #                       "Model",
-   #                       "Trt",
-   #                       "meanvalue",
-   #                       "sdvalue")
-   # 
-   # for (i in c("amb", "ele")) {
-   #     vegDF2$meanvalue[vegDF2$Variable=="NL"&vegDF2$Trt==i] <- myDF1$NL.mean[myDF1$Trt==i]
-   #     vegDF2$sdvalue[vegDF2$Variable=="NL"&vegDF2$Trt==i] <- myDF1$NL.sd[myDF1$Trt==i]
-   #     
-   #     vegDF2$meanvalue[vegDF2$Variable=="NW"&vegDF2$Trt==i] <- myDF1$NW.mean[myDF1$Trt==i]
-   #     vegDF2$sdvalue[vegDF2$Variable=="NW"&vegDF2$Trt==i] <- myDF1$NW.sd[myDF1$Trt==i]
-   #     
-   #     vegDF2$meanvalue[vegDF2$Variable=="NCR"&vegDF2$Trt==i] <- myDF1$NCR.mean[myDF1$Trt==i]
-   #     vegDF2$sdvalue[vegDF2$Variable=="NCR"&vegDF2$Trt==i] <- myDF1$NCR.sd[myDF1$Trt==i]
-   #     
-   #     vegDF2$meanvalue[vegDF2$Variable=="NFR"&vegDF2$Trt==i] <- myDF1$NFR.mean[myDF1$Trt==i]
-   #     vegDF2$sdvalue[vegDF2$Variable=="NFR"&vegDF2$Trt==i] <- myDF1$NFR.sd[myDF1$Trt==i]
-   # }
-   # 
-   # for (i in c("amb", "ele")) {
-   #     for (j in mod.list1) {
-   #         
-   #         ### calculate means
-   #         v1 <- sum(vegDF2$meanvalue[vegDF2$Model==j&vegDF2$Trt==i&vegDF2$Variable%in%c("NL", "NW", "NCR", "NFR")],
-   #                   na.rm=T)
-   #         
-   #         ### calculate sd
-   #         v2 <- sqrt(sum(vegDF2$sdvalue[vegDF2$Model==j&vegDF2$Trt==i&vegDF2$Variable=="NL"]^2,
-   #                        vegDF2$sdvalue[vegDF2$Model==j&vegDF2$Trt==i&vegDF2$Variable=="NW"]^2,
-   #                        vegDF2$sdvalue[vegDF2$Model==j&vegDF2$Trt==i&vegDF2$Variable=="NFR"]^2,
-   #                        vegDF2$sdvalue[vegDF2$Model==j&vegDF2$Trt==i&vegDF2$Variable=="NCR"]^2, na.rm=T)/3)
-   #         
-   #         ### assign values
-   #         vegDF2$meanvalue[vegDF2$Model==j&vegDF2$Variable=="Total"&vegDF2$Trt==i] <- v1
-   #         vegDF2$sdvalue[vegDF2$Model==j&vegDF2$Variable=="Total"&vegDF2$Trt==i] <- v2
-   #         
-   #     }
-   # }
-   # 
-   # plotDF1 <- subset(vegDF2, Variable%in%c("NL", "NW", "NFR", "NCR") & Trt=="amb")
-   # plotDF2 <- subset(vegDF2, Variable%in%c("Total") & Trt=="amb")
-   # 
-   # val1 <- round((plotDF2$meanvalue[plotDF2$Model=="B_GDAYP"]-plotDF2$meanvalue[plotDF2$Model=="I_GDAYN"])/plotDF2$meanvalue[plotDF2$Model=="I_GDAYN"]*100, 1)
-   # val2 <- round((plotDF2$meanvalue[plotDF2$Model=="C_LPJGP"]-plotDF2$meanvalue[plotDF2$Model=="J_LPJGN"])/plotDF2$meanvalue[plotDF2$Model=="J_LPJGN"]*100, 1)
-   # 
-   # 
-   # ### Plotting C pools in ambient CO2
-   # p5 <- ggplot(data=plotDF1, 
-   #              aes(Model, meanvalue)) +
-   #     geom_bar(stat = "identity", aes(fill=Variable, alpha=Model), 
-   #              position="stack", col="black") +
-   #     annotate("text", x=2, y=plotDF2$meanvalue[plotDF2$Model=="GDAYP"]*1.15, 
-   #              label=(paste0(val1, "%")), size=10)+
-   #     annotate("text", x=4, y=plotDF2$meanvalue[plotDF2$Model=="LPJGP"]*1.15, 
-   #              label=(paste0(val2, "%")), size=10)+
-   #     theme_linedraw() +
-   #     theme(panel.grid.minor=element_blank(),
-   #           axis.text.x=element_text(size=12),
-   #           axis.title.x=element_text(size=14),
-   #           axis.text.y=element_text(size=12),
-   #           axis.title.y=element_text(size=14),
-   #           legend.text=element_text(size=12),
-   #           legend.title=element_text(size=14),
-   #           panel.grid.major=element_blank(),
-   #           legend.position="right",
-   #           legend.box = 'horizontal',
-   #           legend.box.just = 'left',
-   #           plot.title = element_text(size=14, face="bold.italic", 
-   #                                     hjust = 0.5))+
-   #     ylab(expression(paste("Vegetation nitrogen pools (g N " * m^2*")")))+
-   #     scale_x_discrete(limit=c("I_GDAYN","B_GDAYP", 
-   #                              "J_LPJGN","C_LPJGP"),
-   #                      label=c("GDAYN","GDAYP", 
-   #                              "LPJGN","LPJGP"))+
-   #     xlab("")+
-   #     scale_alpha_manual(values=c("I_GDAYN" = 0.3, 
-   #                                 "B_GDAYP" = 1.0, 
-   #                                 "J_LPJGN" = 0.3, 
-   #                                 "C_LPJGP" = 1.0),
-   #                        label=c("GDAYN","GDAYP", 
-   #                                "LPJGN","LPJGP")); p5
-   # 
-   # 
-   # ### calculate CO2 pct response difference
-   # plotDF3 <- plotDF2
-   # plotDF3$meanvalue <- vegDF2$meanvalue[vegDF2$Variable=="Total"&vegDF2$Trt=="ele"]/vegDF2$meanvalue[vegDF2$Variable=="Total"&vegDF2$Trt=="amb"]
-   # plotDF3$sdvalue <- NA
-   # 
-   # 
-   # ### Plotting C pools in CO2 pct response
-   # p6 <- ggplot(data=plotDF3, 
-   #              aes(Model, meanvalue)) +
-   #     geom_bar(stat = "identity", aes(fill=Model, alpha=Model), 
-   #              position="stack", col="black") +
-   #     theme_linedraw() +
-   #     theme(panel.grid.minor=element_blank(),
-   #           axis.text.x=element_text(size=12),
-   #           axis.title.x=element_text(size=14),
-   #           axis.text.y=element_text(size=12),
-   #           axis.title.y=element_text(size=14),
-   #           legend.text=element_text(size=12),
-   #           legend.title=element_text(size=14),
-   #           panel.grid.major=element_blank(),
-   #           legend.position="right",
-   #           legend.box = 'horizontal',
-   #           legend.box.just = 'left',
-   #           plot.title = element_text(size=14, face="bold.italic", 
-   #                                     hjust = 0.5))+
-   #     ylab(expression(paste("Vegetation nitrogen " * CO[2] *" response ratio")))+
-   #     scale_x_discrete(limit=c("I_GDAYN","B_GDAYP", 
-   #                              "J_LPJGN","C_LPJGP"),
-   #                      label=c("GDAYN","GDAYP", 
-   #                              "LPJGN","LPJGP"))+
-   #     xlab("")+
-   #     scale_alpha_manual(values=c("I_GDAYN" = 0.3, 
-   #                                 "B_GDAYP" = 1.0, 
-   #                                 "J_LPJGN" = 0.3, 
-   #                                 "C_LPJGP" = 1.0),
-   #                        label=c("GDAYN","GDAYP", 
-   #                                "LPJGN","LPJGP"))+
-   #     scale_fill_manual(values=c("I_GDAYN" = "purple", "B_GDAYP" = "purple",
-   #                                "J_LPJGN" = "orange", "C_LPJGP" = "orange"),
-   #                       label=c("GDAYN","GDAYP", 
-   #                               "LPJGN","LPJGP"))+
-   #     coord_cartesian(ylim=c(0.9,1.1)); p6
-   # 
-   # 
-   # 
-   # ##################################################################
-   # #### major N fluxes
-   # fluxDF2 <- data.frame(rep(c("NGL", "NLRETR", "NUP", "NMIN"), 8), 
-   #                       rep(mod.list1, each = 8), 
-   #                       rep(c("amb", "ele"), each = 4),
-   #                       NA, NA)
-   # colnames(fluxDF2) <- c("Variable", 
-   #                        "Model",
-   #                        "Trt",
-   #                        "meanvalue",
-   #                        "sdvalue")
-   # 
-   # for (i in c("amb", "ele")) {
-   #     fluxDF2$meanvalue[fluxDF2$Variable=="NGL"&fluxDF2$Trt==i] <- myDF1$NGL.mean[myDF1$Trt==i]
-   #     fluxDF2$sdvalue[fluxDF2$Variable=="NGL"&fluxDF2$Trt==i] <- myDF1$NGL.sd[myDF1$Trt==i]
-   #     
-   #     fluxDF2$meanvalue[fluxDF2$Variable=="NLRETR"&fluxDF2$Trt==i] <- myDF1$NLRETR.mean[myDF1$Trt==i]
-   #     fluxDF2$sdvalue[fluxDF2$Variable=="NLRETR"&fluxDF2$Trt==i] <- myDF1$NLRETR.sd[myDF1$Trt==i]
-   #     
-   #     fluxDF2$meanvalue[fluxDF2$Variable=="NUP"&fluxDF2$Trt==i] <- myDF1$NUP.mean[myDF1$Trt==i]
-   #     fluxDF2$sdvalue[fluxDF2$Variable=="NUP"&fluxDF2$Trt==i] <- myDF1$NUP.sd[myDF1$Trt==i]
-   #     
-   #     fluxDF2$meanvalue[fluxDF2$Variable=="NMIN"&fluxDF2$Trt==i] <- myDF1$NMIN.mean[myDF1$Trt==i]
-   #     fluxDF2$sdvalue[fluxDF2$Variable=="NMIN"&fluxDF2$Trt==i] <- myDF1$NMIN.sd[myDF1$Trt==i]
-   # }
-   # 
-   # plotDF1 <- fluxDF2[fluxDF2$Trt=="amb",]
-   # 
-   # ### plotting NLRETR, NUP, and NMIN
-   # p7 <- ggplot(data=plotDF1, 
-   #              aes(Model, meanvalue, group=Variable)) +
-   #     geom_bar(stat = "identity", aes(fill=Variable, alpha=Model), 
-   #              position=position_dodge(), col="black") +
-   #     geom_errorbar(aes(x=Model, 
-   #                       ymin=meanvalue-sdvalue, 
-   #                       ymax=meanvalue+sdvalue), 
-   #                   position=position_dodge()) +
-   #     theme_linedraw() +
-   #     theme(panel.grid.minor=element_blank(),
-   #           axis.text.x=element_text(size=12),
-   #           axis.title.x=element_text(size=14),
-   #           axis.text.y=element_text(size=12),
-   #           axis.title.y=element_text(size=14),
-   #           legend.text=element_text(size=12),
-   #           legend.title=element_text(size=14),
-   #           panel.grid.major=element_blank(),
-   #           legend.position="right",
-   #           legend.box = 'horizontal',
-   #           legend.box.just = 'left',
-   #           plot.title = element_text(size=14, face="bold.italic", 
-   #                                     hjust = 0.5))+
-   #     ylab(expression(paste("Nitrogen fluxes (g N " * m^2 * " " * yr^-1 * ")")))+
-   #     scale_x_discrete(limit=c("I_GDAYN","B_GDAYP", 
-   #                              "J_LPJGN","C_LPJGP"),
-   #                      label=c("GDAYN","GDAYP", 
-   #                              "LPJGN","LPJGP"))+
-   #     xlab("")+
-   #     scale_alpha_manual(values=c("I_GDAYN" = 0.3, 
-   #                                 "B_GDAYP" = 1.0, 
-   #                                 "J_LPJGN" = 0.3, 
-   #                                 "C_LPJGP" = 1.0),
-   #                        label=c("GDAYN","GDAYP", 
-   #                                "LPJGN","LPJGP")); p7
-   # 
-   # 
-   # ### pct CO2 effect
-   # plotDF2 <- plotDF1
-   # plotDF2$Trt <- NULL
-   # 
-   # plotDF2$meanvalue[plotDF2$Variable=="NGL"] <- myDF5$NGL.mean
-   # plotDF2$sdvalue[plotDF2$Variable=="NGL"] <- myDF5$NGL.sd
-   # 
-   # plotDF2$meanvalue[plotDF2$Variable=="NLRETR"] <- myDF5$NLRETR.mean
-   # plotDF2$sdvalue[plotDF2$Variable=="NLRETR"] <- myDF5$NLRETR.sd
-   # 
-   # plotDF2$meanvalue[plotDF2$Variable=="NUP"] <- myDF5$NUP.mean
-   # plotDF2$sdvalue[plotDF2$Variable=="NUP"] <- myDF5$NUP.sd
-   # 
-   # plotDF2$meanvalue[plotDF2$Variable=="NMIN"] <- myDF5$NMIN.mean
-   # plotDF2$sdvalue[plotDF2$Variable=="NMIN"] <- myDF5$NMIN.sd
-   # 
-   # 
-   # ### subset
-   # plotDF2 <- subset(plotDF2, Variable%in%c("NGL", "NUP", "NMIN"))
-   # 
-   # ### plotting 
-   # p8 <- ggplot(data=plotDF2, 
-   #              aes(Model, meanvalue, group=Variable)) +
-   #     geom_bar(stat = "identity", aes(fill=Variable, alpha=Model), 
-   #              position=position_dodge(), col="black") +
-   #     geom_errorbar(aes(x=Model, 
-   #                       ymin=meanvalue-sdvalue, 
-   #                       ymax=meanvalue+sdvalue), 
-   #                   position=position_dodge()) +
-   #     theme_linedraw() +
-   #     theme(panel.grid.minor=element_blank(),
-   #           axis.text.x=element_text(size=12),
-   #           axis.title.x=element_text(size=14),
-   #           axis.text.y=element_text(size=12),
-   #           axis.title.y=element_text(size=14),
-   #           legend.text=element_text(size=12),
-   #           legend.title=element_text(size=14),
-   #           panel.grid.major=element_blank(),
-   #           legend.position="right",
-   #           legend.box = 'horizontal',
-   #           legend.box.just = 'left',
-   #           plot.title = element_text(size=14, face="bold.italic", 
-   #                                     hjust = 0.5))+
-   #     ylab(expression(paste("Nitrogen fluxes " * CO[2] *" response ratio")))+
-   #     scale_x_discrete(limit=c("I_GDAYN","B_GDAYP", 
-   #                              "J_LPJGN","C_LPJGP"),
-   #                      label=c("GDAYN","GDAYP", 
-   #                              "LPJGN","LPJGP"))+
-   #     xlab("")+
-   #     scale_alpha_manual(values=c("I_GDAYN" = 0.3, 
-   #                                 "B_GDAYP" = 1.0, 
-   #                                 "J_LPJGN" = 0.3, 
-   #                                 "C_LPJGP" = 1.0),
-   #                        label=c("GDAYN","GDAYP", 
-   #                                "LPJGN","LPJGP")); p8
-   # 
-   # pdf(paste0(out.dir, '/MIP_CNP_vs_CN_model_comparisons.pdf',sep=''),width=12,height=8)
-   # for (i in 1:8) {
-   #     print(get(paste("p",i,sep="")))
-   # }
-   # dev.off()
     
     
     

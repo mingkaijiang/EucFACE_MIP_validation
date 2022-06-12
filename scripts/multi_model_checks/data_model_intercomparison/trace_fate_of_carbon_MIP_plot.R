@@ -307,13 +307,13 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
                                       hjust = 0.5))+
       ylab(expression(paste("Normalized " * CO[2] * " response")))+
       scale_fill_manual(name="Component",
-                        values=c("NPP"=GreensPalette[3],
-                                 "RAU"=YlOrRdPalette[2]),
+                        values=c("NPP"=GreensPalette[5],
+                                 "RAU"=YlOrRdPalette[6]),
                         labels=c("NPP"="NPP",
                                  "RAU"=expression(R[auto])))+
       scale_x_discrete(limit=c(mod.list.rev, "OBS"),
                        label=c(model.labels, 
-                               "OBS"=expression(bold("OBS"))))
+                               "OBS"=expression(bold("OBS"))));p1
     
     
     
@@ -339,22 +339,21 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
                                       hjust = 0.5))+
       ylab(expression(paste("Normalized " * CO[2] * " response")))+
       scale_fill_manual(name="Component",
-                        values=c("RAU"=YlOrRdPalette[2],
-                                 "RHET"=YlOrRdPalette[6],
-                                 "deltaCVEG"=GreensPalette[6],
+                        values=c("RAU"=YlOrRdPalette[6],
+                                 "RHET"=YlOrRdPalette[8],
+                                 "deltaCVEG"=GreensPalette[7],
                                  "deltaCSTOR"=GreensPalette[4],
                                  "deltaCSOIL"=GreensPalette[9]),
                         labels=c("RAU"=expression(R[auto]),
                                  "RHET"=expression(R[het]),
-                                 "deltaCVEG"=expression(Delta * C[VEG]),
-                                 "deltaCSTOR"=expression(Delta * C[STOR]),
-                                 "deltaCSOIL"=expression(Delta * C[SOIL])))+
+                                 "deltaCVEG"=expression(Delta * C[veg]),
+                                 "deltaCSTOR"=expression(Delta * C[store]),
+                                 "deltaCSOIL"=expression(Delta * C[soil])))+
       scale_x_discrete(limit=c(mod.list.rev, "OBS"),
                        label=c(model.labels, 
-                               "OBS"=expression(bold("OBS"))))
+                               "OBS"=expression(bold("OBS")))); p2
     
-    plot(p2)
-    
+
     plots_top_row <- plot_grid(p1, p2, 
                                labels=c("(a)", "(b)"),
                                ncol=1, align="vh", axis = "l",
@@ -364,7 +363,7 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
     
     pdf(paste0(out.dir, "/MIP_normalized_fate_of_C_", 
                scenario, "_comparison.pdf"), 
-        width=8, height=8)
+        width=8, height=7)
     plot_grid(plots_top_row,
               ncol=1, rel_heights=c(1,0.1))
     

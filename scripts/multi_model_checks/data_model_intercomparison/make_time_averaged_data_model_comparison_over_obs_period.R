@@ -29,6 +29,12 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
     
     d <- dim(ambDF)[2]
     
+    ### remove N models
+    ambDF <- ambDF[ambDF$ModName!="I_GDAYN",]
+    ambDF <- ambDF[ambDF$ModName!="J_LPJGN",]
+    eleDF <- eleDF[eleDF$ModName!="I_GDAYN",]
+    eleDF <- eleDF[eleDF$ModName!="J_LPJGN",]
+    
     #### calculate 4-yr means in the simulation datasets
     ambDF <- subset(ambDF, YEAR>2012 & YEAR<2017)
     eleDF <- subset(eleDF, YEAR>2012 & YEAR<2017)
@@ -96,6 +102,8 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
                           ymax=meanvalue+sdvalue), 
                       col="black", 
                       position=position_dodge2(), width=0.3)+
+        geom_point(data=plotDF2,aes(Group, meanvalue), 
+                 size=2,fill="white", pch=21, col="black") +
         geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
         xlab("")+
         theme_linedraw() +
@@ -117,8 +125,19 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
                                         hjust = 0.5))+
         ylab(expression(paste("Carbon pools (g C " * m^2*")")))+
         scale_x_discrete(limit=c(mod.list, "obs"),
-                         label=c(model.labels, "obs" = "OBS"))+
-        guides(fill=guide_legend(nrow=3))
+                         label=c(model.labels, "obs" = expression(bold("OBS"))))+
+        guides(fill=guide_legend(nrow=3))+
+        scale_fill_manual(name=expression(C[veg]),
+                        values=c("CL"=cbbPalette[2],
+                                 "CW"=cbbPalette[3],
+                                 "CFR"=cbbPalette[4],
+                                 "CCR"=cbbPalette[7],
+                                 "CSTOR"=cbbPalette[8]),
+                        labels=c("CL"=expression(C[leaf]), 
+                                 "CW"=expression(C[wood]), 
+                                 "CFR"=expression(C[froot]), 
+                                 "CCR"=expression(C[croot]),
+                                 "CSTOR"=expression(C[store])));p1
     
     
     p2 <- ggplot(data=plotDF3, 
@@ -129,6 +148,8 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
                           ymax=meanvalue+sdvalue), 
                       col="black", 
                       position=position_dodge2(), width=0.3)+
+        geom_point(aes(Group, meanvalue), 
+                   size=2,fill="white", pch=21, col="black") +
         geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
         xlab("")+
         theme_linedraw() +
@@ -147,12 +168,12 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
                                         hjust = 0.5))+
         ylab(expression(CO[2] * " effect (%)"))+
         scale_x_discrete(limit=c(mod.list, "obs"),
-                         label=c(model.labels, "obs" = "OBS"))+
+                         label=c(model.labels, "obs" = expression(bold("OBS"))))+
         scale_fill_manual(name="Model",
                            values=c(col.values, obs="black"),
                            labels=c(model.labels, "obs"= "OBS"))+
         guides(fill = guide_legend(override.aes = list(col = c(col.values, "obs"="black"))),
-               color = guide_legend(nrow=12, byrow=F))
+               color = guide_legend(nrow=12, byrow=F));p2
     
     
     
@@ -181,6 +202,8 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
                           ymax=meanvalue+sdvalue), 
                       col="black", 
                       position=position_dodge2(), width=0.3)+
+        geom_point(data=plotDF2,aes(Group, meanvalue), 
+                 size=2,fill="white", pch=21, col="black") +
         geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
         xlab("")+
         theme_linedraw() +
@@ -202,9 +225,11 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
                                         hjust = 0.5))+
         ylab(expression(paste("Carbon fluxes (g C " * m^2 * " " * yr^-1 * ")")))+
         scale_x_discrete(limit=c(mod.list, "obs"),
-                         label=c(model.labels, "obs" = "OBS"))+
+                         label=c(model.labels, "obs" = expression(bold("OBS"))))+
         scale_fill_manual(name="Variable",
-                          values=c("NPP"="green", "RAU"="yellow"))
+                          values=c("NPP"="green", "RAU"="yellow"),
+                          labels=c("NPP"="NPP",
+                                   "RAU"=expression(R[auto])));p3
     
     
     p4 <- ggplot(data=plotDF3, 
@@ -215,6 +240,8 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
                           ymax=meanvalue+sdvalue), 
                       col="black", 
                       position=position_dodge2(), width=0.3)+
+        geom_point(aes(Group, meanvalue), 
+                 size=2,fill="white", pch=21, col="black") +
         geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
         xlab("")+
         theme_linedraw() +
@@ -233,12 +260,12 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
                                         hjust = 0.5))+
         ylab(expression(CO[2] * " effect (%)"))+
         scale_x_discrete(limit=c(mod.list, "obs"),
-                         label=c(model.labels, "obs" = "OBS"))+
+                         label=c(model.labels, "obs" = expression(bold("OBS"))))+
         scale_fill_manual(name="Model",
                           values=c(col.values, obs="black"),
                           labels=c(model.labels, "obs"= "OBS"))+
         guides(fill = guide_legend(override.aes = list(col = c(col.values, "obs"="black"))),
-               color = guide_legend(nrow=12, byrow=F))
+               color = guide_legend(nrow=12, byrow=F)); p4
     
     
     ################# Delta C pools  ####################
@@ -262,13 +289,13 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
                  aes(Group, meanvalue)) +
         geom_bar(stat = "identity", aes(fill=Variable), 
                  position="stack", col="black") +
-        geom_point(data=plotDF2, aes(x=Group, y=meanvalue), col="black",
-                   fill="red", pch=21)+
         geom_errorbar(data=plotDF2, 
                       aes(x=Group, ymin=meanvalue-sdvalue,
                           ymax=meanvalue+sdvalue), 
                       col="black", 
                       position=position_dodge2(), width=0.3)+
+        geom_point(data=plotDF2, aes(x=Group, y=meanvalue), col="black",
+                 fill="white", size=2, pch=21)+
         geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
         xlab("")+
         theme_linedraw() +
@@ -285,9 +312,20 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
               legend.box.just = 'left',
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
-        ylab(expression(paste(Delta * " Carbon pools (g C " * m^2 * " " * yr^-1 * ")")))+
+        ylab(expression(paste(Delta * C[veg] * " (g C " * m^2 * " " * yr^-1 * ")")))+
         scale_x_discrete(limit=c(mod.list, "obs"),
-                         label=c(model.labels, "obs" = "OBS"))
+                         label=c(model.labels, "obs" = expression(bold("OBS"))))+
+        scale_fill_manual(name=expression(C[veg]),
+                        values=c("deltaCL"=cbbPalette[2],
+                                 "deltaCW"=cbbPalette[3],
+                                 "deltaCFR"=cbbPalette[4],
+                                 "deltaCCR"=cbbPalette[7],
+                                 "deltaCSTOR"=cbbPalette[8]),
+                        labels=c("deltaCL"=expression(Delta*C[leaf]), 
+                                 "deltaCW"=expression(Delta*C[wood]), 
+                                 "deltaCFR"=expression(Delta*C[froot]), 
+                                 "deltaCCR"=expression(Delta*C[croot]),
+                                 "deltaCSTOR"=expression(Delta*C[store]))); p5
     
     
     p6 <- ggplot(data=plotDF3, 
@@ -298,6 +336,8 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
                           ymax=meanvalue+sdvalue), 
                       col="black", 
                       position=position_dodge2(), width=0.3)+
+        geom_point(data=plotDF3, aes(x=Group, y=meanvalue), col="black",
+                 fill="white", size=2, pch=21)+
         geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
         xlab("")+
         theme_linedraw() +
@@ -316,12 +356,12 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
                                         hjust = 0.5))+
         ylab(expression(CO[2] * " effect (g C " * m^2 * " " * yr^-1 * ")"))+
         scale_x_discrete(limit=c(mod.list, "obs"),
-                         label=c(model.labels, "obs" = "OBS"))+
+                         label=c(model.labels, "obs" = expression(bold("OBS"))))+
         scale_fill_manual(name="Model",
                           values=c(col.values, obs="black"),
                           labels=c(model.labels, "obs"= "OBS"))+
         guides(fill = guide_legend(override.aes = list(col = c(col.values, "obs"="black"))),
-               color = guide_legend(nrow=12, byrow=F))
+               color = guide_legend(nrow=12, byrow=F)); p6
     
     
     
@@ -348,6 +388,8 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
                           ymax=meanvalue+sdvalue), 
                       col="black", 
                       position=position_dodge2(), width=0.3)+
+        geom_point(data=plotDF1, aes(x=Group, y=meanvalue), col="black",
+                 fill="white", size=2, pch=21)+
         geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
         xlab("")+
         theme_linedraw() +
@@ -366,12 +408,12 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
                                         hjust = 0.5))+
         ylab(expression(paste("NEP (g C " * m^2 * " " * yr^-1 * ")")))+
         scale_x_discrete(limit=c(mod.list, "obs"),
-                         label=c(model.labels, "obs" = "OBS"))+
+                         label=c(model.labels, "obs" = expression(bold("OBS"))))+
         scale_fill_manual(name="Model",
                           values=c(col.values, obs="black"),
                           labels=c(model.labels, "obs"= "OBS"))+
         guides(fill = guide_legend(override.aes = list(col = c(col.values, "obs"="black"))),
-               color = guide_legend(nrow=12, byrow=F))
+               color = guide_legend(nrow=12, byrow=F)); p7
     
     
     p8 <- ggplot(data=plotDF2, 
@@ -382,6 +424,8 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
                           ymax=meanvalue+sdvalue), 
                       col="black", 
                       position=position_dodge2(), width=0.3)+
+        geom_point(data=plotDF2, aes(x=Group, y=meanvalue), col="black",
+                 fill="white", size=2, pch=21)+
         geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
         xlab("")+
         theme_linedraw() +
@@ -398,14 +442,14 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
               legend.box.just = 'left',
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
-        ylab(expression(CO[2] * " effect (g C " * m^2 * " " * yr-1 * ")"))+
+        ylab(expression(CO[2] * " effect (g C " * m^2 * " " * yr^-1 * ")"))+
         scale_x_discrete(limit=c(mod.list, "obs"),
-                         label=c(model.labels, "obs" = "OBS"))+
+                         label=c(model.labels, "obs" = expression(bold("OBS"))))+
         scale_fill_manual(name="Model",
                           values=c(col.values, obs="black"),
                           labels=c(model.labels, "obs"= "OBS"))+
         guides(fill = guide_legend(override.aes = list(col = c(col.values, "obs"="black"))),
-               color = guide_legend(nrow=12, byrow=F))
+               color = guide_legend(nrow=12, byrow=F));p8
     
     
     
@@ -424,7 +468,7 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
     
     ### split into ambDF, pctDF
     plotDF1 <- allocDF[allocDF$Trt=="aCO2",]
-    plotDF2 <- allocDF[allocDF$Trt=="diff",]
+    plotDF2 <- allocDF[allocDF$Trt=="pct_diff",]
     
     ### Plotting
     p9 <- ggplot(data=plotDF1, 
@@ -451,13 +495,13 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
                                         hjust = 0.5))+
         ylab("Allocation coefficients")+
         scale_x_discrete(limit=c(mod.list, "obs"),
-                         label=c(model.labels, "obs" = "OBS"))+
+                         label=c(model.labels, "obs" = expression(bold("OBS"))))+
         scale_fill_manual(name="Variable",
                           values=c("Canopy"=cbbPalette[4], 
                                    "Wood"=cbbPalette[3],
                                    "Root"=cbbPalette[8],
                                    "Other"=cbbPalette[2]))+
-        guides(fill=guide_legend(nrow=2))
+        guides(fill=guide_legend(nrow=2)); p9
     
     
     p10 <- ggplot(data=plotDF2, 
@@ -483,20 +527,24 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
                                                colour ="black"),
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
-        ylab(expression(CO[2] * " effect (unitless)"))+
+        ylab(expression(CO[2] * " effect (%)"))+
         scale_x_discrete(limit=c(mod.list, "obs"),
-                         label=c(model.labels, "obs" = "OBS"))+
+                         label=c(model.labels, "obs" = expression(bold("OBS"))))+
         scale_fill_manual(name="Variable",
                           values=c("Canopy"=cbbPalette[4], 
                                    "Wood"=cbbPalette[3],
                                    "Root"=cbbPalette[8],
                                    "Other"=cbbPalette[2]))+
-        guides(fill=guide_legend(nrow=2))
+        guides(fill=guide_legend(nrow=2)); p10
     
     
     pdf(paste0(out.dir, "/MIP_time_averaged_", scenario, "_comparison_C_variables.pdf"), 
         width=16, height=16)
-    plot_grid(p1, p2, p3, p4, p9, p10, p7, p8, 
+    plot_grid(#p1, p2, # Cveg
+              p3, p4, # GPP
+              p5, p6, # delta Cveg
+              p9, p10, # Allocation
+              p7, p8, # NEP
               labels="auto", label_x=0.1, label_y=0.95,
               label_size=24,
               ncol=2)
