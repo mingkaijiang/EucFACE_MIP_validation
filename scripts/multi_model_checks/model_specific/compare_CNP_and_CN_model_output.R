@@ -187,11 +187,11 @@ compare_CNP_and_CN_model_output <- function(scenario) {
                                    "CFR"=cbbPalette[4],
                                    "CCR"=cbbPalette[7],
                                    "CSTOR"=cbbPalette[8]),
-                          labels=c(expression(C[leaf]), 
-                                   expression(C[wood]), 
-                                   expression(C[froot]), 
-                                   expression(C[croot]),
-                                   expression(C[store])))+
+                          labels=c("CL"=expression(C[leaf]), 
+                                   "CW"=expression(C[wood]), 
+                                   "CFR"=expression(C[froot]), 
+                                   "CCR"=expression(C[croot]),
+                                   "CSTOR"=expression(C[store])))+
         guides(fill = guide_legend(override.aes=list(fill=c("CL"=cbbPalette[2],
                                                             "CW"=cbbPalette[3],
                                                             "CFR"=cbbPalette[4],
@@ -329,7 +329,7 @@ compare_CNP_and_CN_model_output <- function(scenario) {
         #         label=(paste0(val1, "%")), size=10)+
         #annotate("text", x=4, y=plotDF2$meanvalue[plotDF2$Model=="C_LPJGP"]*1.2, 
         #         label=(paste0(val2, "%")), size=10)+
-        geom_point(data=plotDF2, aes(x=Model, y=meanvalue), col="red")+
+        geom_point(data=plotDF2, aes(x=Model, y=meanvalue), fill="white", pch=21, col="black")+
         geom_errorbar(data=plotDF2, aes(x=Model,
                                      ymin=meanvalue-sdvalue,
                                      ymax=meanvalue+sdvalue),
@@ -361,11 +361,11 @@ compare_CNP_and_CN_model_output <- function(scenario) {
                                    "CFR"=cbbPalette[4],
                                    "CCR"=cbbPalette[7],
                                    "CSTOR"=cbbPalette[8]),
-                          labels=c(expression(C[leaf]), 
-                                   expression(C[wood]), 
-                                   expression(C[froot]), 
-                                   expression(C[croot]),
-                                   expression(C[store])))+
+                          labels=c("CL"=expression(C[leaf]), 
+                                   "CW"=expression(C[wood]), 
+                                   "CFR"=expression(C[froot]), 
+                                   "CCR"=expression(C[croot]),
+                                   "CSTOR"=expression(C[store])))+
         guides(fill = guide_legend(override.aes=list(fill=c("CL"=cbbPalette[2],
                                                             "CW"=cbbPalette[3],
                                                             "CFR"=cbbPalette[4],

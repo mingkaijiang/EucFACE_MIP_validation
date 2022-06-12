@@ -42,8 +42,8 @@ compare_microbial_model_general_output <- function(scenario) {
     
     
     #### calculate 4-yr means in the simulation datasets
-    #ambDF <- subset(ambDF, YEAR>2012 & YEAR<2017)
-    #eleDF <- subset(eleDF, YEAR>2012 & YEAR<2017)
+    ambDF <- subset(ambDF, YEAR>2012 & YEAR<2017)
+    eleDF <- subset(eleDF, YEAR>2012 & YEAR<2017)
     
     d <- dim(ambDF)[2]
     
@@ -166,6 +166,12 @@ compare_microbial_model_general_output <- function(scenario) {
                  aes(Model, meanvalue)) +
         geom_bar(stat = "identity", aes(fill=Variable, alpha=Model), 
                  position="stack", col="black") +
+        geom_errorbar(data=plotDF2, 
+                      aes(x=Model, ymin=meanvalue-sdvalue, ymax=meanvalue+sdvalue), 
+                      position="dodge", width=0.2, col="black") +
+        geom_point(data=plotDF2, 
+                   aes(x=Model, y=meanvalue), 
+                   position="dodge", col="black", size=2, fill="white", pch=21) +
         #annotate("text", x=2, y=plotDF2$meanvalue[plotDF2$Model=="G_OCHDX"]*1.15, 
         #         label=(paste0(val1, "%")), size=10)+
         #annotate("text", x=4, y=plotDF2$meanvalue[plotDF2$Model=="H_QUJSM"]*1.15, 
@@ -196,7 +202,11 @@ compare_microbial_model_general_output <- function(scenario) {
                                    "CFR"=cbbPalette[4],
                                    "CCR"=cbbPalette[7],
                                    "CSTOR"=cbbPalette[8]),
-                          labels=c("CL", "CW", "CFR", "CCR", "CSTOR"))+
+                          labels=c("CL"=expression(C[leaf]), 
+                                   "CW"=expression(C[wood]), 
+                                   "CFR"=expression(C[froot]), 
+                                   "CCR"=expression(C[croot]),
+                                   "CSTOR"=expression(C[store])))+
         guides(fill = guide_legend(override.aes=list(fill=c("CL"=cbbPalette[2],
                                                             "CW"=cbbPalette[3],
                                                             "CFR"=cbbPalette[4],
@@ -208,7 +218,7 @@ compare_microbial_model_general_output <- function(scenario) {
                                     "G_OCHDX" = 1.0, 
                                     "H_QUJSM" = 1.0),
                            label=c("OCHDP","QUINC",
-                                   "OCHDX","QUJSM"))
+                                   "OCHDX","QUJSM")); p1
     
     ### calculate CO2 pct response difference
     plotDF3 <- plotDF2
@@ -237,7 +247,7 @@ compare_microbial_model_general_output <- function(scenario) {
               legend.text=element_text(size=12),
               legend.title=element_text(size=14),
               panel.grid.major=element_blank(),
-              legend.position="right",
+              legend.position="none",
               legend.box = 'horizontal',
               legend.box.just = 'left',
               plot.title = element_text(size=14, face="bold.italic", 
@@ -258,7 +268,7 @@ compare_microbial_model_general_output <- function(scenario) {
                                    "G_OCHDX" = "purple", "H_QUJSM" = "orange"),
                           label=c("OCHDP","QUINC",
                                   "OCHDX","QUJSM"))+
-        coord_cartesian(ylim=c(1,1.1))
+        coord_cartesian(ylim=c(1,1.1)); p2
     
     
     ##################################################################
@@ -331,11 +341,11 @@ compare_microbial_model_general_output <- function(scenario) {
         #         label=(paste0(val1, "%")), size=10)+
         #annotate("text", x=4, y=plotDF2$meanvalue[plotDF2$Model=="C_LPJGP"]*1.2, 
         #         label=(paste0(val2, "%")), size=10)+
-        geom_point(data=plotDF2, aes(x=Model, y=meanvalue), col="red")+
         geom_errorbar(data=plotDF2, aes(x=Model,
                                         ymin=meanvalue-sdvalue,
                                         ymax=meanvalue+sdvalue),
                       position="dodge", width=0.5)+
+        geom_point(data=plotDF2, aes(x=Model, y=meanvalue), col="black", pch=21, fill="white")+
         theme_linedraw() +
         geom_vline(xintercept=2.5, lty=2)+
         theme(panel.grid.minor=element_blank(),
@@ -363,7 +373,11 @@ compare_microbial_model_general_output <- function(scenario) {
                                    "CFR"=cbbPalette[4],
                                    "CCR"=cbbPalette[7],
                                    "CSTOR"=cbbPalette[8]),
-                          labels=c("CL", "CW", "CFR", "CCR", "CSTOR"))+
+                          labels=c("CL"=expression(C[leaf]), 
+                                   "CW"=expression(C[wood]), 
+                                   "CFR"=expression(C[froot]), 
+                                   "CCR"=expression(C[croot]),
+                                   "CSTOR"=expression(C[store])))+
         guides(fill = guide_legend(override.aes=list(fill=c("CL"=cbbPalette[2],
                                                             "CW"=cbbPalette[3],
                                                             "CFR"=cbbPalette[4],
@@ -375,7 +389,7 @@ compare_microbial_model_general_output <- function(scenario) {
                                     "G_OCHDX" = 1.0, 
                                     "H_QUJSM" = 1.0),
                            label=c("OCHDP","QUINC",
-                                   "OCHDX","QUJSM"))
+                                   "OCHDX","QUJSM")); p3
     
     
     ### calculate CO2 pct response difference
@@ -422,6 +436,7 @@ compare_microbial_model_general_output <- function(scenario) {
                                         ymin=meanvalue-sdvalue,
                                         ymax=meanvalue+sdvalue),
                       position="dodge", width=0.5)+
+        geom_point(data=plotDF3, aes(x=Model, y=meanvalue), col="black", pch=21, fill="white")+
         geom_vline(xintercept=2.5, lty=2)+
         theme(panel.grid.minor=element_blank(),
               axis.text.x=element_text(size=12),
@@ -448,10 +463,10 @@ compare_microbial_model_general_output <- function(scenario) {
                                     "H_QUJSM" = 1.0),
                            label=c("OCHDP","QUINC",
                                    "OCHDX","QUJSM"))+
-        scale_fill_manual(values=c("E_OCHDP" = "black", "F_QUINC" = "black",
-                                   "G_OCHDX" = "black", "H_QUJSM" = "black"),
-                          label=c("OCHDP","OCHDX", 
-                                  "QUINC","QUJSM"))
+        scale_fill_manual(values=c("E_OCHDP" = "purple", "F_QUINC" = "orange",
+                                   "G_OCHDX" = "purple", "H_QUJSM" = "orange"),
+                          label=c("OCHDP","QUINC",
+                                  "OCHDX","QUJSM")); p4
     
     
     
@@ -534,7 +549,7 @@ compare_microbial_model_general_output <- function(scenario) {
         #                                                    "NPP"="green",
         #                                                    "RAU"="red")),
         #                           nrow=1, byrow=F))+
-        guides(fill=guide_legend(expression(C[flux])), alpha = FALSE)
+        guides(fill=guide_legend(expression(C[flux])), alpha = FALSE); p5
     
     
     ### pct CO2 effect
@@ -649,6 +664,12 @@ compare_microbial_model_general_output <- function(scenario) {
     
     
     
+    
+    
+    
+    
+    
+    
     #### Nutrient cycling
     ## P uptake, P mineralization flux, P biochemical mineralization flux
     ## P leaching flux
@@ -745,7 +766,7 @@ compare_microbial_model_general_output <- function(scenario) {
         scale_fill_manual(name="Model",
                           values=c(col.values),
                           labels=c(model.labels))+
-        guides(alpha=guide_legend("Treatment"), fill = FALSE)
+        guides(alpha=guide_legend("Treatment"), fill = FALSE); p1
     
     
     ### plot PMINTOT
@@ -784,7 +805,7 @@ compare_microbial_model_general_output <- function(scenario) {
         scale_fill_manual(name="Model",
                           values=c(col.values),
                           labels=c(model.labels))+
-        guides(alpha=guide_legend("Treatment"), fill = FALSE)
+        guides(alpha=guide_legend("Treatment"), fill = FALSE); p2
     
     
     ### plot PLEACH
