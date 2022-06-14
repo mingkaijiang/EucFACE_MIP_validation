@@ -307,7 +307,7 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
               legend.text=element_text(size=12),
               legend.title=element_text(size=14),
               panel.grid.major=element_blank(),
-              legend.position="right",
+              legend.position=c(.1,.2),
               legend.box = 'horizontal',
               legend.box.just = 'left',
               plot.title = element_text(size=14, face="bold.italic", 
@@ -543,7 +543,7 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
     plot_grid(#p1, p2, # Cveg
               p3, p4, # GPP
               p5, p6, # delta Cveg
-              p9, p10, # Allocation
+              #p9, p10, # Allocation
               p7, p8, # NEP
               labels="auto", label_x=0.1, label_y=0.95,
               label_size=24,
@@ -1233,13 +1233,116 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
     
     
     
+    ################# Plab ####################
+    plabDF <- prepare_plot_DF_for_time_averaged_data_model_intercomparison(eucDF=eucDF,
+                                                                          ambDF=ambDF.sum,
+                                                                          eleDF=eleDF.sum,
+                                                                          difDF=annDF.diff.sum,
+                                                                          var.list=c("PLAB"),
+                                                                          calculate.total=F)
+    
+    
+    
+    
+    ### split into ambDF, pctDF
+    plotDF1 <- plabDF[plabDF$Trt=="aCO2"&plabDF$Variable%in%c("PLAB"),]
+
+    plotDF2 <- plabDF[plabDF$Trt=="pct_diff",]
+    
+    ### ELMV1 assumes top 1 m soil, not top 10 cm
+    plotDF1$meanvalue[plotDF1$Group=="B_ELMV1"] <- plotDF1$meanvalue[plotDF1$Group=="B_ELMV1"]/ 10
+    plotDF1$sdvalue[plotDF1$Group=="B_ELMV1"] <- plotDF1$sdvalue[plotDF1$Group=="B_ELMV1"]/ 10
+    
+    ## plab pool
+    #require(ggbreak)
+    
+    p13 <- ggplot(data=plotDF1, 
+                  aes(Group, meanvalue, group=Group)) +
+      geom_bar(stat = "identity", aes(fill=Group), 
+               position="dodge", col="black") +
+      geom_errorbar(data=plotDF1, 
+                    aes(x=Group, ymin=meanvalue-sdvalue,
+                        ymax=meanvalue+sdvalue), 
+                    col="black", 
+                    position=position_dodge2(), width=0.3)+
+      geom_point(data=plotDF1, aes(x=Group, y=meanvalue), 
+                 position=position_dodge2(width=0.9), col="black",
+                 fill="white", size=2, pch=21)+
+      geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
+      theme_linedraw() +
+      #scale_y_break(c(2,10))+
+      theme(panel.grid.minor=element_blank(),
+            axis.text.x=element_text(size=12),
+            axis.title.x=element_text(size=14),
+            axis.text.y=element_text(size=12),
+            axis.title.y=element_text(size=14),
+            legend.text=element_text(size=12),
+            legend.title=element_text(size=14),
+            panel.grid.major=element_blank(),
+            legend.position="none",
+            legend.box = 'horizontal',
+            legend.box.just = 'left',
+            legend.background = element_rect(fill="grey",
+                                             size=0.5, linetype="solid", 
+                                             colour ="black"),
+            plot.title = element_text(size=14, face="bold.italic", 
+                                      hjust = 0.5))+
+      ylab(expression(P[lab] * " (g P " * m^-2 * ")"))+
+      scale_x_discrete(limit=c(mod.list, "obs"),
+                       label=c(model.labels, "obs" = expression(bold("OBS"))))+
+      scale_fill_manual(name="Model",
+                        values=c(col.values, obs="black"),
+                        labels=c(model.labels, "obs"= "OBS"))+
+      guides(fill=guide_legend(nrow=6));p13
+    
+    
+    
+    
+    p14 <- ggplot(data=plotDF2, 
+                  aes(Group, meanvalue)) +
+      geom_bar(stat = "identity", aes(fill=Group), 
+               position=position_dodge2(), col="black") +
+      geom_errorbar(data=plotDF2, 
+                    aes(x=Group, ymin=meanvalue-sdvalue,
+                        ymax=meanvalue+sdvalue), 
+                    col="black", 
+                    position=position_dodge2(), width=0.3)+
+      geom_point(data=plotDF2, aes(x=Group, y=meanvalue), 
+                 position=position_dodge2(width=0.9), col="black",
+                 fill="white", size=2, pch=21)+
+      geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
+      xlab("")+
+      theme_linedraw() +
+      theme(panel.grid.minor=element_blank(),
+            axis.text.x=element_text(size=12),
+            axis.title.x=element_text(size=14),
+            axis.text.y=element_text(size=12),
+            axis.title.y=element_text(size=14),
+            legend.text=element_text(size=12),
+            legend.title=element_text(size=14),
+            panel.grid.major=element_blank(),
+            legend.position="none",
+            legend.box = 'horizontal',
+            legend.box.just = 'left',
+            plot.title = element_text(size=14, face="bold.italic", 
+                                      hjust = 0.5))+
+      ylab(expression(CO[2] * " effect (%)"))+
+      scale_x_discrete(limit=c(mod.list, "obs"),
+                       label=c(model.labels, "obs" = expression(bold("OBS"))))+
+      scale_fill_manual(name="Model",
+                        values=c(col.values, obs="black"),
+                        labels=c(model.labels, "obs"= "OBS"))+
+      guides(fill=guide_legend(nrow=6)); p14
+    
     pdf(paste0(out.dir, "/MIP_time_averaged_", scenario, "_comparison_P_variables.pdf"), 
-        width=16, height=8)
+        width=16, height=16)
     plot_grid(p1, p2,   # Pveg
               p5, p6,   # pupt and pmin
               #p11, p12, # PUE
               #p9, p10,  # CP ratio
-              labels=c("(a)", "(b)", "(c)", "(d)"), label_x=0.1, label_y=0.95,
+              p13, p14, # Plab
+              labels=c("(a)", "(b)", "(c)", "(d)",
+                       "(e)", "(f)"), label_x=0.1, label_y=0.95,
               label_size=24,
               ncol=2)
     dev.off()
@@ -1248,13 +1351,15 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
     pdf(paste0(out.dir, "/MIP_time_averaged_", scenario, "_comparison_P_variables_SI.pdf"), 
         width=16, height=16)
     plot_grid(p3, p4,   # Pgrowth
-              p7, p8,   # Pupt over requirement
+              #p7, p8,   # Pupt over requirement
               p11, p12, # PUE
               p9, p10,  # CP ratio
+              
               labels=c("(a)", "(b)",
                        "(c)", "(d)",
-                       "(e)", "(f)",
-                       "(g)", "(h)"), label_x=0.1, label_y=0.95,
+                       "(e)", "(f)"),
+                       #"(g)", "(h)"), 
+              label_x=0.1, label_y=0.95,
               label_size=24,
               ncol=2)
     dev.off()

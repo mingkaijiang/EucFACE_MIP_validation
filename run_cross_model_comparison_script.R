@@ -54,6 +54,7 @@ compile_all_dataset_across_models()
 ###      Also generated CO2 effect comparison.
 normalize_dataset_across_models(yr.to.normalize=2012)
 
+normalize_dataset_across_models(yr.to.normalize=2019)
 
 
 #### 2.6. Prepare observed dataset at annual timestep wherever possible
@@ -126,12 +127,12 @@ trace_fate_of_carbon_MIP_plot(scenario="FIX")
 ###        1. real magnitude of P fertilization from different model starting point
 ###        2. normalized magnitude of P fertilization normalized to the same starting point
 plot_normalized_pred_trajectories(climate.scenario="VAR",
-                                  yr.to.normalize=2012,
-                                  yr.to.end=2069)
+                                  yr.to.normalize=2019,
+                                  yr.to.end=2029)
 
 plot_normalized_pred_trajectories(climate.scenario="FIX",
-                                  yr.to.normalize=2012,
-                                  yr.to.end=2069)
+                                  yr.to.normalize=2019,
+                                  yr.to.end=2029)
 
 
 ### 3.6.2. plot time slice comparison:
