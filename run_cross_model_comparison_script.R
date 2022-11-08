@@ -111,8 +111,11 @@ plot_normalized_GPP_response(scenario="VAR")
 
 ### 3.5. Fate of carbon 
 ###      To make it comparable to the obs, we will subset 2013 - 2016 
+###      need to go into function to plot
+scenario="VAR"
 trace_fate_of_carbon_MIP_plot(scenario="VAR")
 
+scenario="FIX"
 trace_fate_of_carbon_MIP_plot(scenario="FIX")
 
 
@@ -140,8 +143,10 @@ plot_normalized_pred_trajectories(climate.scenario="FIX",
 ###        P fertilization: 2020 - 22 (3 yrs)
 ###        future: 2023 - 29 (7 yrs)
 ###        long-term: 2063 - 2069 (7 yrs)
+climate.scenario="VAR"
 plot_timeslice_CO2_by_P_interaction(climate.scenario="VAR")
 
+climate.scenario="FIX"
 plot_timeslice_CO2_by_P_interaction(climate.scenario="FIX")
 
 
