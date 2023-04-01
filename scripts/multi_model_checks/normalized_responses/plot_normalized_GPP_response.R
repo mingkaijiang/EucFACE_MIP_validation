@@ -304,6 +304,13 @@ plot_normalized_GPP_response <- function(scenario) {
     mod.list <- unique(sumDF2$ModName)
     
     
+    ### convert sd into zero
+    sumDF1$Aleaf.mean.sd <- 0.0
+    sumDF1$LAI.mean.sd <- 0.0
+    
+    sumDF2$GPP.sd <- 0.0
+
+    
     ### calculate multi-model means and sds
     multDF1 <- summaryBy(Aleaf.mean.mean+LAI.mean.mean~Trt, data=sumDF1,
                          FUN=c(mean,sd), keep.names=T, na.rm=T)
@@ -600,7 +607,7 @@ plot_normalized_GPP_response <- function(scenario) {
                                             legend.box = 'horizontal',
                                             legend.box.just = 'left'))
     
-    plots_top_row <- plot_grid(p3, p2, p1, 
+    plots_top_row <- plot_grid(p3, p1, p2, 
                                labels=c("(a)", "(b)", "(c)"),
                                ncol=1, align="vh", axis = "l",
                                label_x=0.1, label_y=0.95,

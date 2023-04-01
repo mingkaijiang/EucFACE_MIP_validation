@@ -62,6 +62,10 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
     nmod <- length(mod.list)
     
     
+    ### forcing sd to zero
+    
+    
+    
     ### check GDAY PUP
     #ambDF.sum$PUP.mean[ambDF.sum$ModName=="A_GDAYP"]
     #eleDF.sum$PUP.mean[eleDF.sum$ModName=="A_GDAYP"]
@@ -91,8 +95,6 @@ make_time_averaged_data_model_comparison_over_obs_period <- function(eucDF,
     plotDF3 <- vegDF[vegDF$Trt=="pct_diff"&vegDF$Variable%in%c("Tot"),]
     
     ### Plotting
-    ### additional to-do list:
-    ### 1. fill color by manual selection
     p1 <- ggplot(data=plotDF1, 
                  aes(Group, meanvalue)) +
         geom_bar(stat = "identity", aes(fill=Variable), 

@@ -357,7 +357,7 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
     plots_top_row <- plot_grid(p1, p2, 
                                labels=c("(a)", "(b)"),
                                ncol=1, align="vh", axis = "l",
-                               label_x=0.9, label_y=0.96,
+                               label_x=0.9, label_y=0.98,
                                label_size = 18)
     
     

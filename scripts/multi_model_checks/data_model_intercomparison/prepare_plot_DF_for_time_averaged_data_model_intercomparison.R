@@ -48,8 +48,8 @@ prepare_plot_DF_for_time_averaged_data_model_intercomparison <- function(eucDF,
             myDF1$meanvalue[myDF1$Group==i&myDF1$Trt=="eCO2"&myDF1$Variable==j] <- eleDF[eleDF$ModName==i, paste0(j, ".mean")]
             
             ### sd
-            myDF1$sdvalue[myDF1$Group==i&myDF1$Trt=="aCO2"&myDF1$Variable==j] <- ambDF[ambDF$ModName==i, paste0(j, ".sd")]
-            myDF1$sdvalue[myDF1$Group==i&myDF1$Trt=="eCO2"&myDF1$Variable==j] <- eleDF[eleDF$ModName==i, paste0(j, ".sd")]
+            myDF1$sdvalue[myDF1$Group==i&myDF1$Trt=="aCO2"&myDF1$Variable==j] <- 0.0#ambDF[ambDF$ModName==i, paste0(j, ".sd")]
+            myDF1$sdvalue[myDF1$Group==i&myDF1$Trt=="eCO2"&myDF1$Variable==j] <- 0.0#eleDF[eleDF$ModName==i, paste0(j, ".sd")]
         }
     }
     
@@ -94,8 +94,8 @@ prepare_plot_DF_for_time_averaged_data_model_intercomparison <- function(eucDF,
             myDF2$meanvalue[myDF2$Group==i&myDF2$Trt=="pct_diff"&myDF2$Variable==j] <- difDF[difDF$ModName==i, paste0(j, ".mean")]
             
             ### sd
-            myDF2$sdvalue[myDF2$Group==i&myDF2$Trt=="diff"&myDF2$Variable==j] <- sqrt((ambDF[ambDF$ModName==i, paste0(j, ".sd")]^2+eleDF[eleDF$ModName==i, paste0(j, ".sd")]^2)/2)
-            myDF2$sdvalue[myDF2$Group==i&myDF2$Trt=="pct_diff"&myDF2$Variable==j] <- difDF[difDF$ModName==i, paste0(j, ".sd")]
+            myDF2$sdvalue[myDF2$Group==i&myDF2$Trt=="diff"&myDF2$Variable==j] <- 0.0#sqrt((ambDF[ambDF$ModName==i, paste0(j, ".sd")]^2+eleDF[eleDF$ModName==i, paste0(j, ".sd")]^2)/2)
+            myDF2$sdvalue[myDF2$Group==i&myDF2$Trt=="pct_diff"&myDF2$Variable==j] <- 0.0#difDF[difDF$ModName==i, paste0(j, ".sd")]
         }
     }
     

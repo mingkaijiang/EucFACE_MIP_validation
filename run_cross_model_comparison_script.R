@@ -93,8 +93,8 @@ make_MIP_time_series_plot(scenario="FIX")
 
 ### 3.3. Plot photosynthetic response.
 ###      Need to go into function to plot
-scenario="FIX"
-plot_normalized_GPP_response(scenario="FIX")
+#scenario="FIX"
+#plot_normalized_GPP_response(scenario="FIX")
 scenario="VAR"
 plot_normalized_GPP_response(scenario="VAR")
 
@@ -292,8 +292,7 @@ compare_two_MIP_results()
 ### Ellsworth unpublished: OCHDY, OCHDX, LPJGP (with Haxeltine & Prentice, 1996)
 ### Haxeltine and Prentice 1996: LPJGN
 ### P only downregulate biomass growth: ELMXX, QUINC, QUJSM
-### To fill this script, we will need Ellsworth unpublished relationships
-#theoretical_analysis_of_leaf_nutrient_effect_on_leaf_physiology()
+theoretical_analysis_of_leaf_nutrient_effect_on_leaf_physiology()
 
 
 
