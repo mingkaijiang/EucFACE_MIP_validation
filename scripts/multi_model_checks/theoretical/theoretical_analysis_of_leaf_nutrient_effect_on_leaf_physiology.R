@@ -1,4 +1,4 @@
-theoretical_analysis_of_leaf_nutrient_effect_on_leaf_physiology <- function() {
+theoretical_analysis_of_leaf_nutrient_effect_on_leaf_physiology <- function(scenario) {
     
     ### this is a theoretical analysis on how leaf nutrient concentrations
     ### affect Vcmax and Jmax parameters. 
@@ -10,8 +10,8 @@ theoretical_analysis_of_leaf_nutrient_effect_on_leaf_physiology <- function() {
     
     
     ### prepare leaf N and P matrix
-    npDF <- data.frame("leafN"=rep(seq(0.5, 5.0, by=0.005), each=291),
-                       "leafP"=rep(seq(0.01, 0.3, by=0.001), 901))
+    npDF <- data.frame("leafN"=rep(seq(1.0, 6.0, by=0.01), each=291),
+                       "leafP"=rep(seq(0.01, 0.3, by=0.001), 501))
     
     #npDF <- data.frame("leafN"=rep(seq(0.5, 10.0, by=0.005), each=491),
     #                   "leafP"=rep(seq(0.01, 0.5, by=0.001), 1901))
@@ -98,12 +98,80 @@ theoretical_analysis_of_leaf_nutrient_effect_on_leaf_physiology <- function() {
     rdbu9 <- brewer.pal(n = 9, name = "Reds")
     rdbu8 <- brewer.pal(n = 8, name = "Reds")
     
+    
+    ############################################################################
+    ### get leaf N and P content from each model under ambient and elevated CO2
+    
+    ### read in anual datasets
+    ambDF <- readRDS(paste0("output/MIP_output/processed_simulation/MIP_OBS_", scenario, "_AMB_annual.rds"))
+    eleDF <- readRDS(paste0("output/MIP_output/processed_simulation/MIP_OBS_", scenario, "_ELE_annual.rds"))
+    
+    d <- dim(ambDF)[2]
+    
+    ### remove N models
+    ambDF <- ambDF[ambDF$ModName!="I_GDAYN",]
+    ambDF <- ambDF[ambDF$ModName!="J_LPJGN",]
+    eleDF <- eleDF[eleDF$ModName!="I_GDAYN",]
+    eleDF <- eleDF[eleDF$ModName!="J_LPJGN",]
+    
+    #### calculate 4-yr means in the simulation datasets
+    ambDF <- subset(ambDF, YEAR>2012 & YEAR<2017)
+    eleDF <- subset(eleDF, YEAR>2012 & YEAR<2017)
+    
+    
+    ### normalize by leaf area
+    ambDF$NL_norm <- ambDF$NL/ambDF$LAI
+    ambDF$PL_norm <- ambDF$PL/ambDF$LAI
+    
+    eleDF$NL_norm <- eleDF$NL/eleDF$LAI
+    eleDF$PL_norm <- eleDF$PL/eleDF$LAI
+    
+    ### calculate average
+    ambDF.sum <- summaryBy(.~ModName, FUN=c(mean,sd),
+                           data=ambDF,
+                           keep.names=T, na.rm=T)
+    
+    eleDF.sum <- summaryBy(.~ModName, FUN=c(mean,sd),
+                           data=eleDF,
+                           keep.names=T, na.rm=T)
+    
+    ### get the list of models
+    mod.list <- unique(ambDF.sum$ModName)
+    nmod <- length(mod.list)
+    
+    ## merge amb and ele dataframes
+    ambDF.sum <- ambDF.sum[,c("ModName", "GPP.mean", "NL_norm.mean", "PL_norm.mean", 
+                              "NL.mean", "PL.mean", "LAI.mean")]
+    eleDF.sum <- eleDF.sum[,c("ModName", "GPP.mean", "NL_norm.mean", "PL_norm.mean", 
+                              "NL.mean", "PL.mean", "LAI.mean")]
+    
+    
+    
+    ambDF.sum$Trt <- "amb"
+    eleDF.sum$Trt <- "ele"
+    
+    modDF <- rbind(ambDF.sum, eleDF.sum)
+    arrowDF <- data.frame("ModName"=modDF$ModName[modDF$Trt=="amb"],
+                          "GPP_amb"=modDF$GPP.mean[modDF$Trt=="amb"],
+                          "GPP_ele"=modDF$GPP.mean[modDF$Trt=="ele"],
+                          "NL_norm_amb"=modDF$NL_norm.mean[modDF$Trt=="amb"],
+                          "NL_norm_ele"=modDF$NL_norm.mean[modDF$Trt=="ele"],
+                          "PL_norm_amb"=modDF$PL_norm.mean[modDF$Trt=="amb"],
+                          "PL_norm_ele"=modDF$PL_norm.mean[modDF$Trt=="ele"],
+                          "NL_amb"=modDF$NL.mean[modDF$Trt=="amb"],
+                          "NL_ele"=modDF$NL.mean[modDF$Trt=="ele"],
+                          "PL_amb"=modDF$PL.mean[modDF$Trt=="amb"],
+                          "PL_ele"=modDF$PL.mean[modDF$Trt=="ele"],
+                          "LAI_amb"=modDF$LAI.mean[modDF$Trt=="amb"],
+                          "LAI_ele"=modDF$LAI.mean[modDF$Trt=="ele"])
+    
+    
+    
+    ############################################################################
     ### plot
     
     p1 <- ggplot(npDF, aes(leafN, leafP)) +
-        #geom_contour_filled()+
         geom_tile(aes(fill=as.character(Walker_Vcmax_discrete)))+
-        #scale_fill_brewer(name=expression(V[cmax]), palette=5, type="div")+
         scale_fill_manual(name=expression(V[cmax]), values=rdbu9,
                           labels=c("(20,30]",
                                    "(30,40]",
@@ -114,7 +182,19 @@ theoretical_analysis_of_leaf_nutrient_effect_on_leaf_physiology <- function() {
                                    "(80,90]",
                                    "(90,100]",
                                    "(100,110]"))+
-        geom_abline(slope=0.05, intercept=0.0)+
+        geom_segment(arrowDF, mapping=aes(x=NL_norm_amb, 
+                                  xend = NL_norm_ele,
+                                  y=PL_norm_amb, 
+                                  yend=PL_norm_ele),#arrow=arrow(length=unit(0.03, "npc")),
+                     lwd=0.5, col="black")+
+        geom_point(data=modDF, aes(NL_norm.mean, PL_norm.mean, col=ModName, pch=Trt), size=4)+
+        scale_shape_manual(name=expression(CO[2] * " treatment"),
+                           values=c("amb"=19, "ele"=17),
+                           labels=c("amb", "ele"))+
+        scale_color_manual(name="Model",
+                          values=c(col.values),
+                          labels=c(model.labels))+
+        geom_abline(slope=0.05, intercept=0.0, lty=2)+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
               axis.text.x=element_text(size=12),
@@ -130,15 +210,16 @@ theoretical_analysis_of_leaf_nutrient_effect_on_leaf_physiology <- function() {
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
         xlab(expression("Leaf N (g N " * m^-2 * ")"))+
-        ylab(expression("Leaf P (g N " * m^-2 * ")")); p1
+        ylab(expression("Leaf P (g P " * m^-2 * ")"))+
+        guides(color="none",
+               fill=guide_legend(nrow=8, byrow=T),
+               pch="none")
     
     
     
     
     p2 <- ggplot(npDF, aes(leafN, leafP)) +
-        #geom_contour_filled()+
         geom_tile(aes(fill=as.character(Ellsworth_Vcmax_discrete)))+
-        #scale_fill_brewer(name=expression(V[cmax]), palette=5, type="div")+
         scale_fill_manual(name=expression(V[cmax]), values=rdbu9,
                           labels=c("(20,30]",
                                    "(30,40]",
@@ -149,7 +230,19 @@ theoretical_analysis_of_leaf_nutrient_effect_on_leaf_physiology <- function() {
                                    "(80,90]",
                                    "(90,100]",
                                    "(100,110]"))+
-        geom_abline(slope=0.05, intercept=0.0)+
+        geom_segment(arrowDF, mapping=aes(x=NL_norm_amb, 
+                                          xend = NL_norm_ele,
+                                          y=PL_norm_amb, 
+                                          yend=PL_norm_ele),
+                     lwd=0.5, col="black")+
+        geom_point(data=modDF, aes(NL_norm.mean, PL_norm.mean, col=ModName, pch=Trt), size=4)+
+        scale_shape_manual(name=expression(CO[2] * " treatment"),
+                           values=c("amb"=19, "ele"=17),
+                           labels=c("amb", "ele"))+
+        scale_color_manual(name="Model",
+                           values=c(col.values),
+                           labels=c(model.labels))+
+        geom_abline(slope=0.05, intercept=0.0, lty=2)+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
               axis.text.x=element_text(size=12),
@@ -165,13 +258,11 @@ theoretical_analysis_of_leaf_nutrient_effect_on_leaf_physiology <- function() {
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
         xlab(expression("Leaf N (g N " * m^-2 * ")"))+
-        ylab(expression("Leaf P (g N " * m^-2 * ")")); p2
+        ylab(expression("Leaf P (g P " * m^-2 * ")"))
     
     
     p3 <- ggplot(npDF, aes(leafN, leafP)) +
-        #geom_contour_filled()+
         geom_tile(aes(fill=as.character(Walker_Jmax_discrete)))+
-        #scale_fill_brewer(name=expression(V[cmax]), palette=5, type="div")+
         scale_fill_manual(name=expression(J[max]), values=rdbu8,
                           labels=c("(60,80]",
                                    "(80,100]",
@@ -181,7 +272,19 @@ theoretical_analysis_of_leaf_nutrient_effect_on_leaf_physiology <- function() {
                                    "(160,180]",
                                    "(180,200]",
                                    "(200,220]"))+
-        geom_abline(slope=0.05, intercept=0.0)+
+        geom_segment(arrowDF, mapping=aes(x=NL_norm_amb, 
+                                          xend = NL_norm_ele,
+                                          y=PL_norm_amb, 
+                                          yend=PL_norm_ele),
+                     lwd=0.5, col="black")+
+        geom_point(data=modDF, aes(NL_norm.mean, PL_norm.mean, col=ModName, pch=Trt), size=4)+
+        scale_shape_manual(name=expression(CO[2] * " treatment"),
+                           values=c("amb"=19, "ele"=17),
+                           labels=c("amb", "ele"))+
+        scale_color_manual(name="Model",
+                           values=c(col.values),
+                           labels=c(model.labels))+
+        geom_abline(slope=0.05, intercept=0.0, lty=2)+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
               axis.text.x=element_text(size=12),
@@ -197,14 +300,16 @@ theoretical_analysis_of_leaf_nutrient_effect_on_leaf_physiology <- function() {
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
         xlab(expression("Leaf N (g N " * m^-2 * ")"))+
-        ylab(expression("Leaf P (g N " * m^-2 * ")")); p3
+        ylab(expression("Leaf P (g P " * m^-2 * ")"))+
+        guides(color="none",
+               fill=guide_legend(nrow=8, byrow=T),
+               pch="none")
     
     
+
     
     p4 <- ggplot(npDF, aes(leafN, leafP)) +
-        #geom_contour_filled()+
         geom_tile(aes(fill=as.character(Ellsworth_Jmax_discrete)))+
-        #scale_fill_brewer(name=expression(V[cmax]), palette=5, type="div")+
         scale_fill_manual(name=expression(J[max]), values=rdbu8,
                           labels=c("(60,80]",
                                    "(80,100]",
@@ -214,7 +319,19 @@ theoretical_analysis_of_leaf_nutrient_effect_on_leaf_physiology <- function() {
                                    "(160,180]",
                                    "(180,200]",
                                    "(200,220]"))+
-        geom_abline(slope=0.05, intercept=0.0)+
+        geom_segment(arrowDF, mapping=aes(x=NL_norm_amb, 
+                                          xend = NL_norm_ele,
+                                          y=PL_norm_amb, 
+                                          yend=PL_norm_ele),
+                     lwd=0.5, col="black")+
+        geom_point(data=modDF, aes(NL_norm.mean, PL_norm.mean, col=ModName, pch=Trt), size=4)+
+        scale_shape_manual(name=expression(CO[2] * " treatment"),
+                           values=c("amb"=19, "ele"=17),
+                           labels=c("amb", "ele"))+
+        scale_color_manual(name="Model",
+                           values=c(col.values),
+                           labels=c(model.labels))+
+        geom_abline(slope=0.05, intercept=0.0, lty=2)+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
               axis.text.x=element_text(size=12),
@@ -230,23 +347,28 @@ theoretical_analysis_of_leaf_nutrient_effect_on_leaf_physiology <- function() {
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
         xlab(expression("Leaf N (g N " * m^-2 * ")"))+
-        ylab(expression("Leaf P (g N " * m^-2 * ")")); p4
+        ylab(expression("Leaf P (g P " * m^-2 * ")"))
     
     
     
+    common_legend <- get_legend(p1 + theme(legend.position="bottom")+
+                                    guides(color=guide_legend(nrow=4, byrow=T),
+                                           fill="none",
+                                           pch=guide_legend(nrow=2, byrow=T)))
     
+    plot_row <- plot_grid(p2, p1, p4, p3,
+                          labels=NA,rel_widths=c(1,1.3),
+                          ncol=2, align="vh", axis = "l",
+                          label_x=0.1, label_y=0.95,
+                          label_size = 18)
     
-
     
     ### Plotting
-    pdf(paste0("output/MIP_output/theoretical_photosynthesis.pdf"), width=12, height=8)
+    pdf(paste0("output/MIP_output/theoretical_photosynthesis.pdf"), width=12, height=12)
     
+    plot_grid(plot_row, common_legend,
+              ncol=1, rel_heights=c(1,0.5))
 
-    plot_grid(p2, p1, p4, p3,
-              labels=NA,rel_widths=c(1,1.3),
-              ncol=2, align="vh", axis = "l",
-              label_x=0.1, label_y=0.95,
-              label_size = 18)
     dev.off()
     
     

@@ -60,6 +60,13 @@ plot_photosynthesis_relationships <- function(scenario) {
     eleDF$Aleaf <- with(eleDF, GPP/LAI)
     
     
+    ambDF$NL_leaf <- with(ambDF, NL/LAI)
+    ambDF$PL_leaf <- with(ambDF, PL/LAI)
+    
+    eleDF$NL_leaf <- with(eleDF, NL/LAI)
+    eleDF$PL_leaf <- with(eleDF, PL/LAI)
+    
+    
     d <- dim(ambDF)[2]
     
     ### prepare CO2 df
@@ -105,69 +112,39 @@ plot_photosynthesis_relationships <- function(scenario) {
     require(gridExtra)
     
     
-    #p1 <- ggplot(data=ambDF, aes(LCN, Aleaf)) +
-    #  geom_hex(bins=50) +
-    #  geom_smooth(method = lm, se = FALSE)+
-    #  theme_linedraw() +
-    #  theme(panel.grid.minor=element_blank(),
-    #        axis.text.x=element_text(size=12),
-    #        axis.title.x=element_text(size=14),
-    #        axis.text.y=element_text(size=12),
-    #        axis.title.y=element_text(size=14),
-    #        legend.text=element_text(size=12),
-    #        legend.title=element_text(size=14),
-    #        panel.grid.major=element_blank(),
-    #        legend.position="none",
-    #        legend.box = 'horizontal',
-    #        legend.box.just = 'left',
-    #        plot.title = element_text(size=14, face="bold.italic", 
-    #                                  hjust = 0.5))+
-    #  ylab(expression(paste(A[leaf]* " (g C " * m^2 * " " * d^-1, ")")))+
-    #  xlab(expression(paste("Leaf CN ratio")))+
-    #  ggtitle(paste0(i)); p1
-    #
-    #
-    #require(plotly)
-    #plot_ly(x=ambDF$NL, y=ambDF$PL, z=ambDF$Aleaf, type="scatter3d", mode="markers", color=ambDF$ModName)
-    #
-    #plot_ly(x=ambDF$LCN, y=ambDF$LCP, z=ambDF$Aleaf, type="scatter3d", mode="markers", color=ambDF$ModName)
-    #
-    #plot_ly(x=ambDF$LCN[ambDF$ModName=="C_CABLP"], y=ambDF$LCP[ambDF$ModName=="C_CABLP"], 
-    #        z=ambDF$Aleaf[ambDF$ModName=="C_CABLP"], type="scatter3d", mode="markers", color=ambDF$Aleaf[ambDF$ModName=="C_CABLP"])
-    
     
     ### calculate multi-model means and then plot a vector with arrow to show directional change under eCO2
     ambDF$Trt <- "amb"
     eleDF$Trt <- "ele"
     mgDF <- rbind(ambDF, eleDF)
-    sumDF <- summaryBy(Aleaf+GPP+LAI+NL+PL+LCN+LCP+LNP~ModName+Trt, FUN=c(mean,sd), data=mgDF,
+    sumDF <- summaryBy(Aleaf+GPP+LAI+NL+PL+NL_leaf+PL_leaf+LCN+LCP+LNP~ModName+Trt, FUN=c(mean,sd), data=mgDF,
                         keep.names=T, na.rm=T)
     
     
     ### plot
     p1 <- ggplot() +
-      geom_segment(aes(x=sumDF$PL.mean[sumDF$Trt=="amb"], xend = sumDF$PL.mean[sumDF$Trt=="amb"],
+      geom_segment(aes(x=sumDF$PL_leaf.mean[sumDF$Trt=="amb"], xend = sumDF$PL_leaf.mean[sumDF$Trt=="amb"],
                        y=sumDF$Aleaf.mean[sumDF$Trt=="amb"]+sumDF$Aleaf.sd[sumDF$Trt=="amb"], 
                        yend=sumDF$Aleaf.mean[sumDF$Trt=="amb"]-sumDF$Aleaf.sd[sumDF$Trt=="amb"]),
                    lwd=0.5, color="grey")+
-      geom_segment(aes(x=sumDF$PL.mean[sumDF$Trt=="ele"], xend = sumDF$PL.mean[sumDF$Trt=="ele"],
+      geom_segment(aes(x=sumDF$PL_leaf.mean[sumDF$Trt=="ele"], xend = sumDF$PL_leaf.mean[sumDF$Trt=="ele"],
                        y=sumDF$Aleaf.mean[sumDF$Trt=="ele"]+sumDF$Aleaf.sd[sumDF$Trt=="ele"], 
                        yend=sumDF$Aleaf.mean[sumDF$Trt=="ele"]-sumDF$Aleaf.sd[sumDF$Trt=="ele"]), 
                    lwd=0.5, color="grey")+
-      geom_segment(aes(x=sumDF$PL.mean[sumDF$Trt=="amb"]+sumDF$PL.sd[sumDF$Trt=="amb"], 
-                       xend = sumDF$PL.mean[sumDF$Trt=="amb"]-sumDF$PL.sd[sumDF$Trt=="amb"],
+      geom_segment(aes(x=sumDF$PL_leaf.mean[sumDF$Trt=="amb"]+sumDF$PL_leaf.sd[sumDF$Trt=="amb"], 
+                       xend = sumDF$PL_leaf.mean[sumDF$Trt=="amb"]-sumDF$PL_leaf.sd[sumDF$Trt=="amb"],
                        y=sumDF$Aleaf.mean[sumDF$Trt=="amb"], 
                        yend=sumDF$Aleaf.mean[sumDF$Trt=="amb"]), 
                    lwd=0.5, color="grey")+
-      geom_segment(aes(x=sumDF$PL.mean[sumDF$Trt=="ele"]+sumDF$PL.sd[sumDF$Trt=="ele"], 
-                       xend = sumDF$PL.mean[sumDF$Trt=="ele"]-sumDF$PL.sd[sumDF$Trt=="ele"],
+      geom_segment(aes(x=sumDF$PL_leaf.mean[sumDF$Trt=="ele"]+sumDF$PL_leaf.sd[sumDF$Trt=="ele"], 
+                       xend = sumDF$PL_leaf.mean[sumDF$Trt=="ele"]-sumDF$PL_leaf.sd[sumDF$Trt=="ele"],
                        y=sumDF$Aleaf.mean[sumDF$Trt=="ele"], 
                        yend=sumDF$Aleaf.mean[sumDF$Trt=="ele"]), 
                    lwd=0.5, color="grey")+
-      geom_segment(aes(x=sumDF$PL.mean[sumDF$Trt=="amb"], xend = sumDF$PL.mean[sumDF$Trt=="ele"],
+      geom_segment(aes(x=sumDF$PL_leaf.mean[sumDF$Trt=="amb"], xend = sumDF$PL_leaf.mean[sumDF$Trt=="ele"],
                        y=sumDF$Aleaf.mean[sumDF$Trt=="amb"], yend=sumDF$Aleaf.mean[sumDF$Trt=="ele"]), 
                    lwd=2.0)+
-      geom_point(data=sumDF, aes(PL.mean, Aleaf.mean, fill=ModName, pch=Trt), color="black", size=4)+
+      geom_point(data=sumDF, aes(PL_leaf.mean, Aleaf.mean, fill=ModName, pch=Trt), color="black", size=4)+
       theme_linedraw() +
       theme(panel.grid.minor=element_blank(),
             axis.text.x=element_text(size=12),
@@ -191,33 +168,33 @@ plot_photosynthesis_relationships <- function(scenario) {
       ylab(expression(paste(A[leaf]* " (g C " * m^2 * " " * d^-1, ")")))+
       guides(fill = guide_legend(override.aes = list(col = c(col.values))),
              color = guide_legend(nrow=12, byrow=F))+
-      xlab(expression("Leaf P content (g P " * m^-2 * ")"))
+      xlab(expression("Leaf P content (g P " * m^-2 * " leaf)"))
     
     
     
     p2 <- ggplot() +
-      geom_segment(aes(x=sumDF$NL.mean[sumDF$Trt=="amb"], xend = sumDF$NL.mean[sumDF$Trt=="amb"],
+      geom_segment(aes(x=sumDF$NL_leaf.mean[sumDF$Trt=="amb"], xend = sumDF$NL_leaf.mean[sumDF$Trt=="amb"],
                        y=sumDF$Aleaf.mean[sumDF$Trt=="amb"]+sumDF$Aleaf.sd[sumDF$Trt=="amb"], 
                        yend=sumDF$Aleaf.mean[sumDF$Trt=="amb"]-sumDF$Aleaf.sd[sumDF$Trt=="amb"]),
                    lwd=0.5, color="grey")+
-      geom_segment(aes(x=sumDF$NL.mean[sumDF$Trt=="ele"], xend = sumDF$NL.mean[sumDF$Trt=="ele"],
+      geom_segment(aes(x=sumDF$NL_leaf.mean[sumDF$Trt=="ele"], xend = sumDF$NL_leaf.mean[sumDF$Trt=="ele"],
                        y=sumDF$Aleaf.mean[sumDF$Trt=="ele"]+sumDF$Aleaf.sd[sumDF$Trt=="ele"], 
                        yend=sumDF$Aleaf.mean[sumDF$Trt=="ele"]-sumDF$Aleaf.sd[sumDF$Trt=="ele"]), 
                    lwd=0.5, color="grey")+
-      geom_segment(aes(x=sumDF$NL.mean[sumDF$Trt=="amb"]+sumDF$NL.sd[sumDF$Trt=="amb"], 
-                       xend = sumDF$NL.mean[sumDF$Trt=="amb"]-sumDF$NL.sd[sumDF$Trt=="amb"],
+      geom_segment(aes(x=sumDF$NL_leaf.mean[sumDF$Trt=="amb"]+sumDF$NL_leaf.sd[sumDF$Trt=="amb"], 
+                       xend = sumDF$NL_leaf.mean[sumDF$Trt=="amb"]-sumDF$NL_leaf.sd[sumDF$Trt=="amb"],
                        y=sumDF$Aleaf.mean[sumDF$Trt=="amb"], 
                        yend=sumDF$Aleaf.mean[sumDF$Trt=="amb"]), 
                    lwd=0.5, color="grey")+
-      geom_segment(aes(x=sumDF$NL.mean[sumDF$Trt=="ele"]+sumDF$NL.sd[sumDF$Trt=="ele"], 
-                       xend = sumDF$NL.mean[sumDF$Trt=="ele"]-sumDF$NL.sd[sumDF$Trt=="ele"],
+      geom_segment(aes(x=sumDF$NL_leaf.mean[sumDF$Trt=="ele"]+sumDF$NL_leaf.sd[sumDF$Trt=="ele"], 
+                       xend = sumDF$NL_leaf.mean[sumDF$Trt=="ele"]-sumDF$NL_leaf.sd[sumDF$Trt=="ele"],
                        y=sumDF$Aleaf.mean[sumDF$Trt=="ele"], 
                        yend=sumDF$Aleaf.mean[sumDF$Trt=="ele"]), 
                    lwd=0.5, color="grey")+
-      geom_segment(aes(x=sumDF$NL.mean[sumDF$Trt=="amb"], xend = sumDF$NL.mean[sumDF$Trt=="ele"],
+      geom_segment(aes(x=sumDF$NL_leaf.mean[sumDF$Trt=="amb"], xend = sumDF$NL_leaf.mean[sumDF$Trt=="ele"],
                        y=sumDF$Aleaf.mean[sumDF$Trt=="amb"], yend=sumDF$Aleaf.mean[sumDF$Trt=="ele"]), 
                    lwd=2.0)+
-      geom_point(data=sumDF, aes(NL.mean, Aleaf.mean, fill=ModName, pch=Trt), color="black", size=4)+
+      geom_point(data=sumDF, aes(NL_leaf.mean, Aleaf.mean, fill=ModName, pch=Trt), color="black", size=4)+
       theme_linedraw() +
       theme(panel.grid.minor=element_blank(),
             axis.text.x=element_text(size=12),
@@ -241,7 +218,7 @@ plot_photosynthesis_relationships <- function(scenario) {
       ylab(expression(paste(A[leaf]* " (g C " * m^2 * " " * d^-1, ")")))+
       guides(fill = guide_legend(override.aes = list(col = c(col.values))),
              color = guide_legend(nrow=12, byrow=F))+
-      xlab(expression("Leaf N content (g N " * m^-2 * ")"))
+      xlab(expression("Leaf N content (g N " * m^-2 * " leaf)"))
 
     
     

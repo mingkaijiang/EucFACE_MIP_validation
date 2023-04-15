@@ -57,17 +57,6 @@ normalize_dataset_across_models(yr.to.normalize=2012)
 normalize_dataset_across_models(yr.to.normalize=2019)
 
 
-#### 2.6. Prepare observed dataset at annual timestep wherever possible
-####      Including C budget but also P and N budget and the
-####      associated stoichiometry, water budget, etc.
-####      Use model variable names
-####      The confidence interval in the data indicates treatment variation,
-####      and less so about inter-annual variation.
-####      The model confidence interval is more about inter-annual variation.
-eucDF <- prepare_EucFACE_observation_dataset()
-
-
-
 ##########################################################################
 #### Step 3. Cross-model comparison 
 
@@ -81,17 +70,65 @@ scenario="FIX"
 check_forcing_data_consistency(scenario="FIX")
 
 
+##########################################################################
+####      Prepare observed dataset at annual timestep wherever possible
+####      Including C budget but also P and N budget and the
+####      associated stoichiometry, water budget, etc.
+####      Use model variable names
+####      The confidence interval in the data indicates treatment variation,
+####      and less so about inter-annual variation.
+####      The model confidence interval is more about inter-annual variation.
+eucDF <- prepare_EucFACE_observation_dataset()
 
-### 3.2. Make MIP time-series plot for both variable and fixed climate, 
-###      over observed period only!!!
-###      Note: When number of variables change in the input, 
-###      need to revise the code.
-make_MIP_time_series_plot(scenario="VAR")
 
-make_MIP_time_series_plot(scenario="FIX")
+##########################################################################
+###      Show P effect with the two models that have CN and CNP versions
+###      based on fixed climate forcing
+###      Go into function to plot
+scenario="VAR"
+compare_CNP_and_CN_model_output(scenario="VAR")
+
+scenario="FIX"
+compare_CNP_and_CN_model_output(scenario="FIX")
 
 
-### 3.3. Plot photosynthetic response.
+
+##########################################################################
+###      Compare against Medlyn 2016
+###      The Medlyn 2016 is simulated based on fixed climate (hypothetical, wet)
+###      and so we will need to compare it against the FIX climate scenario in this MIP.
+prepare_Medlyn_2016_input()
+
+compare_two_MIP_results()
+
+
+
+##########################################################################
+### plot growth responses and their comparison to data
+### including delta C veg, NEP, GPP, Cveg and allocation coefficients
+scenario="VAR"
+plot_growth_and_nep_response(scenario="VAR", eucDF)
+
+
+
+##########################################################################
+### This is a theoretical analysis on how leaf nutrient concentrations
+### affect Vcmax and Jmax parameters. 
+### Currently we know:
+### Walker et al. 2014: GDAYN, GDAYP, CABLP (also coordination hypothesis)
+### Ellsworth unpublished: OCHDY, OCHDX, LPJGP (with Haxeltine & Prentice, 1996)
+### Haxeltine and Prentice 1996: LPJGN
+### P only downregulate biomass growth: ELMXX, QUINC, QUJSM
+scenario="VAR"
+theoretical_analysis_of_leaf_nutrient_effect_on_leaf_physiology(scenario="VAR")
+
+###      Photosynthesis and relationship with leaf nutrients
+#plot_photosynthesis_relationships(scenario="FIX")
+plot_photosynthesis_relationships(scenario="VAR")
+
+
+
+###      Plot photosynthetic response.
 ###      Need to go into function to plot
 #scenario="FIX"
 #plot_normalized_GPP_response(scenario="FIX")
@@ -99,6 +136,9 @@ scenario="VAR"
 plot_normalized_GPP_response(scenario="VAR")
 
 
+
+
+##########################################################################
 ### 3.4. Plot allocation coefficients:
 ###      fast plant structural pools: leaf and fineroot
 ###      slow plant structural pools: wood and coarseroot
@@ -122,63 +162,49 @@ trace_fate_of_carbon_MIP_plot(scenario="FIX")
 ### sankey plots?
 
 
-### 3.6. CO2 x P interaction
+##########################################################################
+####     Data-model intercomparison
 
-### 3.6.1. Plot normalized trajectory as well as the CO2 effect over time
-###        This function checks the P fertilization effect for the future period
-###        but does not look at the drought effect:
-###        1. real magnitude of P fertilization from different model starting point
-###        2. normalized magnitude of P fertilization normalized to the same starting point
-plot_normalized_pred_trajectories(climate.scenario="VAR",
-                                  yr.to.normalize=2019,
-                                  yr.to.end=2029)
-
-plot_normalized_pred_trajectories(climate.scenario="FIX",
-                                  yr.to.normalize=2019,
-                                  yr.to.end=2029)
-
-
-### 3.6.2. plot time slice comparison:
-###        hist: 2013 - 19 (7 yrs)
-###        P fertilization: 2020 - 22 (3 yrs)
-###        future: 2023 - 29 (7 yrs)
-###        long-term: 2063 - 2069 (7 yrs)
-climate.scenario="VAR"
-plot_timeslice_CO2_by_P_interaction(climate.scenario="VAR")
-
-climate.scenario="FIX"
-plot_timeslice_CO2_by_P_interaction(climate.scenario="FIX")
+###      Compare to observed dataset
+###      aCO2 + eCO2
+###      Only plot the variable scenario,
+###      because this is used to compare against data
+###      Go into function to plot.
+scenario="VAR"
+make_time_averaged_data_model_comparison_over_obs_period(eucDF,
+                                                         scenario="VAR")
 
 
 
-### 3.7. Check CO2 x drought interaction
-###      1. Firstly check historic period with NOP
-###         to see whether we have soil water savings under eCO2
-###         and how that translates into drought response and post-drought
-###         recovery.
-###      2. Check how continued increase in CO2 affects the drought year response,
-###         and the long-term cumulative C storage in plants and soils.
-###      3. Check if additional P alleviates plant drought stress under eCO2.
-###      4. Check water use efficiency
-plot_CO2_water_interaction()
+##########################################################################
+###      Make MIP time-series plot for both variable and fixed climate, 
+###      over observed period only!!!
+###      Note: When number of variables change in the input, 
+###      need to revise the code.
+make_MIP_time_series_plot(scenario="VAR")
+
+make_MIP_time_series_plot(scenario="FIX")
 
 
-plot_CO2_water_interaction_drought_year(deficit.year=2019)
+### ambient treatment, CO2 responses
+### incomplete
+#plot_MIP_CO2_response_comparison(eucDF)
 
 
-### 3.8 check gradual increase in CO2 vs. sharp increase in CO2
-### compare the eCO2 response with aCO2, i.e.:
-### aCO2, eCO2 with sharp increase, eCO2 with gradual increase
-### Subset a period of future only and historic only under NOP
-### ambDF: 2013 - 2018, 2064 - 2069
-### eleDF: 2013 - 2018
-plot_gradual_increase_CO2_trajectories(climate.scenario="FIX")
-
-plot_gradual_increase_CO2_trajectories(climate.scenario="VAR")
+### time-varying response
+###      LAI, Rsoil
+make_time_varying_data_model_comparison_over_obs_period(scenario="VAR")
 
 
 
-### 3.9 Investigate gross mineralization rate and its relationship to
+### Taylor diagram for LAI, Rsoil and GPP
+plot_taylor_diagram(scenario="VAR")
+
+
+
+
+##########################################################################
+###      Investigate gross mineralization rate and its relationship to
 ###     plant nutrient uptake.
 ###     Expectation: microbial models should have a large component of
 ###     the gross mineralization flux to be immobilized by microbes,
@@ -189,28 +215,18 @@ investigate_gross_mineralization(scenario="FIX")
 
 
 
+
 ##########################################################################
-#### Step 4: Model specific investigations
 
-### 4.1. show P effect with the two models that have CN and CNP versions
-###      based on fixed climate forcing
-###      Go into function to plot
-scenario="VAR"
-compare_CNP_and_CN_model_output(scenario="VAR")
-
-scenario="FIX"
-compare_CNP_and_CN_model_output(scenario="FIX")
-
-
-### 4.2. show microbial effects with the two microbial enabled models
+###       show microbial effects with the two microbial enabled models
 ###      based on fixed climate forcing
 ###      add Csoil, Clit, Rh comparison plot
 
-### 4.2.1. prepare microbial model input
+###   prepare microbial model input
 prepare_microbial_model_input()
 
 
-### 4.2.2. compare general variables
+###   compare general variables
 scenario="FIX"
 compare_microbial_model_general_output(scenario="FIX")
 
@@ -218,96 +234,28 @@ scenario="VAR"
 compare_microbial_model_general_output(scenario="VAR")
 
 
-### 4.2.3. Investigate the MIMICS-like ORCHX performance
+###  Investigate the MIMICS-like ORCHX performance
 investigate_OCHDX_microbial_responses(scenario="FIX")
 
 investigate_OCHDX_microbial_responses(scenario="VAR")
 
 
-### 4.2.4. Investigate QUJSM
+###   Investigate QUJSM
 investigate_QUJSM_microbial_responses(scenario="FIX")
 
 investigate_QUJSM_microbial_responses(scenario="VAR")
 
 
-### 4.2.5. Combine the two
+###   Combine the two
 investigate_microbial_responses(scenario="FIX", compare.to.obs=F)
 
 investigate_microbial_responses(scenario="VAR", compare.to.obs=T)
 
 
 
-##########################################################################
-#### Step 5. Data-model intercomparison
-
-### 5.1. Compare to observed dataset
-###      aCO2 + eCO2
-###      Only plot the variable scenario,
-###      because this is used to compare against data
-###      Go into function to plot.
-scenario="VAR"
-make_time_averaged_data_model_comparison_over_obs_period(eucDF,
-                                                         scenario="VAR")
-
-
-### ambient treatment, CO2 responses
-### incomplete
-#plot_MIP_CO2_response_comparison(eucDF)
-
-
-### 5.2. time-varying response
-###      LAI, Rsoil
-make_time_varying_data_model_comparison_over_obs_period(scenario="VAR")
 
 
 
-### 5.3. Taylor diagram for LAI, Rsoil and GPP
-plot_taylor_diagram(scenario="VAR")
-
-
-
-
-##########################################################################
-#### Step 6. Theoretical analyses
-
-### 6.1. Compare against Medlyn 2016
-###      The Medlyn 2016 is simulated based on fixed climate (hypothetical, wet)
-###      and so we will need to compare it against the FIX climate scenario in this MIP.
-prepare_Medlyn_2016_input()
-
-compare_two_MIP_results()
-
-
-
-### 6.2. Photosynthesis and relationship with leaf nutrients
-#plot_photosynthesis_relationships(scenario="FIX")
-#plot_photosynthesis_relationships(scenario="VAR")
-
-
-
-### this is a theoretical analysis on how leaf nutrient concentrations
-### affect Vcmax and Jmax parameters. 
-### Currently we know:
-### Walker et al. 2014: GDAYN, GDAYP, CABLP (also coordination hypothesis)
-### Ellsworth unpublished: OCHDY, OCHDX, LPJGP (with Haxeltine & Prentice, 1996)
-### Haxeltine and Prentice 1996: LPJGN
-### P only downregulate biomass growth: ELMXX, QUINC, QUJSM
-theoretical_analysis_of_leaf_nutrient_effect_on_leaf_physiology()
-
-
-
-##########################################################################
-#### Step 7. Other work
-
-
-
-
-##########################################################################
-### to do list:
-
-### 1. Leaf nutrient effect on Vcmax and Jmax - theoretical analysis
-###    Need to proceed even without the Ellsworth relationship
-### 2. P fertilization treatment and interaction with eCO2
 
 
 ##########################################################################
