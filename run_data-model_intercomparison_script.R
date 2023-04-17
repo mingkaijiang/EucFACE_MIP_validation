@@ -28,6 +28,8 @@ n.mod.list <- c("GDAYN", "LPJGN")
 #d.mod.list <- c("CABLP", "LPJGP")
 
 
+
+##########################################################################
 #### 2.2. Compile all model results together, 
 ####      and save annual and daily datasets
 ###       Note that, OCHDX and QUJSM has many more additional variables 
@@ -79,6 +81,12 @@ check_forcing_data_consistency(scenario="FIX")
 ####      and less so about inter-annual variation.
 ####      The model confidence interval is more about inter-annual variation.
 eucDF <- prepare_EucFACE_observation_dataset()
+
+
+### check data-model agreement
+scenario="VAR"
+check_data_model_agreement(scenario="VAR", eucDF)
+
 
 
 ##########################################################################
