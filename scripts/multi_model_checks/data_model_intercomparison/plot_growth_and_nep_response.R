@@ -118,6 +118,10 @@ plot_growth_and_nep_response <- function(scenario, eucDF) {
                                        "E_OCHDP", "F_QUINC",
                                        "G_OCHDX", "H_QUJSM")] <- NA
     
+    
+    ### pass plotDF3 to make biomass production / GPP ratio figure
+    bpDF <- plotDF3
+    
     ### Plotting
     ### additional to-do list:
     ### 1. fill color by manual selection
@@ -268,6 +272,9 @@ plot_growth_and_nep_response <- function(scenario, eucDF) {
                                        "E_OCHDP", "F_QUINC",
                                        "G_OCHDX", "H_QUJSM")] <- NA
     
+    ### pass plotDF3 to make biomass production / GPP ratio figure
+    nepDF <- plotDF2
+    
     
     ### plotting GPP, NPP, and RAU
     p7 <- ggplot(data=plotDF1, 
@@ -374,6 +381,7 @@ plot_growth_and_nep_response <- function(scenario, eucDF) {
     plotDF1 <- cfluxDF[cfluxDF$Trt=="aCO2"&cfluxDF$Variable%in%c("NPP","RAU"),]
     plotDF2 <- cfluxDF[cfluxDF$Trt=="aCO2"&cfluxDF$Variable%in%c("Tot"),]
     plotDF3 <- cfluxDF[cfluxDF$Trt=="pct_diff"&cfluxDF$Variable%in%c("Tot"),]
+    plotDF4 <- cfluxDF[cfluxDF$Trt=="diff"&cfluxDF$Variable%in%c("Tot"),]
     
     ### add multi-model mean
     tmpDF <- plotDF1[plotDF1$Group%in%c("A_GDAYP", "B_ELMV1",
@@ -421,6 +429,10 @@ plot_growth_and_nep_response <- function(scenario, eucDF) {
                                          "C_CABLP", "D_LPJGP",
                                          "E_OCHDP", "F_QUINC",
                                          "G_OCHDX", "H_QUJSM")] <- NA
+    
+    
+    ### pass plotDF3 to make biomass production / GPP ratio figure
+    gppDF <- plotDF4
     
     
     ### plotting GPP, NPP, and RAU
@@ -502,6 +514,24 @@ plot_growth_and_nep_response <- function(scenario, eucDF) {
         guides(fill = guide_legend(override.aes = list(col = c(col.values, "multi-model"="grey30", "obs"="grey"))),
                color = guide_legend(nrow=12, byrow=F)); p4
     
+    
+    
+    ### plot the CO2 response ratio of biomass production over the
+    ### CO2 response ratio of GPP to see how they compare
+    ratioDF <- merge(gppDF, bpDF, by="Group")
+    ratioDF$Variable.x <- NULL
+    ratioDF$Variable.y <- NULL
+    ratioDF$Trt.x <- NULL
+    ratioDF$Trt.y <- NULL
+    
+    colnames(ratioDF) <- c("Group", "GPP.mean", "GPP.sd",
+                           "BP.mean", "BP.sd")
+    
+    ratioDF <- merge(ratioDF, nepDF, by="Group")
+    colnames(ratioDF) <- c("Group", "GPP.mean", "GPP.sd",
+                           "BP.mean", "BP.sd",
+                           "Variable", "Trt", 
+                           "NEP.mean", "NEP.sd")
     
     
     #################### allocation coefficient  ####################

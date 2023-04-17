@@ -155,11 +155,8 @@ plot_normalized_GPP_response(scenario="VAR")
 scenario="VAR"
 trace_fate_of_carbon_MIP_plot(scenario="VAR")
 
-scenario="FIX"
-trace_fate_of_carbon_MIP_plot(scenario="FIX")
-
-
-### sankey plots?
+#scenario="FIX"
+#trace_fate_of_carbon_MIP_plot(scenario="FIX")
 
 
 ##########################################################################
