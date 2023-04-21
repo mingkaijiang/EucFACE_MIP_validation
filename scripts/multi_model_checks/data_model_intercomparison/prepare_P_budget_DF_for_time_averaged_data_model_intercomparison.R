@@ -14,7 +14,7 @@ prepare_P_budget_DF_for_time_averaged_data_model_intercomparison <- function(euc
     var.list1 <- c("PL", "PW", "PFR", "PCR", "PSTOR", 
                   "PGL", "PGW", "PGFR", "PGCR", 
                   "PLRETR", "PWRETR", "PCRRETR", "PFRRETR",
-                  "PUP")
+                  "PUP", "GPP_use")
     
     var.list2 <- c("PL", "PW", "PFR", "PCR", "PVEG", 
                    "PGL", "PGW", "PGFR", "PGCR", "PGVEG", 

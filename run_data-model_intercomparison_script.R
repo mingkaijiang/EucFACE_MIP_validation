@@ -85,8 +85,8 @@ eucDF <- prepare_EucFACE_observation_dataset()
 
 ### check data-model agreement
 scenario="VAR"
-rev.sd=1.5
-check_data_model_agreement(scenario="VAR", eucDF, rev.sd=1.5)
+rev.sd=1.0
+check_data_model_agreement(scenario="VAR", eucDF, rev.sd=rev.sd)
 
 
 
@@ -177,8 +177,16 @@ trace_fate_of_carbon_MIP_plot(scenario="VAR")
 ###      because this is used to compare against data
 ###      Go into function to plot.
 scenario="VAR"
-make_time_averaged_data_model_comparison_over_obs_period(eucDF,
-                                                         scenario="VAR")
+plot_p_cycle_responses(eucDF,
+                       scenario="VAR")
+
+
+## 1. check PLAB of CABLP and LPJGP
+## 2. check other soil P variables to plot - focus on soil P processes
+## 3. resolve problems with plant P demand decreased under eCO2 - i.e.
+## data uncertainty is large, and problem with excluding understorey
+## 4. 
+
 
 
 
