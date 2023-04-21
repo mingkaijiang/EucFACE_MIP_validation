@@ -7,6 +7,87 @@ read_and_process_EucFACE_P_budget_output <- function() {
     budgetDF <- read.csv("validation_dataset/EucFACE_P_Budget/total_p_budget_unnormalized.csv")
     cpDF <- read.csv("validation_dataset/EucFACE_P_Budget/summary_cp_ratios.csv")
     
+    inoutDF <- read.csv("validation_dataset/EucFACE_C_Budget_data/summary/inout.csv")
+    nppDF <- read.csv("validation_dataset/EucFACE_C_Budget_data/summary/npp.csv")
+    
+    tmpDF <- read.csv("validation_dataset/EucFACE_C_Budget_data/summary/NEP_normalized_method_comparison.csv")
+    
+    nppDF[nppDF$term=="Mycorrhizal production", 2:9] <- tmpDF[tmpDF$Category=="Figure3inset"&tmpDF$Method=="NPP-Rh",3:10]-tmpDF[tmpDF$Category=="Figure3"&tmpDF$Method=="NPP-Rh",3:10]
+    
+    
+    ### cut out fineroot that is assumed to be understorey
+    ## fluxes
+    fluxDF[fluxDF$terms%in%c("Fine Root P flux", "Fineroot retrans P flux",
+                             "Fineroot Litter P flux"), 2:9] <- fluxDF[fluxDF$terms%in%c("Fine Root P flux", 
+                                                                                         "Fineroot retrans P flux",
+                                                                                         "Fineroot Litter P flux"), 2:9] * 0.5
+    
+    fluxDF[fluxDF$terms=="Total vegetation production P flux",2:9] <- fluxDF[fluxDF$terms=="Canopy P flux",2:9] +
+        fluxDF[fluxDF$terms=="Wood P flux",2:9] +
+        fluxDF[fluxDF$terms=="Fine Root P flux",2:9] +
+        fluxDF[fluxDF$terms=="Coarse Root P flux",2:9] +
+        fluxDF[fluxDF$terms=="Twig litter P flux",2:9] +
+        fluxDF[fluxDF$terms=="Bark litter P flux",2:9] +
+        fluxDF[fluxDF$terms=="Seed litter P flux",2:9]
+    
+    fluxDF[fluxDF$terms=="Total vegetation retranslocation P flux",2:9] <- fluxDF[fluxDF$terms=="Canopy retrans P flux",2:9] +
+        fluxDF[fluxDF$terms=="Sapwood retrans P flux",2:9] +
+        fluxDF[fluxDF$terms=="Fineroot retrans P flux",2:9] +
+        fluxDF[fluxDF$terms=="Coarseroot retrans P flux",2:9] 
+    
+    fluxDF[fluxDF$terms=="Total vegetation uptake P flux",2:9] <- fluxDF[fluxDF$terms=="Total vegetation production P flux",2:9] -
+        fluxDF[fluxDF$terms=="Total vegetation retranslocation P flux",2:9]
+    
+    
+    fluxDF$diff <- fluxDF$eCO2 - fluxDF$aCO2
+    fluxDF$percent_diff <- (fluxDF$eCO2 - fluxDF$aCO2)/fluxDF$aCO2 * 100
+    
+    fluxDF$aCO2_sd <- matrixStats::rowSds(as.matrix(subset(fluxDF, select=c(R2, R3, R6)), na.rm=T)) 
+    fluxDF$eCO2_sd <- matrixStats::rowSds(as.matrix(subset(fluxDF, select=c(R1, R4, R5)), na.rm=T)) 
+    
+    
+    
+    ## stocks
+    poolDF[poolDF$terms=="Fine Root P Pool",2:9] <- poolDF[poolDF$terms=="Fine Root P Pool",2:9] * 0.5
+    poolDF$diff <- poolDF$eCO2 - poolDF$aCO2
+    poolDF$percent_diff <- (poolDF$eCO2 - poolDF$aCO2)/poolDF$aCO2 * 100
+    
+    poolDF$aCO2_sd <- matrixStats::rowSds(as.matrix(subset(poolDF, select=c(R2, R3, R6)), na.rm=T)) 
+    poolDF$eCO2_sd <- matrixStats::rowSds(as.matrix(subset(poolDF, select=c(R1, R4, R5)), na.rm=T)) 
+    
+    
+    ## budgets
+    budgetDF[budgetDF$terms=="Total plant P stock",2:9] <- poolDF[poolDF$terms=="Canopy P Pool",2:9] +
+        poolDF[poolDF$terms=="Total Wood P Pool",2:9] + poolDF[poolDF$terms=="Fine Root P Pool",2:9] + 
+        poolDF[poolDF$terms=="Coarse Root P Pool",2:9] 
+    
+    budgetDF[budgetDF$terms=="Total plant P requirement flux",2:9] <- fluxDF[fluxDF$terms=="Total vegetation production P flux",2:9]
+    
+    budgetDF[budgetDF$terms=="Total plant P retranslocation flux",2:9] <- fluxDF[fluxDF$terms=="Total vegetation retranslocation P flux",2:9]
+    
+    budgetDF[budgetDF$terms=="Plant P uptake flux",2:9] <- fluxDF[fluxDF$terms=="Total vegetation uptake P flux",2:9]
+    
+    budgetDF[budgetDF$terms=="Overstorey GPP efficiency",2:9] <- inoutDF[inoutDF$term=="GPP overstorey",2:9] / fluxDF[fluxDF$terms=="Canopy P flux",2:9]
+    
+    budgetDF[budgetDF$terms=="Plant PUE",2:9] <- (nppDF[nppDF$term=="Leaf NPP",2:9] +
+                                                      nppDF[nppDF$term=="Stem NPP",2:9] + 
+                                                      nppDF[nppDF$term=="Fine Root NPP",2:9] /2 +
+                                                      nppDF[nppDF$term=="Intermediate Root NPP",2:9] / 2 + 
+                                                      nppDF[nppDF$term=="Coarse Root NPP",2:9] +
+                                                      nppDF[nppDF$term=="Other NPP",2:9] + 
+                                                      nppDF[nppDF$term=="Leaf consumption",2:9] +
+                                                      nppDF[nppDF$term=="Mycorrhizal production",2:9]) / fluxDF[fluxDF$terms=="Total vegetation uptake P flux",2:9]
+    
+    
+    budgetDF$aCO2 <- rowMeans(as.matrix(subset(budgetDF, select=c(R2, R3, R6)), na.rm=T)) 
+    budgetDF$eCO2 <- rowMeans(as.matrix(subset(budgetDF, select=c(R1, R4, R5)), na.rm=T)) 
+    budgetDF$aCO2_sd <- matrixStats::rowSds(as.matrix(subset(budgetDF, select=c(R2, R3, R6)), na.rm=T)) 
+    budgetDF$eCO2_sd <- matrixStats::rowSds(as.matrix(subset(budgetDF, select=c(R1, R4, R5)), na.rm=T)) 
+    
+    budgetDF$diff <- budgetDF$eCO2 - budgetDF$aCO2
+    budgetDF$percent_diff <- (budgetDF$eCO2 - budgetDF$aCO2)/budgetDF$aCO2 * 100
+    
+
     
     
     ### prepare a list to store all variables, using the model names
@@ -14,12 +95,13 @@ read_and_process_EucFACE_P_budget_output <- function() {
                     "PFLIT", "PFLITA", "PFLITB", "PCLITB",
                     "PSOIL", "PPORG", "PPMIN", 
                     "PLAB", "PSEC", "POCC", 
-                    "PGL", "PGW", "PGCR", "PGFR",
+                    "PGL", "PGW", "PGCR", "PGFR", "PGUOA",
                     "PLITIN", "PWLIN", "PCRLIN", "PFRLIN",
                     "PUP", "PMIN", "PBIOCHMIN", "PLEACH",
-                    "PLRETR", "PWRETR", "PCRRETR", "PFRRETR",
+                    "PLRETR", "PWRETR", "PCRRETR", "PFRRETR", 
                     "PRETR",
-                    "PUE", "PMRT", "PUPREQ",
+                    "PUE", "GPP_use",
+                    "PMRT", "PUPREQ",
                     "CPL", "CPW", "CPFR", "CPSOIL", "CPFLIT",
                     "PDEM")
         
@@ -59,11 +141,11 @@ read_and_process_EucFACE_P_budget_output <- function() {
     
     
     ## PFR
-    outDF$PFR[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- poolDF$aCO2[poolDF$terms=="Fine Root P Pool"]/2
-    outDF$PFR[outDF$Group=="mean"&outDF$Trt=="eCO2"] <- poolDF$eCO2[poolDF$terms=="Fine Root P Pool"]/2
+    outDF$PFR[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- poolDF$aCO2[poolDF$terms=="Fine Root P Pool"]
+    outDF$PFR[outDF$Group=="mean"&outDF$Trt=="eCO2"] <- poolDF$eCO2[poolDF$terms=="Fine Root P Pool"]
     outDF$PFR[outDF$Group=="sd"&outDF$Trt=="aCO2"] <- poolDF$aCO2_sd[poolDF$terms=="Fine Root P Pool"]
     outDF$PFR[outDF$Group=="sd"&outDF$Trt=="eCO2"] <- poolDF$eCO2_sd[poolDF$terms=="Fine Root P Pool"]
-    outDF$PFR[outDF$Group=="mean"&outDF$Trt=="diff"] <- poolDF$diff[poolDF$terms=="Fine Root P Pool"]
+    outDF$PFR[outDF$Group=="mean"&outDF$Trt=="diff"] <- outDF$PFR[outDF$Group=="mean"&outDF$Trt=="eCO2"]-outDF$PFR[outDF$Group=="mean"&outDF$Trt=="aCO2"]
     outDF$PFR[outDF$Group=="sd"&outDF$Trt=="diff"] <- sqrt((poolDF$aCO2_sd[poolDF$terms=="Fine Root P Pool"]^2+
                                                                     poolDF$eCO2_sd[poolDF$terms=="Fine Root P Pool"]^2)/2)
     
@@ -175,17 +257,17 @@ read_and_process_EucFACE_P_budget_output <- function() {
     
     
     ## PLAB
-    outDF$PLAB[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- poolDF$aCO2[poolDF$terms=="Exchangeable Pi Pool"]
-    outDF$PLAB[outDF$Group=="mean"&outDF$Trt=="eCO2"] <- poolDF$eCO2[poolDF$terms=="Exchangeable Pi Pool"]
-    outDF$PLAB[outDF$Group=="sd"&outDF$Trt=="aCO2"] <- poolDF$aCO2_sd[poolDF$terms=="Exchangeable Pi Pool"]
-    outDF$PLAB[outDF$Group=="sd"&outDF$Trt=="eCO2"] <- poolDF$eCO2_sd[poolDF$terms=="Exchangeable Pi Pool"]
-    outDF$PLAB[outDF$Group=="mean"&outDF$Trt=="diff"] <- poolDF$diff[poolDF$terms=="Exchangeable Pi Pool"]
-    outDF$PLAB[outDF$Group=="sd"&outDF$Trt=="diff"] <- sqrt((poolDF$aCO2_sd[poolDF$terms=="Exchangeable Pi Pool"]^2+
-                                                                     poolDF$eCO2_sd[poolDF$terms=="Exchangeable Pi Pool"]^2)/2)
+    outDF$PLAB[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- poolDF$aCO2[poolDF$terms=="Soil Phosphate P Pool 0-10cm"]
+    outDF$PLAB[outDF$Group=="mean"&outDF$Trt=="eCO2"] <- poolDF$eCO2[poolDF$terms=="Soil Phosphate P Pool 0-10cm"]
+    outDF$PLAB[outDF$Group=="sd"&outDF$Trt=="aCO2"] <- poolDF$aCO2_sd[poolDF$terms=="Soil Phosphate P Pool 0-10cm"]
+    outDF$PLAB[outDF$Group=="sd"&outDF$Trt=="eCO2"] <- poolDF$eCO2_sd[poolDF$terms=="Soil Phosphate P Pool 0-10cm"]
+    outDF$PLAB[outDF$Group=="mean"&outDF$Trt=="diff"] <- poolDF$diff[poolDF$terms=="Soil Phosphate P Pool 0-10cm"]
+    outDF$PLAB[outDF$Group=="sd"&outDF$Trt=="diff"] <- sqrt((poolDF$aCO2_sd[poolDF$terms=="Soil Phosphate P Pool 0-10cm"]^2+
+                                                                     poolDF$eCO2_sd[poolDF$terms=="Soil Phosphate P Pool 0-10cm"]^2)/2)
     
-    outDF$PLAB[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- poolDF$percent_diff[poolDF$terms=="Exchangeable Pi Pool"]
-    outDF$PLAB[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((poolDF$aCO2_sd[poolDF$terms=="Exchangeable Pi Pool"]^2+poolDF$aCO2_sd[poolDF$terms=="Exchangeable Pi Pool"]^2+
-                                                                      poolDF$eCO2_sd[poolDF$terms=="Exchangeable Pi Pool"]^2)/3)/poolDF$aCO2[poolDF$terms=="Exchangeable Pi Pool"]*100 
+    outDF$PLAB[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- poolDF$percent_diff[poolDF$terms=="Soil Phosphate P Pool 0-10cm"]
+    outDF$PLAB[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((poolDF$aCO2_sd[poolDF$terms=="Soil Phosphate P Pool 0-10cm"]^2+poolDF$aCO2_sd[poolDF$terms=="Soil Phosphate P Pool 0-10cm"]^2+
+                                                                      poolDF$eCO2_sd[poolDF$terms=="Soil Phosphate P Pool 0-10cm"]^2)/3)/poolDF$aCO2[poolDF$terms=="Soil Phosphate P Pool 0-10cm"]*100 
     
     
     ## PSEC
@@ -222,7 +304,8 @@ read_and_process_EucFACE_P_budget_output <- function() {
     
     
     ## PGL
-    tmp <- colSums(fluxDF[fluxDF$term%in%c("Frass P flux", "Canopy P flux"),2:7], na.rm=T)
+    tmp <- colSums(fluxDF[fluxDF$term%in%c(#"Frass P flux", 
+                                           "Canopy P flux"),2:7], na.rm=T)
     amean <- mean(c(tmp[2], tmp[3], tmp[6]), na.rm=T)
     emean <- mean(c(tmp[1], tmp[4], tmp[5]), na.rm=T)
     asd <- sd(c(tmp[2], tmp[3], tmp[6]), na.rm=T)
@@ -240,22 +323,39 @@ read_and_process_EucFACE_P_budget_output <- function() {
     
     
     ## PGW
-    outDF$PGW[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- fluxDF$aCO2[fluxDF$terms=="Wood P flux"]
-    outDF$PGW[outDF$Group=="mean"&outDF$Trt=="eCO2"] <- fluxDF$eCO2[fluxDF$terms=="Wood P flux"]
-    outDF$PGW[outDF$Group=="sd"&outDF$Trt=="aCO2"] <- fluxDF$aCO2_sd[fluxDF$terms=="Wood P flux"]
-    outDF$PGW[outDF$Group=="sd"&outDF$Trt=="eCO2"] <- fluxDF$eCO2_sd[fluxDF$terms=="Wood P flux"]
-    outDF$PGW[outDF$Group=="mean"&outDF$Trt=="diff"] <- fluxDF$diff[fluxDF$terms=="Wood P flux"]
-    outDF$PGW[outDF$Group=="sd"&outDF$Trt=="diff"] <- sqrt((fluxDF$aCO2_sd[fluxDF$terms=="Wood P flux"]^2+
-                                                                    fluxDF$eCO2_sd[fluxDF$terms=="Wood P flux"]^2)/2)
+    tmp <- colSums(fluxDF[fluxDF$term%in%c("Wood P flux", "Bark litter P flux",
+                                           "Twig litter P flux", "Seed litter P flux"),2:7], na.rm=T)
+    amean <- mean(c(tmp[2], tmp[3], tmp[6]), na.rm=T)
+    emean <- mean(c(tmp[1], tmp[4], tmp[5]), na.rm=T)
+    asd <- sd(c(tmp[2], tmp[3], tmp[6]), na.rm=T)
+    esd <- sd(c(tmp[1], tmp[4], tmp[5]), na.rm=T)
+    diff <- (emean/amean - 1) * 100
+    outDF$PGW[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- amean
+    outDF$PGW[outDF$Group=="mean"&outDF$Trt=="eCO2"] <- emean
+    outDF$PGW[outDF$Group=="sd"&outDF$Trt=="aCO2"] <- asd
+    outDF$PGW[outDF$Group=="sd"&outDF$Trt=="eCO2"] <- esd
+    outDF$PGW[outDF$Group=="mean"&outDF$Trt=="diff"] <- emean-amean
+    outDF$PGW[outDF$Group=="sd"&outDF$Trt=="diff"] <- sqrt((asd^2+esd^2)/2) 
     
-    outDF$PGW[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- fluxDF$percent_diff[fluxDF$terms=="Wood P flux"]
-    outDF$PGW[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((fluxDF$aCO2_sd[fluxDF$terms=="Wood P flux"]^2+fluxDF$aCO2_sd[fluxDF$terms=="Wood P flux"]^2+
-                                                                    fluxDF$eCO2_sd[fluxDF$terms=="Wood P flux"]^2)/3)/fluxDF$aCO2[fluxDF$terms=="Wood P flux"]*100 
+    outDF$PGW[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- diff
+    outDF$PGW[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((asd^2+asd^2+esd^2)/3)/amean*100 
     
+    #outDF$PGW[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- fluxDF$aCO2[fluxDF$terms=="Wood P flux"]
+    #outDF$PGW[outDF$Group=="mean"&outDF$Trt=="eCO2"] <- fluxDF$eCO2[fluxDF$terms=="Wood P flux"]
+    #outDF$PGW[outDF$Group=="sd"&outDF$Trt=="aCO2"] <- fluxDF$aCO2_sd[fluxDF$terms=="Wood P flux"]
+    #outDF$PGW[outDF$Group=="sd"&outDF$Trt=="eCO2"] <- fluxDF$eCO2_sd[fluxDF$terms=="Wood P flux"]
+    #outDF$PGW[outDF$Group=="mean"&outDF$Trt=="diff"] <- fluxDF$diff[fluxDF$terms=="Wood P flux"]
+    #outDF$PGW[outDF$Group=="sd"&outDF$Trt=="diff"] <- sqrt((fluxDF$aCO2_sd[fluxDF$terms=="Wood P flux"]^2+
+    #                                                                fluxDF$eCO2_sd[fluxDF$terms=="Wood P flux"]^2)/2)
+    #
+    #outDF$PGW[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- fluxDF$percent_diff[fluxDF$terms=="Wood P flux"]
+    #outDF$PGW[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((fluxDF$aCO2_sd[fluxDF$terms=="Wood P flux"]^2+fluxDF$aCO2_sd[fluxDF$terms=="Wood P flux"]^2+
+    #                                                                fluxDF$eCO2_sd[fluxDF$terms=="Wood P flux"]^2)/3)/fluxDF$aCO2[fluxDF$terms=="Wood P flux"]*100 
+    #
     
     ## PGFR
-    outDF$PGFR[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- fluxDF$aCO2[fluxDF$terms=="Fine Root P flux"]/2
-    outDF$PGFR[outDF$Group=="mean"&outDF$Trt=="eCO2"] <- fluxDF$eCO2[fluxDF$terms=="Fine Root P flux"]/2
+    outDF$PGFR[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- fluxDF$aCO2[fluxDF$terms=="Fine Root P flux"]
+    outDF$PGFR[outDF$Group=="mean"&outDF$Trt=="eCO2"] <- fluxDF$eCO2[fluxDF$terms=="Fine Root P flux"]
     outDF$PGFR[outDF$Group=="sd"&outDF$Trt=="aCO2"] <- fluxDF$aCO2_sd[fluxDF$terms=="Fine Root P flux"]
     outDF$PGFR[outDF$Group=="sd"&outDF$Trt=="eCO2"] <- fluxDF$eCO2_sd[fluxDF$terms=="Fine Root P flux"]
     outDF$PGFR[outDF$Group=="mean"&outDF$Trt=="diff"] <- fluxDF$diff[fluxDF$terms=="Fine Root P flux"]
@@ -279,6 +379,20 @@ read_and_process_EucFACE_P_budget_output <- function() {
     outDF$PGCR[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((fluxDF$aCO2_sd[fluxDF$terms=="Coarse Root P flux"]^2+fluxDF$aCO2_sd[fluxDF$terms=="Coarse Root P flux"]^2+
                                                                     fluxDF$eCO2_sd[fluxDF$terms=="Coarse Root P flux"]^2)/3)/fluxDF$aCO2[fluxDF$terms=="Coarse Root P flux"]*100 
     
+    
+    
+    ## PGUOA
+    #outDF$PGCR[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- fluxDF$aCO2[fluxDF$terms=="Understorey P flux"]
+    #outDF$PGCR[outDF$Group=="mean"&outDF$Trt=="eCO2"] <- fluxDF$eCO2[fluxDF$terms=="Understorey P flux"]
+    #outDF$PGCR[outDF$Group=="sd"&outDF$Trt=="aCO2"] <- fluxDF$aCO2_sd[fluxDF$terms=="Understorey P flux"]
+    #outDF$PGCR[outDF$Group=="sd"&outDF$Trt=="eCO2"] <- fluxDF$eCO2_sd[fluxDF$terms=="Understorey P flux"]
+    #outDF$PGCR[outDF$Group=="mean"&outDF$Trt=="diff"] <- fluxDF$diff[fluxDF$terms=="Understorey P flux"]
+    #outDF$PGCR[outDF$Group=="sd"&outDF$Trt=="diff"] <- sqrt((fluxDF$aCO2_sd[fluxDF$terms=="Understorey P flux"]^2+
+    #                                                             fluxDF$eCO2_sd[fluxDF$terms=="Understorey P flux"]^2)/2)
+    #
+    #outDF$PGCR[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- fluxDF$percent_diff[fluxDF$terms=="Understorey P flux"]
+    #outDF$PGCR[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((fluxDF$aCO2_sd[fluxDF$terms=="Understorey P flux"]^2+fluxDF$aCO2_sd[fluxDF$terms=="Understorey P flux"]^2+
+    #                                                                 fluxDF$eCO2_sd[fluxDF$terms=="Understorey P flux"]^2)/3)/fluxDF$aCO2[fluxDF$terms=="Understorey P flux"]*100 
     
     
     
@@ -347,8 +461,8 @@ read_and_process_EucFACE_P_budget_output <- function() {
     
     
     ## PFRLIN
-    outDF$PFRLIN[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- fluxDF$aCO2[fluxDF$terms=="Fineroot Litter P flux"]/2
-    outDF$PFRLIN[outDF$Group=="mean"&outDF$Trt=="eCO2"] <- fluxDF$eCO2[fluxDF$terms=="Fineroot Litter P flux"]/2
+    outDF$PFRLIN[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- fluxDF$aCO2[fluxDF$terms=="Fineroot Litter P flux"]
+    outDF$PFRLIN[outDF$Group=="mean"&outDF$Trt=="eCO2"] <- fluxDF$eCO2[fluxDF$terms=="Fineroot Litter P flux"]
     outDF$PFRLIN[outDF$Group=="sd"&outDF$Trt=="aCO2"] <- fluxDF$aCO2_sd[fluxDF$terms=="Fineroot Litter P flux"]
     outDF$PFRLIN[outDF$Group=="sd"&outDF$Trt=="eCO2"] <- fluxDF$eCO2_sd[fluxDF$terms=="Fineroot Litter P flux"]
     outDF$PFRLIN[outDF$Group=="mean"&outDF$Trt=="diff"] <- fluxDF$diff[fluxDF$terms=="Fineroot Litter P flux"]
@@ -368,21 +482,7 @@ read_and_process_EucFACE_P_budget_output <- function() {
     outDF$PCRLIN[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- NA
     outDF$PCRLIN[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- NA
     
-    
-    ## PUP
-    outDF$PUP[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- fluxDF$aCO2[fluxDF$terms=="Total vegetation uptake P flux"]
-    outDF$PUP[outDF$Group=="mean"&outDF$Trt=="eCO2"] <- fluxDF$eCO2[fluxDF$terms=="Total vegetation uptake P flux"]
-    outDF$PUP[outDF$Group=="sd"&outDF$Trt=="aCO2"] <- fluxDF$aCO2_sd[fluxDF$terms=="Total vegetation uptake P flux"]
-    outDF$PUP[outDF$Group=="sd"&outDF$Trt=="eCO2"] <- fluxDF$eCO2_sd[fluxDF$terms=="Total vegetation uptake P flux"]
-    outDF$PUP[outDF$Group=="mean"&outDF$Trt=="diff"] <- fluxDF$diff[fluxDF$terms=="Total vegetation uptake P flux"]
-    outDF$PUP[outDF$Group=="sd"&outDF$Trt=="diff"] <- sqrt((fluxDF$aCO2_sd[fluxDF$terms=="Total vegetation uptake P flux"]^2+
-                                                                    fluxDF$eCO2_sd[fluxDF$terms=="Total vegetation uptake P flux"]^2)/2) 
-    
-    outDF$PUP[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- fluxDF$percent_diff[fluxDF$terms=="Total vegetation uptake P flux"]
-    outDF$PUP[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((fluxDF$aCO2_sd[fluxDF$terms=="Total vegetation uptake P flux"]^2+fluxDF$aCO2_sd[fluxDF$terms=="Total vegetation uptake P flux"]^2+
-                                                                       fluxDF$eCO2_sd[fluxDF$terms=="Total vegetation uptake P flux"]^2)/3)/fluxDF$aCO2[fluxDF$terms=="Total vegetation uptake P flux"]*100 
-    
-    
+
     ## PMIN
     tmp <- colSums(fluxDF[fluxDF$term%in%c("Mineralization P flux 0-10cm", 
                                            "Mineralization P flux 10-30cm",
@@ -469,8 +569,8 @@ read_and_process_EucFACE_P_budget_output <- function() {
     
     
     ## PFRETR
-    outDF$PFRETR[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- fluxDF$aCO2[fluxDF$terms=="Fineroot retrans P flux"]/2
-    outDF$PFRETR[outDF$Group=="mean"&outDF$Trt=="eCO2"] <- fluxDF$eCO2[fluxDF$terms=="Fineroot retrans P flux"]/2
+    outDF$PFRETR[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- fluxDF$aCO2[fluxDF$terms=="Fineroot retrans P flux"]
+    outDF$PFRETR[outDF$Group=="mean"&outDF$Trt=="eCO2"] <- fluxDF$eCO2[fluxDF$terms=="Fineroot retrans P flux"]
     outDF$PFRETR[outDF$Group=="sd"&outDF$Trt=="aCO2"] <- fluxDF$aCO2_sd[fluxDF$terms=="Fineroot retrans P flux"]
     outDF$PFRETR[outDF$Group=="sd"&outDF$Trt=="eCO2"] <- fluxDF$eCO2_sd[fluxDF$terms=="Fineroot retrans P flux"]
     outDF$PFRETR[outDF$Group=="mean"&outDF$Trt=="diff"] <- fluxDF$diff[fluxDF$terms=="Fineroot retrans P flux"]
@@ -510,7 +610,20 @@ read_and_process_EucFACE_P_budget_output <- function() {
                                                                      outDF$PRETR[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2)/3)/outDF$PRETR[outDF$Group=="mean"&outDF$Trt=="aCO2"]*100 
     
     
-
+    ## PUP
+    outDF$PUP[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- outDF$PDEM[outDF$Group=="mean"&outDF$Trt=="aCO2"] - outDF$PRETR[outDF$Group=="mean"&outDF$Trt=="aCO2"]
+    outDF$PUP[outDF$Group=="mean"&outDF$Trt=="eCO2"] <- outDF$PDEM[outDF$Group=="mean"&outDF$Trt=="eCO2"] - outDF$PRETR[outDF$Group=="mean"&outDF$Trt=="eCO2"]
+    outDF$PUP[outDF$Group=="sd"&outDF$Trt=="aCO2"] <- sqrt((outDF$PDEM[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2 + outDF$PRETR[outDF$Group=="sd"&outDF$Trt=="aCO2"])/2)
+    outDF$PUP[outDF$Group=="sd"&outDF$Trt=="eCO2"] <- sqrt((outDF$PDEM[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2 + outDF$PRETR[outDF$Group=="sd"&outDF$Trt=="eCO2"])/2)
+    outDF$PUP[outDF$Group=="mean"&outDF$Trt=="diff"] <- outDF$PUP[outDF$Group=="mean"&outDF$Trt=="eCO2"] - outDF$PUP[outDF$Group=="mean"&outDF$Trt=="aCO2"]
+    outDF$PUP[outDF$Group=="sd"&outDF$Trt=="diff"] <- sqrt((outDF$PUP[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+
+                                                                outDF$PUP[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2)/2) 
+    
+    outDF$PUP[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- (outDF$PUP[outDF$Group=="mean"&outDF$Trt=="eCO2"] - outDF$PUP[outDF$Group=="mean"&outDF$Trt=="aCO2"]) / outDF$PUP[outDF$Group=="mean"&outDF$Trt=="aCO2"]
+    outDF$PUP[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((outDF$PUP[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2+outDF$PUP[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2+
+                                                                    outDF$PUP[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2)/3)/outDF$PUP[outDF$Group=="mean"&outDF$Trt=="eCO2"]*100 
+    
+    
 
     ## PUE
     outDF$PUE[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- budgetDF$aCO2[budgetDF$terms=="Plant PUE"]
@@ -523,6 +636,19 @@ read_and_process_EucFACE_P_budget_output <- function() {
     
     outDF$PUE[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- NA
     outDF$PUE[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- NA
+    
+    
+    ## GPP_use
+    outDF$GPP_use[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- budgetDF$aCO2[budgetDF$terms=="Overstorey GPP efficiency"]
+    outDF$GPP_use[outDF$Group=="mean"&outDF$Trt=="eCO2"] <- budgetDF$eCO2[budgetDF$terms=="Overstorey GPP efficiency"]
+    outDF$GPP_use[outDF$Group=="sd"&outDF$Trt=="aCO2"] <- budgetDF$aCO2_sd[budgetDF$terms=="Overstorey GPP efficiency"]
+    outDF$GPP_use[outDF$Group=="sd"&outDF$Trt=="eCO2"] <- budgetDF$eCO2_sd[budgetDF$terms=="Overstorey GPP efficiency"]
+    outDF$GPP_use[outDF$Group=="mean"&outDF$Trt=="diff"] <- outDF$GPP_use[outDF$Group=="mean"&outDF$Trt=="eCO2"]-outDF$GPP_use[outDF$Group=="mean"&outDF$Trt=="aCO2"]
+    outDF$GPP_use[outDF$Group=="sd"&outDF$Trt=="diff"] <- sqrt((outDF$GPP_use[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2+
+                                                                outDF$GPP_use[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2)/2)
+    
+    outDF$GPP_use[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- NA
+    outDF$GPP_use[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- NA
     
     
     ## PMRT

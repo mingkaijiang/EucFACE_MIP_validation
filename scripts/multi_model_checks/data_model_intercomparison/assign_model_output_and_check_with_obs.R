@@ -5,12 +5,12 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
     ###########################################################################
     ### GPP
     outDF$A_GDAYP[outDF$Variable=="GPP"] <- ifelse(modDF.sum$GPP.mean[modDF.sum$ModName=="A_GDAYP"]<=
-                                                         (obsDF$GPP[obsDF$Group=="mean"&obsDF$Trt==treatment]+
-                                                              obsDF$GPP[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                         modDF.sum$GPP.mean[modDF.sum$ModName=="A_GDAYP"]>=
-                                                         (obsDF$GPP[obsDF$Group=="mean"&obsDF$Trt==treatment]-
-                                                              obsDF$GPP[obsDF$Group=="sd"&obsDF$Trt==treatment]),
-                                                     1, 0)
+                                                       (obsDF$GPP[obsDF$Group=="mean"&obsDF$Trt==treatment]+
+                                                            obsDF$GPP[obsDF$Group=="sd"&obsDF$Trt==treatment])&
+                                                       modDF.sum$GPP.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                       (obsDF$GPP[obsDF$Group=="mean"&obsDF$Trt==treatment]-
+                                                            obsDF$GPP[obsDF$Group=="sd"&obsDF$Trt==treatment]),
+                                                   1, 0)
     
     outDF$B_ELMV1[outDF$Variable=="GPP"] <- ifelse(modDF.sum$GPP.mean[modDF.sum$ModName=="B_ELMV1"]<=
                                                          (obsDF$GPP[obsDF$Group=="mean"&obsDF$Trt==treatment]+
@@ -3436,6 +3436,73 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
                                                                  obsDF$CPFLIT[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                         1, 0)
     
+    
+    
+    ### GPP use
+    outDF$A_GDAYP[outDF$Variable=="GPP_use"] <- ifelse(modDF.sum$GPP_use.mean[modDF.sum$ModName=="A_GDAYP"]<=
+                                                       (obsDF$GPP_use[obsDF$Group=="mean"&obsDF$Trt==treatment]+
+                                                            obsDF$GPP_use[obsDF$Group=="sd"&obsDF$Trt==treatment])&
+                                                       modDF.sum$GPP_use.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                       (obsDF$GPP_use[obsDF$Group=="mean"&obsDF$Trt==treatment]-
+                                                            obsDF$GPP_use[obsDF$Group=="sd"&obsDF$Trt==treatment]),
+                                                   1, 0)
+    
+    outDF$B_ELMV1[outDF$Variable=="GPP_use"] <- ifelse(modDF.sum$GPP_use.mean[modDF.sum$ModName=="B_ELMV1"]<=
+                                                       (obsDF$GPP_use[obsDF$Group=="mean"&obsDF$Trt==treatment]+
+                                                            obsDF$GPP_use[obsDF$Group=="sd"&obsDF$Trt==treatment])&
+                                                       modDF.sum$GPP_use.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                       (obsDF$GPP_use[obsDF$Group=="mean"&obsDF$Trt==treatment]-
+                                                            obsDF$GPP_use[obsDF$Group=="sd"&obsDF$Trt==treatment]),
+                                                   1, 0)
+    
+    outDF$C_CABLP[outDF$Variable=="GPP_use"] <- ifelse(modDF.sum$GPP_use.mean[modDF.sum$ModName=="C_CABLP"]<=
+                                                       (obsDF$GPP_use[obsDF$Group=="mean"&obsDF$Trt==treatment]+
+                                                            obsDF$GPP_use[obsDF$Group=="sd"&obsDF$Trt==treatment])&
+                                                       modDF.sum$GPP_use.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                       (obsDF$GPP_use[obsDF$Group=="mean"&obsDF$Trt==treatment]-
+                                                            obsDF$GPP_use[obsDF$Group=="sd"&obsDF$Trt==treatment]),
+                                                   1, 0)
+    
+    
+    outDF$D_LPJGP[outDF$Variable=="GPP_use"] <- ifelse(modDF.sum$GPP_use.mean[modDF.sum$ModName=="D_LPJGP"]<=
+                                                       (obsDF$GPP_use[obsDF$Group=="mean"&obsDF$Trt==treatment]+
+                                                            obsDF$GPP_use[obsDF$Group=="sd"&obsDF$Trt==treatment])&
+                                                       modDF.sum$GPP_use.mean[modDF.sum$ModName=="D_LPJGP"]>=
+                                                       (obsDF$GPP_use[obsDF$Group=="mean"&obsDF$Trt==treatment]-
+                                                            obsDF$GPP_use[obsDF$Group=="sd"&obsDF$Trt==treatment]),
+                                                   1, 0)
+    
+    outDF$E_OCHDP[outDF$Variable=="GPP_use"] <- ifelse(modDF.sum$GPP_use.mean[modDF.sum$ModName=="E_OCHDP"]<=
+                                                       (obsDF$GPP_use[obsDF$Group=="mean"&obsDF$Trt==treatment]+
+                                                            obsDF$GPP_use[obsDF$Group=="sd"&obsDF$Trt==treatment])&
+                                                       modDF.sum$GPP.mean[modDF.sum$ModName=="E_OCHDP"]>=
+                                                       (obsDF$GPP_use[obsDF$Group=="mean"&obsDF$Trt==treatment]-
+                                                            obsDF$GPP_use[obsDF$Group=="sd"&obsDF$Trt==treatment]),
+                                                   1, 0)
+    
+    outDF$F_QUINC[outDF$Variable=="GPP_use"] <- ifelse(modDF.sum$GPP_use.mean[modDF.sum$ModName=="F_QUINC"]<=
+                                                       (obsDF$GPP_use[obsDF$Group=="mean"&obsDF$Trt==treatment]+
+                                                            obsDF$GPP_use[obsDF$Group=="sd"&obsDF$Trt==treatment])&
+                                                       modDF.sum$GPP_use.mean[modDF.sum$ModName=="F_QUINC"]>=
+                                                       (obsDF$GPP_use[obsDF$Group=="mean"&obsDF$Trt==treatment]-
+                                                            obsDF$GPP_use[obsDF$Group=="sd"&obsDF$Trt==treatment]),
+                                                   1, 0)
+    
+    outDF$G_OCHDX[outDF$Variable=="GPP_use"] <- ifelse(modDF.sum$GPP_use.mean[modDF.sum$ModName=="G_OCHDX"]<=
+                                                       (obsDF$GPP_use[obsDF$Group=="mean"&obsDF$Trt==treatment]+
+                                                            obsDF$GPP_use[obsDF$Group=="sd"&obsDF$Trt==treatment])&
+                                                       modDF.sum$GPP_use.mean[modDF.sum$ModName=="G_OCHDX"]>=
+                                                       (obsDF$GPP_use[obsDF$Group=="mean"&obsDF$Trt==treatment]-
+                                                            obsDF$GPP_use[obsDF$Group=="sd"&obsDF$Trt==treatment]),
+                                                   1, 0)
+    
+    outDF$H_QUJSM[outDF$Variable=="GPP_use"] <- ifelse(modDF.sum$GPP_use.mean[modDF.sum$ModName=="H_QUJSM"]<=
+                                                       (obsDF$GPP_use[obsDF$Group=="mean"&obsDF$Trt==treatment]+
+                                                            obsDF$GPP_use[obsDF$Group=="sd"&obsDF$Trt==treatment])&
+                                                       modDF.sum$GPP_use.mean[modDF.sum$ModName=="H_QUJSM"]>=
+                                                       (obsDF$GPP_use[obsDF$Group=="mean"&obsDF$Trt==treatment]-
+                                                            obsDF$GPP_use[obsDF$Group=="sd"&obsDF$Trt==treatment]),
+                                                   1, 0)
     
     return(outDF)
     

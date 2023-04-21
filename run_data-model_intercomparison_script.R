@@ -35,28 +35,28 @@ n.mod.list <- c("GDAYN", "LPJGN")
 ###       Note that, OCHDX and QUJSM has many more additional variables 
 ###       that could be useful, 
 ###       but are currently not included here. 
-compile_obs_dataset_across_models(p.mod.list, n.mod.list)
+#compile_obs_dataset_across_models(p.mod.list, n.mod.list)
 
 
 ### 2.3. Compile all future predicted datasets together.
 ###      Generate daily and annual output.
-compile_pred_dataset_across_models(p.mod.list=p.mod.list,
-                                   n.mod.list=n.mod.list)
+#compile_pred_dataset_across_models(p.mod.list=p.mod.list,
+#                                   n.mod.list=n.mod.list)
 
 
 ### 2.4. Compile both historic and future period together.
 ###      Use daily data to compute annual data, including delta pools,
 ###      so that we can calculate normalized responses in the next step.
-compile_all_dataset_across_models()
+#compile_all_dataset_across_models()
 
 
 ### 2.5. Normalize all the variables to year 2012 or 2019, 
 ###      so that we can compare cross models.
 ###      Note that just do it for the each CO2 treatment.
 ###      Also generated CO2 effect comparison.
-normalize_dataset_across_models(yr.to.normalize=2012)
+#normalize_dataset_across_models(yr.to.normalize=2012)
 
-normalize_dataset_across_models(yr.to.normalize=2019)
+#normalize_dataset_across_models(yr.to.normalize=2019)
 
 
 ##########################################################################
@@ -65,11 +65,11 @@ normalize_dataset_across_models(yr.to.normalize=2019)
 ### 3.1. Check forcing data consistency,
 ###      Only focusing on historic period
 ###      Go into function to plot.
-scenario="VAR"
-check_forcing_data_consistency(scenario="VAR")
+#scenario="VAR"
+#check_forcing_data_consistency(scenario="VAR")
 
-scenario="FIX"
-check_forcing_data_consistency(scenario="FIX")
+#scenario="FIX"
+#check_forcing_data_consistency(scenario="FIX")
 
 
 ##########################################################################
@@ -85,7 +85,8 @@ eucDF <- prepare_EucFACE_observation_dataset()
 
 ### check data-model agreement
 scenario="VAR"
-check_data_model_agreement(scenario="VAR", eucDF)
+rev.sd=1.5
+check_data_model_agreement(scenario="VAR", eucDF, rev.sd=1.5)
 
 
 

@@ -24,6 +24,108 @@ read_and_process_EucFACE_C_budget_output <- function() {
     nppDF$percent_diff[nppDF$term=="Mycorrhizal production"] <- (nppDF$diff[nppDF$term=="Mycorrhizal production"])/nppDF$aCO2[nppDF$term=="Mycorrhizal production"] *100.0
     
     
+    ### revise NEP to remove understorey contributions
+    tmpDF1 <- data.frame(inoutDF[inoutDF$term%in%c("GPP overstorey",
+                                                   "GPP understorey",
+                                                   "CH4 efflux",
+                                                   "Ra leaf",
+                                                   "Ra stem",
+                                                   "Ra root",
+                                                   "Ra understorey",
+                                                   "Rsoil",
+                                                   "Ra overstorey root",
+                                                   "VOC",
+                                                   "DOC",
+                                                   "Rherbivore",
+                                                   "Rgrowth"),1:7])
+    tmpDF2 <- tmpDF1[tmpDF1$term=="GPP overstorey",2:7] -
+        abs(tmpDF1[tmpDF1$term=="CH4 efflux",2:7]) - tmpDF1[tmpDF1$term=="Ra leaf",2:7] -
+        tmpDF1[tmpDF1$term=="Ra stem",2:7] - 
+        (tmpDF1[tmpDF1$term=="Rsoil",2:7] - (tmpDF1[tmpDF1$term=="Ra root",2:7] - tmpDF1[tmpDF1$term=="Ra overstorey root",2:7])) - 
+        tmpDF1[tmpDF1$term=="Rgrowth",2:7] -
+        tmpDF1[tmpDF1$term=="VOC",2:7] - tmpDF1[tmpDF1$term=="Rherbivore",2:7]
+    
+    v1 <- mean(c(tmpDF2$Ring_2, tmpDF2$Ring_3, tmpDF2$Ring_6))
+    v2 <- mean(c(tmpDF2$Ring_1, tmpDF2$Ring_4, tmpDF2$Ring_5))
+    v3 <- sd(c(tmpDF2$Ring_2, tmpDF2$Ring_3, tmpDF2$Ring_6))
+    v4 <- sd(c(tmpDF2$Ring_1, tmpDF2$Ring_4, tmpDF2$Ring_5))
+    v5 <- v2-v1
+    v6 <- sqrt((v3^2+v4^2)/2)
+    
+    nepDF$NEP[nepDF$Method=="In-out"&nepDF$Trt=="aCO2"] <- v1
+    nepDF$NEP[nepDF$Method=="In-out"&nepDF$Trt=="eCO2"] <- v2
+    nepDF$NEP_conf[nepDF$Method=="In-out"&nepDF$Trt=="aCO2"] <- v3
+    nepDF$NEP_conf[nepDF$Method=="In-out"&nepDF$Trt=="eCO2"] <- v4
+    
+    
+    ## npp - rh
+    tmpDF1 <- data.frame(nppDF[nppDF$term%in%c("Leaf NPP",
+                                               "Stem NPP",
+                                               "Fine Root NPP",
+                                               "Intermediate Root NPP",
+                                               "Coarse Root NPP",
+                                               "Other NPP",
+                                               "Leaf consumption",
+                                               "Mycorrhizal production",
+                                               "R hetero"),1:7])
+    tmpDF2 <- tmpDF1[tmpDF1$term=="Leaf NPP",2:7] +
+        tmpDF1[tmpDF1$term=="Stem NPP",2:7] + tmpDF1[tmpDF1$term=="Fine Root NPP",2:7] /2 +
+        tmpDF1[tmpDF1$term=="Intermediate Root NPP",2:7] / 2 + tmpDF1[tmpDF1$term=="Coarse Root NPP",2:7] +
+        tmpDF1[tmpDF1$term=="Other NPP",2:7] + tmpDF1[tmpDF1$term=="Leaf consumption",2:7] +
+        tmpDF1[tmpDF1$term=="Mycorrhizal production",2:7] - tmpDF1[tmpDF1$term=="R hetero",2:7] 
+    
+    v1 <- mean(c(tmpDF2$Ring_2, tmpDF2$Ring_3, tmpDF2$Ring_6))
+    v2 <- mean(c(tmpDF2$Ring_1, tmpDF2$Ring_4, tmpDF2$Ring_5))
+    v3 <- sd(c(tmpDF2$Ring_2, tmpDF2$Ring_3, tmpDF2$Ring_6))
+    v4 <- sd(c(tmpDF2$Ring_1, tmpDF2$Ring_4, tmpDF2$Ring_5))
+    v5 <- v2-v1
+    v6 <- sqrt((v3^2+v4^2)/2)
+    
+    nepDF$NEP[nepDF$Method=="NPP-Rh"&nepDF$Trt=="aCO2"] <- v1
+    nepDF$NEP[nepDF$Method=="NPP-Rh"&nepDF$Trt=="eCO2"] <- v2
+    nepDF$NEP_conf[nepDF$Method=="NPP-Rh"&nepDF$Trt=="aCO2"] <- v3
+    nepDF$NEP_conf[nepDF$Method=="NPP-Rh"&nepDF$Trt=="eCO2"] <- v4
+    
+    
+    ## delta Cveg
+    tmpDF1 <- data.frame(deltaDF[deltaDF$term%in%c("Overstorey leaf",
+                                               "Overstorey wood",
+                                               "Fine Root",
+                                               "Intermediate Root",
+                                               "Coarse Root",
+                                               "Litter",
+                                               "Microbial biomass",
+                                               "Mycorrhizae",
+                                               "Soil C",
+                                               "Insects"),1:7])
+    tmpDF2 <- tmpDF1[tmpDF1$term=="Overstorey leaf",2:7] +
+        tmpDF1[tmpDF1$term=="Overstorey wood",2:7] + tmpDF1[tmpDF1$term=="Fine Root",2:7] /2 +
+        tmpDF1[tmpDF1$term=="Intermediate Root",2:7] / 2 + tmpDF1[tmpDF1$term=="Coarse Root",2:7] +
+        tmpDF1[tmpDF1$term=="Litter",2:7] + tmpDF1[tmpDF1$term=="Microbial biomass",2:7] +
+        tmpDF1[tmpDF1$term=="Mycorrhizae",2:7] + tmpDF1[tmpDF1$term=="Soil C",2:7] +
+        tmpDF1[tmpDF1$term=="Insects",2:7] 
+    
+    v1 <- mean(c(tmpDF2$Ring_2, tmpDF2$Ring_3, tmpDF2$Ring_6))
+    v2 <- mean(c(tmpDF2$Ring_1, tmpDF2$Ring_4, tmpDF2$Ring_5))
+    v3 <- sd(c(tmpDF2$Ring_2, tmpDF2$Ring_3, tmpDF2$Ring_6))
+    v4 <- sd(c(tmpDF2$Ring_1, tmpDF2$Ring_4, tmpDF2$Ring_5))
+    v5 <- v2-v1
+    v6 <- sqrt((v3^2+v4^2)/2)
+    
+    nepDF$NEP[nepDF$Method=="Pool"&nepDF$Trt=="aCO2"] <- v1
+    nepDF$NEP[nepDF$Method=="Pool"&nepDF$Trt=="eCO2"] <- v2
+    nepDF$NEP_conf[nepDF$Method=="Pool"&nepDF$Trt=="aCO2"] <- v3
+    nepDF$NEP_conf[nepDF$Method=="Pool"&nepDF$Trt=="eCO2"] <- v4
+    
+    
+    ### update
+    
+    nepDF$pos <- nepDF$NEP + nepDF$NEP_conf
+    nepDF$neg <- nepDF$NEP - nepDF$NEP_conf
+    
+    
+
+    
     ### prepare a list to store all variables
     c.var.list <- c("GPP", "LAI", "NPP", "CGL", "CGW", "CGFR", "CGCR", "CEX",
                     "RL", "RW", "RFR", "RGR", "RAU", "CVOC", "RHET", "RECO",
@@ -78,8 +180,8 @@ read_and_process_EucFACE_C_budget_output <- function() {
                                                                   poolDF$eCO2_sd[poolDF$term=="Overstorey wood"]^2)/3)/poolDF$aCO2[poolDF$term=="Overstorey wood"]*100 
     
     
-    ## CFR
-    tmp <- colSums(poolDF[poolDF$term%in%c("Fine Root", "Intermediate Root"),2:7], na.rm=T)
+    ## CFR - partition into understorey and overstorey
+    tmp <- colSums(poolDF[poolDF$term%in%c("Fine Root", "Intermediate Root"),2:7], na.rm=T)/2
     amean <- mean(c(tmp[2], tmp[3], tmp[6]), na.rm=T)
     emean <- mean(c(tmp[1], tmp[4], tmp[5]), na.rm=T)
     asd <- sd(c(tmp[2], tmp[3], tmp[6]), na.rm=T)
@@ -193,7 +295,7 @@ read_and_process_EucFACE_C_budget_output <- function() {
                                                                        deltaDF$eCO2_sd[deltaDF$term=="Overstorey wood"]^2)/3)/abs(deltaDF$aCO2[deltaDF$term=="Overstorey wood"])*100
     
     ## deltaCFR
-    tmp <- colSums(deltaDF[deltaDF$term%in%c("Fine Root", "Intermediate Root"),2:7], na.rm=T)
+    tmp <- colSums(deltaDF[deltaDF$term%in%c("Fine Root", "Intermediate Root"),2:7], na.rm=T)/2
     amean <- mean(c(tmp[2], tmp[3], tmp[6]), na.rm=T)
     emean <- mean(c(tmp[1], tmp[4], tmp[5]), na.rm=T)
     asd <- sd(c(tmp[2], tmp[3], tmp[6]), na.rm=T)
@@ -315,7 +417,7 @@ read_and_process_EucFACE_C_budget_output <- function() {
     
     
     ### CGFR
-    tmp <- colSums(nppDF[nppDF$term%in%c("Fine Root NPP", "Intermediate Root NPP"),2:7], na.rm=T)
+    tmp <- colSums(nppDF[nppDF$term%in%c("Fine Root NPP", "Intermediate Root NPP"),2:7], na.rm=T)/2
     amean <- mean(c(tmp[2], tmp[3], tmp[6]), na.rm=T)
     emean <- mean(c(tmp[1], tmp[4], tmp[5]), na.rm=T)
     asd <- sd(c(tmp[2], tmp[3], tmp[6]), na.rm=T)
@@ -343,8 +445,15 @@ read_and_process_EucFACE_C_budget_output <- function() {
     outDF$CGCR[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((nppDF$aCO2_sd[nppDF$term=="Coarse Root NPP"]^2+nppDF$aCO2_sd[nppDF$term=="Coarse Root NPP"]^2+
                                                                     nppDF$eCO2_sd[nppDF$term=="Coarse Root NPP"]^2)/3)/nppDF$aCO2[nppDF$term=="Coarse Root NPP"]*100
     
-    ### NPP - does not include exudation yet
-    tmp <- colSums(nppDF[nppDF$term%in%c("Leaf NPP", "Stem NPP", 
+    ### NPP - include exudation 
+    tmpDF <- nppDF[nppDF$term%in%c("Leaf NPP", "Stem NPP", 
+                                   "Fine Root NPP", "Intermediate Root NPP",
+                                   "Coarse Root NPP", "Other NPP",
+                                   "Leaf consumption", "Mycorrhizal production"),1:7]
+    tmpDF[tmpDF$term=="Fine Root NPP",2:7] <- tmpDF[tmpDF$term=="Fine Root NPP",2:7] / 2
+    tmpDF[tmpDF$term=="Intermediate Root NPP",2:7] <- tmpDF[tmpDF$term=="Intermediate Root NPP",2:7] / 2
+    
+    tmp <- colSums(tmpDF[tmpDF$term%in%c("Leaf NPP", "Stem NPP", 
                                          "Fine Root NPP", "Intermediate Root NPP",
                                          "Coarse Root NPP", "Other NPP",
                                          "Leaf consumption", "Mycorrhizal production"),2:7], na.rm=T)
@@ -418,6 +527,19 @@ read_and_process_EucFACE_C_budget_output <- function() {
                                                                   inoutDF$eCO2_sd[inoutDF$term=="Ra overstorey root"]^2)/3)/inoutDF$aCO2[inoutDF$term=="Ra overstorey root"]*100
     
     
+    #outDF$RFR[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- inoutDF$aCO2[inoutDF$term=="Ra root"]
+    #outDF$RFR[outDF$Group=="mean"&outDF$Trt=="eCO2"] <- inoutDF$eCO2[inoutDF$term=="Ra root"]
+    #outDF$RFR[outDF$Group=="sd"&outDF$Trt=="aCO2"] <- inoutDF$aCO2_sd[inoutDF$term=="Ra root"]
+    #outDF$RFR[outDF$Group=="sd"&outDF$Trt=="eCO2"] <- inoutDF$eCO2_sd[inoutDF$term=="Ra root"]
+    #outDF$RFR[outDF$Group=="mean"&outDF$Trt=="diff"] <- inoutDF$diff[inoutDF$term=="Ra root"]
+    #outDF$RFR[outDF$Group=="sd"&outDF$Trt=="diff"] <- sqrt((inoutDF$aCO2_sd[inoutDF$term=="Ra root"]^2+
+    #                                                            inoutDF$eCO2_sd[inoutDF$term=="Ra root"]^2)/2)
+    #outDF$RFR[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- inoutDF$percent_diff[inoutDF$term=="Ra root"]
+    #outDF$RFR[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((inoutDF$aCO2_sd[inoutDF$term=="Ra root"]^2+inoutDF$aCO2_sd[inoutDF$term=="Ra root"]^2+
+    #                                                                inoutDF$eCO2_sd[inoutDF$term=="Ra root"]^2)/3)/inoutDF$aCO2[inoutDF$term=="Ra root"]*100
+    
+    
+    
     ### CVOC
     outDF$CVOC[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- inoutDF$aCO2[inoutDF$term=="VOC"]
     outDF$CVOC[outDF$Group=="mean"&outDF$Trt=="eCO2"] <- inoutDF$eCO2[inoutDF$term=="VOC"]
@@ -464,8 +586,9 @@ read_and_process_EucFACE_C_budget_output <- function() {
     
     
     ### RECO
-    tmp <- colSums(inoutDF[inoutDF$term%in%c("Ra leaf", "Ra stem", 
-                                             "Rsoil", "Rgrowth"),2:7], na.rm=T)
+    tmp <- colSums(rbind(inoutDF[inoutDF$term%in%c("Ra leaf", "Ra stem", "Ra overstorey root",
+                                                   "Rgrowth"),2:7], 
+                         nppDF[nppDF$term=="R hetero",2:7]), na.rm=T)
     amean <- mean(c(tmp[2], tmp[3], tmp[6]), na.rm=T)
     emean <- mean(c(tmp[1], tmp[4], tmp[5]), na.rm=T)
     asd <- sd(c(tmp[2], tmp[3], tmp[6]), na.rm=T)
