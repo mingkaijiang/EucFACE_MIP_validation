@@ -80,7 +80,8 @@ n.mod.list <- c("GDAYN", "LPJGN")
 ####      The confidence interval in the data indicates treatment variation,
 ####      and less so about inter-annual variation.
 ####      The model confidence interval is more about inter-annual variation.
-eucDF <- prepare_EucFACE_observation_dataset()
+ignore.understorey=T
+eucDF <- prepare_EucFACE_observation_dataset(ignore.understorey=T)
 
 
 ### check data-model agreement
@@ -177,45 +178,18 @@ trace_fate_of_carbon_MIP_plot(scenario="VAR")
 ###      because this is used to compare against data
 ###      Go into function to plot.
 scenario="VAR"
-plot_p_cycle_responses(eucDF,
-                       scenario="VAR")
+
+plot_plant_p_cycle_responses(eucDF,
+                             scenario="VAR")
+
+plot_soil_p_cycle_responses(eucDF,
+                            scenario="VAR")
 
 
-## 1. check PLAB of CABLP and LPJGP
 ## 2. check other soil P variables to plot - focus on soil P processes
 ## 3. resolve problems with plant P demand decreased under eCO2 - i.e.
 ## data uncertainty is large, and problem with excluding understorey
 ## 4. 
-
-
-
-
-##########################################################################
-###      Make MIP time-series plot for both variable and fixed climate, 
-###      over observed period only!!!
-###      Note: When number of variables change in the input, 
-###      need to revise the code.
-make_MIP_time_series_plot(scenario="VAR")
-
-make_MIP_time_series_plot(scenario="FIX")
-
-
-### ambient treatment, CO2 responses
-### incomplete
-#plot_MIP_CO2_response_comparison(eucDF)
-
-
-### time-varying response
-###      LAI, Rsoil
-make_time_varying_data_model_comparison_over_obs_period(scenario="VAR")
-
-
-
-### Taylor diagram for LAI, Rsoil and GPP
-plot_taylor_diagram(scenario="VAR")
-
-
-
 
 ##########################################################################
 ###      Investigate gross mineralization rate and its relationship to
@@ -225,7 +199,7 @@ plot_taylor_diagram(scenario="VAR")
 ###     and hence the ratio of plant nutrient uptake to gross mineralization
 ###     is tiny.
 investigate_gross_mineralization(scenario="VAR")
-investigate_gross_mineralization(scenario="FIX")
+#investigate_gross_mineralization(scenario="FIX")
 
 
 
@@ -264,6 +238,37 @@ investigate_QUJSM_microbial_responses(scenario="VAR")
 investigate_microbial_responses(scenario="FIX", compare.to.obs=F)
 
 investigate_microbial_responses(scenario="VAR", compare.to.obs=T)
+
+
+
+
+
+
+##########################################################################
+###      Make MIP time-series plot for both variable and fixed climate, 
+###      over observed period only!!!
+###      Note: When number of variables change in the input, 
+###      need to revise the code.
+make_MIP_time_series_plot(scenario="VAR")
+
+make_MIP_time_series_plot(scenario="FIX")
+
+
+### ambient treatment, CO2 responses
+### incomplete
+#plot_MIP_CO2_response_comparison(eucDF)
+
+
+### time-varying response
+###      LAI, Rsoil
+make_time_varying_data_model_comparison_over_obs_period(scenario="VAR")
+
+
+
+### Taylor diagram for LAI, Rsoil and GPP
+plot_taylor_diagram(scenario="VAR")
+
+
 
 
 

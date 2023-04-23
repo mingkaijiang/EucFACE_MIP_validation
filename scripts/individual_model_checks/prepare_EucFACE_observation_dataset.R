@@ -1,4 +1,4 @@
-prepare_EucFACE_observation_dataset <- function () {
+prepare_EucFACE_observation_dataset <- function (ignore.understorey) {
     ### Prepare EucFACE observation datasets.
     ### Take codes from EucFACE C and nutrient budget assessment;
     ### Con't use any unpublished data to compromise upcoming data-based publications.
@@ -12,11 +12,20 @@ prepare_EucFACE_observation_dataset <- function () {
     #### taken directly from EucFACE C budget output
     #############################################################################
     
-    #### read in C budget data
-    cDF <- read_and_process_EucFACE_C_budget_output()
-    
-    ### read in N and P budget data
-    pDF <- read_and_process_EucFACE_P_budget_output()
+    if (ignore.understorey == T) {
+        #### read in C budget data
+        cDF <- read_and_process_EucFACE_C_budget_output_ignore_understorey()
+        
+        ### read in N and P budget data
+        pDF <- read_and_process_EucFACE_P_budget_output_ignore_understorey()
+    } else {
+        #### read in C budget data
+        cDF <- read_and_process_EucFACE_C_budget_output()
+        
+        ### read in N and P budget data
+        pDF <- read_and_process_EucFACE_P_budget_output()
+        
+    }
     
     
     ### read in water data

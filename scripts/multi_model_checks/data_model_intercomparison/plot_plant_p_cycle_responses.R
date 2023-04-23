@@ -1,5 +1,5 @@
-plot_p_cycle_responses <- function(eucDF,
-                                   scenario) {
+plot_plant_p_cycle_responses <- function(eucDF,
+                                         scenario) {
   
     
     ##################################################################
@@ -169,12 +169,15 @@ plot_p_cycle_responses <- function(eucDF,
         xlab("")+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
-              axis.text.x=element_text(size=12),
-              axis.title.x=element_text(size=14),
+              #axis.text.x=element_text(size=14,angle = 45, 
+              #                         vjust = 1, hjust = 1),
+              axis.text.x=element_text(size=14),
               axis.text.y=element_text(size=12),
               axis.title.y=element_text(size=14),
               legend.text=element_text(size=12),
               legend.title=element_text(size=14),
+              axis.text.x=element_text(size=14,angle = 45, 
+                                       vjust = 1, hjust = 1),
               panel.grid.major=element_blank(),
               legend.position=c(0.85,0.2),
               legend.box = 'horizontal',
@@ -184,7 +187,7 @@ plot_p_cycle_responses <- function(eucDF,
                                                colour ="black"),
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
-        ylab(expression(paste("Phosphorus pools (g P " * m^2*")")))+
+        ylab(expression(paste("P pools (g P " * m^2*")")))+
         scale_x_discrete(limit=c(mod.list, "multi-model", "obs"),
                          label=c(model.labels, "multi-model" = expression(bold("M-M")),
                                  "obs" = expression(bold("OBS"))))+
@@ -216,7 +219,9 @@ plot_p_cycle_responses <- function(eucDF,
         xlab("")+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
-              axis.text.x=element_text(size=12),
+              #axis.text.x=element_text(size=14,angle = 45, 
+              #                         vjust = 1, hjust = 1),
+              axis.text.x=element_text(size=14),
               axis.title.x=element_text(size=14),
               axis.text.y=element_text(size=12),
               axis.title.y=element_text(size=14),
@@ -245,117 +250,200 @@ plot_p_cycle_responses <- function(eucDF,
     
     
     
-  #  ##################################################################################
-  #  ### delta Ppools
-  #  vegDF <- prepare_plot_DF_for_time_averaged_data_model_intercomparison(eucDF=eucDF,
-  #                                                                        ambDF=ambDF.sum,
-  #                                                                        eleDF=eleDF.sum,
-  #                                                                        difDF=annDF.diff.sum,
-  #                                                                        var.list=c("deltaPL", "deltaPW", "deltaPFR", "deltaPCR", "deltaPSTOR"),
-  #                                                                        calculate.total=T)
-  #  
-  #  
-  #  
-  #  
-  #  ### split into ambDF, pctDF
-  #  plotDF1 <- vegDF[vegDF$Trt=="aCO2"&vegDF$Variable%in%c("deltaPL","deltaPW","deltaPCR","deltaPFR","deltaPSTOR"),]
-  #  plotDF2 <- vegDF[vegDF$Trt=="aCO2"&vegDF$Variable%in%c("Tot"),]
-  #  
-  #  plotDF3 <- vegDF[vegDF$Trt=="pct_diff"&vegDF$Variable%in%c("Tot"),]
-  #  plotDF4 <- vegDF[vegDF$Trt=="pct_diff"&vegDF$Variable%in%c("deltaPL","deltaPW","deltaPFR","deltaPSTOR"),]
-  #  
-  #  ### Plotting
-  #  ### additional to-do list:
-  #  ### 1. fill color by manual selection
-  #  p1 <- ggplot(data=plotDF1, 
-  #               aes(Group, meanvalue)) +
-  #    geom_bar(stat = "identity", aes(fill=Variable), 
-  #             position="stack", col="black") +
-  #    geom_errorbar(data=plotDF2, 
-  #                  aes(x=Group, ymin=meanvalue-sdvalue,
-  #                      ymax=meanvalue+sdvalue), 
-  #                  col="black", 
-  #                  position=position_dodge2(), width=0.3)+
-  #    geom_point(data=plotDF2, aes(x=Group, y=meanvalue), col="black",
-  #               fill="white", size=2, pch=21)+
-  #    geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
-  #    xlab("")+
-  #    theme_linedraw() +
-  #    theme(panel.grid.minor=element_blank(),
-  #          axis.text.x=element_text(size=12),
-  #          axis.title.x=element_text(size=14),
-  #          axis.text.y=element_text(size=12),
-  #          axis.title.y=element_text(size=14),
-  #          legend.text=element_text(size=12),
-  #          legend.title=element_text(size=14),
-  #          panel.grid.major=element_blank(),
-  #          legend.position=c(0.85,0.2),
-  #          legend.box = 'horizontal',
-  #          legend.box.just = 'left',
-  #          legend.background = element_rect(fill="grey",
-  #                                           size=0.5, linetype="solid", 
-  #                                           colour ="black"),
-  #          plot.title = element_text(size=14, face="bold.italic", 
-  #                                    hjust = 0.5))+
-  #    ylab(expression(paste(Delta * " Phosphorus pools (g P " * m^2* " " * yr^-1 * ")")))+
-  #    scale_x_discrete(limit=c(mod.list, "obs"),
-  #                     label=c(model.labels, "obs" = expression(bold("OBS"))))+
-  #    scale_fill_manual(name=expression(P[veg]),
-  #                      values=c("deltaPL"=cbbPalette[2],
-  #                               "deltaPW"=cbbPalette[3],
-  #                               "deltaPFR"=cbbPalette[4],
-  #                               "deltaPCR"=cbbPalette[7],
-  #                               "deltaPSTOR"=cbbPalette[8]),
-  #                      labels=c("deltaPL"=expression(Delta*P[leaf]), 
-  #                               "deltaPW"=expression(Delta*P[wood]), 
-  #                               "deltaPFR"=expression(Delta*P[froot]), 
-  #                               "deltaPCR"=expression(Delta*P[croot]),
-  #                               "deltaPSTOR"=expression(Delta*P[store])))+
-  #    guides(fill=guide_legend(nrow=3)); p1
-  #  
-  #  
-  #  p2 <- ggplot(data=plotDF3, 
-  #               aes(Group, meanvalue)) +
-  #    geom_bar(stat = "identity", aes(fill=Group),
-  #             position=position_dodge2(), col="black") +
-  #    geom_errorbar(aes(x=Group, ymin=meanvalue-sdvalue,
-  #                      ymax=meanvalue+sdvalue), 
-  #                  col="black", stat="identity",
-  #                  position=position_dodge2(), width=0.3)+
-  #    geom_point(data=plotDF3, aes(x=Group, y=meanvalue), col="black",
-  #               fill="white", size=2, pch=21)+
-  #    geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
-  #    xlab("")+
-  #    theme_linedraw() +
-  #    theme(panel.grid.minor=element_blank(),
-  #          axis.text.x=element_text(size=12),
-  #          axis.title.x=element_text(size=14),
-  #          axis.text.y=element_text(size=12),
-  #          axis.title.y=element_text(size=14),
-  #          legend.text=element_text(size=12),
-  #          legend.title=element_text(size=14),
-  #          panel.grid.major=element_blank(),
-  #          legend.position="none",
-  #          legend.box = 'horizontal',
-  #          legend.box.just = 'left',
-  #          legend.background = element_rect(fill="grey",
-  #                                           size=0.5, linetype="solid", 
-  #                                           colour ="black"),
-  #          plot.title = element_text(size=14, face="bold.italic", 
-  #                                    hjust = 0.5))+
-  #    ylab(expression(CO[2] * " effect (%)"))+
-  #    scale_x_discrete(limit=c(mod.list, "obs"),
-  #                     label=c(model.labels, "obs" = expression(bold("OBS"))))+
-  #    #scale_fill_manual(name="Variable",
-  #    #                  values=c("PL"=cbbPalette[4], 
-  #    #                           "PW"=cbbPalette[3],
-  #    #                           "PFR"=cbbPalette[8],
-  #    #                           "PSTOR"=cbbPalette[2]))+
-  #    #guides(fill=guide_legend(nrow=2)); p2
-  #    scale_fill_manual(name="Model",
-  #                      values=c(col.values, obs="black"),
-  #                      labels=c(model.labels, "obs"= "OBS"));p2
-  #  
+    ##################################################################################
+    ### delta P pools
+    vegDF <- prepare_plot_DF_for_time_averaged_data_model_intercomparison(eucDF=eucDF,
+                                                                          ambDF=ambDF.sum,
+                                                                          eleDF=eleDF.sum,
+                                                                          difDF=annDF.diff.sum,
+                                                                          var.list=c("deltaPL", "deltaPW", "deltaPFR", "deltaPCR", "deltaPSTOR"),
+                                                                          calculate.total=T)
+    
+    
+    
+    
+    ### split into ambDF, pctDF
+    plotDF1 <- vegDF[vegDF$Trt=="aCO2"&vegDF$Variable%in%c("deltaPL","deltaPW","deltaPCR","deltaPFR","deltaPSTOR"),]
+    plotDF2 <- vegDF[vegDF$Trt=="aCO2"&vegDF$Variable%in%c("Tot"),]
+    
+    plotDF3 <- vegDF[vegDF$Trt=="diff"&vegDF$Variable%in%c("Tot"),]
+    plotDF4 <- vegDF[vegDF$Trt=="diff"&vegDF$Variable%in%c("deltaPL","deltaPW","deltaPFR","deltaPSTOR"),]
+    
+    
+    ### add multi-model mean
+    tmpDF <- plotDF1[plotDF1$Group%in%c("A_GDAYP", "B_ELMV1",
+                                        "C_CABLP", "D_LPJGP",
+                                        "E_OCHDP", "F_QUINC",
+                                        "G_OCHDX", "H_QUJSM"),]
+    tmpDF2 <- summaryBy(meanvalue~Variable+Trt, FUN=c(mean,sd),
+                        na.rm=T, data=tmpDF, keep.names=T)
+    tmpDF2$Group <- "multi-model"
+    tmpDF2 <- tmpDF2[,c("Variable", "Group", "Trt", "meanvalue.mean", "meanvalue.sd")]
+    colnames(tmpDF2) <- c("Variable", "Group", "Trt", "meanvalue", "sdvalue")
+    
+    plotDF1 <- rbind(plotDF1, tmpDF2)
+    
+    ### add multi-model mean
+    tmpDF <- plotDF2[plotDF2$Group%in%c("A_GDAYP", "B_ELMV1",
+                                        "C_CABLP", "D_LPJGP",
+                                        "E_OCHDP", "F_QUINC",
+                                        "G_OCHDX", "H_QUJSM"),]
+    tmpDF2 <- summaryBy(meanvalue~Variable+Trt, FUN=c(mean,sd),
+                        na.rm=T, data=tmpDF, keep.names=T)
+    tmpDF2$Group <- "multi-model"
+    tmpDF2 <- tmpDF2[,c("Variable", "Group", "Trt", "meanvalue.mean", "meanvalue.sd")]
+    colnames(tmpDF2) <- c("Variable", "Group", "Trt", "meanvalue", "sdvalue")
+    
+    plotDF2 <- rbind(plotDF2, tmpDF2)
+    
+    plotDF2$sdvalue[plotDF2$Group%in%c("A_GDAYP", "B_ELMV1",
+                                       "C_CABLP", "D_LPJGP",
+                                       "E_OCHDP", "F_QUINC",
+                                       "G_OCHDX", "H_QUJSM")] <- NA
+    
+    
+    ### add multi-model mean
+    tmpDF <- plotDF3[plotDF3$Group%in%c("A_GDAYP", "B_ELMV1",
+                                        "C_CABLP", "D_LPJGP",
+                                        "E_OCHDP", "F_QUINC",
+                                        "G_OCHDX", "H_QUJSM"),]
+    tmpDF2 <- summaryBy(meanvalue~Variable+Trt, FUN=c(mean,sd),
+                        na.rm=T, data=tmpDF, keep.names=T)
+    tmpDF2$Group <- "multi-model"
+    tmpDF2 <- tmpDF2[,c("Variable", "Group", "Trt", "meanvalue.mean", "meanvalue.sd")]
+    colnames(tmpDF2) <- c("Variable", "Group", "Trt", "meanvalue", "sdvalue")
+    
+    plotDF3 <- rbind(plotDF3, tmpDF2)
+    
+    ### add multi-model mean
+    tmpDF <- plotDF4[plotDF4$Group%in%c("A_GDAYP", "B_ELMV1",
+                                        "C_CABLP", "D_LPJGP",
+                                        "E_OCHDP", "F_QUINC",
+                                        "G_OCHDX", "H_QUJSM"),]
+    tmpDF2 <- summaryBy(meanvalue~Variable+Trt, FUN=c(mean,sd),
+                        na.rm=T, data=tmpDF, keep.names=T)
+    tmpDF2$Group <- "multi-model"
+    tmpDF2 <- tmpDF2[,c("Variable", "Group", "Trt", "meanvalue.mean", "meanvalue.sd")]
+    colnames(tmpDF2) <- c("Variable", "Group", "Trt", "meanvalue", "sdvalue")
+    
+    plotDF4 <- rbind(plotDF4, tmpDF2)
+    
+    
+    
+    
+    ### Plotting
+    ### additional to-do list:
+    ### 1. fill color by manual selection
+    p3 <- ggplot(data=plotDF1, 
+                 aes(Group, meanvalue)) +
+      geom_bar(stat = "identity", aes(fill=Variable), 
+               position="stack", col="black") +
+      geom_errorbar(data=plotDF2, 
+                    aes(x=Group, ymin=meanvalue-sdvalue,
+                        ymax=meanvalue+sdvalue), 
+                    col="black", 
+                    position=position_dodge2(), width=0.3)+
+      #geom_point(data=plotDF2, aes(x=Group, y=meanvalue), col="black",
+      #           fill="white", size=2, pch=21)+
+      geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
+      xlab("")+
+      theme_linedraw() +
+      theme(panel.grid.minor=element_blank(),
+            #axis.text.x=element_text(size=14,angle = 45, 
+            #                         vjust = 1, hjust = 1),
+            axis.text.x=element_text(size=14),
+            axis.title.x=element_text(size=14),
+            axis.text.y=element_text(size=12),
+            axis.title.y=element_text(size=14),
+            legend.text=element_text(size=12),
+            legend.title=element_text(size=14),
+            panel.grid.major=element_blank(),
+            legend.position=c(0.85,0.2),
+            legend.box = 'horizontal',
+            legend.box.just = 'left',
+            legend.background = element_rect(fill="grey",
+                                             size=0.5, linetype="solid", 
+                                             colour ="black"),
+            plot.title = element_text(size=14, face="bold.italic", 
+                                      hjust = 0.5))+
+      ylab(expression(Delta * " P pools (g P " * m^2* " " * yr^-1 * ")"))+
+      scale_x_discrete(limit=c(mod.list, "multi-model", "obs"),
+                       label=c(model.labels, "multi-model" = expression(bold("M-M")),
+                               "obs" = expression(bold("OBS"))))+
+      scale_fill_manual(name=expression(P[veg]),
+                        values=c("deltaPL"=cbbPalette[2],
+                                 "deltaPW"=cbbPalette[3],
+                                 "deltaPFR"=cbbPalette[4],
+                                 "deltaPCR"=cbbPalette[7],
+                                 "deltaPSTOR"=cbbPalette[8]),
+                        labels=c("deltaPL"=expression(Delta*P[leaf]), 
+                                 "deltaPW"=expression(Delta*P[wood]), 
+                                 "deltaPFR"=expression(Delta*P[froot]), 
+                                 "deltaPCR"=expression(Delta*P[croot]),
+                                 "deltaPSTOR"=expression(Delta*P[store])))+
+      guides(fill=guide_legend(nrow=3)); p3
+    
+    
+    p4 <- ggplot(data=plotDF3, 
+                 aes(Group, meanvalue)) +
+      geom_bar(stat = "identity", aes(fill=Group),
+               position=position_dodge2(), col="black") +
+      geom_errorbar(aes(x=Group, ymin=meanvalue-sdvalue,
+                        ymax=meanvalue+sdvalue), 
+                    col="black", stat="identity",
+                    position=position_dodge2(), width=0.3)+
+      #geom_point(data=plotDF3, aes(x=Group, y=meanvalue), col="black",
+      #           fill="white", size=2, pch=21)+
+      geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
+      xlab("")+
+      theme_linedraw() +
+      theme(panel.grid.minor=element_blank(),
+            #axis.text.x=element_text(size=14,angle = 45, 
+            #                         vjust = 1, hjust = 1),
+            axis.text.x=element_text(size=14),
+            axis.title.x=element_text(size=14),
+            axis.text.y=element_text(size=12),
+            axis.title.y=element_text(size=14),
+            legend.text=element_text(size=12),
+            legend.title=element_text(size=14),
+            panel.grid.major=element_blank(),
+            legend.position="none",
+            legend.box = 'horizontal',
+            legend.box.just = 'left',
+            legend.background = element_rect(fill="grey",
+                                             size=0.5, linetype="solid", 
+                                             colour ="black"),
+            plot.title = element_text(size=14, face="bold.italic", 
+                                      hjust = 0.5))+
+      ylab(expression(CO[2] * " effect (g P " * m^2* " " * yr^-1 * ")"))+
+      scale_x_discrete(limit=c(mod.list, "multi-model","obs"),
+                       label=c(model.labels, "multi-model" = expression(bold("M-M")),
+                               "obs" = expression(bold("OBS"))))+
+      scale_fill_manual(name="Model",
+                        values=c(col.values, 
+                                 "multi-model"="grey30",
+                                 "obs"="grey"),
+                        labels=c(model.labels, "obs"= "OBS"))+
+      guides(fill = guide_legend(override.aes = list(col = c(col.values, 
+                                                             "multi-model"="grey30", 
+                                                             "obs"="grey"))),
+             color = guide_legend(nrow=12, byrow=F));p4
+    
+    
+    
+    pdf(paste0(out.dir, "/MIP_time_averaged_", scenario, "_P_pools.pdf"), 
+        width=10, height=12)
+    plot_grid(p1, p2,   
+              p3, p4,
+              labels=c("(a)", "(b)", "(c)", "(d)"), label_x=0.1, label_y=0.95,
+              label_size=24,
+              ncol=2)
+    dev.off()
+    
+    
+    
+    
+    
     
     
     
@@ -442,7 +530,7 @@ plot_p_cycle_responses <- function(eucDF,
     
     
     ### plotting 
-    p3 <- ggplot(data=plotDF1, 
+    p5 <- ggplot(data=plotDF1, 
                  aes(Group, meanvalue)) +
         geom_bar(stat = "identity", aes(fill=Variable), 
                  position="stack", col="black") +
@@ -457,7 +545,9 @@ plot_p_cycle_responses <- function(eucDF,
         xlab("")+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
-              axis.text.x=element_text(size=12),
+              #axis.text.x=element_text(size=14,angle = 45, 
+              #                         vjust = 1, hjust = 1),
+              axis.text.x=element_text(size=14),
               axis.title.x=element_text(size=14),
               axis.text.y=element_text(size=12),
               axis.title.y=element_text(size=14),
@@ -485,10 +575,10 @@ plot_p_cycle_responses <- function(eucDF,
       guides(fill=guide_legend(nrow=2))+
         scale_x_discrete(limit=c(mod.list, "multi-model", "obs"),
                          label=c(model.labels, "multi-model"=expression(bold("M-M")),
-                                 "obs" = expression(bold("OBS")))); p3
+                                 "obs" = expression(bold("OBS")))); p5
     
     
-    p4 <- ggplot(data=plotDF4, 
+    p6 <- ggplot(data=plotDF4, 
                  aes(Group, meanvalue)) +
       geom_bar(stat = "identity", aes(fill=Group), 
                position="stack", col="black") +
@@ -502,7 +592,9 @@ plot_p_cycle_responses <- function(eucDF,
       xlab("")+
       theme_linedraw() +
       theme(panel.grid.minor=element_blank(),
-            axis.text.x=element_text(size=12),
+            #axis.text.x=element_text(size=14,angle = 45, 
+            #                         vjust = 1, hjust = 1),
+            axis.text.x=element_text(size=14),
             axis.title.x=element_text(size=14),
             axis.text.y=element_text(size=12),
             axis.title.y=element_text(size=14),
@@ -525,7 +617,7 @@ plot_p_cycle_responses <- function(eucDF,
                                  "obs"="grey"),
                         labels=c(model.labels, "obs"= "OBS"))+
       guides(fill = guide_legend(override.aes = list(col = c(col.values, "multi-model"="grey30", "obs"="grey"))),
-             color = guide_legend(nrow=12, byrow=F)); p4
+             color = guide_legend(nrow=12, byrow=F)); p6
     
     
     
@@ -637,7 +729,7 @@ plot_p_cycle_responses <- function(eucDF,
     
     
     ### plotting 
-    p5 <- ggplot(data=plotDF1, 
+    p7 <- ggplot(data=plotDF1, 
                  aes(Group, meanvalue)) +
       geom_bar(stat = "identity", aes(fill=Variable), 
                position="stack", col="black") +
@@ -652,14 +744,16 @@ plot_p_cycle_responses <- function(eucDF,
       xlab("")+
       theme_linedraw() +
       theme(panel.grid.minor=element_blank(),
-            axis.text.x=element_text(size=12),
+            #axis.text.x=element_text(size=14,angle = 45, 
+            #                         vjust = 1, hjust = 1),
+            axis.text.x=element_text(size=14),
             axis.title.x=element_text(size=14),
             axis.text.y=element_text(size=12),
             axis.title.y=element_text(size=14),
             legend.text=element_text(size=12),
             legend.title=element_text(size=14),
             panel.grid.major=element_blank(),
-            legend.position=c(.8,.8),
+            legend.position=c(.7,.8),
             legend.box = 'horizontal',
             legend.box.just = 'left',
             legend.background = element_rect(fill="grey",
@@ -676,7 +770,7 @@ plot_p_cycle_responses <- function(eucDF,
       guides(fill=guide_legend(nrow=2))+
       scale_x_discrete(limit=c(mod.list, "multi-model", "obs"),
                        label=c(model.labels, "multi-model"=expression(bold("M-M")),
-                               "obs" = expression(bold("OBS")))); p5
+                               "obs" = expression(bold("OBS")))); p7
     
     
     
@@ -720,12 +814,12 @@ plot_p_cycle_responses <- function(eucDF,
     #         color = guide_legend(nrow=12, byrow=F)); p6
     
     
-    p6 <- ggplot(data=plotDF4, 
+    p8 <- ggplot(data=plotDF4, 
                  aes(Group, meanvalue, group=Variable)) +
       geom_bar(stat = "identity", aes(fill=Variable), 
                position=position_dodge2(), col="black") +
       geom_errorbar(aes(x=Group, ymin=meanvalue-sdvalue,
-                        ymax=meanvalue+sdvalue, grou=Variable), 
+                        ymax=meanvalue+sdvalue, group=Variable), 
                     col="black", 
                     position=position_dodge2(), width=0.9)+
       #geom_point(data=plotDF4, aes(x=Group, y=meanvalue), 
@@ -735,7 +829,9 @@ plot_p_cycle_responses <- function(eucDF,
       xlab("")+
       theme_linedraw() +
       theme(panel.grid.minor=element_blank(),
-            axis.text.x=element_text(size=12),
+            #axis.text.x=element_text(size=14,angle = 45, 
+            #                         vjust = 1, hjust = 1),
+            axis.text.x=element_text(size=14),
             axis.title.x=element_text(size=14),
             axis.text.y=element_text(size=12),
             axis.title.y=element_text(size=14),
@@ -756,18 +852,19 @@ plot_p_cycle_responses <- function(eucDF,
       guides(fill=guide_legend(nrow=2))+
       scale_x_discrete(limit=c(mod.list, "multi-model", "obs"),
                        label=c(model.labels, "multi-model"=expression(bold("M-M")),
-                               "obs" = expression(bold("OBS"))));p6
+                               "obs" = expression(bold("OBS"))));p8
     
     
     
     
     pdf(paste0(out.dir, "/MIP_time_averaged_", scenario, "_P_demand_and_uptake.pdf"), 
         width=16, height=16)
-    plot_grid(p1, p2,   
+    plot_grid(p1, p2, 
               p3, p4,
               p5, p6,   
+              p7, p8,
               labels=c("(a)", "(b)", "(c)", "(d)",
-                       "(e)", "(f)"), label_x=0.1, label_y=0.95,
+                       "(e)", "(f)", "(g)", "(h)"), label_x=0.1, label_y=0.95,
               label_size=24,
               ncol=2)
     dev.off()
@@ -797,7 +894,8 @@ plot_p_cycle_responses <- function(eucDF,
     pfluxDF2 <- pfluxDF2[pfluxDF2$Variable=="Tot",]
     pfluxDF2$Variable <- "PMIN"
     
-    pfluxDF <- rbind(pfluxDF1, pfluxDF2)
+    #pfluxDF <- rbind(pfluxDF1, pfluxDF2)
+    pfluxDF <- pfluxDF2
     
     ### split into ambDF, pctDF
     plotDF1 <- pfluxDF[pfluxDF$Trt=="aCO2",]
@@ -806,92 +904,228 @@ plot_p_cycle_responses <- function(eucDF,
     plotDF3 <- pfluxDF[pfluxDF$Trt=="pct_diff",]
     
     
+    ### add multi-model mean
+    tmpDF <- plotDF1[plotDF1$Group%in%c("A_GDAYP", "B_ELMV1",
+                                        "C_CABLP", "D_LPJGP",
+                                        "E_OCHDP", "F_QUINC",
+                                        "G_OCHDX", "H_QUJSM"),]
+    tmpDF2 <- summaryBy(meanvalue~Variable+Trt, FUN=c(mean,sd),
+                        na.rm=T, data=tmpDF, keep.names=T)
+    tmpDF2$Group <- "multi-model"
+    tmpDF2 <- tmpDF2[,c("Variable", "Group", "Trt", "meanvalue.mean", "meanvalue.sd")]
+    colnames(tmpDF2) <- c("Variable", "Group", "Trt", "meanvalue", "sdvalue")
+    
+    plotDF1 <- rbind(plotDF1, tmpDF2)
+    
+    ### add multi-model mean
+    tmpDF <- plotDF2[plotDF2$Group%in%c("A_GDAYP", "B_ELMV1",
+                                        "C_CABLP", "D_LPJGP",
+                                        "E_OCHDP", "F_QUINC",
+                                        "G_OCHDX", "H_QUJSM"),]
+    tmpDF2 <- summaryBy(meanvalue~Variable+Trt, FUN=c(mean,sd),
+                        na.rm=T, data=tmpDF, keep.names=T)
+    tmpDF2$Group <- "multi-model"
+    tmpDF2 <- tmpDF2[,c("Variable", "Group", "Trt", "meanvalue.mean", "meanvalue.sd")]
+    colnames(tmpDF2) <- c("Variable", "Group", "Trt", "meanvalue", "sdvalue")
+    
+    plotDF2 <- rbind(plotDF2, tmpDF2)
+    
+    plotDF2$sdvalue[plotDF2$Group%in%c("A_GDAYP", "B_ELMV1",
+                                       "C_CABLP", "D_LPJGP",
+                                       "E_OCHDP", "F_QUINC",
+                                       "G_OCHDX", "H_QUJSM")] <- NA
+    
+    
+    ### add multi-model mean
+    tmpDF <- plotDF3[plotDF3$Group%in%c("A_GDAYP", "B_ELMV1",
+                                        "C_CABLP", "D_LPJGP",
+                                        "E_OCHDP", "F_QUINC",
+                                        "G_OCHDX", "H_QUJSM"),]
+    tmpDF2 <- summaryBy(meanvalue~Variable+Trt, FUN=c(mean,sd),
+                        na.rm=T, data=tmpDF, keep.names=T)
+    tmpDF2$Group <- "multi-model"
+    tmpDF2 <- tmpDF2[,c("Variable", "Group", "Trt", "meanvalue.mean", "meanvalue.sd")]
+    colnames(tmpDF2) <- c("Variable", "Group", "Trt", "meanvalue", "sdvalue")
+    
+    plotDF3 <- rbind(plotDF3, tmpDF2)
+    
+
+    
     ### plotting 
-    p5 <- ggplot(data=plotDF1, 
+    p9 <- ggplot(data=plotDF1, 
                  aes(Group, meanvalue, group=Variable)) +
-        geom_bar(stat = "identity", aes(fill=Variable), 
-                 position=position_dodge2(), col="black") +
-        geom_errorbar(data=plotDF2,
-                      aes(x=Group, ymin=meanvalue-sdvalue,
-                          ymax=meanvalue+sdvalue), 
-                      col="black", 
-                      position=position_dodge2(), width=0.9)+
-        geom_point(data=plotDF2, aes(x=Group, y=meanvalue), 
-                   position=position_dodge2(width=0.9), col="black",
-                 fill="white", size=2, pch=21)+
-        geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
-        xlab("")+
-        theme_linedraw() +
-        theme(panel.grid.minor=element_blank(),
-              axis.text.x=element_text(size=12),
-              axis.title.x=element_text(size=14),
-              axis.text.y=element_text(size=12),
-              axis.title.y=element_text(size=14),
-              legend.text=element_text(size=12),
-              legend.title=element_text(size=14),
-              panel.grid.major=element_blank(),
-              legend.position=c(.1,.2),
-              legend.box = 'horizontal',
-              legend.box.just = 'left',
-              legend.background = element_rect(fill="grey",
-                                               size=0.5, linetype="solid", 
-                                               colour ="black"),
-              plot.title = element_text(size=14, face="bold.italic", 
-                                        hjust = 0.5))+
-        ylab(expression(paste("Phosphorus fluxes (g C " * m^2 * " " * yr^-1 * ")")))+
-        scale_fill_manual(name=expression(P[fluxes]),
-                        values=c("PMIN"=alpha("red3", 0.5),
-                                 "PUP"=alpha("blue3", 0.5)),
-                        labels=c("PMIN"=expression(P[net]), 
-                                 "PUP"=expression(P[upt])))+
-        scale_x_discrete(limit=c(mod.list, "obs"),
-                         label=c(model.labels, "obs" = expression(bold("OBS")))); p5
+      geom_bar(stat = "identity", aes(fill=Group), 
+               position=position_dodge2(), col="black") +
+      geom_errorbar(data=plotDF2,
+                    aes(x=Group, ymin=meanvalue-sdvalue,
+                        ymax=meanvalue+sdvalue), 
+                    col="black", 
+                    position=position_dodge2(), width=0.9)+
+      #geom_point(data=plotDF2, aes(x=Group, y=meanvalue), 
+      #           position=position_dodge2(width=0.9), col="black",
+      #         fill="white", size=2, pch=21)+
+      geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
+      xlab("")+
+      theme_linedraw() +
+      theme(panel.grid.minor=element_blank(),
+            #axis.text.x=element_text(size=14,angle = 45, 
+            #                         vjust = 1, hjust = 1),
+            axis.text.x=element_text(size=14),
+            axis.title.x=element_text(size=14),
+            axis.text.y=element_text(size=12),
+            axis.title.y=element_text(size=14),
+            legend.text=element_text(size=12),
+            legend.title=element_text(size=14),
+            panel.grid.major=element_blank(),
+            legend.position="none",
+            legend.box = 'horizontal',
+            legend.box.just = 'left',
+            legend.background = element_rect(fill="grey",
+                                             size=0.5, linetype="solid", 
+                                             colour ="black"),
+            plot.title = element_text(size=14, face="bold.italic", 
+                                      hjust = 0.5))+
+      ylab(expression(P[net] * " (g P " * m^2 * " " * yr^-1 * ")"))+
+      scale_fill_manual(name="Model",
+                        values=c(col.values, 
+                                 "multi-model"="grey30",
+                                 "obs"="grey"),
+                        labels=c(model.labels, "obs"= "OBS"))+
+      scale_x_discrete(limit=c(mod.list, "multi-model", "obs"),
+                       label=c(model.labels, "multi-model"=expression(bold("M-M")),
+                               "obs" = expression(bold("OBS")))); p9
     
     
-    #require(ggbreak)
-    
-    p6 <- ggplot(data=plotDF3, 
-                 aes(Group, meanvalue, group=Variable)) +
-        geom_bar(stat = "identity", aes(fill=Variable), 
-                 position=position_dodge2(), col="black") +
-        geom_errorbar(aes(x=Group, ymin=meanvalue-sdvalue,
-                          ymax=meanvalue+sdvalue, grou=Variable), 
-                      col="black", 
-                      position=position_dodge2(), width=0.9)+
-        geom_point(data=plotDF3, aes(x=Group, y=meanvalue), 
-                 position=position_dodge2(width=0.9), col="black",
-                 fill="white", size=2, pch=21)+
-        geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
-        xlab("")+
-        theme_linedraw() +
-        theme(panel.grid.minor=element_blank(),
-              axis.text.x=element_text(size=12),
-              axis.title.x=element_text(size=14),
-              axis.text.y=element_text(size=12),
-              axis.title.y=element_text(size=14),
-              legend.text=element_text(size=12),
-              legend.title=element_text(size=14),
-              panel.grid.major=element_blank(),
-              legend.position="none",
-              legend.box = 'horizontal',
-              legend.box.just = 'left',
-              plot.title = element_text(size=14, face="bold.italic", 
-                                        hjust = 0.5))+
-        ylab(expression(CO[2] * " effect (%)"))+
-        #scale_y_break(c(-400, -30, 50, 410))+
-        scale_fill_manual(name=expression(P[fluxes]),
-                        values=c("PMIN"=alpha("red3", 0.5),
-                                 "PUP"=alpha("blue3", 0.5)),
-                        labels=c("PMIN"=expression(P[net]), 
-                                 "PUP"=expression(P[upt])))+
-        ylim(c(-30, 50))+
-        scale_x_discrete(limit=c(mod.list, "obs"),
-                         label=c(model.labels, "obs" = expression(bold("OBS"))));p6
+    p10 <- ggplot(data=plotDF3, 
+                  aes(Group, meanvalue, group=Variable)) +
+      geom_bar(stat = "identity", aes(fill=Group), 
+               position=position_dodge2(), col="black") +
+      geom_errorbar(aes(x=Group, ymin=meanvalue-sdvalue,
+                        ymax=meanvalue+sdvalue, group=Variable), 
+                    col="black", 
+                    position=position_dodge2(), width=0.9)+
+      #geom_point(data=plotDF3, aes(x=Group, y=meanvalue), 
+      #         position=position_dodge2(width=0.9), col="black",
+      #         fill="white", size=2, pch=21)+
+      geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
+      xlab("")+
+      theme_linedraw() +
+      theme(panel.grid.minor=element_blank(),
+            #axis.text.x=element_text(size=14,angle = 45, 
+            #                         vjust = 1, hjust = 1),
+            axis.text.x=element_text(size=14),
+            axis.title.x=element_text(size=14),
+            axis.text.y=element_text(size=12),
+            axis.title.y=element_text(size=14),
+            legend.text=element_text(size=12),
+            legend.title=element_text(size=14),
+            panel.grid.major=element_blank(),
+            legend.position="none",
+            legend.box = 'horizontal',
+            legend.box.just = 'left',
+            plot.title = element_text(size=14, face="bold.italic", 
+                                      hjust = 0.5))+
+      ylab(expression(CO[2] * " effect (%)"))+
+      scale_fill_manual(name="Model",
+                        values=c(col.values, 
+                                 "multi-model"="grey30",
+                                 "obs"="grey"),
+                        labels=c(model.labels, "obs"= "OBS"))+
+      scale_x_discrete(limit=c(mod.list, "multi-model", "obs"),
+                       label=c(model.labels, "multi-model"=expression(bold("M-M")),
+                               "obs" = expression(bold("OBS"))));p10
     
 
     
     
-    ################## P uptake and mineralization ####################
+    #p9 <- ggplot(data=plotDF1, 
+    #             aes(Group, meanvalue, group=Variable)) +
+    #  geom_bar(stat = "identity", aes(fill=Variable), 
+    #           position=position_dodge2(), col="black") +
+    #  geom_errorbar(data=plotDF2,
+    #                aes(x=Group, ymin=meanvalue-sdvalue,
+    #                    ymax=meanvalue+sdvalue), 
+    #                col="black", 
+    #                position=position_dodge2(), width=0.9)+
+    #  #geom_point(data=plotDF2, aes(x=Group, y=meanvalue), 
+    #  #           position=position_dodge2(width=0.9), col="black",
+    #  #         fill="white", size=2, pch=21)+
+    #  geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
+    #  xlab("")+
+    #  theme_linedraw() +
+    #  theme(panel.grid.minor=element_blank(),
+    #        #axis.text.x=element_text(size=14,angle = 45, 
+    #        #                         vjust = 1, hjust = 1),
+    #        axis.text.x=element_text(size=14),
+    #        axis.title.x=element_text(size=14),
+    #        axis.text.y=element_text(size=12),
+    #        axis.title.y=element_text(size=14),
+    #        legend.text=element_text(size=12),
+    #        legend.title=element_text(size=14),
+    #        panel.grid.major=element_blank(),
+    #        legend.position=c(.1,.7),
+    #        legend.box = 'horizontal',
+    #        legend.box.just = 'left',
+    #        legend.background = element_rect(fill="grey",
+    #                                         size=0.5, linetype="solid", 
+    #                                         colour ="black"),
+    #        plot.title = element_text(size=14, face="bold.italic", 
+    #                                  hjust = 0.5))+
+    #  ylab(expression(paste("P fluxes (g C " * m^2 * " " * yr^-1 * ")")))+
+    #  scale_fill_manual(name=expression(P[fluxes]),
+    #                    values=c("PMIN"=Diverge_hsv_Palette[4],
+    #                             "PUP"=Diverge_hsv_Palette[2]),
+    #                    labels=c("PMIN"=expression(P[net]), 
+    #                             "PUP"=expression(P[upt])))+
+    #  scale_x_discrete(limit=c(mod.list, "multi-model", "obs"),
+    #                   label=c(model.labels, "multi-model"=expression(bold("M-M")),
+    #                           "obs" = expression(bold("OBS")))); p9
+    #
+    #
+    #p10 <- ggplot(data=plotDF3, 
+    #              aes(Group, meanvalue, group=Variable)) +
+    #  geom_bar(stat = "identity", aes(fill=Variable), 
+    #           position=position_dodge2(), col="black") +
+    #  geom_errorbar(aes(x=Group, ymin=meanvalue-sdvalue,
+    #                    ymax=meanvalue+sdvalue, grou=Variable), 
+    #                col="black", 
+    #                position=position_dodge2(), width=0.9)+
+    #  #geom_point(data=plotDF3, aes(x=Group, y=meanvalue), 
+    #  #         position=position_dodge2(width=0.9), col="black",
+    #  #         fill="white", size=2, pch=21)+
+    #  geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
+    #  xlab("")+
+    #  theme_linedraw() +
+    #  theme(panel.grid.minor=element_blank(),
+    #        #axis.text.x=element_text(size=14,angle = 45, 
+    #        #                         vjust = 1, hjust = 1),
+    #        axis.text.x=element_text(size=14),
+    #        axis.title.x=element_text(size=14),
+    #        axis.text.y=element_text(size=12),
+    #        axis.title.y=element_text(size=14),
+    #        legend.text=element_text(size=12),
+    #        legend.title=element_text(size=14),
+    #        panel.grid.major=element_blank(),
+    #        legend.position="none",
+    #        legend.box = 'horizontal',
+    #        legend.box.just = 'left',
+    #        plot.title = element_text(size=14, face="bold.italic", 
+    #                                  hjust = 0.5))+
+    #  ylab(expression(CO[2] * " effect (%)"))+
+    #  #scale_y_break(c(-400, -30, 50, 410))+
+    #  scale_fill_manual(name=expression(P[fluxes]),
+    #                    values=c("PMIN"=Diverge_hsv_Palette[4],
+    #                             "PUP"=Diverge_hsv_Palette[2]),
+    #                    labels=c("PMIN"=expression(P[net]), 
+    #                             "PUP"=expression(P[upt])))+
+    #  #ylim(c(-30, 50))+
+    #  scale_x_discrete(limit=c(mod.list, "multi-model", "obs"),
+    #                   label=c(model.labels, "multi-model"=expression(bold("M-M")),
+    #                           "obs" = expression(bold("OBS"))));p10
+    
+    
+    
+    ################## PUE ####################
     budgetDF <- prepare_P_budget_DF_for_time_averaged_data_model_intercomparison(eucDF=eucDF,
                                                                                  ambDF=ambDF.sum,
                                                                                  eleDF=eleDF.sum,
@@ -989,14 +1223,16 @@ plot_p_cycle_responses <- function(eucDF,
       geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
       theme_linedraw() +
       theme(panel.grid.minor=element_blank(),
-            axis.text.x=element_text(size=12),
+            #axis.text.x=element_text(size=14,angle = 45, 
+            #                         vjust = 1, hjust = 1),
+            axis.text.x=element_text(size=14),
             axis.title.x=element_text(size=14),
             axis.text.y=element_text(size=12),
             axis.title.y=element_text(size=14),
             legend.text=element_text(size=12),
             legend.title=element_text(size=14),
             panel.grid.major=element_blank(),
-            legend.position=c(.75,.8),
+            legend.position=c(.70,.8),
             legend.box = 'horizontal',
             legend.box.just = 'left',
             legend.background = element_rect(fill="grey",
@@ -1005,12 +1241,13 @@ plot_p_cycle_responses <- function(eucDF,
             plot.title = element_text(size=14, face="bold.italic", 
                                       hjust = 0.5))+
       ylab(expression("PUE (g " * C^-1 * " g " * P^-1 * ")"))+
+      xlab("")+
       scale_x_discrete(limit=c(mod.list, "multi-model", "obs"),
                        label=c(model.labels, "multi-model"=expression(bold("M-M")),
                                "obs" = expression(bold("OBS"))))+
       scale_fill_manual(name="Variable",
-                        values=c("PUE"=cbbPalette[4], 
-                                 "GPP_PUE"=cbbPalette[3]),
+                        values=c("PUE"=cbbPalette[2], 
+                                 "GPP_PUE"=cbbPalette[6]),
                         label=c("PUE"=expression(PUE[BP]),
                                 "GPP_PUE"=expression(PUE[GPP])))+
       guides(fill=guide_legend(nrow=2)); p11
@@ -1026,7 +1263,9 @@ plot_p_cycle_responses <- function(eucDF,
       xlab("")+
       theme_linedraw() +
       theme(panel.grid.minor=element_blank(),
-            axis.text.x=element_text(size=12),
+            #axis.text.x=element_text(size=14,angle = 45, 
+            #                         vjust = 1, hjust = 1),
+            axis.text.x=element_text(size=14),
             axis.title.x=element_text(size=14),
             axis.text.y=element_text(size=12),
             axis.title.y=element_text(size=14),
@@ -1038,91 +1277,25 @@ plot_p_cycle_responses <- function(eucDF,
             legend.box.just = 'left',
             plot.title = element_text(size=14, face="bold.italic", 
                                       hjust = 0.5))+
-      ylab(expression(CO[2] * " effect (absolute)"))+
+      ylab(expression(CO[2] * " effect (ele - amb)"))+
       scale_x_discrete(limit=c(mod.list, "multi-model", "obs"),
                        label=c(model.labels, "multi-model"=expression(bold("M-M")),
                                "obs" = expression(bold("OBS"))))+
       scale_fill_manual(name="Variable",
-                        values=c("PUE"=cbbPalette[4], 
-                                 "GPP_PUE"=cbbPalette[3]),
+                        values=c("PUE"=cbbPalette[2], 
+                                 "GPP_PUE"=cbbPalette[6]),
                         label=c("PUE"=expression(PUE[BP]),
                                 "GPP_PUE"=expression(PUE[GPP])))+
       guides(fill=guide_legend(nrow=2)); p12
     
     
-    #subDF1 <- subset(budgetDF, Variable%in%c("PUPREQ"))
-    #
-    #
-    #plotDF1 <- subDF1[subDF1$Trt=="aCO2",]
-    #plotDF2 <- subDF1[subDF1$Trt=="pct_diff",]
-    #
-    #
-    #### plotting 
-    #p7 <- ggplot(data=plotDF1, 
-    #             aes(Group, meanvalue)) +
-    #    geom_bar(stat = "identity", aes(fill=Group), 
-    #             position=position_dodge2(), col="black") +
-    #    geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
-    #    xlab("")+
-    #    theme_linedraw() +
-    #    theme(panel.grid.minor=element_blank(),
-    #          axis.text.x=element_text(size=12),
-    #          axis.title.x=element_text(size=14),
-    #          axis.text.y=element_text(size=12),
-    #          axis.title.y=element_text(size=14),
-    #          legend.text=element_text(size=12),
-    #          legend.title=element_text(size=14),
-    #          panel.grid.major=element_blank(),
-    #          legend.position="none",
-    #          legend.box = 'horizontal',
-    #          legend.box.just = 'left',
-    #          legend.background = element_rect(fill="grey",
-    #                                           size=0.5, linetype="solid", 
-    #                                           colour ="black"),
-    #          plot.title = element_text(size=14, face="bold.italic", 
-    #                                    hjust = 0.5))+
-    #    ylab(expression(P[up] * " / " * P[demand]))+
-    #  scale_fill_manual(name="Model",
-    #                    values=c(col.values, obs="black"),
-    #                    labels=c(model.labels, "obs"= "OBS"))+
-    #  guides(fill=guide_legend(nrow=6))+
-    #    scale_x_discrete(limit=c(mod.list, "obs"),
-    #                     label=c(model.labels, "obs" = expression(bold("OBS")))); p7
-    #
-    #
-    #p8 <- ggplot(data=plotDF2, 
-    #             aes(Group, meanvalue)) +
-    #    geom_bar(stat = "identity", aes(fill=Group), 
-    #             position=position_dodge2(), col="black") +
-    #    geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
-    #    xlab("")+
-    #    theme_linedraw() +
-    #    theme(panel.grid.minor=element_blank(),
-    #          axis.text.x=element_text(size=12),
-    #          axis.title.x=element_text(size=14),
-    #          axis.text.y=element_text(size=12),
-    #          axis.title.y=element_text(size=14),
-    #          legend.text=element_text(size=12),
-    #          legend.title=element_text(size=14),
-    #          panel.grid.major=element_blank(),
-    #          legend.position="none",
-    #          legend.box = 'horizontal',
-    #          legend.box.just = 'left',
-    #          plot.title = element_text(size=14, face="bold.italic", 
-    #                                    hjust = 0.5))+
-    #    ylab(expression(CO[2] * " effect (%)"))+
-    #  scale_fill_manual(name="Model",
-    #                    values=c(col.values, obs="black"),
-    #                    labels=c(model.labels, "obs"= "OBS"))+
-    #  guides(fill=guide_legend(nrow=6))+
-    #    scale_x_discrete(limit=c(mod.list, "obs"),
-    #                     label=c(model.labels, "obs" = expression(bold("OBS")))); p8
     
     
     
     ################# CP ratios ####################
-    subDF2 <- subset(budgetDF, Variable%in%c("CPL", "CPW", "CPFR", "CPFLIT", 
-                                             "CPSOIL"))
+    subDF2 <- subset(budgetDF, Variable%in%c("CPL", "CPW", "CPFR"#, "CPFLIT", 
+                                             #"CPSOIL"
+                                             ))
     
     
     plotDF1 <- subDF2[subDF2$Trt=="aCO2",]
@@ -1178,7 +1351,7 @@ plot_p_cycle_responses <- function(eucDF,
     
     
     ## stoichiometry
-    p9 <- ggplot(data=plotDF1, 
+    p13 <- ggplot(data=plotDF1, 
                  aes(Group, meanvalue, group=Variable)) +
       geom_bar(stat = "identity", aes(fill=Variable), 
                position="dodge", col="black") +
@@ -1190,7 +1363,9 @@ plot_p_cycle_responses <- function(eucDF,
       geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
       theme_linedraw() +
       theme(panel.grid.minor=element_blank(),
-            axis.text.x=element_text(size=12),
+            #axis.text.x=element_text(size=14,angle = 45, 
+            #                         vjust = 1, hjust = 1),
+            axis.text.x=element_text(size=14),
             axis.title.x=element_text(size=14),
             axis.text.y=element_text(size=12),
             axis.title.y=element_text(size=14),
@@ -1206,6 +1381,7 @@ plot_p_cycle_responses <- function(eucDF,
             plot.title = element_text(size=14, face="bold.italic", 
                                       hjust = 0.5))+
       ylab("CP stoichiometry")+
+      xlab("")+
       scale_x_discrete(limit=c(mod.list, "multi-model", "obs"),
                        label=c(model.labels, "multi-model"=expression(bold("M-M")),
                                "obs" = expression(bold("OBS"))))+
@@ -1220,12 +1396,12 @@ plot_p_cycle_responses <- function(eucDF,
                                 "CPFR"=expression(CP[froot]),
                                 "CPFLIT"=expression(CP[flit]),
                                 "CPSOIL"=expression(CP[soil])))+
-      guides(fill=guide_legend(nrow=2)); p9
+      guides(fill=guide_legend(nrow=2)); p13
     
     
     
     
-    p10 <- ggplot(data=plotDF2, 
+    p14 <- ggplot(data=plotDF2, 
                  aes(Group, meanvalue)) +
         geom_bar(stat = "identity", aes(fill=Variable), 
                  position=position_dodge2(), col="black") +
@@ -1233,7 +1409,9 @@ plot_p_cycle_responses <- function(eucDF,
         xlab("")+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
-              axis.text.x=element_text(size=12),
+              #axis.text.x=element_text(size=14,angle = 45, 
+              #                         vjust = 1, hjust = 1),
+              axis.text.x=element_text(size=14),
               axis.title.x=element_text(size=14),
               axis.text.y=element_text(size=12),
               axis.title.y=element_text(size=14),
@@ -1260,393 +1438,29 @@ plot_p_cycle_responses <- function(eucDF,
                                   "CPFR"=expression(CP[froot]),
                                   "CPFLIT"=expression(CP[flit]),
                                   "CPSOIL"=expression(CP[soil])))+
-        guides(fill=guide_legend(nrow=2)); p10
+        guides(fill=guide_legend(nrow=2)); p14
     
     
     
     
-    ################# PUE ####################
-    subDF1 <- subset(budgetDF, Variable%in%c("PUE"))
-    subDF1$meanvalue <- ifelse(is.infinite(subDF1$meanvalue), NA, subDF1$meanvalue)  
     
     
-    plotDF1 <- subDF1[subDF1$Trt=="aCO2",]
-    plotDF2 <- subDF1[subDF1$Trt=="pct_diff",]
+    ###########################################################################
     
-    
-    ## plot
-    p11 <- ggplot(data=plotDF1, 
-                 aes(Group, meanvalue, group=Group)) +
-      geom_bar(stat = "identity", aes(fill=Group), 
-               position="dodge", col="black") +
-      geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
-      theme_linedraw() +
-      theme(panel.grid.minor=element_blank(),
-            axis.text.x=element_text(size=12),
-            axis.title.x=element_text(size=14),
-            axis.text.y=element_text(size=12),
-            axis.title.y=element_text(size=14),
-            legend.text=element_text(size=12),
-            legend.title=element_text(size=14),
-            panel.grid.major=element_blank(),
-            legend.position="none",
-            legend.box = 'horizontal',
-            legend.box.just = 'left',
-            legend.background = element_rect(fill="grey",
-                                             size=0.5, linetype="solid", 
-                                             colour ="black"),
-            plot.title = element_text(size=14, face="bold.italic", 
-                                      hjust = 0.5))+
-      ylab(expression("PUE (g C " * g^-1 * " P)"))+
-      scale_x_discrete(limit=c(mod.list, "multi-model", "obs"),
-                       label=c(model.labels, "multi-model"=expression(bold("M-M")),
-                               "obs" = expression(bold("OBS"))))+
-      scale_fill_manual(name="Model",
-                        values=c(col.values, obs="black"),
-                        labels=c(model.labels, "obs"= "OBS"))+
-      guides(fill=guide_legend(nrow=6));p11
-    
-    
-    
-    
-    p12 <- ggplot(data=plotDF2, 
-                  aes(Group, meanvalue)) +
-      geom_bar(stat = "identity", aes(fill=Group), 
-               position=position_dodge2(), col="black") +
-      geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
-      xlab("")+
-      theme_linedraw() +
-      theme(panel.grid.minor=element_blank(),
-            axis.text.x=element_text(size=12),
-            axis.title.x=element_text(size=14),
-            axis.text.y=element_text(size=12),
-            axis.title.y=element_text(size=14),
-            legend.text=element_text(size=12),
-            legend.title=element_text(size=14),
-            panel.grid.major=element_blank(),
-            legend.position="none",
-            legend.box = 'horizontal',
-            legend.box.just = 'left',
-            plot.title = element_text(size=14, face="bold.italic", 
-                                      hjust = 0.5))+
-      ylab(expression(CO[2] * " effect (%)"))+
-      scale_x_discrete(limit=c(mod.list, "multi-model", "obs"),
-                       label=c(model.labels, "multi-model"=expression(bold("M-M")),
-                               "obs" = expression(bold("OBS"))))+
-      scale_fill_manual(name="Model",
-                        values=c(col.values, obs="black"),
-                        labels=c(model.labels, "obs"= "OBS"))+
-      guides(fill=guide_legend(nrow=6)); p12
-    
-    
-    
-    
-    ################# Plab and P mineralization flux####################
-    plabDF <- prepare_plot_DF_for_time_averaged_data_model_intercomparison(eucDF=eucDF,
-                                                                          ambDF=ambDF.sum,
-                                                                          eleDF=eleDF.sum,
-                                                                          difDF=annDF.diff.sum,
-                                                                          var.list=c("PLAB"),
-                                                                          calculate.total=F)
-  
-    
-    
-    ### split into ambDF, pctDF
-    plotDF1 <- plabDF[plabDF$Trt=="aCO2"&plabDF$Variable%in%c("PLAB"),]
-
-    plotDF2 <- plabDF[plabDF$Trt=="pct_diff",]
-    
-    ### ELMV1 assumes top 1 m soil, not top 10 cm
-    plotDF1$meanvalue[plotDF1$Group=="B_ELMV1"] <- plotDF1$meanvalue[plotDF1$Group=="B_ELMV1"]/ 10
-    plotDF1$sdvalue[plotDF1$Group=="B_ELMV1"] <- plotDF1$sdvalue[plotDF1$Group=="B_ELMV1"]/ 10
-    
-    
-    
-    ### add multi-model mean
-    tmpDF <- plotDF1[plotDF1$Group%in%c("A_GDAYP", "B_ELMV1",
-                                        "C_CABLP", "D_LPJGP",
-                                        "E_OCHDP", "F_QUINC",
-                                        "G_OCHDX", "H_QUJSM"),]
-    tmpDF2 <- summaryBy(meanvalue~Variable+Trt, FUN=c(mean,sd),
-                        na.rm=T, data=tmpDF, keep.names=T)
-    tmpDF2$Group <- "multi-model"
-    tmpDF2 <- tmpDF2[,c("Variable", "Group", "Trt", "meanvalue.mean", "meanvalue.sd")]
-    colnames(tmpDF2) <- c("Variable", "Group", "Trt", "meanvalue", "sdvalue")
-    
-    plotDF1 <- rbind(plotDF1, tmpDF2)
-    
-    ### add multi-model mean
-    tmpDF <- plotDF2[plotDF2$Group%in%c("A_GDAYP", "B_ELMV1",
-                                        "C_CABLP", "D_LPJGP",
-                                        "E_OCHDP", "F_QUINC",
-                                        "G_OCHDX", "H_QUJSM"),]
-    tmpDF2 <- summaryBy(meanvalue~Variable+Trt, FUN=c(mean,sd),
-                        na.rm=T, data=tmpDF, keep.names=T)
-    tmpDF2$Group <- "multi-model"
-    tmpDF2 <- tmpDF2[,c("Variable", "Group", "Trt", "meanvalue.mean", "meanvalue.sd")]
-    colnames(tmpDF2) <- c("Variable", "Group", "Trt", "meanvalue", "sdvalue")
-    
-    plotDF2 <- rbind(plotDF2, tmpDF2)
-    
-    
-    plotDF2$sdvalue[plotDF2$Group%in%c("A_GDAYP", "B_ELMV1",
-                                       "C_CABLP", "D_LPJGP",
-                                       "E_OCHDP", "F_QUINC",
-                                       "G_OCHDX", "H_QUJSM")] <- NA
-    
-    p13 <- ggplot(data=plotDF1, 
-                  aes(Group, meanvalue, group=Group)) +
-      geom_bar(stat = "identity", aes(fill=Group), 
-               position="dodge", col="black") +
-      geom_errorbar(data=plotDF1, 
-                    aes(x=Group, ymin=meanvalue-sdvalue,
-                        ymax=meanvalue+sdvalue), 
-                    col="black", 
-                    position=position_dodge2(), width=0.3)+
-      #geom_point(data=plotDF1, aes(x=Group, y=meanvalue), 
-      #           position=position_dodge2(width=0.9), col="black",
-      #           fill="white", size=2, pch=21)+
-      geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
-      theme_linedraw() +
-      #scale_y_break(c(2,10))+
-      theme(panel.grid.minor=element_blank(),
-            axis.text.x=element_text(size=12),
-            axis.title.x=element_text(size=14),
-            axis.text.y=element_text(size=12),
-            axis.title.y=element_text(size=14),
-            legend.text=element_text(size=12),
-            legend.title=element_text(size=14),
-            panel.grid.major=element_blank(),
-            legend.position="none",
-            legend.box = 'horizontal',
-            legend.box.just = 'left',
-            legend.background = element_rect(fill="grey",
-                                             size=0.5, linetype="solid", 
-                                             colour ="black"),
-            plot.title = element_text(size=14, face="bold.italic", 
-                                      hjust = 0.5))+
-      ylab(expression(P[lab] * " (g P " * m^-2 * ")"))+
-      scale_x_discrete(limit=c(mod.list, "multi-model", "obs"),
-                       label=c(model.labels, "multi-model"=expression(bold("M-M")),
-                               "obs" = expression(bold("OBS"))))+
-      scale_fill_manual(name="Model",
-                        values=c(col.values, obs="black"),
-                        labels=c(model.labels, "obs"= "OBS"))+
-      guides(fill=guide_legend(nrow=6));p13
-    
-    
-    
-    
-    p14 <- ggplot(data=plotDF2, 
-                  aes(Group, meanvalue)) +
-      geom_bar(stat = "identity", aes(fill=Group), 
-               position=position_dodge2(), col="black") +
-      geom_errorbar(data=plotDF2, 
-                    aes(x=Group, ymin=meanvalue-sdvalue,
-                        ymax=meanvalue+sdvalue), 
-                    col="black", 
-                    position=position_dodge2(), width=0.3)+
-      #geom_point(data=plotDF2, aes(x=Group, y=meanvalue), 
-      #           position=position_dodge2(width=0.9), col="black",
-      #           fill="white", size=2, pch=21)+
-      geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
-      xlab("")+
-      theme_linedraw() +
-      theme(panel.grid.minor=element_blank(),
-            axis.text.x=element_text(size=12),
-            axis.title.x=element_text(size=14),
-            axis.text.y=element_text(size=12),
-            axis.title.y=element_text(size=14),
-            legend.text=element_text(size=12),
-            legend.title=element_text(size=14),
-            panel.grid.major=element_blank(),
-            legend.position="none",
-            legend.box = 'horizontal',
-            legend.box.just = 'left',
-            plot.title = element_text(size=14, face="bold.italic", 
-                                      hjust = 0.5))+
-      ylab(expression(CO[2] * " effect (%)"))+
-      scale_x_discrete(limit=c(mod.list, "multi-model", "obs"),
-                       label=c(model.labels, "multi-model"=expression(bold("M-M")),
-                               "obs" = expression(bold("OBS"))))+
-      scale_fill_manual(name="Model",
-                        values=c(col.values, obs="black"),
-                        labels=c(model.labels, "obs"= "OBS"))+
-      guides(fill=guide_legend(nrow=6)); p14
-    
-    
-    
-    
-    #### Pmin
-    
-    pminDF <- prepare_plot_DF_for_time_averaged_data_model_intercomparison(eucDF=eucDF,
-                                                                           ambDF=ambDF.sum,
-                                                                           eleDF=eleDF.sum,
-                                                                           difDF=annDF.diff.sum,
-                                                                           var.list=c("PMIN", "PBIOCHMIN"),
-                                                                           calculate.total=T)
-    
-    
-    
-    pminDF <- pminDF[pminDF$Variable=="Tot",]
-    pminDF$Variable <- "PMIN"
-    
-    
-    ### split into ambDF, pctDF
-    plotDF1 <- pminDF[pminDF$Trt=="aCO2"&pminDF$Variable%in%c("PMIN"),]
-    
-    plotDF2 <- pminDF[pminDF$Trt=="pct_diff",]
-    
-    ### OCHDP and OCHDX: PMIN is the net P mineralization flux, ignoring biochemical mineralization;
-    ###                  PBIOCHMIN is the gross flux.
-    ###                  Easy solution is the subtract PBIOCHMIN from the total,
-    ###                  and because PBIOCHMIN = PMIN, we can just divide the total by 2
-    plotDF1$meanvalue[plotDF1$Group=="E_OCHDP"] <- plotDF1$meanvalue[plotDF1$Group=="E_OCHDP"]/ 2
-    plotDF1$meanvalue[plotDF1$Group=="G_OCHDX"] <- plotDF1$meanvalue[plotDF1$Group=="G_OCHDX"]/ 2
-    
-  
-    ### add multi-model mean
-    tmpDF <- plotDF1[plotDF1$Group%in%c("A_GDAYP", "B_ELMV1",
-                                        "C_CABLP", "D_LPJGP",
-                                        "E_OCHDP", "F_QUINC",
-                                        "G_OCHDX", "H_QUJSM"),]
-    tmpDF2 <- summaryBy(meanvalue~Variable+Trt, FUN=c(mean,sd),
-                        na.rm=T, data=tmpDF, keep.names=T)
-    tmpDF2$Group <- "multi-model"
-    tmpDF2 <- tmpDF2[,c("Variable", "Group", "Trt", "meanvalue.mean", "meanvalue.sd")]
-    colnames(tmpDF2) <- c("Variable", "Group", "Trt", "meanvalue", "sdvalue")
-    
-    plotDF1 <- rbind(plotDF1, tmpDF2)
-    
-    ### add multi-model mean
-    tmpDF <- plotDF2[plotDF2$Group%in%c("A_GDAYP", "B_ELMV1",
-                                        "C_CABLP", "D_LPJGP",
-                                        "E_OCHDP", "F_QUINC",
-                                        "G_OCHDX", "H_QUJSM"),]
-    tmpDF2 <- summaryBy(meanvalue~Variable+Trt, FUN=c(mean,sd),
-                        na.rm=T, data=tmpDF, keep.names=T)
-    tmpDF2$Group <- "multi-model"
-    tmpDF2 <- tmpDF2[,c("Variable", "Group", "Trt", "meanvalue.mean", "meanvalue.sd")]
-    colnames(tmpDF2) <- c("Variable", "Group", "Trt", "meanvalue", "sdvalue")
-    
-    plotDF2 <- rbind(plotDF2, tmpDF2)
-    
-    
-    plotDF2$sdvalue[plotDF2$Group%in%c("A_GDAYP", "B_ELMV1",
-                                       "C_CABLP", "D_LPJGP",
-                                       "E_OCHDP", "F_QUINC",
-                                       "G_OCHDX", "H_QUJSM")] <- NA
-    
-    p15 <- ggplot(data=plotDF1, 
-                  aes(Group, meanvalue, group=Group)) +
-      geom_bar(stat = "identity", aes(fill=Group), 
-               position="dodge", col="black") +
-      geom_errorbar(data=plotDF1, 
-                    aes(x=Group, ymin=meanvalue-sdvalue,
-                        ymax=meanvalue+sdvalue), 
-                    col="black", 
-                    position=position_dodge2(), width=0.3)+
-      #geom_point(data=plotDF1, aes(x=Group, y=meanvalue), 
-      #           position=position_dodge2(width=0.9), col="black",
-      #           fill="white", size=2, pch=21)+
-      geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
-      theme_linedraw() +
-      #scale_y_break(c(2,10))+
-      theme(panel.grid.minor=element_blank(),
-            axis.text.x=element_text(size=12),
-            axis.title.x=element_text(size=14),
-            axis.text.y=element_text(size=12),
-            axis.title.y=element_text(size=14),
-            legend.text=element_text(size=12),
-            legend.title=element_text(size=14),
-            panel.grid.major=element_blank(),
-            legend.position="none",
-            legend.box = 'horizontal',
-            legend.box.just = 'left',
-            legend.background = element_rect(fill="grey",
-                                             size=0.5, linetype="solid", 
-                                             colour ="black"),
-            plot.title = element_text(size=14, face="bold.italic", 
-                                      hjust = 0.5))+
-      ylab(expression(P[net] * " (g P " * m^-2 * " " * yr^-1 * ")"))+
-      scale_x_discrete(limit=c(mod.list, "multi-model", "obs"),
-                       label=c(model.labels, "multi-model"=expression(bold("M-M")),
-                               "obs" = expression(bold("OBS"))))+
-      scale_fill_manual(name="Model",
-                        values=c(col.values, obs="black"),
-                        labels=c(model.labels, "obs"= "OBS"))+
-      guides(fill=guide_legend(nrow=6));p15
-    
-    
-    
-    
-    p16 <- ggplot(data=plotDF2, 
-                  aes(Group, meanvalue)) +
-      geom_bar(stat = "identity", aes(fill=Group), 
-               position=position_dodge2(), col="black") +
-      geom_errorbar(data=plotDF2, 
-                    aes(x=Group, ymin=meanvalue-sdvalue,
-                        ymax=meanvalue+sdvalue), 
-                    col="black", 
-                    position=position_dodge2(), width=0.3)+
-      #geom_point(data=plotDF2, aes(x=Group, y=meanvalue), 
-      #           position=position_dodge2(width=0.9), col="black",
-      #           fill="white", size=2, pch=21)+
-      geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
-      xlab("")+
-      theme_linedraw() +
-      theme(panel.grid.minor=element_blank(),
-            axis.text.x=element_text(size=12),
-            axis.title.x=element_text(size=14),
-            axis.text.y=element_text(size=12),
-            axis.title.y=element_text(size=14),
-            legend.text=element_text(size=12),
-            legend.title=element_text(size=14),
-            panel.grid.major=element_blank(),
-            legend.position="none",
-            legend.box = 'horizontal',
-            legend.box.just = 'left',
-            plot.title = element_text(size=14, face="bold.italic", 
-                                      hjust = 0.5))+
-      ylab(expression(CO[2] * " effect (%)"))+
-      scale_x_discrete(limit=c(mod.list, "multi-model", "obs"),
-                       label=c(model.labels, "multi-model"=expression(bold("M-M")),
-                               "obs" = expression(bold("OBS"))))+
-      scale_fill_manual(name="Model",
-                        values=c(col.values, obs="black"),
-                        labels=c(model.labels, "obs"= "OBS"))+
-      guides(fill=guide_legend(nrow=6)); p16
-    
-    
-    pdf(paste0(out.dir, "/MIP_time_averaged_", scenario, "_comparison_P_variables.pdf"), 
-        width=16, height=16)
-    plot_grid(p1, p2,   # Pveg
-              p5, p6,   # pupt and pmin
-              #p11, p12, # PUE
-              #p9, p10,  # CP ratio
-              p13, p14, # Plab
+    pdf(paste0(out.dir, "/MIP_time_averaged_", scenario, "_comparison_P_use_variables.pdf"), 
+        width=16, height=20)
+    plot_grid(p11, p12, # PUE
+              p13, p14, # cp ratios
+              p7, p8,   # p uptake and resorption
+              p9, p10,  # Puptake and P min 
               labels=c("(a)", "(b)", "(c)", "(d)",
-                       "(e)", "(f)"), label_x=0.1, label_y=0.95,
+                       "(e)", "(f)", "(g)", "(h)"), label_x=0.1, label_y=0.95,
               label_size=24,
               ncol=2)
     dev.off()
     
     
-    pdf(paste0(out.dir, "/MIP_time_averaged_", scenario, "_comparison_P_variables_SI.pdf"), 
-        width=16, height=16)
-    plot_grid(p3, p4,   # Pgrowth
-              #p7, p8,   # Pupt over requirement
-              p11, p12, # PUE
-              p9, p10,  # CP ratio
-              
-              labels=c("(a)", "(b)",
-                       "(c)", "(d)",
-                       "(e)", "(f)"),
-                       #"(g)", "(h)"), 
-              label_x=0.1, label_y=0.95,
-              label_size=24,
-              ncol=2)
-    dev.off()
+   
     
 }
 
