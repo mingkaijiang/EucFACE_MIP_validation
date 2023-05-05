@@ -185,21 +185,12 @@ plot_plant_p_cycle_responses(eucDF,
 plot_soil_p_cycle_responses(eucDF,
                             scenario="VAR")
 
-
-## 2. check other soil P variables to plot - focus on soil P processes
-## 3. resolve problems with plant P demand decreased under eCO2 - i.e.
-## data uncertainty is large, and problem with excluding understorey
-## 4. 
-
-##########################################################################
-###      Investigate gross mineralization rate and its relationship to
-###     plant nutrient uptake.
-###     Expectation: microbial models should have a large component of
-###     the gross mineralization flux to be immobilized by microbes,
-###     and hence the ratio of plant nutrient uptake to gross mineralization
-###     is tiny.
-investigate_gross_mineralization(scenario="VAR")
-#investigate_gross_mineralization(scenario="FIX")
+## summary of results
+## 1. uncertainty range in data is large, 
+## 2. some signs of CO2 response in data are not easy to explain, possibly due to large uncertainty
+## 3. OCHDP and OCHDX have large Pnet flux;
+## 4. inconsistency in data and model regarding NEP, Pupt and Pnet, due to contribution of understorey
+## 5. 
 
 
 
@@ -215,31 +206,38 @@ prepare_microbial_model_input()
 
 
 ###   compare general variables
-scenario="FIX"
-compare_microbial_model_general_output(scenario="FIX")
+#scenario="FIX"
+#compare_microbial_model_general_output(scenario="FIX")
 
 scenario="VAR"
 compare_microbial_model_general_output(scenario="VAR")
 
 
 ###  Investigate the MIMICS-like ORCHX performance
-investigate_OCHDX_microbial_responses(scenario="FIX")
-
-investigate_OCHDX_microbial_responses(scenario="VAR")
-
-
-###   Investigate QUJSM
-investigate_QUJSM_microbial_responses(scenario="FIX")
-
-investigate_QUJSM_microbial_responses(scenario="VAR")
+#investigate_OCHDX_microbial_responses(scenario="FIX")
+#investigate_OCHDX_microbial_responses(scenario="VAR")
 
 
 ###   Combine the two
-investigate_microbial_responses(scenario="FIX", compare.to.obs=F)
-
+#investigate_microbial_responses(scenario="FIX", compare.to.obs=F)
+scenario="VAR"
+compare.to.obs=T
 investigate_microbial_responses(scenario="VAR", compare.to.obs=T)
 
+###   Investigate QUJSM
+#investigate_QUJSM_microbial_responses(scenario="FIX")
+investigate_QUJSM_microbial_responses(scenario="VAR")
 
+
+##########################################################################
+###      Investigate gross mineralization rate and its relationship to
+###     plant nutrient uptake.
+###     Expectation: microbial models should have a large component of
+###     the gross mineralization flux to be immobilized by microbes,
+###     and hence the ratio of plant nutrient uptake to gross mineralization
+###     is tiny.
+#investigate_gross_mineralization(scenario="VAR")
+#investigate_gross_mineralization(scenario="FIX")
 
 
 

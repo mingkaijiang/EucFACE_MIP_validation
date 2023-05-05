@@ -230,4 +230,72 @@ investigate_QUJSM_microbial_responses <- function (scenario) {
     
     
     
+    ### compare QUJSM soil P with data for all depths
+    subDF <- plotDF[plotDF$Variable%in%c("PMIC10", "PMIC30", "PMIC60"),]
+    
+    
+    ### add data
+    subDF2 <- data.frame("ModName"="obs",
+                         "Trt"=rep(c("amb", "ele"), each=3),
+                         "Variable"=rep(c("PMIC10", 
+                                          "PMIC30",
+                                          "PMIC60"), 2),
+                         "meanvalue"=c(3.43, 1.99+3.43, 0.55+1.99+3.43,
+                                       2.86, 2.38+2.86, 0.78+2.38+2.86),
+                         sdvalue=c(0.88, sqrt((0.88^2+0.54^2)/2), sqrt((0.88^2+0.54^2+0.17^2)/3),
+                                   0.24, sqrt((0.17^2+0.24^2)/2), sqrt((0.59^2+0.17^2+0.24^2)/3)))
+    
+    
+    plotDF2 <- rbind(subDF, subDF2)
+    
+    
+    
+    # New facet label names for supp variable
+    facet.labs <- c("QUJSM", "OBS")
+    names(facet.labs) <- c("H_QUJSM", "obs")
+    
+    facet.labs <- as_labeller(c(`H_QUJSM` = "QUJSM", `obs` = "OBS"))
+    
+    
+    p1 <- ggplot(data=plotDF2, 
+                 aes(Variable, meanvalue, group=Trt)) +
+        geom_bar(stat = "identity", aes(fill=Trt), 
+                 position=position_dodge(), col="black") +
+        geom_errorbar(stat = "identity", aes(ymin=meanvalue-sdvalue,
+                                             ymax=meanvalue+sdvalue), 
+                      position=position_dodge(width=0.8), width=0.5,
+                      col="black") +
+        facet_wrap(~ModName,labeller = facet.labs)+
+        theme_linedraw() +
+        theme(panel.grid.minor=element_blank(),
+              axis.text.x=element_text(size=12),
+              axis.title.x=element_text(size=14),
+              axis.text.y=element_text(size=12),
+              axis.title.y=element_text(size=14),
+              legend.text=element_text(size=12),
+              legend.title=element_text(size=14),
+              panel.grid.major=element_blank(),
+              legend.position="none",
+              legend.box = 'horizontal',
+              legend.box.just = 'left',
+              plot.title = element_text(size=14, face="bold.italic", 
+                                        hjust = 0.5))+
+        ylab(expression(paste(P[microbe] * " pools (g C " * m^2*")")))+
+        #scale_x_discrete(limit=c("amb","ele"),
+        #                 label=c("amb"= "AMB",
+        #                         "ele"= "ELE"))+
+        xlab("")+
+        #coord_cartesian(ylim=p1.y.range)+
+        scale_fill_manual(name="",
+                          values=c("amb"="blue3",
+                                   "ele"="red2"),
+                          labels=c("amb", "ele")); p1
+    
+
+    pdf(paste0(out.dir, "/QUJSM_microbial_pools_P.pdf"), 
+        width=6, height=4)
+    plot(p1)
+    dev.off()
+    
+    
 }

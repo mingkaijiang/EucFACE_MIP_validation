@@ -138,6 +138,67 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
                                     keep.names=T, na.rm=T)
     
     
+    
+    ### calculate multi-model mean
+    ## ambDF
+    n <- (dim(ambDF.sum)[2]-1)/2+1
+    tmpDF <- ambDF.sum[ambDF.sum$ModName=="A_GDAYP",]
+    tmpDF$ModName <- "I_MM"
+    subDF <- ambDF.sum[,1:n]
+    subDF$MM <- "I_MM"
+    
+    tmpDF1 <- summaryBy(.~MM, data=subDF, FUN=c(mean,sd),
+                        keep.names=T, na.rm=T)
+
+    names(tmpDF1) <- names(ambDF.sum)
+    ambDF.sum <- rbind(ambDF.sum, tmpDF1)
+    
+    
+    
+    ## eleDF
+    n <- (dim(eleDF.sum)[2]-1)/2+1
+    tmpDF <- eleDF.sum[eleDF.sum$ModName=="A_GDAYP",]
+    tmpDF$ModName <- "I_MM"
+    subDF <- eleDF.sum[,1:n]
+    subDF$MM <- "I_MM"
+    
+    tmpDF1 <- summaryBy(.~MM, data=subDF, FUN=c(mean,sd),
+                        keep.names=T, na.rm=T)
+    
+    names(tmpDF1) <- names(eleDF.sum)
+    eleDF.sum <- rbind(eleDF.sum, tmpDF1)
+    
+    
+    ## annDF.diff.sum
+    n <- (dim(annDF.diff.sum)[2]-1)/2+1
+    tmpDF <- annDF.diff.sum[annDF.diff.sum$ModName=="A_GDAYP",]
+    tmpDF$ModName <- "I_MM"
+    subDF <- annDF.diff.sum[,1:n]
+    subDF$MM <- "I_MM"
+    
+    tmpDF1 <- summaryBy(.~MM, data=subDF, FUN=c(mean,sd),
+                        keep.names=T, na.rm=T)
+    
+    names(tmpDF1) <- names(annDF.diff.sum)
+    annDF.diff.sum <- rbind(annDF.diff.sum, tmpDF1)
+    
+    
+    ## pctDF.diff.sum
+    n <- (dim(annDF.pct.diff.sum)[2]-1)/2+1
+    tmpDF <- annDF.pct.diff.sum[annDF.pct.diff.sum$ModName=="A_GDAYP",]
+    tmpDF$ModName <- "I_MM"
+    subDF <- annDF.pct.diff.sum[,1:n]
+    subDF$MM <- "I_MM"
+    
+    tmpDF1 <- summaryBy(.~MM, data=subDF, FUN=c(mean,sd),
+                        keep.names=T, na.rm=T)
+    
+    names(tmpDF1) <- names(annDF.pct.diff.sum)
+    annDF.pct.diff.sum <- rbind(annDF.pct.diff.sum, tmpDF1)
+    
+    
+    
+    
     ### get the list of models
     mod.list <- unique(ambDF.sum$ModName)
     nmod <- length(mod.list)
@@ -164,7 +225,8 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
                          "A_GDAYP"=NA, "B_ELMV1"=NA,
                          "C_CABLP"=NA, "D_LPJGP"=NA,
                          "E_OCHDP"=NA, "F_QUINC"=NA,
-                         "G_OCHDX"=NA, "H_QUJSM"=NA)
+                         "G_OCHDX"=NA, "H_QUJSM"=NA,
+                         "I_MM"=NA)
     
     outDF4 <- outDF3 <- outDF2 <- outDF1
     
@@ -321,6 +383,16 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
     subDF5.4 <- plotDF5[plotDF5$Variable%in%y.limits.sub.list4,]
     subDF5.5 <- plotDF5[plotDF5$Variable%in%y.limits.sub.list5,]
     
+    
+    model.labels <- c("A_GDAYP" = "GDAYP",
+                      "B_ELMV1" = "ELMV1",
+                      "C_CABLP" = "CABLP",
+                      "D_LPJGP" = "LPJGP",
+                      "E_OCHDP" = "OCDHP",
+                      "F_QUINC" = "QUINC",
+                      "G_OCHDX" = "OCHDX",
+                      "H_QUJSM" = "QUJSM",
+                      "I_MM" = "MM")
     
     
     ##################################################################

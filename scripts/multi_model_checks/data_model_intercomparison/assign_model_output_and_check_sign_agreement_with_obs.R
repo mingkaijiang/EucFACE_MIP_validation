@@ -37,6 +37,9 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
                                                        sign(obsDF$GPP[obsDF$Group=="mean"&obsDF$Trt==treatment]),
                                                    1, 0)
     
+    outDF$I_MM[outDF$Variable=="GPP"] <- ifelse(sign(modDF.sum$GPP.mean[modDF.sum$ModName=="I_MM"])==
+                                                       sign(obsDF$GPP[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                   1, 0)
     
     ### NPP
     outDF$A_GDAYP[outDF$Variable=="NPP"] <- ifelse(sign(modDF.sum$NPP.mean[modDF.sum$ModName=="A_GDAYP"])==
@@ -69,6 +72,10 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
                                                    1, 0)
     
     outDF$H_QUJSM[outDF$Variable=="NPP"] <- ifelse(sign(modDF.sum$NPP.mean[modDF.sum$ModName=="H_QUJSM"])==
+                                                       sign(obsDF$NPP[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                   1, 0)
+    
+    outDF$I_MM[outDF$Variable=="NPP"] <- ifelse(sign(modDF.sum$NPP.mean[modDF.sum$ModName=="I_MM"])==
                                                        sign(obsDF$NPP[obsDF$Group=="mean"&obsDF$Trt==treatment]),
                                                    1, 0)
     
@@ -106,6 +113,10 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
                                                        sign(obsDF$NEP[obsDF$Group=="mean"&obsDF$Trt==treatment]),
                                                    1, 0)
     
+    outDF$I_MM[outDF$Variable=="NEP"] <- ifelse(sign(modDF.sum$NEP.mean[modDF.sum$ModName=="I_MM"])==
+                                                       sign(obsDF$NEP[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                   1, 0)
+    
     ### RHET
     outDF$A_GDAYP[outDF$Variable=="RHET"] <- ifelse(sign(modDF.sum$RHET.mean[modDF.sum$ModName=="A_GDAYP"])==
                                                        sign(obsDF$RHET[obsDF$Group=="mean"&obsDF$Trt==treatment]),
@@ -139,6 +150,10 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
     outDF$H_QUJSM[outDF$Variable=="RHET"] <- ifelse(sign(modDF.sum$RHET.mean[modDF.sum$ModName=="H_QUJSM"])==
                                                        sign(obsDF$RHET[obsDF$Group=="mean"&obsDF$Trt==treatment]),
                                                    1, 0)
+    
+    outDF$I_MM[outDF$Variable=="RHET"] <- ifelse(sign(modDF.sum$RHET.mean[modDF.sum$ModName=="I_MM"])==
+                                                        sign(obsDF$RHET[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                    1, 0)
     
     ### BP
     outDF$A_GDAYP[outDF$Variable=="BP"] <- ifelse(sign(modDF.sum$BP.mean[modDF.sum$ModName=="A_GDAYP"])==
@@ -174,6 +189,10 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
                                                        sign(obsDF$BP[obsDF$Group=="mean"&obsDF$Trt==treatment]),
                                                    1, 0)
     
+    outDF$I_MM[outDF$Variable=="BP"] <- ifelse(sign(modDF.sum$BP.mean[modDF.sum$ModName=="I_MM"])==
+                                                      sign(obsDF$BP[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                  1, 0)
+    
     ### deltaCL
     outDF$A_GDAYP[outDF$Variable=="deltaCL"] <- ifelse(sign(modDF.sum$deltaCL.mean[modDF.sum$ModName=="A_GDAYP"])==
                                                        sign(obsDF$deltaCL[obsDF$Group=="mean"&obsDF$Trt==treatment]),
@@ -207,6 +226,12 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
     outDF$H_QUJSM[outDF$Variable=="deltaCL"] <- ifelse(sign(modDF.sum$deltaCL.mean[modDF.sum$ModName=="H_QUJSM"])==
                                                        sign(obsDF$deltaCL[obsDF$Group=="mean"&obsDF$Trt==treatment]),
                                                    1, 0)
+    
+    
+    outDF$I_MM[outDF$Variable=="deltaCL"] <- ifelse(sign(modDF.sum$deltaCL.mean[modDF.sum$ModName=="I_MM"])==
+                                                           sign(obsDF$deltaCL[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                       1, 0)
+    
     
     ### deltaCW
     outDF$A_GDAYP[outDF$Variable=="deltaCW"] <- ifelse(sign(modDF.sum$deltaCW.mean[modDF.sum$ModName=="A_GDAYP"])==
@@ -242,6 +267,10 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
                                                        sign(obsDF$deltaCW[obsDF$Group=="mean"&obsDF$Trt==treatment]),
                                                    1, 0)
     
+    outDF$I_MM[outDF$Variable=="deltaCW"] <- ifelse(sign(modDF.sum$deltaCW.mean[modDF.sum$ModName=="I_MM"])==
+                                                           sign(obsDF$deltaCW[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                       1, 0)
+    
     ### deltaCFR
     outDF$A_GDAYP[outDF$Variable=="deltaCFR"] <- ifelse(sign(modDF.sum$deltaCFR.mean[modDF.sum$ModName=="A_GDAYP"])==
                                                        sign(obsDF$deltaCFR[obsDF$Group=="mean"&obsDF$Trt==treatment]),
@@ -275,6 +304,10 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
     outDF$H_QUJSM[outDF$Variable=="deltaCFR"] <- ifelse(sign(modDF.sum$deltaCFR.mean[modDF.sum$ModName=="H_QUJSM"])==
                                                        sign(obsDF$deltaCFR[obsDF$Group=="mean"&obsDF$Trt==treatment]),
                                                    1, 0)
+    
+    outDF$I_MM[outDF$Variable=="deltaCFR"] <- ifelse(sign(modDF.sum$deltaCFR.mean[modDF.sum$ModName=="I_MM"])==
+                                                            sign(obsDF$deltaCFR[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                        1, 0)
     
     ### deltaCCR
     outDF$A_GDAYP[outDF$Variable=="deltaCCR"] <- ifelse(sign(modDF.sum$deltaCCR.mean[modDF.sum$ModName=="A_GDAYP"])==
@@ -310,6 +343,11 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
                                                        sign(obsDF$deltaCCR[obsDF$Group=="mean"&obsDF$Trt==treatment]),
                                                    1, 0)
     
+    outDF$I_MM[outDF$Variable=="deltaCCR"] <- ifelse(sign(modDF.sum$deltaCCR.mean[modDF.sum$ModName=="I_MM"])==
+                                                            sign(obsDF$deltaCCR[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                        1, 0)
+    
+    
     ### deltaCFLITA
     outDF$A_GDAYP[outDF$Variable=="deltaCFLITA"] <- ifelse(sign(modDF.sum$deltaCFLITA.mean[modDF.sum$ModName=="A_GDAYP"])==
                                                        sign(obsDF$deltaCFLITA[obsDF$Group=="mean"&obsDF$Trt==treatment]),
@@ -343,6 +381,10 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
     outDF$H_QUJSM[outDF$Variable=="deltaCFLITA"] <- ifelse(sign(modDF.sum$deltaCFLITA.mean[modDF.sum$ModName=="H_QUJSM"])==
                                                        sign(obsDF$deltaCFLITA[obsDF$Group=="mean"&obsDF$Trt==treatment]),
                                                    1, 0)
+    
+    outDF$I_MM[outDF$Variable=="deltaCFLITA"] <- ifelse(sign(modDF.sum$deltaCFLITA.mean[modDF.sum$ModName=="I_MM"])==
+                                                               sign(obsDF$deltaCFLITA[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                           1, 0)
     
     ### deltaCMIC
     #outDF$A_GDAYP[outDF$Variable=="deltaCMIC"] <- ifelse(modDF.sum$deltaCMIC.mean[modDF.sum$ModName=="A_GDAYP"]<=
@@ -444,6 +486,10 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
                                                        sign(obsDF$CGL[obsDF$Group=="mean"&obsDF$Trt==treatment]),
                                                    1, 0)
     
+    outDF$I_MM[outDF$Variable=="CGL"] <- ifelse(sign(modDF.sum$CGL.mean[modDF.sum$ModName=="I_MM"])==
+                                                       sign(obsDF$CGL[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                   1, 0)
+    
     ### CGW
     outDF$A_GDAYP[outDF$Variable=="CGW"] <- ifelse(sign(modDF.sum$CGW.mean[modDF.sum$ModName=="A_GDAYP"])==
                                                        sign(obsDF$CGW[obsDF$Group=="mean"&obsDF$Trt==treatment]),
@@ -475,6 +521,10 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
                                                    1, 0)
     
     outDF$H_QUJSM[outDF$Variable=="CGW"] <- ifelse(sign(modDF.sum$CGW.mean[modDF.sum$ModName=="H_QUJSM"])==
+                                                       sign(obsDF$CGW[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                   1, 0)
+    
+    outDF$I_MM[outDF$Variable=="CGW"] <- ifelse(sign(modDF.sum$CGW.mean[modDF.sum$ModName=="I_MM"])==
                                                        sign(obsDF$CGW[obsDF$Group=="mean"&obsDF$Trt==treatment]),
                                                    1, 0)
     
@@ -512,6 +562,10 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
                                                        sign(obsDF$CGFR[obsDF$Group=="mean"&obsDF$Trt==treatment]),
                                                    1, 0)
     
+    outDF$I_MM[outDF$Variable=="CGFR"] <- ifelse(sign(modDF.sum$CGFR.mean[modDF.sum$ModName=="I_MM"])==
+                                                        sign(obsDF$CGFR[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                    1, 0)
+    
     ### CGCR
     outDF$A_GDAYP[outDF$Variable=="CGCR"] <- ifelse(sign(modDF.sum$CGCR.mean[modDF.sum$ModName=="A_GDAYP"])==
                                                        sign(obsDF$CGCR[obsDF$Group=="mean"&obsDF$Trt==treatment]),
@@ -546,6 +600,10 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
                                                        sign(obsDF$CGCR[obsDF$Group=="mean"&obsDF$Trt==treatment]),
                                                    1, 0)
     
+    outDF$I_MM[outDF$Variable=="CGCR"] <- ifelse(sign(modDF.sum$CGCR.mean[modDF.sum$ModName=="I_MM"])==
+                                                        sign(obsDF$CGCR[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                    1, 0)
+    
     ### LAI
     outDF$A_GDAYP[outDF$Variable=="LAI"] <- ifelse(sign(modDF.sum$LAI.mean[modDF.sum$ModName=="A_GDAYP"])==
                                                        sign(obsDF$LAI[obsDF$Group=="mean"&obsDF$Trt==treatment]),
@@ -577,6 +635,10 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
                                                    1, 0)
     
     outDF$H_QUJSM[outDF$Variable=="LAI"] <- ifelse(sign(modDF.sum$LAI.mean[modDF.sum$ModName=="H_QUJSM"])==
+                                                       sign(obsDF$LAI[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                   1, 0)
+    
+    outDF$I_MM[outDF$Variable=="LAI"] <- ifelse(sign(modDF.sum$LAI.mean[modDF.sum$ModName=="I_MM"])==
                                                        sign(obsDF$LAI[obsDF$Group=="mean"&obsDF$Trt==treatment]),
                                                    1, 0)
     
@@ -614,6 +676,11 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
                                                        sign(obsDF$CL[obsDF$Group=="mean"&obsDF$Trt==treatment]),
                                                    1, 0)
     
+    outDF$I_MM[outDF$Variable=="CL"] <- ifelse(sign(modDF.sum$CL.mean[modDF.sum$ModName=="I_MM"])==
+                                                      sign(obsDF$CL[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                  1, 0)
+    
+    
     ### CW
     outDF$A_GDAYP[outDF$Variable=="CW"] <- ifelse(sign(modDF.sum$CW.mean[modDF.sum$ModName=="A_GDAYP"])==
                                                        sign(obsDF$CW[obsDF$Group=="mean"&obsDF$Trt==treatment]),
@@ -647,6 +714,11 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
     outDF$H_QUJSM[outDF$Variable=="CW"] <- ifelse(sign(modDF.sum$CW.mean[modDF.sum$ModName=="H_QUJSM"])==
                                                        sign(obsDF$CW[obsDF$Group=="mean"&obsDF$Trt==treatment]),
                                                    1, 0)
+    
+    outDF$I_MM[outDF$Variable=="CW"] <- ifelse(sign(modDF.sum$CW.mean[modDF.sum$ModName=="I_MM"])==
+                                                      sign(obsDF$CW[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                  1, 0)
+    
     
     ### CFR
     outDF$A_GDAYP[outDF$Variable=="CFR"] <- ifelse(sign(modDF.sum$CFR.mean[modDF.sum$ModName=="A_GDAYP"])==
@@ -682,6 +754,11 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
                                                        sign(obsDF$CFR[obsDF$Group=="mean"&obsDF$Trt==treatment]),
                                                    1, 0)
     
+    outDF$I_MM[outDF$Variable=="CFR"] <- ifelse(sign(modDF.sum$CFR.mean[modDF.sum$ModName=="I_MM"])==
+                                                       sign(obsDF$CFR[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                   1, 0)
+    
+    
     ### CCR
     outDF$A_GDAYP[outDF$Variable=="CCR"] <- ifelse(sign(modDF.sum$CCR.mean[modDF.sum$ModName=="A_GDAYP"])==
                                                        sign(obsDF$CCR[obsDF$Group=="mean"&obsDF$Trt==treatment]),
@@ -713,6 +790,10 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
                                                    1, 0)
     
     outDF$H_QUJSM[outDF$Variable=="CCR"] <- ifelse(sign(modDF.sum$CCR.mean[modDF.sum$ModName=="H_QUJSM"])==
+                                                       sign(obsDF$CCR[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                   1, 0)
+    
+    outDF$I_MM[outDF$Variable=="CCR"] <- ifelse(sign(modDF.sum$CCR.mean[modDF.sum$ModName=="I_MM"])==
                                                        sign(obsDF$CCR[obsDF$Group=="mean"&obsDF$Trt==treatment]),
                                                    1, 0)
     
@@ -749,6 +830,10 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
     outDF$H_QUJSM[outDF$Variable=="CFLITA"] <- ifelse(sign(modDF.sum$CFLITA.mean[modDF.sum$ModName=="H_QUJSM"])==
                                                        sign(obsDF$CFLITA[obsDF$Group=="mean"&obsDF$Trt==treatment]),
                                                    1, 0)
+    
+    outDF$I_MM[outDF$Variable=="CFLITA"] <- ifelse(sign(modDF.sum$CFLITA.mean[modDF.sum$ModName=="I_MM"])==
+                                                          sign(obsDF$CFLITA[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                      1, 0)
     
     ### CMIC
     #outDF$A_GDAYP[outDF$Variable=="CMIC"] <- ifelse(modDF.sum$CMIC.mean[modDF.sum$ModName=="A_GDAYP"]<=
@@ -850,6 +935,12 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
                                                        sign(obsDF$CSOIL[obsDF$Group=="mean"&obsDF$Trt==treatment]),
                                                    1, 0)
     
+    outDF$I_MM[outDF$Variable=="CSOIL"] <- ifelse(sign(modDF.sum$CSOIL.mean[modDF.sum$ModName=="I_MM"])==
+                                                         sign(obsDF$CSOIL[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                     1, 0)
+    
+    
+    
     ### PL
     outDF$A_GDAYP[outDF$Variable=="PL"] <- ifelse(sign(modDF.sum$PL.mean[modDF.sum$ModName=="A_GDAYP"])==
                                                        sign(obsDF$PL[obsDF$Group=="mean"&obsDF$Trt==treatment]),
@@ -883,6 +974,12 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
     outDF$H_QUJSM[outDF$Variable=="PL"] <- ifelse(sign(modDF.sum$PL.mean[modDF.sum$ModName=="H_QUJSM"])==
                                                        sign(obsDF$PL[obsDF$Group=="mean"&obsDF$Trt==treatment]),
                                                    1, 0)
+    
+    outDF$I_MM[outDF$Variable=="PL"] <- ifelse(sign(modDF.sum$PL.mean[modDF.sum$ModName=="I_MM"])==
+                                                      sign(obsDF$PL[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                  1, 0)
+    
+    
     
     ### PW
     outDF$A_GDAYP[outDF$Variable=="PW"] <- ifelse(sign(modDF.sum$PW.mean[modDF.sum$ModName=="A_GDAYP"])==
@@ -918,6 +1015,11 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
                                                        sign(obsDF$PW[obsDF$Group=="mean"&obsDF$Trt==treatment]),
                                                    1, 0)
     
+    outDF$I_MM[outDF$Variable=="PW"] <- ifelse(sign(modDF.sum$PW.mean[modDF.sum$ModName=="I_MM"])==
+                                                      sign(obsDF$PW[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                  1, 0)
+    
+    
     ### PFR
     outDF$A_GDAYP[outDF$Variable=="PFR"] <- ifelse(sign(modDF.sum$PFR.mean[modDF.sum$ModName=="A_GDAYP"])==
                                                        sign(obsDF$PFR[obsDF$Group=="mean"&obsDF$Trt==treatment]),
@@ -951,6 +1053,12 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
     outDF$H_QUJSM[outDF$Variable=="PFR"] <- ifelse(sign(modDF.sum$PFR.mean[modDF.sum$ModName=="H_QUJSM"])==
                                                        sign(obsDF$PFR[obsDF$Group=="mean"&obsDF$Trt==treatment]),
                                                    1, 0)
+    
+    outDF$I_MM[outDF$Variable=="PFR"] <- ifelse(sign(modDF.sum$PFR.mean[modDF.sum$ModName=="I_MM"])==
+                                                       sign(obsDF$PFR[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                   1, 0)
+    
+    
     
     ### PCR
     outDF$A_GDAYP[outDF$Variable=="PCR"] <- ifelse(sign(modDF.sum$PCR.mean[modDF.sum$ModName=="A_GDAYP"])==
@@ -986,6 +1094,12 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
                                                        sign(obsDF$PCR[obsDF$Group=="mean"&obsDF$Trt==treatment]),
                                                    1, 0)
     
+    outDF$I_MM[outDF$Variable=="PCR"] <- ifelse(sign(modDF.sum$PCR.mean[modDF.sum$ModName=="I_MM"])==
+                                                       sign(obsDF$PCR[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                   1, 0)
+    
+    
+    
     ### PFLITA
     outDF$A_GDAYP[outDF$Variable=="PFLITA"] <- ifelse(sign(modDF.sum$PFLITA.mean[modDF.sum$ModName=="A_GDAYP"])==
                                                        sign(obsDF$PFLITA[obsDF$Group=="mean"&obsDF$Trt==treatment]),
@@ -1019,6 +1133,12 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
     outDF$H_QUJSM[outDF$Variable=="PFLITA"] <- ifelse(sign(modDF.sum$PFLITA.mean[modDF.sum$ModName=="H_QUJSM"])==
                                                        sign(obsDF$PFLITA[obsDF$Group=="mean"&obsDF$Trt==treatment]),
                                                    1, 0)
+    
+    outDF$I_MM[outDF$Variable=="PFLITA"] <- ifelse(sign(modDF.sum$PFLITA.mean[modDF.sum$ModName=="I_MM"])==
+                                                          sign(obsDF$PFLITA[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                      1, 0)
+    
+    
     
     ### PSOIL
     outDF$A_GDAYP[outDF$Variable=="PSOIL"] <- ifelse(sign(modDF.sum$PSOIL.mean[modDF.sum$ModName=="A_GDAYP"])==
@@ -1054,6 +1174,12 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
                                                        sign(obsDF$PSOIL[obsDF$Group=="mean"&obsDF$Trt==treatment]),
                                                    1, 0)
     
+    outDF$I_MM[outDF$Variable=="PSOIL"] <- ifelse(sign(modDF.sum$PSOIL.mean[modDF.sum$ModName=="I_MM"])==
+                                                         sign(obsDF$PSOIL[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                     1, 0)
+    
+    
+    
     ### PPORG
     outDF$A_GDAYP[outDF$Variable=="PPORG"] <- ifelse(sign(modDF.sum$PPORG.mean[modDF.sum$ModName=="A_GDAYP"])==
                                                        sign(obsDF$PPORG[obsDF$Group=="mean"&obsDF$Trt==treatment]),
@@ -1087,6 +1213,12 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
     outDF$H_QUJSM[outDF$Variable=="PPORG"] <- ifelse(sign(modDF.sum$PPORG.mean[modDF.sum$ModName=="H_QUJSM"])==
                                                        sign(obsDF$PPORG[obsDF$Group=="mean"&obsDF$Trt==treatment]),
                                                    1, 0)
+    
+    outDF$I_MM[outDF$Variable=="PPORG"] <- ifelse(sign(modDF.sum$PPORG.mean[modDF.sum$ModName=="I_MM"])==
+                                                         sign(obsDF$PPORG[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                     1, 0)
+    
+    
     
     ### PPMIN
     outDF$A_GDAYP[outDF$Variable=="PPMIN"] <- ifelse(sign(modDF.sum$PPMIN.mean[modDF.sum$ModName=="A_GDAYP"])==
@@ -1122,6 +1254,12 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
                                                        sign(obsDF$PPMIN[obsDF$Group=="mean"&obsDF$Trt==treatment]),
                                                    1, 0)
     
+    outDF$I_MM[outDF$Variable=="PPMIN"] <- ifelse(sign(modDF.sum$PPMIN.mean[modDF.sum$ModName=="I_MM"])==
+                                                         sign(obsDF$PPMIN[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                     1, 0)
+    
+    
+    
     ### PDEM
     outDF$A_GDAYP[outDF$Variable=="PDEM"] <- ifelse(sign(modDF.sum$PDEM.mean[modDF.sum$ModName=="A_GDAYP"])==
                                                        sign(obsDF$PDEM[obsDF$Group=="mean"&obsDF$Trt==treatment]),
@@ -1155,6 +1293,12 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
     outDF$H_QUJSM[outDF$Variable=="PDEM"] <- ifelse(sign(modDF.sum$PDEM.mean[modDF.sum$ModName=="H_QUJSM"])==
                                                        sign(obsDF$PDEM[obsDF$Group=="mean"&obsDF$Trt==treatment]),
                                                    1, 0)
+    
+    outDF$I_MM[outDF$Variable=="PDEM"] <- ifelse(sign(modDF.sum$PDEM.mean[modDF.sum$ModName=="I_MM"])==
+                                                        sign(obsDF$PDEM[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                    1, 0)
+    
+    
     
     ### PGL
     outDF$A_GDAYP[outDF$Variable=="PGL"] <- ifelse(sign(modDF.sum$PGL.mean[modDF.sum$ModName=="A_GDAYP"])==
@@ -1190,6 +1334,12 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
                                                        sign(obsDF$PGL[obsDF$Group=="mean"&obsDF$Trt==treatment]),
                                                    1, 0)
     
+    outDF$I_MM[outDF$Variable=="PGL"] <- ifelse(sign(modDF.sum$PGL.mean[modDF.sum$ModName=="I_MM"])==
+                                                       sign(obsDF$PGL[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                   1, 0)
+    
+    
+    
     ### PGW
     outDF$A_GDAYP[outDF$Variable=="PGW"] <- ifelse(sign(modDF.sum$PGW.mean[modDF.sum$ModName=="A_GDAYP"])==
                                                        sign(obsDF$PGW[obsDF$Group=="mean"&obsDF$Trt==treatment]),
@@ -1223,6 +1373,12 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
     outDF$H_QUJSM[outDF$Variable=="PGW"] <- ifelse(sign(modDF.sum$PGW.mean[modDF.sum$ModName=="H_QUJSM"])==
                                                        sign(obsDF$PGW[obsDF$Group=="mean"&obsDF$Trt==treatment]),
                                                    1, 0)
+    
+    outDF$I_MM[outDF$Variable=="PGW"] <- ifelse(sign(modDF.sum$PGW.mean[modDF.sum$ModName=="I_MM"])==
+                                                       sign(obsDF$PGW[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                   1, 0)
+    
+    
     
     ### PGFR
     outDF$A_GDAYP[outDF$Variable=="PGFR"] <- ifelse(sign(modDF.sum$PGFR.mean[modDF.sum$ModName=="A_GDAYP"])==
@@ -1258,6 +1414,12 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
                                                        sign(obsDF$PGFR[obsDF$Group=="mean"&obsDF$Trt==treatment]),
                                                    1, 0)
     
+    outDF$I_MM[outDF$Variable=="PGFR"] <- ifelse(sign(modDF.sum$PGFR.mean[modDF.sum$ModName=="I_MM"])==
+                                                        sign(obsDF$PGFR[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                    1, 0)
+    
+    
+    
     ### PGCR
     outDF$A_GDAYP[outDF$Variable=="PGCR"] <- ifelse(sign(modDF.sum$PGCR.mean[modDF.sum$ModName=="A_GDAYP"])==
                                                        sign(obsDF$PGCR[obsDF$Group=="mean"&obsDF$Trt==treatment]),
@@ -1291,6 +1453,12 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
     outDF$H_QUJSM[outDF$Variable=="PGCR"] <- ifelse(sign(modDF.sum$PGCR.mean[modDF.sum$ModName=="H_QUJSM"])==
                                                        sign(obsDF$PGCR[obsDF$Group=="mean"&obsDF$Trt==treatment]),
                                                    1, 0)
+    
+    outDF$I_MM[outDF$Variable=="PGCR"] <- ifelse(sign(modDF.sum$PGCR.mean[modDF.sum$ModName=="I_MM"])==
+                                                        sign(obsDF$PGCR[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                    1, 0)
+    
+    
     
     ### PLITIN
     outDF$A_GDAYP[outDF$Variable=="PLITIN"] <- ifelse(sign(modDF.sum$PLITIN.mean[modDF.sum$ModName=="A_GDAYP"])==
@@ -1326,6 +1494,12 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
                                                        sign(obsDF$PLITIN[obsDF$Group=="mean"&obsDF$Trt==treatment]),
                                                    1, 0)
     
+    outDF$I_MM[outDF$Variable=="PLITIN"] <- ifelse(sign(modDF.sum$PLITIN.mean[modDF.sum$ModName=="I_MM"])==
+                                                          sign(obsDF$PLITIN[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                      1, 0)
+    
+    
+    
     ### PWLIN
     outDF$A_GDAYP[outDF$Variable=="PWLIN"] <- ifelse(sign(modDF.sum$PWLIN.mean[modDF.sum$ModName=="A_GDAYP"])==
                                                        sign(obsDF$PWLIN[obsDF$Group=="mean"&obsDF$Trt==treatment]),
@@ -1359,6 +1533,12 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
     outDF$H_QUJSM[outDF$Variable=="PWLIN"] <- ifelse(sign(modDF.sum$PWLIN.mean[modDF.sum$ModName=="H_QUJSM"])==
                                                        sign(obsDF$PWLIN[obsDF$Group=="mean"&obsDF$Trt==treatment]),
                                                    1, 0)
+    
+    outDF$I_MM[outDF$Variable=="PWLIN"] <- ifelse(sign(modDF.sum$PWLIN.mean[modDF.sum$ModName=="I_MM"])==
+                                                         sign(obsDF$PWLIN[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                     1, 0)
+    
+    
     
     ### PFRLIN
     outDF$A_GDAYP[outDF$Variable=="PFRLIN"] <- ifelse(sign(modDF.sum$PFRLIN.mean[modDF.sum$ModName=="A_GDAYP"])==
@@ -1394,6 +1574,12 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
                                                        sign(obsDF$PFRLIN[obsDF$Group=="mean"&obsDF$Trt==treatment]),
                                                    1, 0)
     
+    outDF$I_MM[outDF$Variable=="PFRLIN"] <- ifelse(sign(modDF.sum$PFRLIN.mean[modDF.sum$ModName=="I_MM"])==
+                                                          sign(obsDF$PFRLIN[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                      1, 0)
+    
+    
+    
     ### PLAB
     outDF$A_GDAYP[outDF$Variable=="PLAB"] <- ifelse(sign(modDF.sum$PLAB.mean[modDF.sum$ModName=="A_GDAYP"])==
                                                        sign(obsDF$PLAB[obsDF$Group=="mean"&obsDF$Trt==treatment]),
@@ -1427,6 +1613,12 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
     outDF$H_QUJSM[outDF$Variable=="PLAB"] <- ifelse(sign(modDF.sum$PLAB.mean[modDF.sum$ModName=="H_QUJSM"])==
                                                        sign(obsDF$PLAB[obsDF$Group=="mean"&obsDF$Trt==treatment]),
                                                    1, 0)
+    
+    outDF$I_MM[outDF$Variable=="PLAB"] <- ifelse(sign(modDF.sum$PLAB.mean[modDF.sum$ModName=="I_MM"])==
+                                                        sign(obsDF$PLAB[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                    1, 0)
+    
+    
     
     ### PSEC
     outDF$A_GDAYP[outDF$Variable=="PSEC"] <- ifelse(sign(modDF.sum$PSEC.mean[modDF.sum$ModName=="A_GDAYP"])==
@@ -1462,6 +1654,12 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
                                                        sign(obsDF$PSEC[obsDF$Group=="mean"&obsDF$Trt==treatment]),
                                                    1, 0)
     
+    outDF$I_MM[outDF$Variable=="PSEC"] <- ifelse(sign(modDF.sum$PSEC.mean[modDF.sum$ModName=="I_MM"])==
+                                                        sign(obsDF$PSEC[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                    1, 0)
+    
+    
+    
     ### POCC
     outDF$A_GDAYP[outDF$Variable=="POCC"] <- ifelse(sign(modDF.sum$POCC.mean[modDF.sum$ModName=="A_GDAYP"])==
                                                        sign(obsDF$POCC[obsDF$Group=="mean"&obsDF$Trt==treatment]),
@@ -1495,6 +1693,10 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
     outDF$H_QUJSM[outDF$Variable=="POCC"] <- ifelse(sign(modDF.sum$POCC.mean[modDF.sum$ModName=="H_QUJSM"])==
                                                        sign(obsDF$POCC[obsDF$Group=="mean"&obsDF$Trt==treatment]),
                                                    1, 0)
+    
+    outDF$I_MM[outDF$Variable=="POCC"] <- ifelse(sign(modDF.sum$POCC.mean[modDF.sum$ModName=="I_MM"])==
+                                                        sign(obsDF$POCC[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                    1, 0)
     
     ### PUP
     outDF$A_GDAYP[outDF$Variable=="PUP"] <- ifelse(sign(modDF.sum$PUP.mean[modDF.sum$ModName=="A_GDAYP"])==
@@ -1530,6 +1732,12 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
                                                        sign(obsDF$PUP[obsDF$Group=="mean"&obsDF$Trt==treatment]),
                                                    1, 0)
     
+    outDF$I_MM[outDF$Variable=="PUP"] <- ifelse(sign(modDF.sum$PUP.mean[modDF.sum$ModName=="I_MM"])==
+                                                       sign(obsDF$PUP[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                   1, 0)
+    
+    
+    
     ### PRETR
     outDF$A_GDAYP[outDF$Variable=="PRETR"] <- ifelse(sign(modDF.sum$PRETR.mean[modDF.sum$ModName=="A_GDAYP"])==
                                                        sign(obsDF$PRETR[obsDF$Group=="mean"&obsDF$Trt==treatment]),
@@ -1563,6 +1771,11 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
     outDF$H_QUJSM[outDF$Variable=="PRETR"] <- ifelse(sign(modDF.sum$PRETR.mean[modDF.sum$ModName=="H_QUJSM"])==
                                                        sign(obsDF$PRETR[obsDF$Group=="mean"&obsDF$Trt==treatment]),
                                                    1, 0)
+    
+    outDF$I_MM[outDF$Variable=="PRETR"] <- ifelse(sign(modDF.sum$PRETR.mean[modDF.sum$ModName=="I_MM"])==
+                                                         sign(obsDF$PRETR[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                     1, 0)
+    
     
     ### PMIN
     outDF$A_GDAYP[outDF$Variable=="PMIN"] <- ifelse(sign(modDF.sum$PMIN.mean[modDF.sum$ModName=="A_GDAYP"])==
@@ -1598,6 +1811,12 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
                                                        sign(obsDF$PMIN[obsDF$Group=="mean"&obsDF$Trt==treatment]),
                                                    1, 0)
     
+    outDF$I_MM[outDF$Variable=="PMIN"] <- ifelse(sign(modDF.sum$PMIN.mean[modDF.sum$ModName=="I_MM"])==
+                                                        sign(obsDF$PMIN[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                    1, 0)
+    
+    
+    
     ### PLEACH
     outDF$A_GDAYP[outDF$Variable=="PLEACH"] <- ifelse(sign(modDF.sum$PLEACH.mean[modDF.sum$ModName=="A_GDAYP"])==
                                                        sign(obsDF$PLEACH[obsDF$Group=="mean"&obsDF$Trt==treatment]),
@@ -1631,6 +1850,12 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
     outDF$H_QUJSM[outDF$Variable=="PLEACH"] <- ifelse(sign(modDF.sum$PLEACH.mean[modDF.sum$ModName=="H_QUJSM"])==
                                                        sign(obsDF$PLEACH[obsDF$Group=="mean"&obsDF$Trt==treatment]),
                                                    1, 0)
+    
+    outDF$I_MM[outDF$Variable=="PLEACH"] <- ifelse(sign(modDF.sum$PLEACH.mean[modDF.sum$ModName=="I_MM"])==
+                                                          sign(obsDF$PLEACH[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                      1, 0)
+    
+    
     
     ### PUE
     outDF$A_GDAYP[outDF$Variable=="PUE"] <- ifelse(sign(modDF.sum$PUE.mean[modDF.sum$ModName=="A_GDAYP"])==
@@ -1666,6 +1891,11 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
                                                        sign(obsDF$PUE[obsDF$Group=="mean"&obsDF$Trt==treatment]),
                                                    1, 0)
     
+    outDF$I_MM[outDF$Variable=="PUE"] <- ifelse(sign(modDF.sum$PUE.mean[modDF.sum$ModName=="I_MM"])==
+                                                       sign(obsDF$PUE[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                   1, 0)
+    
+    
     ### CPL
     outDF$A_GDAYP[outDF$Variable=="CPL"] <- ifelse(sign(modDF.sum$CPL.mean[modDF.sum$ModName=="A_GDAYP"])==
                                                        sign(obsDF$CPL[obsDF$Group=="mean"&obsDF$Trt==treatment]),
@@ -1699,6 +1929,12 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
     outDF$H_QUJSM[outDF$Variable=="CPL"] <- ifelse(sign(modDF.sum$CPL.mean[modDF.sum$ModName=="H_QUJSM"])==
                                                        sign(obsDF$CPL[obsDF$Group=="mean"&obsDF$Trt==treatment]),
                                                    1, 0)
+    
+    outDF$I_MM[outDF$Variable=="CPL"] <- ifelse(sign(modDF.sum$CPL.mean[modDF.sum$ModName=="I_MM"])==
+                                                       sign(obsDF$CPL[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                   1, 0)
+    
+    
     
     ### CPW
     outDF$A_GDAYP[outDF$Variable=="CPW"] <- ifelse(sign(modDF.sum$CPW.mean[modDF.sum$ModName=="A_GDAYP"])==
@@ -1734,6 +1970,11 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
                                                        sign(obsDF$CPW[obsDF$Group=="mean"&obsDF$Trt==treatment]),
                                                    1, 0)
     
+    outDF$I_MM[outDF$Variable=="CPW"] <- ifelse(sign(modDF.sum$CPW.mean[modDF.sum$ModName=="I_MM"])==
+                                                       sign(obsDF$CPW[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                   1, 0)
+    
+    
     ### CPFR
     outDF$A_GDAYP[outDF$Variable=="CPFR"] <- ifelse(sign(modDF.sum$CPFR.mean[modDF.sum$ModName=="A_GDAYP"])==
                                                        sign(obsDF$CPFR[obsDF$Group=="mean"&obsDF$Trt==treatment]),
@@ -1767,6 +2008,10 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
     outDF$H_QUJSM[outDF$Variable=="CPFR"] <- ifelse(sign(modDF.sum$CPFR.mean[modDF.sum$ModName=="H_QUJSM"])==
                                                        sign(obsDF$CPFR[obsDF$Group=="mean"&obsDF$Trt==treatment]),
                                                    1, 0)
+    
+    outDF$I_MM[outDF$Variable=="CPFR"] <- ifelse(sign(modDF.sum$CPFR.mean[modDF.sum$ModName=="I_MM"])==
+                                                        sign(obsDF$CPFR[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                    1, 0)
     
     ### CPSOIL
     outDF$A_GDAYP[outDF$Variable=="CPSOIL"] <- ifelse(sign(modDF.sum$CPSOIL.mean[modDF.sum$ModName=="A_GDAYP"])==
@@ -1802,6 +2047,12 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
                                                        sign(obsDF$CPSOIL[obsDF$Group=="mean"&obsDF$Trt==treatment]),
                                                    1, 0)
     
+    outDF$I_MM[outDF$Variable=="CPSOIL"] <- ifelse(sign(modDF.sum$CPSOIL.mean[modDF.sum$ModName=="I_MM"])==
+                                                          sign(obsDF$CPSOIL[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                      1, 0)
+    
+    
+    
     ### CPFLIT
     outDF$A_GDAYP[outDF$Variable=="CPFLIT"] <- ifelse(sign(modDF.sum$CPFLIT.mean[modDF.sum$ModName=="A_GDAYP"])==
                                                        sign(obsDF$CPFLIT[obsDF$Group=="mean"&obsDF$Trt==treatment]),
@@ -1835,6 +2086,11 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
     outDF$H_QUJSM[outDF$Variable=="CPFLIT"] <- ifelse(sign(modDF.sum$CPFLIT.mean[modDF.sum$ModName=="H_QUJSM"])==
                                                        sign(obsDF$CPFLIT[obsDF$Group=="mean"&obsDF$Trt==treatment]),
                                                    1, 0)
+    
+    outDF$I_MM[outDF$Variable=="CPFLIT"] <- ifelse(sign(modDF.sum$CPFLIT.mean[modDF.sum$ModName=="I_MM"])==
+                                                          sign(obsDF$CPFLIT[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                      1, 0)
+    
     
     
     ### GPP use
@@ -1870,6 +2126,11 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
     outDF$H_QUJSM[outDF$Variable=="GPP_use"] <- ifelse(sign(modDF.sum$GPP_use.mean[modDF.sum$ModName=="H_QUJSM"])==
                                                            sign(obsDF$GPP_use[obsDF$Group=="mean"&obsDF$Trt==treatment]),
                                                        1, 0)
+    
+    outDF$I_MM[outDF$Variable=="GPP_use"] <- ifelse(sign(modDF.sum$GPP_use.mean[modDF.sum$ModName=="I_MM"])==
+                                                           sign(obsDF$GPP_use[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                       1, 0)
+    
     
     return(outDF)
     

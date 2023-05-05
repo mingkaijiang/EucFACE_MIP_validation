@@ -20,15 +20,12 @@ prepare_EucFACE_observation_dataset <- function (ignore.understorey) {
         pDF <- read_and_process_EucFACE_P_budget_output_ignore_understorey()
     } else {
         #### read in C budget data
-        cDF <- read_and_process_EucFACE_C_budget_output()
+        cDF <- read_and_process_EucFACE_C_budget_output_not_ignore_understorey()
         
         ### read in N and P budget data
-        pDF <- read_and_process_EucFACE_P_budget_output()
+        pDF <- read_and_process_EucFACE_P_budget_output_not_ignore_understorey()
         
     }
-    
-    
-    ### read in water data
     
     ### merge
     outDF <- cbind(cDF, pDF[,-c(1:2)])
