@@ -80,13 +80,14 @@ n.mod.list <- c("GDAYN", "LPJGN")
 ####      The confidence interval in the data indicates treatment variation,
 ####      and less so about inter-annual variation.
 ####      The model confidence interval is more about inter-annual variation.
-ignore.understorey=T
-eucDF <- prepare_EucFACE_observation_dataset(ignore.understorey=T)
+ignore.understorey=F
+eucDF <- prepare_EucFACE_observation_dataset(ignore.understorey=F)
 
 
 ### check data-model agreement
 scenario="VAR"
 rev.sd=1.0
+
 check_data_model_agreement(scenario="VAR", eucDF, rev.sd=rev.sd)
 
 

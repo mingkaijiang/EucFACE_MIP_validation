@@ -16,7 +16,7 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
     obsDF <- eucDF
     
     
-    ### revise sd to 1.5 times the original value
+    ### revise sd to rev.sd times the original value
     num.col <- ncol(obsDF)
     obsDF[obsDF$Group=="sd"&obsDF$Trt=="aCO2", 3:num.col] <- obsDF[obsDF$Group=="sd"&obsDF$Trt=="aCO2", 3:num.col] * rev.sd
     obsDF[obsDF$Group=="sd"&obsDF$Trt=="diff", 3:num.col] <- obsDF[obsDF$Group=="sd"&obsDF$Trt=="diff", 3:num.col] * rev.sd
@@ -25,8 +25,6 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
     ### read in annual datasets
     ambDF <- readRDS(paste0("output/MIP_output/processed_simulation/MIP_OBS_", scenario, "_AMB_annual.rds"))
     eleDF <- readRDS(paste0("output/MIP_output/processed_simulation/MIP_OBS_", scenario, "_ELE_annual.rds"))
-    
-    d <- dim(ambDF)[2]
     
     ### remove N models
     ambDF <- ambDF[ambDF$ModName!="I_GDAYN",]
@@ -40,8 +38,8 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
     
     ### add more variables
     ## biomass production
-    ambDF$BP <- rowSums(ambDF[,c("deltaCL","deltaCW","deltaCFR","deltaCCR")], na.rm=T)
-    eleDF$BP <- rowSums(eleDF[,c("deltaCL","deltaCW","deltaCFR","deltaCCR")], na.rm=T)
+    ambDF$BP <- rowSums(ambDF[,c("deltaCL","deltaCW","deltaCFR","deltaCCR","deltaCSTOR")], na.rm=T)
+    eleDF$BP <- rowSums(eleDF[,c("deltaCL","deltaCW","deltaCFR","deltaCCR","deltaCSTOR")], na.rm=T)
     
     #obsDF$BP <- NA
     #obsDF$BP[obsDF$Group=="mean"&obsDF$Trt=="aCO2"] <- obsDF$deltaCL[obsDF$Group=="mean"&obsDF$Trt=="aCO2"] +
@@ -110,6 +108,8 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
     #obsDF$PRETR <- with(obsDF, PLRETR+PWRETR+PCRETR+PFRETR)
     
     
+    ### get new dimension
+    d <- dim(ambDF)[2]
     
     
     ### calculate difference
@@ -272,10 +272,10 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
                       "RHET"=expression(R[het]), 
                       #"deltaCL", "deltaCW", "deltaCFR", "deltaCCR",
                       #"deltaCFLITA", "deltaCMIC", 
-                      "CGL"=expression(BP[leaf]), 
-                      "CGW"=expression(BP[wood]), 
-                      "CGFR"=expression(BP[froot]), 
-                      "CGCR"=expression(BP[croot]), 
+                      "CGL"=expression(NPP[leaf]), 
+                      "CGW"=expression(NPP[wood]), 
+                      "CGFR"=expression(NPP[froot]), 
+                      "CGCR"=expression(NPP[croot]), 
                       "LAI"="LAI", 
                       "CL"=expression(C[leaf]), 
                       "CW"=expression(C[wood]), 
@@ -341,48 +341,131 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
     plotDF3$value <- as.character(plotDF3$value)
     plotDF4$value <- as.character(plotDF4$value)
     
-    plotDF5 <- merge(plotDF3, plotDF4, by=c("Variable", "ModName"))
-    
+    plotDF5 <- merge(plotDF1, plotDF3, by=c("Variable", "ModName"))
+    plotDF5 <- merge(plotDF5, plotDF4, by=c("Variable", "ModName"))
+    colnames(plotDF5) <- c("Variable", "ModName", "aCO2", "CO2_magnitude", "CO2_sign")
     
     ### prepare subsets
-    y.limits.sub.list1 <- c("CSOIL", "CFLITA", #"CCR", 
+    y.limits.sub.list1 <- c("CSOIL", "CFLITA", 
                             "CFR", "CW", "CL", 
                             "LAI",
-                            #"CGCR", 
                             "CGFR", "CGW", "CGL", 
                             "RHET", "NEP", "BP", "NPP", "GPP")
-    
-    #y.limits.sub.list2 <- c()
     
     y.limits.sub.list3 <- c("PUE", 
                             "GPP_use",
                             "PLEACH", 
-                            "PFRLIN", #"PWLIN", "PLITIN", 
-                            #"PGCR", 
-                            "PGFR", "PGW", "PGL", "PMIN", "PRETR", "PUP", "PDEM")
+                            "PLITIN", 
+                            "PGFR", "PGW", "PGL", 
+                            "PMIN", "PRETR", "PUP", "PDEM")
     
-    y.limits.sub.list4 <- c(#"POCC", "PSEC", 
-                            "PLAB",
-                            "PPMIN", "PPORG", "PSOIL", "PFLITA", #"PCR", 
+    y.limits.sub.list4 <- c("PLAB",
+                            "PPMIN", "PPORG", "PSOIL", "PFLITA", 
                             "PFR", "PW", "PL")
     
     
     y.limits.sub.list5 <- c("CPSOIL", "CPFLIT", "CPFR", "CPW", "CPL")
     
     
+    ### prepare to count the number of variables making correct predictions
+    plotDF5$count2 <- ifelse(plotDF5$CO2_magnitude==1&plotDF5$CO2_sign==1,1,0)
+    plotDF5$count3 <- ifelse(plotDF5$CO2_magnitude==1&plotDF5$CO2_sign==1&plotDF5$aCO2==1,1,0)
+    plotDF5$xlab <- rep(1:9)
+    
+    ### subset the data
     subDF1.1 <- plotDF1[plotDF1$Variable%in%y.limits.sub.list1,]
-    #subDF1.2 <- plotDF1[plotDF1$Variable%in%y.limits.sub.list2,]
     subDF1.3 <- plotDF1[plotDF1$Variable%in%y.limits.sub.list3,]
     subDF1.4 <- plotDF1[plotDF1$Variable%in%y.limits.sub.list4,]
     subDF1.5 <- plotDF1[plotDF1$Variable%in%y.limits.sub.list5,]
     
     
     subDF5.1 <- plotDF5[plotDF5$Variable%in%y.limits.sub.list1,]
-    #subDF5.2 <- plotDF5[plotDF5$Variable%in%y.limits.sub.list2,]
     subDF5.3 <- plotDF5[plotDF5$Variable%in%y.limits.sub.list3,]
     subDF5.4 <- plotDF5[plotDF5$Variable%in%y.limits.sub.list4,]
     subDF5.5 <- plotDF5[plotDF5$Variable%in%y.limits.sub.list5,]
     
+    
+    ### calculate the number of variables that reproduce the data
+    sumDF1 <- summaryBy(count2+count3~ModName+xlab, data=subDF5.1, 
+                        na.rm=T, keep.names=T, FUN=sum)
+
+    sumDF3 <- summaryBy(count2+count3~ModName+xlab, data=subDF5.3, 
+                        na.rm=T, keep.names=T, FUN=sum)
+    
+    sumDF4 <- summaryBy(count2+count3~ModName+xlab, data=subDF5.4, 
+                        na.rm=T, keep.names=T, FUN=sum)
+    
+    sumDF5 <- summaryBy(count2+count3~ModName+xlab, data=subDF5.5, 
+                        na.rm=T, keep.names=T, FUN=sum)
+    
+    
+    ### prepare ylabDF
+    ylabDF1 <- data.frame("Variable"=y.limits.sub.list1,
+                          "count"=NA)
+       
+    ylabDF3 <- data.frame("Variable"=y.limits.sub.list3,
+                          "count"=NA)
+    
+    ylabDF4 <- data.frame("Variable"=y.limits.sub.list4,
+                          "count"=NA)
+    
+    ylabDF5 <- data.frame("Variable"=y.limits.sub.list5,
+                          "count"=NA)
+        
+        
+    for (i in y.limits.sub.list1) {
+        ## ignore MM
+        tmpDF <- subDF5.1[subDF5.1$ModName!="I_MM",]
+        ylabDF1$count[ylabDF1$Variable==i] <- sum(tmpDF$count2[tmpDF$Variable==i], na.rm=T)
+    }
+    
+    for (i in y.limits.sub.list3) {
+        ## ignore MM
+        tmpDF <- subDF5.3[subDF5.3$ModName!="I_MM",]
+        ylabDF3$count[ylabDF3$Variable==i] <- sum(tmpDF$count2[tmpDF$Variable==i], na.rm=T)
+    }
+    
+    for (i in y.limits.sub.list4) {
+        ## ignore MM
+        tmpDF <- subDF5.4[subDF5.4$ModName!="I_MM",]
+        ylabDF4$count[ylabDF4$Variable==i] <- sum(tmpDF$count2[tmpDF$Variable==i], na.rm=T)
+    }
+    
+    for (i in y.limits.sub.list5) {
+        ## ignore MM
+        tmpDF <- subDF5.5[subDF5.5$ModName!="I_MM",]
+        ylabDF5$count[ylabDF5$Variable==i] <- sum(tmpDF$count2[tmpDF$Variable==i], na.rm=T)
+    }
+    
+    
+    ### revise y label to continuous variable
+    ylabDF1$ylab <- c(1:dim(ylabDF1)[1])
+    ylabDF3$ylab <- c(1:dim(ylabDF3)[1])
+    ylabDF4$ylab <- c(1:dim(ylabDF4)[1])
+    ylabDF5$ylab <- c(1:dim(ylabDF5)[1])
+    
+    ### same
+    for (i in y.limits.sub.list1) {
+        subDF5.1$ylab[subDF5.1$Variable==i] <- ylabDF1$ylab[ylabDF1$Variable==i]
+    }
+    
+    for (i in y.limits.sub.list3) {
+        subDF5.3$ylab[subDF5.3$Variable==i] <- ylabDF3$ylab[ylabDF3$Variable==i]
+    }
+    
+    for (i in y.limits.sub.list4) {
+        subDF5.4$ylab[subDF5.4$Variable==i] <- ylabDF4$ylab[ylabDF4$Variable==i]
+    }
+    
+    for (i in y.limits.sub.list5) {
+        subDF5.5$ylab[subDF5.5$Variable==i] <- ylabDF5$ylab[ylabDF5$Variable==i]
+    }
+        
+        
+    
+    
+    ##################################################################    
+    ### plot labelling
     
     model.labels <- c("A_GDAYP" = "GDAYP",
                       "B_ELMV1" = "ELMV1",
@@ -392,16 +475,72 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
                       "F_QUINC" = "QUINC",
                       "G_OCHDX" = "OCHDX",
                       "H_QUJSM" = "QUJSM",
-                      "I_MM" = "MM")
+                      "I_MM" = expression(bold("MM")))
+    
+    x.labels <- c("GDAYP",
+                  "ELMV1",
+                  "CABLP",
+                  "LPJGP",
+                  "OCDHP",
+                  "QUINC",
+                  "OCHDX",
+                  "QUJSM",
+                  expression(bold("MM")))
+    
+    
+    
+    y.labels.list1 <- rev(c("GPP",
+                            "NPP", 
+                            expression(Delta*C[veg]), 
+                            "NEP", 
+                            expression(R[het]), 
+                            expression(NPP[leaf]), 
+                            expression(NPP[wood]), 
+                            expression(NPP[froot]), 
+                            "LAI", 
+                            expression(C[leaf]), 
+                            expression(C[wood]), 
+                            expression(C[froot]), 
+                            expression(C[leaflit]), 
+                            expression(C[soil])))
+    
+    
+    y.labels.list3 <- rev(c(expression(P[dem]), 
+                            expression(P[upt]),
+                            expression(P[retr]), 
+                            expression(P[net]), 
+                            expression(P[gleaf]), 
+                            expression(P[gwood]), 
+                            expression(P[gfroot]), 
+                            expression(P[leaflit]), 
+                            expression(P[leach]),
+                            expression(PUE[GPP]),
+                            expression(PUE[NPP])))
+    
+    y.labels.list4 <- rev(c(expression(P[leaf]), 
+                            expression(P[wood]), 
+                            expression(P[froot]), 
+                            expression(P[leaflit]), 
+                            expression(P[soil]), 
+                            expression(P[org]), 
+                            expression(P[inorg]),
+                            expression(P[lab])))
+    
+    
+    y.labels.list5 <- rev(c(expression(CP[leaf]), 
+                            expression(CP[wood]), 
+                            expression(CP[froot]), 
+                            expression(CP[leaflit]),
+                            expression(CP[soil])))
     
     
     ##################################################################
     ### make plot
     
     p1 <- ggplot() + 
-        geom_tile(data = subDF1.1, aes(x=ModName, y=Variable, fill=value), color="white",
+        geom_tile(data = subDF5.1, aes(x=ModName, y=Variable, fill=aCO2), color="white",
                   width=1)+
-        geom_point(data=subDF5.1, aes(x=ModName, y=Variable, pch=value.x, color=value.y),
+        geom_point(data=subDF5.1, aes(x=ModName, y=Variable, pch=CO2_magnitude, color=CO2_sign),
                    size=4)+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
@@ -440,51 +579,54 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
         coord_fixed()
     
     
-    #p2 <- ggplot() + 
-    #    geom_tile(data = subDF1.2, aes(x=ModName, y=Variable, fill=value), color="white",
-    #              width=1)+
-    #    geom_point(data=subDF5.2, aes(x=ModName, y=Variable, pch=value.x, color=value.y),
-    #               size=4)+
-    #    theme_linedraw() +
-    #    theme(panel.grid.minor=element_blank(),
-    #          axis.text.x=element_text(size=16,angle = 45, 
-    #                                   vjust = 1, hjust = 1),
-    #          axis.title.x=element_text(size=16),
-    #          axis.text.y=element_text(size=16),
-    #          axis.title.y=element_text(size=16),
-    #          legend.text=element_text(size=16),
-    #          legend.title=element_text(size=16),
-    #          panel.grid.major=element_blank(),
-    #          legend.position="none",
-    #          legend.box = 'vertical',
-    #          legend.box.just = 'left',
-    #          plot.title = element_text(size=16, face="bold.italic", 
-    #                                    hjust = 0.5))+
-    #    ylab("")+
-    #    xlab("")+
-    #    scale_x_discrete(limit=mod.list,label=model.labels)+
-    #    scale_y_discrete(limit=y.limits.sub.list2,label=y.labels.list)+
-    #    scale_shape_manual(name=expression("Predicted " * CO[2] * " response sign"),
-    #                       values=c("0"=19,
-    #                                "1"=17),
-    #                       labels=c("0"="Inconsistent with data",
-    #                                "1"="Consistent with data"))+
-    #    scale_color_manual(name=expression("Predicted " * CO[2] * " response magnitude"),
-    #                       values=c("0"="brown",
-    #                                "1"="black"),
-    #                       labels=c("0"="Outside data range",
-    #                                "1"="Inside data range"))+
-    #    scale_fill_manual(name=expression("Predicted " * aCO[2] * " value"),
-    #                      values=c("0"="burlywood1",
-    #                               "1"="green3"),
-    #                      labels=c("0"="Outside data range",
-    #                               "1"="Inside data range"))
+    
+    p1_1 <- ggplot() + 
+        geom_tile(data = subDF5.1, aes(x=xlab, y=ylab, fill=CO2_sign), color="white",
+                  width=1)+
+        geom_point(data=subDF5.1, aes(x=xlab, y=ylab, pch=CO2_magnitude),
+                   size=4)+
+        theme_linedraw() +
+        theme(panel.grid.minor=element_blank(),
+              axis.text.x.bottom=element_text(size=16,angle = 45, 
+                                              vjust = 1, hjust = 1),
+              axis.text.x.top=element_text(size=16,angle = 0,
+                                           vjust = 0.5, hjust = 0.5),
+              axis.title.x=element_text(size=16),
+              axis.text.y=element_text(size=16),
+              axis.title.y=element_text(size=16),
+              legend.text=element_text(size=16),
+              legend.title=element_text(size=16),
+              panel.grid.major=element_blank(),
+              legend.position="none",
+              legend.box = 'vertical',
+              legend.box.just = 'left',
+              plot.title = element_text(size=16, face="bold.italic", 
+                                        hjust = 0.5))+
+        ylab("")+
+        xlab("")+
+        scale_x_continuous(breaks=c(1:9),label=x.labels,
+                           sec.axis = dup_axis(labels=sumDF1$count2))+
+        scale_y_continuous(breaks=c(1:dim(ylabDF1)[1]),label=y.labels.list1,
+                           sec.axis = dup_axis(labels=ylabDF1$count))+
+        #scale_y_discrete(limit=y.limits.sub.list1,label=y.labels.list)+
+        scale_shape_manual(name=expression("Predicted " * CO[2] * " response magnitude"),
+                           values=c("0"=21,
+                                    "1"=19),
+                           labels=c("0"="Outside data SD range",
+                                    "1"="Within data SD range"))+
+        scale_fill_manual(name=expression("Predicted " * CO[2] * " sign"),
+                          values=c("0"=cbbPalette[5], #"burlywood1",
+                                   "1"=cbbPalette[4]),#"darkgreen"),
+                          labels=c("0"="Inconsistent with data",
+                                   "1"="Consistent with data"))+
+        coord_fixed(); p1_1
+    
     
     
     p3 <- ggplot() + 
-        geom_tile(data = subDF1.3, aes(x=ModName, y=Variable, fill=value), color="white",
+        geom_tile(data = subDF5.3, aes(x=ModName, y=Variable, fill=aCO2), color="white",
                   width=1)+
-        geom_point(data=subDF5.3, aes(x=ModName, y=Variable, pch=value.x, color=value.y),
+        geom_point(data=subDF5.3, aes(x=ModName, y=Variable, pch=CO2_magnitude, color=CO2_sign),
                    size=4)+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
@@ -522,10 +664,54 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
                                    "1"="Inside data range"))+
         coord_fixed()
     
-    p4 <- ggplot() + 
-        geom_tile(data = subDF1.4, aes(x=ModName, y=Variable, fill=value), color="white",
+    
+    p3_1 <- ggplot() + 
+        geom_tile(data = subDF5.3, aes(x=xlab, y=ylab, fill=CO2_sign), color="white",
                   width=1)+
-        geom_point(data=subDF5.4, aes(x=ModName, y=Variable, pch=value.x, color=value.y),
+        geom_point(data=subDF5.3, aes(x=xlab, y=ylab, pch=CO2_magnitude),
+                   size=4)+
+        theme_linedraw() +
+        theme(panel.grid.minor=element_blank(),
+              axis.text.x.bottom=element_text(size=16,angle = 45, 
+                                              vjust = 1, hjust = 1),
+              axis.text.x.top=element_text(size=16,angle = 0,
+                                           vjust = 0.5, hjust = 0.5),
+              axis.title.x=element_text(size=16),
+              axis.text.y=element_text(size=16),
+              axis.title.y=element_text(size=16),
+              legend.text=element_text(size=16),
+              legend.title=element_text(size=16),
+              panel.grid.major=element_blank(),
+              legend.position="none",
+              legend.box = 'vertical',
+              legend.box.just = 'left',
+              plot.title = element_text(size=16, face="bold.italic", 
+                                        hjust = 0.5))+
+        ylab("")+
+        xlab("")+
+        #scale_x_discrete(limit=mod.list,label=model.labels)+
+        scale_x_continuous(breaks=c(1:9),label=x.labels,
+                           sec.axis = dup_axis(labels=sumDF3$count2))+
+        #scale_y_discrete(limit=y.limits.sub.list3,label=y.labels.list)+
+        scale_y_continuous(breaks=c(1:dim(ylabDF3)[1]),label=y.labels.list3,
+                           sec.axis = dup_axis(labels=ylabDF3$count))+
+        scale_shape_manual(name=expression("Predicted " * CO[2] * " response magnitude"),
+                           values=c("0"=21,
+                                    "1"=19),
+                           labels=c("0"="Outside data SD range",
+                                    "1"="Within data SD range"))+
+        scale_fill_manual(name=expression("Predicted " * CO[2] * " sign"),
+                          values=c("0"=cbbPalette[5], #"burlywood1",
+                                   "1"=cbbPalette[4]),#"darkgreen"),
+                          labels=c("0"="Inconsistent with data",
+                                   "1"="Consistent with data"))+
+        coord_fixed()
+    
+    
+    p4 <- ggplot() + 
+        geom_tile(data = subDF5.4, aes(x=ModName, y=Variable, fill=aCO2), color="white",
+                  width=1)+
+        geom_point(data=subDF5.4, aes(x=ModName, y=Variable, pch=CO2_magnitude, color=CO2_sign),
                    size=4)+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
@@ -564,11 +750,54 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
         coord_fixed()
     
     
+    p4_1 <- ggplot() + 
+        geom_tile(data = subDF5.4, aes(x=xlab, y=ylab, fill=CO2_sign), color="white",
+                  width=1)+
+        geom_point(data=subDF5.4, aes(x=xlab, y=ylab, pch=CO2_magnitude),
+                   size=4)+
+        theme_linedraw() +
+        theme(panel.grid.minor=element_blank(),
+              axis.text.x.bottom=element_text(size=16,angle = 45, 
+                                              vjust = 1, hjust = 1),
+              axis.text.x.top=element_text(size=16,angle = 0,
+                                           vjust = 0.5, hjust = 0.5),
+              axis.title.x=element_text(size=16),
+              axis.text.y=element_text(size=16),
+              axis.title.y=element_text(size=16),
+              legend.text=element_text(size=16),
+              legend.title=element_text(size=16),
+              panel.grid.major=element_blank(),
+              legend.position="none",
+              legend.box = 'vertical',
+              legend.box.just = 'left',
+              plot.title = element_text(size=16, face="bold.italic", 
+                                        hjust = 0.5))+
+        ylab("")+
+        xlab("")+
+        #scale_x_discrete(limit=mod.list,label=model.labels)+
+        scale_x_continuous(breaks=c(1:9),label=x.labels,
+                           sec.axis = dup_axis(labels=sumDF4$count2))+
+        #scale_y_discrete(limit=y.limits.sub.list4,label=y.labels.list)+
+        scale_y_continuous(breaks=c(1:dim(ylabDF4)[1]),label=y.labels.list4,
+                           sec.axis = dup_axis(labels=ylabDF4$count))+
+        scale_shape_manual(name=expression("Predicted " * CO[2] * " response magnitude"),
+                           values=c("0"=21,
+                                    "1"=19),
+                           labels=c("0"="Outside data SD range",
+                                    "1"="Within data SD range"))+
+        scale_fill_manual(name=expression("Predicted " * CO[2] * " sign"),
+                          values=c("0"=cbbPalette[5], #"burlywood1",
+                                   "1"=cbbPalette[4]),#"darkgreen"),
+                          labels=c("0"="Inconsistent with data",
+                                   "1"="Consistent with data"))+
+        coord_fixed()
+    
+    
     
     p5 <- ggplot() + 
-        geom_tile(data = subDF1.5, aes(x=ModName, y=Variable, fill=value), color="white",
+        geom_tile(data = subDF5.5, aes(x=ModName, y=Variable, fill=aCO2), color="white",
                   width=1)+
-        geom_point(data=subDF5.5, aes(x=ModName, y=Variable, pch=value.x, color=value.y),
+        geom_point(data=subDF5.5, aes(x=ModName, y=Variable, pch=CO2_magnitude, color=CO2_sign),
                    size=4)+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
@@ -607,6 +836,49 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
         coord_fixed()
     
     
+    p5_1 <- ggplot() + 
+        geom_tile(data = subDF5.5, aes(x=xlab, y=ylab, fill=CO2_sign), color="white",
+                  width=1)+
+        geom_point(data=subDF5.5, aes(x=xlab, y=ylab, pch=CO2_magnitude),
+                   size=4)+
+        theme_linedraw() +
+        theme(panel.grid.minor=element_blank(),
+              axis.text.x.bottom=element_text(size=16,angle = 45, 
+                                              vjust = 1, hjust = 1),
+              axis.text.x.top=element_text(size=16,angle = 0,
+                                           vjust = 0.5, hjust = 0.5),
+              axis.title.x=element_text(size=16),
+              axis.text.y=element_text(size=16),
+              axis.title.y=element_text(size=16),
+              legend.text=element_text(size=16),
+              legend.title=element_text(size=16),
+              panel.grid.major=element_blank(),
+              legend.position="none",
+              legend.box = 'vertical',
+              legend.box.just = 'left',
+              plot.title = element_text(size=16, face="bold.italic", 
+                                        hjust = 0.5))+
+        ylab("")+
+        xlab("")+
+        #scale_x_discrete(limit=mod.list,label=model.labels)+
+        scale_x_continuous(breaks=c(1:9),label=x.labels,
+                           sec.axis = dup_axis(labels=sumDF5$count2))+
+        #scale_y_discrete(limit=y.limits.sub.list5,label=y.labels.list)+
+        scale_y_continuous(breaks=c(1:dim(ylabDF5)[1]),label=y.labels.list5,
+                           sec.axis = dup_axis(labels=ylabDF5$count))+
+        scale_shape_manual(name=expression("Predicted " * CO[2] * " response magnitude"),
+                           values=c("0"=21,
+                                    "1"=19),
+                           labels=c("0"="Outside data SD range",
+                                    "1"="Within data SD range"))+
+        scale_fill_manual(name=expression("Predicted " * CO[2] * " sign"),
+                          values=c("0"=cbbPalette[5], #"burlywood1",
+                                   "1"=cbbPalette[4]),#"darkgreen"),
+                          labels=c("0"="Inconsistent with data",
+                                   "1"="Consistent with data"))+
+        coord_fixed()
+    
+    
     
     #plots_left_column <- plot_grid(p1, p2,
     #                               labels=c("a", "b"), label_x=0.1, label_y=0.95,
@@ -614,20 +886,39 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
     #                               ncol=1)
     
     legend_bottom_row <- get_legend(p1 + theme(legend.position="right",
-                                               legend.box = 'vertical',
+                                               legend.box = 'horizontal',
                                                legend.box.just = 'left'))
     
-    plots_right_column <- plot_grid(p5, legend_bottom_row,
-                                   labels=c("e", ""), label_x=0.1, label_y=0.95,
-                                   label_size=24,
-                                   ncol=1)
+    plots_top_row <- plot_grid(p1, p3, p4, p5, 
+                               labels=c("", ""), label_x=0.1, label_y=0.95,
+                               label_size=24,
+                               ncol=4)
     
     
     pdf(paste0(out.dir, "/multi-model_comparison_agreement_with_data.pdf"), 
         width=16, height=10)
-    plot_grid(p1, p3, p4, plots_right_column,
-              ncol=4)
+    plot_grid(plots_top_row, legend_bottom_row, rel_heights=c(1,0.2),
+              ncol=1)
     dev.off()
+    
+    
+    
+    legend_bottom_row <- get_legend(p1_1 + theme(legend.position="right",
+                                               legend.box = 'horizontal',
+                                               legend.box.just = 'left'))
+    
+    plots_top_row <- plot_grid(p1_1, p3_1, p4_1, p5_1, 
+                               labels=c("", ""), label_x=0.1, label_y=0.95,
+                               label_size=24,
+                               ncol=4)
+    
+    
+    pdf(paste0(out.dir, "/multi-model_comparison_agreement_with_data2.pdf"), 
+        width=20, height=10)
+    plot_grid(plots_top_row, legend_bottom_row, rel_heights=c(1,0.2),
+              ncol=1)
+    dev.off()
+    
     
     
     ##################################################################

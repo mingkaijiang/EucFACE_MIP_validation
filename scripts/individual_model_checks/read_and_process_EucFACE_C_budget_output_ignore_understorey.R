@@ -722,18 +722,19 @@ read_and_process_EucFACE_C_budget_output_ignore_understorey <- function() {
     outDF$BP[outDF$Group=="sd"&outDF$Trt=="aCO2"] <- sqrt((outDF$deltaCL[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+
                                                                outDF$deltaCW[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+
                                                                outDF$deltaCFR[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+
-                                                               outDF$deltaCCR[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2)/4)
+                                                               outDF$deltaCCR[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2)/2)
     
     outDF$BP[outDF$Group=="sd"&outDF$Trt=="eCO2"] <- sqrt((outDF$deltaCL[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2+
                                                                outDF$deltaCW[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2+
                                                                outDF$deltaCFR[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2+
-                                                               outDF$deltaCCR[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2)/4)
+                                                               outDF$deltaCCR[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2)/2)
     
     outDF$BP[outDF$Group=="mean"&outDF$Trt=="diff"] <- outDF$BP[outDF$Group=="mean"&outDF$Trt=="eCO2"]-outDF$BP[outDF$Group=="mean"&outDF$Trt=="aCO2"]
     outDF$BP[outDF$Group=="sd"&outDF$Trt=="diff"] <- sqrt((outDF$BP[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+outDF$BP[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2)/2)
     
     outDF$BP[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- (outDF$BP[outDF$Group=="mean"&outDF$Trt=="eCO2"]-outDF$BP[outDF$Group=="mean"&outDF$Trt=="aCO2"])/outDF$BP[outDF$Group=="mean"&outDF$Trt=="aCO2"]*100
-    outDF$BP[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((outDF$BP[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2+outDF$BP[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+outDF$BP[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2)/3)/outDF$BP[outDF$Group=="mean"&outDF$Trt=="aCO2"]*100
+    outDF$BP[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((outDF$BP[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2+outDF$BP[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+
+                                                                   outDF$BP[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2)/3)/outDF$BP[outDF$Group=="mean"&outDF$Trt=="aCO2"]*100
     
     
     

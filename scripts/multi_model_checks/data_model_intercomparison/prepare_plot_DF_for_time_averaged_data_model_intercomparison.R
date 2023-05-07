@@ -115,7 +115,7 @@ prepare_plot_DF_for_time_averaged_data_model_intercomparison <- function(eucDF,
         for (i in unique(myDF1$Group)) {
             for (j in c("aCO2", "eCO2")) {
                 sd.values <- myDF1$sdvalue[myDF1$Group==i&myDF1$Trt==j]
-                totDF$sdvalue[totDF$Group==i&totDF$Trt==j] <- sqrt(sum(sd.values^2, na.rm=T)/nvar)
+                totDF$sdvalue[totDF$Group==i&totDF$Trt==j] <- sqrt(sum(sd.values^2, na.rm=T)/length(sd.values[!is.na(sd.values)]))
             }
         }
         

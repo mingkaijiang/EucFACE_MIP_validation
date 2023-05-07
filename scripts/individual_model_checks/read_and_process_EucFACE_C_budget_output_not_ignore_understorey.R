@@ -150,7 +150,7 @@ read_and_process_EucFACE_C_budget_output_not_ignore_understorey <- function() {
     outDF$GPP[outDF$Group=="sd"&outDF$Trt=="diff"] <- sqrt((outDF$GPP[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+
                                                                 outDF$GPP[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2)/2)
     outDF$GPP[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- outDF$GPP[outDF$Group=="mean"&outDF$Trt=="diff"]/outDF$GPP[outDF$Group=="mean"&outDF$Trt=="aCO2"]*100
-    outDF$GPP[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((outDF$GPP[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+outDF$GPP[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2+
+    outDF$GPP[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((outDF$GPP[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+outDF$GPP[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+
                                                                     outDF$GPP[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2)/3)/inoutDF$aCO2[inoutDF$term=="GPP overstorey"]*100 
     
     ## CL
@@ -163,7 +163,7 @@ read_and_process_EucFACE_C_budget_output_not_ignore_understorey <- function() {
                                                                outDF$CL[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2)/2)
     
     outDF$CL[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- outDF$CL[outDF$Group=="mean"&outDF$Trt=="diff"] / outDF$CL[outDF$Group=="mean"&outDF$Trt=="aCO2"] * 100
-    outDF$CL[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((outDF$CL[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+outDF$CL[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2+
+    outDF$CL[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((outDF$CL[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+outDF$CL[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+
                                                                    outDF$CL[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2)/3)/outDF$CL[outDF$Group=="mean"&outDF$Trt=="aCO2"]*100 
     
     ## CW
@@ -270,14 +270,14 @@ read_and_process_EucFACE_C_budget_output_not_ignore_understorey <- function() {
     ## deltaCL
     outDF$deltaCL[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- deltaDF$aCO2[deltaDF$term=="Overstorey leaf"]+deltaDF$aCO2[deltaDF$term=="Understorey above-ground"]
     outDF$deltaCL[outDF$Group=="mean"&outDF$Trt=="eCO2"] <- deltaDF$eCO2[deltaDF$term=="Overstorey leaf"]+deltaDF$eCO2[deltaDF$term=="Understorey above-ground"]
-    outDF$deltaCL[outDF$Group=="sd"&outDF$Trt=="aCO2"] <- sqrt((deltaDF$aCO2_sd[deltaDF$term=="Overstorey leaf"]^2+deltaDF$aCO2_sd[deltaDF$term=="Understorey above-ground"]^2)/2)
-    outDF$deltaCL[outDF$Group=="sd"&outDF$Trt=="eCO2"] <- sqrt((deltaDF$eCO2_sd[deltaDF$term=="Overstorey leaf"]^2+deltaDF$eCO2_sd[deltaDF$term=="Understorey above-ground"]^2)/2)
+    outDF$deltaCL[outDF$Group=="sd"&outDF$Trt=="aCO2"] <- sqrt((deltaDF$aCO2_sd[deltaDF$term=="Overstorey leaf"]^2+deltaDF$aCO2_sd[deltaDF$term=="Understorey above-ground"]^2)/2)*2
+    outDF$deltaCL[outDF$Group=="sd"&outDF$Trt=="eCO2"] <- sqrt((deltaDF$eCO2_sd[deltaDF$term=="Overstorey leaf"]^2+deltaDF$eCO2_sd[deltaDF$term=="Understorey above-ground"]^2)/2)*2
     outDF$deltaCL[outDF$Group=="mean"&outDF$Trt=="diff"] <- outDF$deltaCL[outDF$Group=="mean"&outDF$Trt=="eCO2"] - outDF$deltaCL[outDF$Group=="mean"&outDF$Trt=="aCO2"]
     outDF$deltaCL[outDF$Group=="sd"&outDF$Trt=="diff"] <- sqrt((outDF$deltaCL[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+
                                                                     outDF$deltaCL[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2)/2)
     
     outDF$deltaCL[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- outDF$deltaCL[outDF$Group=="sd"&outDF$Trt=="diff"] / outDF$deltaCL[outDF$Group=="mean"&outDF$Trt=="aCO2"] * 100
-    outDF$deltaCL[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((outDF$deltaCL[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+outDF$deltaCL[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2+
+    outDF$deltaCL[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((outDF$deltaCL[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+outDF$deltaCL[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+
                                                                         outDF$deltaCL[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2)/3)/abs(outDF$deltaCL[outDF$Group=="mean"&outDF$Trt=="aCO2"])*100
     
     
@@ -495,8 +495,8 @@ read_and_process_EucFACE_C_budget_output_not_ignore_understorey <- function() {
     outDF$RL[outDF$Group=="sd"&outDF$Trt=="diff"] <- sqrt((outDF$RL[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+
                                                                outDF$RL[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2)/2)
     
-    outDF$RL[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- outDF$RL[outDF$Group=="mean"&outDF$Trt=="eCO2"] / outDF$RL[outDF$Group=="mean"&outDF$Trt=="aCO2"] * 100
-    outDF$RL[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((outDF$RL[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+outDF$RL[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2+
+    outDF$RL[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- outDF$RL[outDF$Group=="mean"&outDF$Trt=="diff"] / outDF$RL[outDF$Group=="mean"&outDF$Trt=="aCO2"] * 100
+    outDF$RL[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((outDF$RL[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+outDF$RL[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+
                                                                    outDF$RL[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2)/3)/outDF$RL[outDF$Group=="mean"&outDF$Trt=="aCO2"]*100
     
     
@@ -601,6 +601,9 @@ read_and_process_EucFACE_C_budget_output_not_ignore_understorey <- function() {
     outDF$CEX[outDF$Group=="sd"&outDF$Trt=="diff"] <- sqrt((nppDF$aCO2_sd[nppDF$term=="Mycorrhizal production"]^2+nppDF$eCO2_sd[nppDF$term=="Mycorrhizal production"]^2)/2)
     
     outDF$CEX[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- nppDF$percent_diff[nppDF$term=="Mycorrhizal production"]
+    outDF$CEX[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((outDF$CEX[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+outDF$CEX[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+
+                                                                    outDF$CEX[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2)/3)/outDF$CEX[outDF$Group=="mean"&outDF$Trt=="aCO2"]*100
+    
     
     
     ### NEP in - out
@@ -612,9 +615,9 @@ read_and_process_EucFACE_C_budget_output_not_ignore_understorey <- function() {
     outDF$NEP_inout[outDF$Group=="sd"&outDF$Trt=="diff"] <- sqrt((nepDF$NEP_conf[nepDF$Method=="In-out"&nepDF$Trt=="aCO2"]^2+
                                                                           nepDF$NEP_conf[nepDF$Method=="In-out"&nepDF$Trt=="eCO2"]^2)/2)
     
-    outDF$NEP_inout[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- (nepDF$NEP[nepDF$Method=="In-out"&nepDF$Trt=="eCO2"]-nepDF$NEP[nepDF$Method=="In-out"&nepDF$Trt=="aCO2"])/nepDF$NEP[nepDF$Method=="In-out"&nepDF$Trt=="aCO2"]*100
-    outDF$NEP_inout[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((nepDF$NEP_conf[nepDF$Method=="In-out"&nepDF$Trt=="aCO2"]^2+nepDF$NEP_conf[nepDF$Method=="In-out"&nepDF$Trt=="aCO2"]^2+
-                                                                          nepDF$NEP_conf[nepDF$Method=="In-out"&nepDF$Trt=="eCO2"]^2)/3)/nepDF$NEP[nepDF$Method=="In-out"&nepDF$Trt=="aCO2"]*100
+    outDF$NEP_inout[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- outDF$NEP_inout[outDF$Group=="mean"&outDF$Trt=="diff"]/outDF$NEP_inout[outDF$Group=="mean"&outDF$Trt=="aCO2"]*100
+    outDF$NEP_inout[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((outDF$NEP_inout[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+outDF$NEP_inout[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+
+                                                                          outDF$NEP_inout[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2)/3)/outDF$NEP_inout[outDF$Group=="mean"&outDF$Trt=="aCO2"]*100
     
     ### NEP npp - rh
     outDF$NEP_npprh[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- nepDF$NEP[nepDF$Method=="NPP-Rh"&nepDF$Trt=="aCO2"]

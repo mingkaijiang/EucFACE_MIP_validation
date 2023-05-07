@@ -17,10 +17,10 @@ read_and_process_EucFACE_P_budget_output_not_ignore_understorey <- function() {
     
     ### cut out fineroot that is assumed to be understorey
     ## fluxes
-    fluxDF[fluxDF$terms%in%c("Fine Root P flux", "Fineroot retrans P flux",
-                             "Fineroot Litter P flux"), 2:9] <- fluxDF[fluxDF$terms%in%c("Fine Root P flux", 
-                                                                                         "Fineroot retrans P flux",
-                                                                                         "Fineroot Litter P flux"), 2:9] * 0.5
+    #fluxDF[fluxDF$terms%in%c("Fine Root P flux", "Fineroot retrans P flux",
+    #                         "Fineroot Litter P flux"), 2:9] <- fluxDF[fluxDF$terms%in%c("Fine Root P flux", 
+    #                                                                                     "Fineroot retrans P flux",
+    #                                                                                     "Fineroot Litter P flux"), 2:9] * 0.5
     
     fluxDF[fluxDF$terms=="Total vegetation production P flux",2:9] <- fluxDF[fluxDF$terms=="Canopy P flux",2:9] +
         fluxDF[fluxDF$terms=="Wood P flux",2:9] +
@@ -28,12 +28,14 @@ read_and_process_EucFACE_P_budget_output_not_ignore_understorey <- function() {
         fluxDF[fluxDF$terms=="Coarse Root P flux",2:9] +
         fluxDF[fluxDF$terms=="Twig litter P flux",2:9] +
         fluxDF[fluxDF$terms=="Bark litter P flux",2:9] +
-        fluxDF[fluxDF$terms=="Seed litter P flux",2:9]
+        fluxDF[fluxDF$terms=="Seed litter P flux",2:9] + 
+        fluxDF[fluxDF$terms=="Understorey P flux",2:9] 
     
     fluxDF[fluxDF$terms=="Total vegetation retranslocation P flux",2:9] <- fluxDF[fluxDF$terms=="Canopy retrans P flux",2:9] +
         fluxDF[fluxDF$terms=="Sapwood retrans P flux",2:9] +
         fluxDF[fluxDF$terms=="Fineroot retrans P flux",2:9] +
-        fluxDF[fluxDF$terms=="Coarseroot retrans P flux",2:9] 
+        fluxDF[fluxDF$terms=="Coarseroot retrans P flux",2:9] +
+        fluxDF[fluxDF$terms=="Understorey retrans P flux",2:9]
     
     fluxDF[fluxDF$terms=="Total vegetation uptake P flux",2:9] <- fluxDF[fluxDF$terms=="Total vegetation production P flux",2:9] -
         fluxDF[fluxDF$terms=="Total vegetation retranslocation P flux",2:9]
@@ -48,7 +50,7 @@ read_and_process_EucFACE_P_budget_output_not_ignore_understorey <- function() {
     
     
     ## stocks
-    poolDF[poolDF$terms=="Fine Root P Pool",2:9] <- poolDF[poolDF$terms=="Fine Root P Pool",2:9] * 0.5
+    #poolDF[poolDF$terms=="Fine Root P Pool",2:9] <- poolDF[poolDF$terms=="Fine Root P Pool",2:9] * 0.5
     poolDF$diff <- poolDF$eCO2 - poolDF$aCO2
     poolDF$percent_diff <- (poolDF$eCO2 - poolDF$aCO2)/poolDF$aCO2 * 100
     
@@ -59,7 +61,7 @@ read_and_process_EucFACE_P_budget_output_not_ignore_understorey <- function() {
     ## budgets
     budgetDF[budgetDF$terms=="Total plant P stock",2:9] <- poolDF[poolDF$terms=="Canopy P Pool",2:9] +
         poolDF[poolDF$terms=="Total Wood P Pool",2:9] + poolDF[poolDF$terms=="Fine Root P Pool",2:9] + 
-        poolDF[poolDF$terms=="Coarse Root P Pool",2:9] 
+        poolDF[poolDF$terms=="Coarse Root P Pool",2:9] + poolDF[poolDF$terms=="Understorey P Pool",2:9] 
     
     budgetDF[budgetDF$terms=="Total plant P requirement flux",2:9] <- fluxDF[fluxDF$terms=="Total vegetation production P flux",2:9]
     
@@ -70,14 +72,24 @@ read_and_process_EucFACE_P_budget_output_not_ignore_understorey <- function() {
     budgetDF[budgetDF$terms=="Overstorey GPP efficiency",2:9] <- inoutDF[inoutDF$term=="GPP overstorey",2:9] / fluxDF[fluxDF$terms=="Canopy P flux",2:9]
     
     budgetDF[budgetDF$terms=="Plant PUE",2:9] <- (nppDF[nppDF$term=="Leaf NPP",2:9] +
+                                                      nppDF[nppDF$term=="Understorey NPP",2:9] +
                                                       nppDF[nppDF$term=="Stem NPP",2:9] + 
-                                                      nppDF[nppDF$term=="Fine Root NPP",2:9] /2 +
-                                                      nppDF[nppDF$term=="Intermediate Root NPP",2:9] / 2 + 
+                                                      nppDF[nppDF$term=="Fine Root NPP",2:9] +
+                                                      nppDF[nppDF$term=="Intermediate Root NPP",2:9] + 
                                                       nppDF[nppDF$term=="Coarse Root NPP",2:9] +
                                                       nppDF[nppDF$term=="Other NPP",2:9] + 
                                                       nppDF[nppDF$term=="Leaf consumption",2:9] +
                                                       nppDF[nppDF$term=="Mycorrhizal production",2:9]) / fluxDF[fluxDF$terms=="Total vegetation uptake P flux",2:9]
     
+    
+    tmpDF <- budgetDF[budgetDF$terms=="Overstorey GPP efficiency",]
+    tmpDF$terms <- "Overall GPP efficiency"
+    tmpDF[,2:7] <- (inoutDF[inoutDF$term=="GPP overstorey",2:7] + inoutDF[inoutDF$term=="GPP understorey",2:7]) / (
+        fluxDF[fluxDF$terms=="Canopy P flux",2:7] + fluxDF[fluxDF$terms=="Understorey P flux",2:7]
+    )
+    tmpDF$aCO2 <- tmpDF$eCO2 <- tmpDF$aCO2_sd <- tmpDF$eCO2_sd <- tmpDF$diff <- tmpDF$diff_se <- tmpDF$diff_cf <- tmpDF$percent_diff <- NA
+    
+    budgetDF <- rbind(budgetDF, tmpDF)
     
     budgetDF$aCO2 <- rowMeans(as.matrix(subset(budgetDF, select=c(R2, R3, R6)), na.rm=T)) 
     budgetDF$eCO2 <- rowMeans(as.matrix(subset(budgetDF, select=c(R1, R4, R5)), na.rm=T)) 
@@ -86,7 +98,6 @@ read_and_process_EucFACE_P_budget_output_not_ignore_understorey <- function() {
     
     budgetDF$diff <- budgetDF$eCO2 - budgetDF$aCO2
     budgetDF$percent_diff <- (budgetDF$eCO2 - budgetDF$aCO2)/budgetDF$aCO2 * 100
-    
 
     
     
@@ -113,17 +124,17 @@ read_and_process_EucFACE_P_budget_output_not_ignore_understorey <- function() {
         
     ### assign values
     ## PL
-    outDF$PL[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- poolDF$aCO2[poolDF$terms=="Canopy P Pool"]
-    outDF$PL[outDF$Group=="mean"&outDF$Trt=="eCO2"] <- poolDF$eCO2[poolDF$terms=="Canopy P Pool"]
-    outDF$PL[outDF$Group=="sd"&outDF$Trt=="aCO2"] <- poolDF$aCO2_sd[poolDF$terms=="Canopy P Pool"]
-    outDF$PL[outDF$Group=="sd"&outDF$Trt=="eCO2"] <- poolDF$eCO2_sd[poolDF$terms=="Canopy P Pool"]
-    outDF$PL[outDF$Group=="mean"&outDF$Trt=="diff"] <- poolDF$diff[poolDF$terms=="Canopy P Pool"]
-    outDF$PL[outDF$Group=="sd"&outDF$Trt=="diff"] <- sqrt((poolDF$aCO2_sd[poolDF$terms=="Canopy P Pool"]^2+
-                                                                   poolDF$eCO2_sd[poolDF$terms=="Canopy P Pool"]^2)/2)
+    outDF$PL[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- poolDF$aCO2[poolDF$terms=="Canopy P Pool"] + poolDF$aCO2[poolDF$terms=="Understorey P Pool"]
+    outDF$PL[outDF$Group=="mean"&outDF$Trt=="eCO2"] <- poolDF$eCO2[poolDF$terms=="Canopy P Pool"] + poolDF$eCO2[poolDF$terms=="Understorey P Pool"]
+    outDF$PL[outDF$Group=="sd"&outDF$Trt=="aCO2"] <- sqrt((poolDF$aCO2_sd[poolDF$terms=="Canopy P Pool"]^2 + poolDF$aCO2_sd[poolDF$terms=="Understorey P Pool"]^2)/2)
+    outDF$PL[outDF$Group=="sd"&outDF$Trt=="eCO2"] <- sqrt((poolDF$eCO2_sd[poolDF$terms=="Canopy P Pool"]^2 + poolDF$eCO2_sd[poolDF$terms=="Understorey P Pool"]^2)/2)
+    outDF$PL[outDF$Group=="mean"&outDF$Trt=="diff"] <- outDF$PL[outDF$Group=="mean"&outDF$Trt=="eCO2"] - outDF$PL[outDF$Group=="mean"&outDF$Trt=="aCO2"]
+    outDF$PL[outDF$Group=="sd"&outDF$Trt=="diff"] <- sqrt((outDF$PL[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+
+                                                               outDF$PL[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2)/2)
     
-    outDF$PL[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- poolDF$percent_diff[poolDF$terms=="Canopy P Pool"]
-    outDF$PL[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((poolDF$aCO2_sd[poolDF$terms=="Canopy P Pool"]^2+poolDF$aCO2_sd[poolDF$terms=="Canopy P Pool"]^2+
-                                                                   poolDF$eCO2_sd[poolDF$terms=="Canopy P Pool"]^2)/3)/poolDF$aCO2[poolDF$terms=="Canopy P Pool"]*100 
+    outDF$PL[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- outDF$PL[outDF$Group=="mean"&outDF$Trt=="diff"] / outDF$PL[outDF$Group=="mean"&outDF$Trt=="aCO2"] * 100
+    outDF$PL[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((outDF$PL[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+outDF$PL[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+
+                                                                   outDF$PL[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2)/3)/outDF$PL[outDF$Group=="mean"&outDF$Trt=="aCO2"]*100 
     
     
     ## PW
@@ -304,8 +315,7 @@ read_and_process_EucFACE_P_budget_output_not_ignore_understorey <- function() {
     
     
     ## PGL
-    tmp <- colSums(fluxDF[fluxDF$term%in%c(#"Frass P flux", 
-                                           "Canopy P flux"),2:7], na.rm=T)
+    tmp <- colSums(fluxDF[fluxDF$term%in%c("Canopy P flux", "Understorey P flux"),2:7], na.rm=T)
     amean <- mean(c(tmp[2], tmp[3], tmp[6]), na.rm=T)
     emean <- mean(c(tmp[1], tmp[4], tmp[5]), na.rm=T)
     asd <- sd(c(tmp[2], tmp[3], tmp[6]), na.rm=T)
@@ -418,6 +428,11 @@ read_and_process_EucFACE_P_budget_output_not_ignore_understorey <- function() {
                                                                  outDF$PGFR[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2+
                                                                  outDF$PGCR[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2)/4)
     
+    
+    ## revise PDEM sd values based on the budget DF
+    outDF$PDEM[outDF$Group=="sd"&outDF$Trt=="aCO2"] <- budgetDF$aCO2_sd[budgetDF$terms=="Total plant P requirement flux"]
+    outDF$PDEM[outDF$Group=="sd"&outDF$Trt=="eCO2"] <- budgetDF$eCO2_sd[budgetDF$terms=="Total plant P requirement flux"]
+    
     outDF$PDEM[outDF$Group=="mean"&outDF$Trt=="diff"] <- outDF$PDEM[outDF$Group=="mean"&outDF$Trt=="eCO2"] - outDF$PDEM[outDF$Group=="mean"&outDF$Trt=="aCO2"]
     outDF$PDEM[outDF$Group=="sd"&outDF$Trt=="diff"] <- sqrt((outDF$PDEM[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+
                                                                  outDF$PDEM[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2)/2)
@@ -527,17 +542,17 @@ read_and_process_EucFACE_P_budget_output_not_ignore_understorey <- function() {
     
 
     ## PLRETR
-    outDF$PLRETR[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- fluxDF$aCO2[fluxDF$terms=="Canopy retrans P flux"]
-    outDF$PLRETR[outDF$Group=="mean"&outDF$Trt=="eCO2"] <- fluxDF$eCO2[fluxDF$terms=="Canopy retrans P flux"]
-    outDF$PLRETR[outDF$Group=="sd"&outDF$Trt=="aCO2"] <- fluxDF$aCO2_sd[fluxDF$terms=="Canopy retrans P flux"]
-    outDF$PLRETR[outDF$Group=="sd"&outDF$Trt=="eCO2"] <- fluxDF$eCO2_sd[fluxDF$terms=="Canopy retrans P flux"]
-    outDF$PLRETR[outDF$Group=="mean"&outDF$Trt=="diff"] <- fluxDF$diff[fluxDF$terms=="Canopy retrans P flux"]
-    outDF$PLRETR[outDF$Group=="sd"&outDF$Trt=="diff"] <- sqrt((fluxDF$aCO2_sd[fluxDF$terms=="Canopy retrans P flux"]^2+
-                                                                       fluxDF$eCO2_sd[fluxDF$terms=="Canopy retrans P flux"]^2)/2)
+    outDF$PLRETR[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- fluxDF$aCO2[fluxDF$terms=="Canopy retrans P flux"]+fluxDF$aCO2[fluxDF$terms=="Understorey retrans P flux"]
+    outDF$PLRETR[outDF$Group=="mean"&outDF$Trt=="eCO2"] <- fluxDF$eCO2[fluxDF$terms=="Canopy retrans P flux"]+fluxDF$eCO2[fluxDF$terms=="Understorey retrans P flux"]
+    outDF$PLRETR[outDF$Group=="sd"&outDF$Trt=="aCO2"] <- sqrt((fluxDF$aCO2_sd[fluxDF$terms=="Canopy retrans P flux"]^2+fluxDF$aCO2_sd[fluxDF$terms=="Understorey retrans P flux"]^2)/2)
+    outDF$PLRETR[outDF$Group=="sd"&outDF$Trt=="eCO2"] <- sqrt((fluxDF$eCO2_sd[fluxDF$terms=="Canopy retrans P flux"]^2+fluxDF$eCO2_sd[fluxDF$terms=="Understorey retrans P flux"]^2)/2)
+    outDF$PLRETR[outDF$Group=="mean"&outDF$Trt=="diff"] <- outDF$PLRETR[outDF$Group=="mean"&outDF$Trt=="eCO2"] - outDF$PLRETR[outDF$Group=="mean"&outDF$Trt=="aCO2"]
+    outDF$PLRETR[outDF$Group=="sd"&outDF$Trt=="diff"] <- sqrt((outDF$PLRETR[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+
+                                                                   outDF$PLRETR[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2)/2)
     
-    outDF$PLRETR[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- fluxDF$percent_diff[fluxDF$terms=="Canopy retrans P flux"]
-    outDF$PLRETR[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((fluxDF$aCO2_sd[fluxDF$terms=="Canopy retrans P flux"]^2+fluxDF$aCO2_sd[fluxDF$terms=="Canopy retrans P flux"]^2+
-                                                                       fluxDF$eCO2_sd[fluxDF$terms=="Canopy retrans P flux"]^2)/3)/fluxDF$aCO2[fluxDF$terms=="Canopy retrans P flux"]*100 
+    outDF$PLRETR[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- (outDF$PLRETR[outDF$Group=="mean"&outDF$Trt=="eCO2"] -  outDF$PLRETR[outDF$Group=="mean"&outDF$Trt=="aCO2"] )/ outDF$PLRETR[outDF$Group=="mean"&outDF$Trt=="aCO2"] * 100
+    outDF$PLRETR[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((outDF$PLRETR[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+outDF$PLRETR[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+
+                                                                       outDF$PLRETR[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2)/3)/outDF$PLRETR[outDF$Group=="mean"&outDF$Trt=="aCO2"]*100 
     
     
     ## PWRETR
@@ -620,8 +635,8 @@ read_and_process_EucFACE_P_budget_output_not_ignore_understorey <- function() {
                                                                 outDF$PUP[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2)/2) 
     
     outDF$PUP[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- (outDF$PUP[outDF$Group=="mean"&outDF$Trt=="eCO2"] - outDF$PUP[outDF$Group=="mean"&outDF$Trt=="aCO2"]) / outDF$PUP[outDF$Group=="mean"&outDF$Trt=="aCO2"]
-    outDF$PUP[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((outDF$PUP[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2+outDF$PUP[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2+
-                                                                    outDF$PUP[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2)/3)/outDF$PUP[outDF$Group=="mean"&outDF$Trt=="eCO2"]*100 
+    outDF$PUP[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((outDF$PUP[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2+outDF$PUP[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+
+                                                                    outDF$PUP[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2)/3)/outDF$PUP[outDF$Group=="mean"&outDF$Trt=="aCO2"]*100 
     
     
 
@@ -634,21 +649,25 @@ read_and_process_EucFACE_P_budget_output_not_ignore_understorey <- function() {
     outDF$PUE[outDF$Group=="sd"&outDF$Trt=="diff"] <- sqrt((outDF$PUE[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2+
                                                                 outDF$PUE[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2)/2)
     
-    outDF$PUE[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- NA
-    outDF$PUE[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- NA
+    outDF$PUE[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- outDF$PUE[outDF$Group=="mean"&outDF$Trt=="diff"] / outDF$PUE[outDF$Group=="mean"&outDF$Trt=="aCO2"] * 100
+    outDF$PUE[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((outDF$PUE[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2+outDF$PUE[outDF$Group=="mean"&outDF$Trt=="aCO2"]^2+
+                                                                    outDF$PUE[outDF$Group=="mean"&outDF$Trt=="aCO2"]^2)/3)/outDF$PUE[outDF$Group=="mean"&outDF$Trt=="aCO2"]*100
+    
+    
     
     
     ## GPP_use
-    outDF$GPP_use[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- budgetDF$aCO2[budgetDF$terms=="Overstorey GPP efficiency"]
-    outDF$GPP_use[outDF$Group=="mean"&outDF$Trt=="eCO2"] <- budgetDF$eCO2[budgetDF$terms=="Overstorey GPP efficiency"]
-    outDF$GPP_use[outDF$Group=="sd"&outDF$Trt=="aCO2"] <- budgetDF$aCO2_sd[budgetDF$terms=="Overstorey GPP efficiency"]
-    outDF$GPP_use[outDF$Group=="sd"&outDF$Trt=="eCO2"] <- budgetDF$eCO2_sd[budgetDF$terms=="Overstorey GPP efficiency"]
+    outDF$GPP_use[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- budgetDF$aCO2[budgetDF$terms=="Overall GPP efficiency"]
+    outDF$GPP_use[outDF$Group=="mean"&outDF$Trt=="eCO2"] <- budgetDF$eCO2[budgetDF$terms=="Overall GPP efficiency"]
+    outDF$GPP_use[outDF$Group=="sd"&outDF$Trt=="aCO2"] <- budgetDF$aCO2_sd[budgetDF$terms=="Overall GPP efficiency"]
+    outDF$GPP_use[outDF$Group=="sd"&outDF$Trt=="eCO2"] <- budgetDF$eCO2_sd[budgetDF$terms=="Overall GPP efficiency"]
     outDF$GPP_use[outDF$Group=="mean"&outDF$Trt=="diff"] <- outDF$GPP_use[outDF$Group=="mean"&outDF$Trt=="eCO2"]-outDF$GPP_use[outDF$Group=="mean"&outDF$Trt=="aCO2"]
     outDF$GPP_use[outDF$Group=="sd"&outDF$Trt=="diff"] <- sqrt((outDF$GPP_use[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2+
                                                                 outDF$GPP_use[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2)/2)
     
-    outDF$GPP_use[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- NA
-    outDF$GPP_use[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- NA
+    outDF$GPP_use[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- outDF$GPP_use[outDF$Group=="mean"&outDF$Trt=="diff"]/outDF$GPP_use[outDF$Group=="mean"&outDF$Trt=="aCO2"]*100
+    outDF$GPP_use[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((outDF$GPP_use[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+outDF$GPP_use[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+
+                                                                        outDF$GPP_use[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2)/3)/outDF$GPP_use[outDF$Group=="mean"&outDF$Trt=="aCO2"]*100
     
     
     ## PMRT
