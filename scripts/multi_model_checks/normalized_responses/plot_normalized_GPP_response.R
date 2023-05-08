@@ -298,9 +298,6 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
     
     ###############################################################################
 
-    
-    
-    
     ### plot CO2 response ratios
     subDF <- plotDF2[plotDF2$ModName%in%c("A_GDAYP", "B_ELMV1",
                                           "C_CABLP", "D_LPJGP",
@@ -429,19 +426,43 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
                              "Obs_field",
                              "Obs_inst")
     
+    
+    myDF <- read.csv("./validation_dataset/EucFACE_C_Budget_data/MAESPA_output/VJlimitedPhotoResponseCO2.csv")
+    myDF <- myDF[myDF$A.inc >=0,]
+    myDF <- myDF[myDF$A.inc <=2,]
+    
+    Ac.mean <- mean(myDF$Ac.inc-1)*100
+    Ac.sd <- sd(myDF$Ac.inc-1)*100
+    Aj.mean <- mean(myDF$Aj.inc-1)*100
+    Aj.sd <- sd(myDF$Aj.inc-1)*100
+    A.mean <- mean(myDF$A.inc-1)*100
+    A.sd <- sd(myDF$A.inc-1)*100
+    
+    
+    tmpDF1 <- data.frame("ModName"=c("Ac.mean", "Aj.mean"),
+                         "diff"=c(Ac.mean, Aj.mean),
+                         "diff.sd"=c(Ac.sd, Aj.sd),
+                         "ModName2"=c("Ac", "Aj"))
+    
+    gppDF.plot <- rbind(gppDF.plot, tmpDF1)
+    
+    
     subDF2 <- gppDF.plot[gppDF.plot$ModName%in%c("A_GDAYP","B_ELMV1",
                                                  "C_CABLP", "D_LPJGP",
                                                  "E_OCHDP", "F_QUINC",
                                                  "G_OCHDX", "H_QUJSM"),]
     
-    subDF1 <- gppDF.plot[gppDF.plot$ModName%in%c("Obs_field", "Obs_inst"),]
+    subDF1 <- gppDF.plot[gppDF.plot$ModName%in%c("Obs_field", "Obs_inst", "Ac.mean", "Aj.mean"),]
+    
+    
+    
     
     
     p3 <- ggplot(data=gppDF.plot, 
                  aes(ModName2, diff)) +
-      geom_violin() +
+      geom_violin(fill="grey") +
       stat_summary(fun.y="mean", geom="crossbar", width=0.5, color="black")+
-      geom_errorbar(data=subDF1, aes(x=ModName, ymin=diff-diff.sd, 
+      geom_errorbar(data=subDF1, aes(x=ModName2, ymin=diff-diff.sd, 
                                      ymax=diff+diff.sd), width=0.2,
                     position=position_dodge(width=1)) +
       geom_point(data=subDF2, aes(ModName2, diff, 
@@ -464,132 +485,128 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
             plot.title = element_text(size=14, face="bold.italic", 
                                       hjust = 0.5))+
       ylab(expression(paste(CO[2] * " response of GPP (%)")))+
-      scale_x_discrete(limit=c("Multi-model", "Obs_field", "Obs_inst"),
-                       label=c("Multi-model" = expression(bold("M-M")),
-                               "Obs_field" = expression(bold("OBS"[field])),
-                               "Obs_inst" = expression(bold("OBS"[inst]))))+
+      scale_x_discrete(limit=c("Multi-model", "Obs_field", "Obs_inst",
+                               "Ac", "Aj"),
+                       label=c("Multi-model" = expression("M-M"),
+                               "Obs_field" = expression("OBS"[field]),
+                               "Obs_inst" = expression("OBS"[inst]),
+                               "Ac" = expression(A[c]),
+                               "Aj"= expression(A[j])))+
       scale_color_manual(name="Model",
                          values=c(col.values,
                                   "Obs_field"="black",
-                                  "Obs_inst"="black"))
+                                  "Obs_inst"="black",
+                                  "Ac"="black",
+                                  "Aj"="black"))
     
-    plot(p3)
-    
-    
-    
-    ### plot CO2 response ratios
-    subDF <- plotDF1[plotDF1$ModName%in%c("A_GDAYP", "B_ELMV1",
-                                          "C_CABLP", "D_LPJGP",
-                                          "E_OCHDP", "F_QUINC",
-                                          "G_OCHDX", "H_QUJSM"),]
-    
-    subDF1 <- subDF[subDF$Trt=="amb",]
-    subDF2 <- subDF[subDF$Trt=="ele",]
-    subDF1$Aleaf.mean.sd <- NULL
-    subDF2$Aleaf.mean.sd <- NULL
-    
-    names(subDF1) <- names(subDF2) <- c("ModName", "Trt", "Aleaf")
-    
-    subDF <- merge(subDF1, subDF2, by="ModName")
-    subDF$diff <- with(subDF, (Aleaf.y-Aleaf.x)/Aleaf.x)
-    subDF$Trt.x <- NULL
-    subDF$Trt.y <- NULL
-    subDF$Aleaf.x <- NULL
-    subDF$Aleaf.y <- NULL
-    subDF$diff.sd <- 0.0
-    
-    tmpDF <- data.frame("ModName"="Multi-model",
-                        "diff"=mean(subDF$diff),
-                        "diff.sd"=sd(subDF$diff))
-    
-    aleafDF.plot <- rbind(subDF, tmpDF)
-    aleafDF.plot$diff <- aleafDF.plot$diff * 100
-    aleafDF.plot$diff.sd <- aleafDF.plot$diff.sd * 100
-    
-    myDF <- read.csv("./validation_dataset/EucFACE_C_Budget_data/MAESPA_output/VJlimitedPhotoResponseCO2.csv")
-    myDF <- myDF[myDF$A.inc >=0,]
-    myDF <- myDF[myDF$A.inc <=2,]
-    
-    Ac.mean <- mean(myDF$Ac.inc-1)*100
-    Ac.sd <- sd(myDF$Ac.inc-1)*100
-    Aj.mean <- mean(myDF$Aj.inc-1)*100
-    Aj.sd <- sd(myDF$Aj.inc-1)*100
-    A.mean <- mean(myDF$A.inc-1)*100
-    A.sd <- sd(myDF$A.inc-1)*100
-    
-    
-    tmpDF1 <- data.frame("ModName"=c("A.mean", "Ac.mean", "Aj.mean", "A.obs"),
-                         "diff"=c(A.mean, Ac.mean, Aj.mean, v5*100),
-                         "diff.sd"=c(A.sd, Ac.sd, Aj.sd, v6*100))
-    
-    aleafDF.plot <- rbind(aleafDF.plot, tmpDF1)
+    #plot(p3)
     
     
     
-    
-    aleafDF.plot$ModName2 <- c(rep("Multi-model", 9),
-                               "A.mean", "Ac.mean",
-                               "Aj.mean", "A.obs")
-    
-    subDF2 <- aleafDF.plot[aleafDF.plot$ModName%in%c("A_GDAYP","B_ELMV1",
-                                                     "C_CABLP", "D_LPJGP",
-                                                     "E_OCHDP", "F_QUINC",
-                                                     "G_OCHDX", "H_QUJSM"),]
-    
-    subDF1 <- aleafDF.plot[aleafDF.plot$ModName%in%c("A.mean", "Ac.mean",
-                                                     "Aj.mean", "A.obs"),]
-    
-    
-    p1 <- ggplot(data=aleafDF.plot, 
-                 aes(ModName2, diff)) +
-      geom_violin() +
-      stat_summary(fun.y="mean", geom="crossbar", width=0.5, color="black")+
-      geom_errorbar(data=subDF1, aes(x=ModName, ymin=diff-diff.sd, 
-                                     ymax=diff+diff.sd), width=0.2,
-                    position=position_dodge(width=1)) +
-      geom_point(data=subDF2, aes(ModName2, diff, 
-                                  col=ModName), 
-                 position=position_jitterdodge(jitter.width=0.2, dodge.width=0.9), 
-                 size=6)+
-      #ylim(-5, 15)+
-      theme_linedraw() +
-      theme(panel.grid.minor=element_blank(),
-            axis.text.x=element_text(size=12),
-            axis.title.x=element_blank(),
-            axis.text.y=element_text(size=12),
-            axis.title.y=element_text(size=14),
-            legend.text=element_text(size=12),
-            legend.title=element_text(size=14),
-            panel.grid.major=element_blank(),
-            legend.position="none",
-            legend.box = 'horizontal',
-            legend.box.just = 'left',
-            plot.title = element_text(size=14, face="bold.italic", 
-                                      hjust = 0.5))+
-      ylab(expression(paste(CO[2] * " response of Aleaf (%)")))+
-      scale_x_discrete(limit=c("Multi-model", "A.mean", "Ac.mean", "Aj.mean", "A.obs"),
-                       label=c("Multi-model" = expression(bold("M-M")),
-                               "A.mean" = expression(bold("A"[long])),
-                               "Ac.mean" = expression(bold("A"[c])),
-                               "Aj.mean" = expression(bold("A"[j])),
-                               "A.obs" = expression(bold("A"[obs]))))+
-      scale_color_manual(name="Model",
-                         values=c(col.values,
-                                  "A.mean"="black",
-                                  "Ac.mean"="black",
-                                  "Aj.mean"="black",
-                                  "A.obs"="black"))
-    
-    plot(p1)
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    #### plot CO2 response ratios
+    #subDF <- plotDF1[plotDF1$ModName%in%c("A_GDAYP", "B_ELMV1",
+    #                                      "C_CABLP", "D_LPJGP",
+    #                                      "E_OCHDP", "F_QUINC",
+    #                                      "G_OCHDX", "H_QUJSM"),]
+    #
+    #subDF1 <- subDF[subDF$Trt=="amb",]
+    #subDF2 <- subDF[subDF$Trt=="ele",]
+    #subDF1$Aleaf.mean.sd <- NULL
+    #subDF2$Aleaf.mean.sd <- NULL
+    #
+    #names(subDF1) <- names(subDF2) <- c("ModName", "Trt", "Aleaf")
+    #
+    #subDF <- merge(subDF1, subDF2, by="ModName")
+    #subDF$diff <- with(subDF, (Aleaf.y-Aleaf.x)/Aleaf.x)
+    #subDF$Trt.x <- NULL
+    #subDF$Trt.y <- NULL
+    #subDF$Aleaf.x <- NULL
+    #subDF$Aleaf.y <- NULL
+    #subDF$diff.sd <- 0.0
+    #
+    #tmpDF <- data.frame("ModName"="Multi-model",
+    #                    "diff"=mean(subDF$diff),
+    #                    "diff.sd"=sd(subDF$diff))
+    #
+    #aleafDF.plot <- rbind(subDF, tmpDF)
+    #aleafDF.plot$diff <- aleafDF.plot$diff * 100
+    #aleafDF.plot$diff.sd <- aleafDF.plot$diff.sd * 100
+    #
+    #myDF <- read.csv("./validation_dataset/EucFACE_C_Budget_data/MAESPA_output/VJlimitedPhotoResponseCO2.csv")
+    #myDF <- myDF[myDF$A.inc >=0,]
+    #myDF <- myDF[myDF$A.inc <=2,]
+    #
+    #Ac.mean <- mean(myDF$Ac.inc-1)*100
+    #Ac.sd <- sd(myDF$Ac.inc-1)*100
+    #Aj.mean <- mean(myDF$Aj.inc-1)*100
+    #Aj.sd <- sd(myDF$Aj.inc-1)*100
+    #A.mean <- mean(myDF$A.inc-1)*100
+    #A.sd <- sd(myDF$A.inc-1)*100
+    #
+    #
+    #tmpDF1 <- data.frame("ModName"=c("A.mean", "Ac.mean", "Aj.mean", "A.obs"),
+    #                     "diff"=c(A.mean, Ac.mean, Aj.mean, v5*100),
+    #                     "diff.sd"=c(A.sd, Ac.sd, Aj.sd, v6*100))
+    #
+    #aleafDF.plot <- rbind(aleafDF.plot, tmpDF1)
+    #
+    #
+    #
+    #
+    #aleafDF.plot$ModName2 <- c(rep("Multi-model", 9),
+    #                           "A.mean", "Ac.mean",
+    #                           "Aj.mean", "A.obs")
+    #
+    #subDF2 <- aleafDF.plot[aleafDF.plot$ModName%in%c("A_GDAYP","B_ELMV1",
+    #                                                 "C_CABLP", "D_LPJGP",
+    #                                                 "E_OCHDP", "F_QUINC",
+    #                                                 "G_OCHDX", "H_QUJSM"),]
+    #
+    #subDF1 <- aleafDF.plot[aleafDF.plot$ModName%in%c("A.mean", "Ac.mean",
+    #                                                 "Aj.mean", "A.obs"),]
+    #
+    #
+    #p1 <- ggplot(data=aleafDF.plot, 
+    #             aes(ModName2, diff)) +
+    #  geom_violin() +
+    #  stat_summary(fun.y="mean", geom="crossbar", width=0.5, color="black")+
+    #  geom_errorbar(data=subDF1, aes(x=ModName, ymin=diff-diff.sd, 
+    #                                 ymax=diff+diff.sd), width=0.2,
+    #                position=position_dodge(width=1)) +
+    #  geom_point(data=subDF2, aes(ModName2, diff, 
+    #                              col=ModName), 
+    #             position=position_jitterdodge(jitter.width=0.2, dodge.width=0.9), 
+    #             size=6)+
+    #  #ylim(-5, 15)+
+    #  theme_linedraw() +
+    #  theme(panel.grid.minor=element_blank(),
+    #        axis.text.x=element_text(size=12),
+    #        axis.title.x=element_blank(),
+    #        axis.text.y=element_text(size=12),
+    #        axis.title.y=element_text(size=14),
+    #        legend.text=element_text(size=12),
+    #        legend.title=element_text(size=14),
+    #        panel.grid.major=element_blank(),
+    #        legend.position="none",
+    #        legend.box = 'horizontal',
+    #        legend.box.just = 'left',
+    #        plot.title = element_text(size=14, face="bold.italic", 
+    #                                  hjust = 0.5))+
+    #  ylab(expression(paste(CO[2] * " response of Aleaf (%)")))+
+    #  scale_x_discrete(limit=c("Multi-model", "A.mean", "Ac.mean", "Aj.mean", "A.obs"),
+    #                   label=c("Multi-model" = expression(bold("M-M")),
+    #                           "A.mean" = expression(bold("A"[long])),
+    #                           "Ac.mean" = expression(bold("A"[c])),
+    #                           "Aj.mean" = expression(bold("A"[j])),
+    #                           "A.obs" = expression(bold("A"[obs]))))+
+    #  scale_color_manual(name="Model",
+    #                     values=c(col.values,
+    #                              "A.mean"="black",
+    #                              "Ac.mean"="black",
+    #                              "Aj.mean"="black",
+    #                              "A.obs"="black"))
+    #
+    #plot(p1)
     
     
     
@@ -642,7 +659,7 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
     
     p2 <- ggplot(data=subDF3, 
                  aes(ModName2, diff)) +
-      geom_violin() +
+      geom_violin(fill="grey") +
       stat_summary(fun.y="mean", geom="crossbar", width=0.5, color="black")+
       geom_errorbar(data=subDF1, aes(x=ModName, ymin=diff-diff.sd, 
                                      ymax=diff+diff.sd), width=0.2,
@@ -668,13 +685,13 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
                                       hjust = 0.5))+
       ylab(expression(paste(CO[2] * " response of LAI (%)")))+
       scale_x_discrete(limit=c("Multi-model", "Obs"),
-                       label=c("Multi-model" = expression(bold("M-M")),
-                               "Obs" = expression(bold("OBS"))))+
+                       label=c("Multi-model" = expression("M-M"),
+                               "Obs" = expression("OBS")))+
       scale_color_manual(name="Model",
                          values=c(col.values,
                                   "Obs"="black"))
 
-    plot(p2)
+    #plot(p2)
 
     
     
@@ -730,7 +747,7 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
                          labels=c(model.labels))
     
     
-    plot(p5)
+    #plot(p5)
     
     
     subDF1 <- plotDF3[plotDF3$ModName%in%c("Multi-model", "OBS"),]
@@ -798,7 +815,7 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
                                     ymax=LAI_diff+LAI_diff_sd)) +
       geom_errorbarh(data=comDF, aes(xmin=GPP_diff-GPP_diff_sd, 
                                      xmax=GPP_diff+GPP_diff_sd)) +
-      geom_point(data=comDF, aes(GPP_diff, LAI_diff, col=ModName),
+      geom_point(data=comDF, aes(GPP_diff, LAI_diff, col=ModName, pch=ModName),
                  size=6)+
       theme_linedraw() +
       theme(panel.grid.minor=element_blank(),
@@ -818,39 +835,42 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
       ylab(expression(paste(CO[2] * " response of LAI (%)")))+
       scale_color_manual(name="Model",
                          values=c(col.values,
-                                  "Obs"="black"))
+                                  "Obs"="black"))+
+      scale_shape_manual(name="Model",
+                         values=c("A_GDAYP"=19,"B_ELMV1"=19,
+                                  "C_CABLP"=19,"D_LPJGP"=19,
+                                  "E_OCHDP"=19,"F_QUINC"=19,
+                                  "G_OCHDX"=19,"H_QUJSM"=19,
+                                  "Multi-model"=19,"Obs"=15))+
+      annotate("text", x = 5, y = -1, label = "OBS")+
+      annotate("text", x = 17, y = 5, label = "M-M")
     
-    plot(p7)
     
-    
-    plots_right_column <- plot_grid(p3, p7, p2, 
-                                    labels=c("b", "d", "e"),
-                                    ncol=1, align="vh", axis = "l",
-                                    label_x=0.84, label_y=0.95,
-                                    label_size = 20)
-    
-    
-  
-    pdf(paste0(out.dir, "/MIP_normalized_photosynthesis_response_OBS_", 
-               scenario, "_comparison_with_obs.pdf"), 
-        width=14, height=16)
-    plot_grid(plots_left_column, plots_right_column,
-              ncol=2, rel_widths=c(1,0.5))
-    
-    dev.off()
+    ###############################################################################
     
     
     
-    plots_bottom_row <- plot_grid(p3, p5, p2, p7,
-                                  labels=c("b", "c", "d", "e"),
-                                  ncol=4, align="vh", axis = "l",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    ###############################################################################
+    plots_bottom_row <- plot_grid(p3, #p5, 
+                                  p2, p7, 
+                                  labels=c("b", "c", "d"),
+                                  ncol=3, align="vh", axis = "l",
                                   label_x=0.84, label_y=0.95,
-                                  rel_widths=c(1.2, 1,1,1),
+                                  rel_widths=c(1.2, 1,1),
                                   label_size = 20)
     
     pdf(paste0(out.dir, "/MIP_normalized_photosynthesis_response_OBS_", 
                scenario, "_comparison_with_obs2.pdf"), 
-        width=14, height=8)
+        width=14, height=7)
     plot_grid(plots_top_row, plots_bottom_row,
               ncol=1, rel_heights=c(1,1))
     

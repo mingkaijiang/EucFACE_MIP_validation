@@ -171,7 +171,7 @@ plot_growth_and_nep_response <- function(scenario, eucDF) {
         #                           "deltaCFR"=expression(Delta*C[froot]), 
         #                           "deltaCCR"=expression(Delta*C[croot]),
         #                           "deltaCSTOR"=expression(Delta*C[store])))+
-    scale_fill_manual(name=expression("BP"),
+    scale_fill_manual(name=expression(Delta*C[veg]),
                       values=c("deltaCL"=cbbPalette[2],
                                "deltaCW"=cbbPalette[3],
                                "deltaCFR"=cbbPalette[4],

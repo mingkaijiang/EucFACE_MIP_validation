@@ -127,7 +127,7 @@ read_and_process_EucFACE_C_budget_output_not_ignore_understorey <- function() {
 
     
     ### prepare a list to store all variables
-    c.var.list <- c("GPP", "LAI", "NPP", "CGL", "CGW", "CGFR", "CGCR", "CEX",
+    c.var.list <- c("GPP", "AllGPP", "LAI", "NPP", "CGL", "CGW", "CGFR", "CGCR", "CEX",
                     "RL", "RW", "RFR", "RGR", "RAU", "CVOC", "RHET", "RECO",
                     "NEP_inout", "NEP_npprh", "NEP_pool", "NEP",
                     "CL", "CW", "CFR", "CCR", "CFLITA", "CMIC", "CSOIL", "CMYC",
@@ -141,17 +141,31 @@ read_and_process_EucFACE_C_budget_output_not_ignore_understorey <- function() {
     colnames(outDF) <- c("Group", "Trt")
         
     ### assign values
-    ## GPP
-    outDF$GPP[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- inoutDF$aCO2[inoutDF$term=="GPP overstorey"] + inoutDF$aCO2[inoutDF$term=="GPP understorey"]
-    outDF$GPP[outDF$Group=="mean"&outDF$Trt=="eCO2"] <- inoutDF$eCO2[inoutDF$term=="GPP overstorey"] + inoutDF$eCO2[inoutDF$term=="GPP understorey"]
-    outDF$GPP[outDF$Group=="sd"&outDF$Trt=="aCO2"] <- sqrt((inoutDF$aCO2_sd[inoutDF$term=="GPP overstorey"]^2+inoutDF$aCO2_sd[inoutDF$term=="GPP understorey"]^2)/2)
-    outDF$GPP[outDF$Group=="sd"&outDF$Trt=="eCO2"] <- sqrt((inoutDF$eCO2_sd[inoutDF$term=="GPP overstorey"]^2+inoutDF$eCO2_sd[inoutDF$term=="GPP understorey"]^2)/2)
+    ## GPP - tree only
+    outDF$GPP[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- inoutDF$aCO2[inoutDF$term=="GPP overstorey"] 
+    outDF$GPP[outDF$Group=="mean"&outDF$Trt=="eCO2"] <- inoutDF$eCO2[inoutDF$term=="GPP overstorey"]
+    outDF$GPP[outDF$Group=="sd"&outDF$Trt=="aCO2"] <- inoutDF$aCO2_sd[inoutDF$term=="GPP overstorey"]
+    outDF$GPP[outDF$Group=="sd"&outDF$Trt=="eCO2"] <- inoutDF$eCO2_sd[inoutDF$term=="GPP overstorey"]
     outDF$GPP[outDF$Group=="mean"&outDF$Trt=="diff"] <- outDF$GPP[outDF$Group=="mean"&outDF$Trt=="eCO2"] - outDF$GPP[outDF$Group=="mean"&outDF$Trt=="aCO2"]
     outDF$GPP[outDF$Group=="sd"&outDF$Trt=="diff"] <- sqrt((outDF$GPP[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+
                                                                 outDF$GPP[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2)/2)
     outDF$GPP[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- outDF$GPP[outDF$Group=="mean"&outDF$Trt=="diff"]/outDF$GPP[outDF$Group=="mean"&outDF$Trt=="aCO2"]*100
     outDF$GPP[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((outDF$GPP[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+outDF$GPP[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+
-                                                                    outDF$GPP[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2)/3)/inoutDF$aCO2[inoutDF$term=="GPP overstorey"]*100 
+                                                                    outDF$GPP[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2)/3)/outDF$GPP[outDF$Group=="mean"&outDF$Trt=="aCO2"]*100 
+    
+    
+    ## AllGPP - both trees and understorey
+    outDF$AllGPP[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- inoutDF$aCO2[inoutDF$term=="GPP overstorey"] + inoutDF$aCO2[inoutDF$term=="GPP understorey"]
+    outDF$AllGPP[outDF$Group=="mean"&outDF$Trt=="eCO2"] <- inoutDF$eCO2[inoutDF$term=="GPP overstorey"] + inoutDF$eCO2[inoutDF$term=="GPP understorey"]
+    outDF$AllGPP[outDF$Group=="sd"&outDF$Trt=="aCO2"] <- sqrt((inoutDF$aCO2_sd[inoutDF$term=="GPP overstorey"]^2+inoutDF$aCO2_sd[inoutDF$term=="GPP understorey"]^2)/2)
+    outDF$AllGPP[outDF$Group=="sd"&outDF$Trt=="eCO2"] <- sqrt((inoutDF$eCO2_sd[inoutDF$term=="GPP overstorey"]^2+inoutDF$eCO2_sd[inoutDF$term=="GPP understorey"]^2)/2)
+    outDF$AllGPP[outDF$Group=="mean"&outDF$Trt=="diff"] <- outDF$AllGPP[outDF$Group=="mean"&outDF$Trt=="eCO2"] - outDF$AllGPP[outDF$Group=="mean"&outDF$Trt=="aCO2"]
+    outDF$AllGPP[outDF$Group=="sd"&outDF$Trt=="diff"] <- sqrt((outDF$AllGPP[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+
+                                                                outDF$AllGPP[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2)/2)
+    outDF$AllGPP[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- outDF$AllGPP[outDF$Group=="mean"&outDF$Trt=="diff"]/outDF$AllGPP[outDF$Group=="mean"&outDF$Trt=="aCO2"]*100
+    outDF$AllGPP[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((outDF$AllGPP[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+outDF$AllGPP[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+
+                                                                    outDF$AllGPP[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2)/3)/outDF$AllGPP[outDF$Group=="mean"&outDF$Trt=="aCO2"]*100 
+    
     
     ## CL
     outDF$CL[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- poolDF$aCO2[poolDF$term=="Overstorey leaf"]+poolDF$aCO2[poolDF$term=="Understorey above-ground"]
@@ -680,10 +694,17 @@ read_and_process_EucFACE_C_budget_output_not_ignore_understorey <- function() {
                                                                         outDF$NEP_pools[outDF$Group=="sd"&outDF$Trt=="pct_diff"]^2)/3)
     
     ### read in laiDF
+    ## overstorey
     laiDF <- read.csv("validation_dataset/EucFACE_LAI_2012_2016.csv")
-    
     laisumDF <- summaryBy(lai~Trt, data=laiDF, FUN=c(mean,sd), 
                           keep.names=T, na.rm=T)
+    
+    ## understorey
+    laiDF2 <- read.csv("simulation_output/understorey.gpp.csv")
+    laisumDF2 <- summaryBy(GPP.sum+LAI.mean~c.treat+Species, FUN=c(mean,sd),
+                           data=laiDF2, keep.names=T, na.rm=T)
+    
+    
     
     
     ### LAI

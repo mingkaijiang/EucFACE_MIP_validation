@@ -38,6 +38,11 @@ theoretical_analysis_of_leaf_nutrient_effect_on_leaf_physiology <- function(scen
     npDF$Ellsworth_Vcmax <- exp(4.308 + 0.298 * log(npDF$leafP) + 0.197 * log(npDF$leafN)) 
     npDF$Ellsworth_Jmax <- exp(5.139 + 0.325 * log(npDF$leafP) + 0.112 * log(npDF$leafN))
     
+    
+    ### calculate Jmax/Vcmax
+    npDF$Walker_JVratio <- with(npDF, Walker_Jmax/Walker_Vcmax)
+    npDF$Ellsworth_JVratio <- with(npDF, Ellsworth_Jmax/Ellsworth_Vcmax)
+    
     ### 
     vcmax.range <- c(plyr::round_any(min(c(npDF$Walker_Vcmax, npDF$Ellsworth_Vcmax)), 10, f=floor), 
                      plyr::round_any(max(c(npDF$Walker_Vcmax, npDF$Ellsworth_Vcmax)), 10, f=ceiling))
