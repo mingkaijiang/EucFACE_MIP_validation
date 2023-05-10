@@ -145,7 +145,7 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
     
     ########################################################
     ### plotting
-    p1 <- ggplot(data=plotDF1, 
+    p1_mm <- ggplot(data=plotDF1, 
                  aes(ModName, Aleaf.mean.mean, group=Trt)) +
       geom_bar(stat = "identity", aes(fill=ModName, alpha=Trt), 
                position=position_dodge(), col="black") +
@@ -184,11 +184,11 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
     
     
     
-    p2 <- ggplot(data=plotDF2, 
+    p2_mm <- ggplot(data=plotDF2, 
                  aes(ModName, LAI.mean.mean, group=Trt)) +
       geom_bar(stat = "identity", aes(fill=ModName, alpha=Trt), 
                position=position_dodge(), col="black") +
-      geom_vline(xintercept=c(6.5, 8.5, 10.5, 11.5), lty=2)+
+      geom_vline(xintercept=c(6.5, 8.5), lty=2)+
       geom_errorbar(aes(x=ModName, ymin=LAI.mean.mean-LAI.mean.sd, 
                         ymax=LAI.mean.mean+LAI.mean.sd), width=0.4,
                     position=position_dodge(width=1)) +
@@ -222,13 +222,13 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
                                "OBS" = expression(bold("OBS"))))
     
     
-    p3 <- ggplot(data=plotDF3, 
-                 aes(ModName, GPP.mean, group=Trt)) +
+    p3_mm <- ggplot(data=plotDF3, 
+                 aes(ModName, GPP.mean/1000, group=Trt)) +
       geom_bar(stat = "identity", aes(fill=ModName, alpha=Trt), 
                position=position_dodge(), col="black") +
-      geom_vline(xintercept=c(6.5, 8.5, 10.5, 11.5), lty=2)+
-      geom_errorbar(aes(x=ModName, ymin=GPP.mean-GPP.sd, 
-                        ymax=GPP.mean+GPP.sd), width=0.4,
+      geom_vline(xintercept=c(6.5, 8.5), lty=2)+
+      geom_errorbar(aes(x=ModName, ymin=(GPP.mean-GPP.sd)/1000, 
+                        ymax=(GPP.mean+GPP.sd)/1000), width=0.4,
                     position=position_dodge(width=0.9)) +
       theme_linedraw() +
       theme(panel.grid.minor=element_blank(),
@@ -244,7 +244,7 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
             legend.box.just = 'left',
             plot.title = element_text(size=14, face="bold.italic", 
                                       hjust = 0.5))+
-      ylab(expression(paste("GPP (g C " * m^2 * " " * yr^-1, ")")))+
+      ylab(expression(paste("GPP (kg C " * m^2 * " " * yr^-1, ")")))+
       scale_alpha_manual(name="Treatment",
                          values=c("amb" = 0.3, 
                                   "ele" = 1.0),
@@ -264,18 +264,18 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
     #                                        legend.box = 'horizontal',
     #                                        legend.box.just = 'left'))
     
-    plots_left_column <- plot_grid(p3, p1, p2, 
+    plots_left_column <- plot_grid(p3_mm, p1_mm, p2_mm, 
                                    labels=c("a", "c", "e"),
                                    ncol=1, align="vh", axis = "l",
                                    label_x=0.1, label_y=0.95,
                                    label_size = 20)
     
-    plots_top_row <- plot_grid(p3, labels=c("a"), ncol=1,
-                               align="vh", axis = "l",
-                               label_x=0.1, label_y=0.95,
-                               label_size = 20)
+    plots_top_row <- plot_grid(p3_mm, labels=c(""), ncol=1,
+                                         align="vh", axis = "l",
+                                         label_x=0.1, label_y=0.95,
+                                         label_size = 20)
     
-    plots_ed_figure <- plot_grid(p1, p2, 
+    plots_ed_figure <- plot_grid(p1_mm, p2_mm, 
                                  labels=c("a", "b"),
                                  ncol=1, align="vh", axis = "l",
                                  label_x=0.1, label_y=0.95,
@@ -283,7 +283,7 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
     
     pdf(paste0(out.dir, "/MIP_photosynthesis_", 
                scenario, "_comparison_with_obs_ed_figure.pdf"), 
-        width=12, height=10)
+        width=12, height=6)
     plot_grid(plots_ed_figure)
     
     dev.off()
@@ -458,7 +458,7 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
     
     
     
-    p3 <- ggplot(data=gppDF.plot, 
+    p3_co2 <- ggplot(data=gppDF.plot, 
                  aes(ModName2, diff)) +
       geom_violin(fill="grey") +
       stat_summary(fun.y="mean", geom="crossbar", width=0.5, color="black")+
@@ -499,7 +499,7 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
                                   "Ac"="black",
                                   "Aj"="black"))
     
-    #plot(p3)
+    #plot(p3_co2)
     
     
     
@@ -657,7 +657,7 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
 
     ### plotting
     
-    p2 <- ggplot(data=subDF3, 
+    p2_co2 <- ggplot(data=subDF3, 
                  aes(ModName2, diff)) +
       geom_violin(fill="grey") +
       stat_summary(fun.y="mean", geom="crossbar", width=0.5, color="black")+
@@ -703,7 +703,7 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
                                            "G_OCHDX", "H_QUJSM"),]
     subDF2$ModName2 <- "Multi-model"
     
-    p5 <- ggplot(data=subDF1, 
+    p5_co2 <- ggplot(data=subDF1, 
                  aes(ModName, LAI.mean.mean, group=Trt)) +
       geom_bar(data=subDF1,stat = "identity", aes(fill=ModName, alpha=Trt), 
                position=position_dodge(), col="black") +
@@ -757,11 +757,11 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
                                            "G_OCHDX", "H_QUJSM"),]
     subDF2$ModName2 <- "Multi-model"
     
-    p6 <- ggplot(data=subDF1, 
+    p6_co2 <- ggplot(data=subDF1, 
                  aes(ModName, GPP.mean, group=Trt)) +
       geom_bar(data=subDF1,stat = "identity", aes(fill=ModName, alpha=Trt), 
                position=position_dodge(), col="black") +
-      geom_vline(xintercept=c(6.5, 8.5, 10.5, 11.5), lty=2)+
+      geom_vline(xintercept=c(6.5, 8.5), lty=2)+
       geom_errorbar(data=subDF1, aes(x=ModName, ymin=GPP.mean-GPP.sd, 
                                      ymax=GPP.mean+GPP.sd), width=0.2,
                     position=position_dodge(width=1)) +
@@ -809,7 +809,7 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
     colnames(comDF) <- c("ModName", "GPP_diff", "GPP_diff_sd", "ModName2",
                          "LAI_diff", "LAI_diff_sd")
     
-    p7 <- ggplot(data=comDF, 
+    p7_co2 <- ggplot(data=comDF, 
                  aes(GPP_diff, LAI_diff, group=ModName)) +
       geom_errorbar(data=comDF, aes(ymin=LAI_diff-LAI_diff_sd, 
                                     ymax=LAI_diff+LAI_diff_sd)) +
@@ -846,33 +846,786 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
       annotate("text", x = 17, y = 5, label = "M-M")
     
     
-    ###############################################################################
+    
+    common.legend <- get_legend(p1_co2 + theme(legend.position="right"))
     
     
+    plots_lai_column <- plot_grid(p5_co2, p2_co2, 
+                                  labels=c("", ""),
+                                  ncol=1, align="vh", axis = "l",
+                                  label_x=0.84, label_y=0.95,
+                                  label_size = 20)
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    ###############################################################################
-    plots_bottom_row <- plot_grid(p3, #p5, 
-                                  p2, p7, 
-                                  labels=c("b", "c", "d"),
+    plots_bottom_row <- plot_grid(p3_co2, plots_lai_column, p7_co2, 
+                                  labels=c("", "", ""),
                                   ncol=3, align="vh", axis = "l",
                                   label_x=0.84, label_y=0.95,
                                   rel_widths=c(1.2, 1,1),
                                   label_size = 20)
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    ###############################################################################
+    ### Leaf nutrient
+    
+    ### read in anual datasets
+    ambDF <- readRDS(paste0(in.dir, "/MIP_OBS_", scenario, "_AMB_daily.rds"))
+    eleDF <- readRDS(paste0(in.dir, "/MIP_OBS_", scenario, "_ELE_daily.rds"))
+    
+    ### ignore NAs
+    ambDF[ambDF<=-999] <- NA
+    eleDF[eleDF<=-999] <- NA
+    
+    ### remove two N only models
+    ambDF <- ambDF[ambDF$ModName%in%c("A_GDAYP",
+                                      "B_ELMV1",
+                                      "C_CABLP",
+                                      "D_LPJGP",
+                                      "E_OCHDP",
+                                      "F_QUINC",
+                                      "G_OCHDX",
+                                      "H_QUJSM"),]
+    
+    eleDF <- eleDF[eleDF$ModName%in%c("A_GDAYP",
+                                      "B_ELMV1",
+                                      "C_CABLP",
+                                      "D_LPJGP",
+                                      "E_OCHDP",
+                                      "F_QUINC",
+                                      "G_OCHDX",
+                                      "H_QUJSM"),]
+    
+    
+    ### Calculate ratios
+    ambDF$LCN <- with(ambDF, CL/NL)
+    eleDF$LCN <- with(eleDF, CL/NL)
+    
+    ambDF$LCP <- with(ambDF, CL/PL)
+    eleDF$LCP <- with(eleDF, CL/PL)
+    
+    ambDF$LNP <- with(ambDF, NL/PL)
+    eleDF$LNP <- with(eleDF, NL/PL)
+    
+    ambDF <- ambDF[,c("YEAR", "DOY", "Date", "ModName", "GPP", "LAI", "NL", "PL",
+                      "LCN", "LCP", "LNP", "NCON")]
+    
+    eleDF <- eleDF[,c("YEAR", "DOY", "Date", "ModName", "GPP", "LAI", "NL", "PL",
+                      "LCN", "LCP", "LNP", "NCON")]
+    
+    ambDF$Aleaf <- with(ambDF, GPP/LAI)
+    eleDF$Aleaf <- with(eleDF, GPP/LAI)
+    
+    
+    ambDF$NL_leaf <- with(ambDF, NL/LAI)
+    ambDF$PL_leaf <- with(ambDF, PL/LAI)
+    
+    eleDF$NL_leaf <- with(eleDF, NL/LAI)
+    eleDF$PL_leaf <- with(eleDF, PL/LAI)
+    
+    
+    d <- dim(ambDF)[2]
+    
+    
+    
+    
+    
+    ##################################################################
+    
+    
+    
+    mod.list <- unique(ambDF$ModNmae)
+    
+    require(gridExtra)
+    
+    
+    
+    ### calculate multi-model means and then plot a vector with arrow to show directional change under eCO2
+    ambDF$Trt <- "amb"
+    eleDF$Trt <- "ele"
+    mgDF <- rbind(ambDF, eleDF)
+    sumDF <- summaryBy(Aleaf+GPP+LAI+NL+PL+NL_leaf+PL_leaf+LCN+LCP+LNP~ModName+Trt, FUN=c(mean,sd), data=mgDF,
+                       keep.names=T, na.rm=T)
+    
+    
+    ### plot
+    p1 <- ggplot() +
+      geom_segment(aes(x=sumDF$PL_leaf.mean[sumDF$Trt=="amb"], xend = sumDF$PL_leaf.mean[sumDF$Trt=="amb"],
+                       y=sumDF$Aleaf.mean[sumDF$Trt=="amb"]+sumDF$Aleaf.sd[sumDF$Trt=="amb"], 
+                       yend=sumDF$Aleaf.mean[sumDF$Trt=="amb"]-sumDF$Aleaf.sd[sumDF$Trt=="amb"]),
+                   lwd=0.5, color="grey")+
+      geom_segment(aes(x=sumDF$PL_leaf.mean[sumDF$Trt=="ele"], xend = sumDF$PL_leaf.mean[sumDF$Trt=="ele"],
+                       y=sumDF$Aleaf.mean[sumDF$Trt=="ele"]+sumDF$Aleaf.sd[sumDF$Trt=="ele"], 
+                       yend=sumDF$Aleaf.mean[sumDF$Trt=="ele"]-sumDF$Aleaf.sd[sumDF$Trt=="ele"]), 
+                   lwd=0.5, color="grey")+
+      geom_segment(aes(x=sumDF$PL_leaf.mean[sumDF$Trt=="amb"]+sumDF$PL_leaf.sd[sumDF$Trt=="amb"], 
+                       xend = sumDF$PL_leaf.mean[sumDF$Trt=="amb"]-sumDF$PL_leaf.sd[sumDF$Trt=="amb"],
+                       y=sumDF$Aleaf.mean[sumDF$Trt=="amb"], 
+                       yend=sumDF$Aleaf.mean[sumDF$Trt=="amb"]), 
+                   lwd=0.5, color="grey")+
+      geom_segment(aes(x=sumDF$PL_leaf.mean[sumDF$Trt=="ele"]+sumDF$PL_leaf.sd[sumDF$Trt=="ele"], 
+                       xend = sumDF$PL_leaf.mean[sumDF$Trt=="ele"]-sumDF$PL_leaf.sd[sumDF$Trt=="ele"],
+                       y=sumDF$Aleaf.mean[sumDF$Trt=="ele"], 
+                       yend=sumDF$Aleaf.mean[sumDF$Trt=="ele"]), 
+                   lwd=0.5, color="grey")+
+      geom_segment(aes(x=sumDF$PL_leaf.mean[sumDF$Trt=="amb"], xend = sumDF$PL_leaf.mean[sumDF$Trt=="ele"],
+                       y=sumDF$Aleaf.mean[sumDF$Trt=="amb"], yend=sumDF$Aleaf.mean[sumDF$Trt=="ele"]), 
+                   lwd=2.0)+
+      geom_point(data=sumDF, aes(PL_leaf.mean, Aleaf.mean, fill=ModName, #alpha=Trt, 
+                                 pch=Trt), color="black", size=4)+
+      theme_linedraw() +
+      theme(panel.grid.minor=element_blank(),
+            axis.text.x=element_text(size=12),
+            axis.title.x=element_text(size=14),
+            axis.text.y=element_text(size=12),
+            axis.title.y=element_text(size=14),
+            legend.text=element_text(size=12),
+            legend.title=element_text(size=14),
+            panel.grid.major=element_blank(),
+            legend.position="none",
+            legend.box = 'horizontal',
+            legend.box.just = 'left',
+            #plot.margin = margin(t = 10,  # Top margin
+            #                     r = 10,  # Right margin
+            #                     b = 10,  # Bottom margin
+            #                     l = 10),
+            plot.title = element_text(size=14, face="bold.italic", 
+                                      hjust = 0.5))+
+      scale_fill_manual(name="Model",
+                        values=c(col.values),
+                        labels=c(model.labels))+
+      scale_shape_manual(name=expression(CO[2] * " treatment"),
+                         values=c("amb"=21, "ele"=24),
+                         labels=c("amb", "ele"))+
+      #scale_alpha_manual(name="Treatment",
+      #                   values=c("amb" = 0.5, 
+      #                            "ele" = 1.0),
+      #                   label=c("AMB", "ELE"))+
+      ylab(expression(paste(A[leaf]* " (g C " * m^2 * " " * d^-1, ")")))+
+      guides(fill = guide_legend(override.aes = list(col = c(col.values))),
+             color = guide_legend(nrow=12, byrow=F))+
+      xlab(expression("Leaf P content (g P " * m^-2 * " leaf)"))
+    
+    
+    
+    p2 <- ggplot() +
+      geom_segment(aes(x=sumDF$NL_leaf.mean[sumDF$Trt=="amb"], xend = sumDF$NL_leaf.mean[sumDF$Trt=="amb"],
+                       y=sumDF$Aleaf.mean[sumDF$Trt=="amb"]+sumDF$Aleaf.sd[sumDF$Trt=="amb"], 
+                       yend=sumDF$Aleaf.mean[sumDF$Trt=="amb"]-sumDF$Aleaf.sd[sumDF$Trt=="amb"]),
+                   lwd=0.5, color="grey")+
+      geom_segment(aes(x=sumDF$NL_leaf.mean[sumDF$Trt=="ele"], xend = sumDF$NL_leaf.mean[sumDF$Trt=="ele"],
+                       y=sumDF$Aleaf.mean[sumDF$Trt=="ele"]+sumDF$Aleaf.sd[sumDF$Trt=="ele"], 
+                       yend=sumDF$Aleaf.mean[sumDF$Trt=="ele"]-sumDF$Aleaf.sd[sumDF$Trt=="ele"]), 
+                   lwd=0.5, color="grey")+
+      geom_segment(aes(x=sumDF$NL_leaf.mean[sumDF$Trt=="amb"]+sumDF$NL_leaf.sd[sumDF$Trt=="amb"], 
+                       xend = sumDF$NL_leaf.mean[sumDF$Trt=="amb"]-sumDF$NL_leaf.sd[sumDF$Trt=="amb"],
+                       y=sumDF$Aleaf.mean[sumDF$Trt=="amb"], 
+                       yend=sumDF$Aleaf.mean[sumDF$Trt=="amb"]), 
+                   lwd=0.5, color="grey")+
+      geom_segment(aes(x=sumDF$NL_leaf.mean[sumDF$Trt=="ele"]+sumDF$NL_leaf.sd[sumDF$Trt=="ele"], 
+                       xend = sumDF$NL_leaf.mean[sumDF$Trt=="ele"]-sumDF$NL_leaf.sd[sumDF$Trt=="ele"],
+                       y=sumDF$Aleaf.mean[sumDF$Trt=="ele"], 
+                       yend=sumDF$Aleaf.mean[sumDF$Trt=="ele"]), 
+                   lwd=0.5, color="grey")+
+      geom_segment(aes(x=sumDF$NL_leaf.mean[sumDF$Trt=="amb"], xend = sumDF$NL_leaf.mean[sumDF$Trt=="ele"],
+                       y=sumDF$Aleaf.mean[sumDF$Trt=="amb"], yend=sumDF$Aleaf.mean[sumDF$Trt=="ele"]), 
+                   lwd=2.0)+
+      geom_point(data=sumDF, aes(NL_leaf.mean, Aleaf.mean, fill=ModName, pch=Trt), color="black", size=4)+
+      theme_linedraw() +
+      theme(panel.grid.minor=element_blank(),
+            axis.text.x=element_text(size=12),
+            axis.title.x=element_text(size=14),
+            axis.text.y=element_text(size=12),
+            axis.title.y=element_text(size=14),
+            legend.text=element_text(size=12),
+            legend.title=element_text(size=14),
+            panel.grid.major=element_blank(),
+            legend.position="none",
+            legend.box = 'horizontal',
+            legend.box.just = 'left',
+            plot.title = element_text(size=14, face="bold.italic", 
+                                      hjust = 0.5))+
+      scale_fill_manual(name="Model",
+                        values=c(col.values),
+                        labels=c(model.labels))+
+      scale_shape_manual(name=expression(CO[2] * " treatment"),
+                         values=c("amb"=21, "ele"=24),
+                         labels=c("amb", "ele"))+
+      ylab(expression(paste(A[leaf]* " (g C " * m^2 * " " * d^-1, ")")))+
+      guides(fill = guide_legend(override.aes = list(col = c(col.values))),
+             color = guide_legend(nrow=12, byrow=F))+
+      xlab(expression("Leaf N content (g N " * m^-2 * " leaf)"))
+    
+    
+    
+    p3 <- ggplot() +
+      geom_segment(aes(x=sumDF$LCP.mean[sumDF$Trt=="amb"], xend = sumDF$LCP.mean[sumDF$Trt=="amb"],
+                       y=sumDF$Aleaf.mean[sumDF$Trt=="amb"]+sumDF$Aleaf.sd[sumDF$Trt=="amb"], 
+                       yend=sumDF$Aleaf.mean[sumDF$Trt=="amb"]-sumDF$Aleaf.sd[sumDF$Trt=="amb"]),
+                   lwd=0.5, color="grey")+
+      geom_segment(aes(x=sumDF$LCP.mean[sumDF$Trt=="ele"], xend = sumDF$LCP.mean[sumDF$Trt=="ele"],
+                       y=sumDF$Aleaf.mean[sumDF$Trt=="ele"]+sumDF$Aleaf.sd[sumDF$Trt=="ele"], 
+                       yend=sumDF$Aleaf.mean[sumDF$Trt=="ele"]-sumDF$Aleaf.sd[sumDF$Trt=="ele"]), 
+                   lwd=0.5, color="grey")+
+      geom_segment(aes(x=sumDF$LCP.mean[sumDF$Trt=="amb"]+sumDF$LCP.sd[sumDF$Trt=="amb"], 
+                       xend = sumDF$LCP.mean[sumDF$Trt=="amb"]-sumDF$LCP.sd[sumDF$Trt=="amb"],
+                       y=sumDF$Aleaf.mean[sumDF$Trt=="amb"], 
+                       yend=sumDF$Aleaf.mean[sumDF$Trt=="amb"]), 
+                   lwd=0.5, color="grey")+
+      geom_segment(aes(x=sumDF$LCP.mean[sumDF$Trt=="ele"]+sumDF$LCP.sd[sumDF$Trt=="ele"], 
+                       xend = sumDF$LCP.mean[sumDF$Trt=="ele"]-sumDF$LCP.sd[sumDF$Trt=="ele"],
+                       y=sumDF$Aleaf.mean[sumDF$Trt=="ele"], 
+                       yend=sumDF$Aleaf.mean[sumDF$Trt=="ele"]), 
+                   lwd=0.5, color="grey")+
+      geom_segment(aes(x=sumDF$LCP.mean[sumDF$Trt=="amb"], xend = sumDF$LCP.mean[sumDF$Trt=="ele"],
+                       y=sumDF$Aleaf.mean[sumDF$Trt=="amb"], yend=sumDF$Aleaf.mean[sumDF$Trt=="ele"]), 
+                   lwd=2.0)+
+      geom_point(data=sumDF, aes(LCP.mean, Aleaf.mean, fill=ModName, pch=Trt), color="black", size=4)+
+      theme_linedraw() +
+      theme(panel.grid.minor=element_blank(),
+            axis.text.x=element_text(size=12),
+            axis.title.x=element_text(size=14),
+            axis.text.y=element_text(size=12),
+            axis.title.y=element_text(size=14),
+            legend.text=element_text(size=12),
+            legend.title=element_text(size=14),
+            panel.grid.major=element_blank(),
+            legend.position="none",
+            legend.box = 'horizontal',
+            legend.box.just = 'left',
+            plot.title = element_text(size=14, face="bold.italic", 
+                                      hjust = 0.5))+
+      scale_fill_manual(name="Model",
+                        values=c(col.values),
+                        labels=c(model.labels))+
+      scale_shape_manual(name=expression(CO[2] * " treatment"),
+                         values=c("amb"=21, "ele"=24),
+                         labels=c("amb", "ele"))+
+      ylab(expression(paste(A[leaf]* " (g C " * m^2 * " " * d^-1, ")")))+
+      guides(fill = guide_legend(override.aes = list(col = c(col.values))),
+             color = guide_legend(nrow=12, byrow=F))+
+      xlab(expression("Leaf CP ratio"))
+    
+    
+    
+    p4 <- ggplot() +
+      geom_segment(aes(x=sumDF$LCN.mean[sumDF$Trt=="amb"], xend = sumDF$LCN.mean[sumDF$Trt=="amb"],
+                       y=sumDF$Aleaf.mean[sumDF$Trt=="amb"]+sumDF$Aleaf.sd[sumDF$Trt=="amb"], 
+                       yend=sumDF$Aleaf.mean[sumDF$Trt=="amb"]-sumDF$Aleaf.sd[sumDF$Trt=="amb"]),
+                   lwd=0.5, color="grey")+
+      geom_segment(aes(x=sumDF$LCN.mean[sumDF$Trt=="ele"], xend = sumDF$LCN.mean[sumDF$Trt=="ele"],
+                       y=sumDF$Aleaf.mean[sumDF$Trt=="ele"]+sumDF$Aleaf.sd[sumDF$Trt=="ele"], 
+                       yend=sumDF$Aleaf.mean[sumDF$Trt=="ele"]-sumDF$Aleaf.sd[sumDF$Trt=="ele"]), 
+                   lwd=0.5, color="grey")+
+      geom_segment(aes(x=sumDF$LCN.mean[sumDF$Trt=="amb"]+sumDF$LCN.sd[sumDF$Trt=="amb"], 
+                       xend = sumDF$LCN.mean[sumDF$Trt=="amb"]-sumDF$LCN.sd[sumDF$Trt=="amb"],
+                       y=sumDF$Aleaf.mean[sumDF$Trt=="amb"], 
+                       yend=sumDF$Aleaf.mean[sumDF$Trt=="amb"]), 
+                   lwd=0.5, color="grey")+
+      geom_segment(aes(x=sumDF$LCN.mean[sumDF$Trt=="ele"]+sumDF$LCN.sd[sumDF$Trt=="ele"], 
+                       xend = sumDF$LCN.mean[sumDF$Trt=="ele"]-sumDF$LCN.sd[sumDF$Trt=="ele"],
+                       y=sumDF$Aleaf.mean[sumDF$Trt=="ele"], 
+                       yend=sumDF$Aleaf.mean[sumDF$Trt=="ele"]), 
+                   lwd=0.5, color="grey")+
+      geom_segment(aes(x=sumDF$LCN.mean[sumDF$Trt=="amb"], xend = sumDF$LCN.mean[sumDF$Trt=="ele"],
+                       y=sumDF$Aleaf.mean[sumDF$Trt=="amb"], yend=sumDF$Aleaf.mean[sumDF$Trt=="ele"]), 
+                   lwd=2.0)+
+      geom_point(data=sumDF, aes(LCN.mean, Aleaf.mean, fill=ModName, pch=Trt), color="black", size=4)+
+      theme_linedraw() +
+      theme(panel.grid.minor=element_blank(),
+            axis.text.x=element_text(size=12),
+            axis.title.x=element_text(size=14),
+            axis.text.y=element_text(size=12),
+            axis.title.y=element_text(size=14),
+            legend.text=element_text(size=12),
+            legend.title=element_text(size=14),
+            panel.grid.major=element_blank(),
+            legend.position="none",
+            legend.box = 'horizontal',
+            legend.box.just = 'left',
+            plot.title = element_text(size=14, face="bold.italic", 
+                                      hjust = 0.5))+
+      scale_fill_manual(name="Model",
+                        values=c(col.values),
+                        labels=c(model.labels))+
+      scale_shape_manual(name=expression(CO[2] * " treatment"),
+                         values=c("amb"=21, "ele"=24),
+                         labels=c("amb", "ele"))+
+      ylab(expression(paste(A[leaf]* " (g C " * m^2 * " " * d^-1, ")")))+
+      guides(fill = guide_legend(override.aes = list(col = c(col.values))),
+             color = guide_legend(nrow=12, byrow=F))+
+      xlab(expression("Leaf CN ratio"))
+    
+    
+    
+    p5 <- ggplot() +
+      geom_segment(aes(x=sumDF$LNP.mean[sumDF$Trt=="amb"], xend = sumDF$LNP.mean[sumDF$Trt=="amb"],
+                       y=sumDF$Aleaf.mean[sumDF$Trt=="amb"]+sumDF$Aleaf.sd[sumDF$Trt=="amb"], 
+                       yend=sumDF$Aleaf.mean[sumDF$Trt=="amb"]-sumDF$Aleaf.sd[sumDF$Trt=="amb"]),
+                   lwd=0.5, color="grey")+
+      geom_segment(aes(x=sumDF$LNP.mean[sumDF$Trt=="ele"], xend = sumDF$LNP.mean[sumDF$Trt=="ele"],
+                       y=sumDF$Aleaf.mean[sumDF$Trt=="ele"]+sumDF$Aleaf.sd[sumDF$Trt=="ele"], 
+                       yend=sumDF$Aleaf.mean[sumDF$Trt=="ele"]-sumDF$Aleaf.sd[sumDF$Trt=="ele"]), 
+                   lwd=0.5, color="grey")+
+      geom_segment(aes(x=sumDF$LNP.mean[sumDF$Trt=="amb"]+sumDF$LNP.sd[sumDF$Trt=="amb"], 
+                       xend = sumDF$LNP.mean[sumDF$Trt=="amb"]-sumDF$LNP.sd[sumDF$Trt=="amb"],
+                       y=sumDF$Aleaf.mean[sumDF$Trt=="amb"], 
+                       yend=sumDF$Aleaf.mean[sumDF$Trt=="amb"]), 
+                   lwd=0.5, color="grey")+
+      geom_segment(aes(x=sumDF$LNP.mean[sumDF$Trt=="ele"]+sumDF$LNP.sd[sumDF$Trt=="ele"], 
+                       xend = sumDF$LNP.mean[sumDF$Trt=="ele"]-sumDF$LNP.sd[sumDF$Trt=="ele"],
+                       y=sumDF$Aleaf.mean[sumDF$Trt=="ele"], 
+                       yend=sumDF$Aleaf.mean[sumDF$Trt=="ele"]), 
+                   lwd=0.5, color="grey")+
+      geom_segment(aes(x=sumDF$LNP.mean[sumDF$Trt=="amb"], xend = sumDF$LNP.mean[sumDF$Trt=="ele"],
+                       y=sumDF$Aleaf.mean[sumDF$Trt=="amb"], yend=sumDF$Aleaf.mean[sumDF$Trt=="ele"]), 
+                   lwd=2.0)+
+      geom_point(data=sumDF, aes(LNP.mean, Aleaf.mean, fill=ModName, pch=Trt), color="black", size=4)+
+      theme_linedraw() +
+      theme(panel.grid.minor=element_blank(),
+            axis.text.x=element_text(size=12),
+            axis.title.x=element_text(size=14),
+            axis.text.y=element_text(size=12),
+            axis.title.y=element_text(size=14),
+            legend.text=element_text(size=12),
+            legend.title=element_text(size=14),
+            panel.grid.major=element_blank(),
+            legend.position="none",
+            legend.box = 'horizontal',
+            legend.box.just = 'left',
+            plot.title = element_text(size=14, face="bold.italic", 
+                                      hjust = 0.5))+
+      scale_fill_manual(name="Model",
+                        values=c(col.values),
+                        labels=c(model.labels))+
+      scale_shape_manual(name=expression(CO[2] * " treatment"),
+                         values=c("amb"=21, "ele"=24),
+                         labels=c("amb", "ele"))+
+      ylab(expression(paste(A[leaf]* " (g C " * m^2 * " " * d^-1, ")")))+
+      guides(fill = guide_legend(override.aes = list(col = c(col.values))),
+             color = guide_legend(nrow=12, byrow=F))+
+      xlab(expression("Leaf NP ratio"))
+    
+    
+    
+   
+    
+    ##################################################################
+    ### calculate multiple model means for each year
+    ## amb
+    ambDF.mip <- summaryBy(.~YEAR+ModName, FUN=mean,
+                           data=ambDF, keep.names=T, na.rm=T)
+    
+    eleDF.mip <- summaryBy(.~YEAR+ModName, FUN=mean,
+                           data=eleDF, keep.names=T, na.rm=T)
+    
+    
+    ### replace inf with na
+    ambDF.mip[sapply(ambDF.mip, is.infinite)] <- NA
+    ambDF.mip[sapply(ambDF.mip, is.nan)] <- NA
+    
+    eleDF.mip[sapply(eleDF.mip, is.infinite)] <- NA
+    eleDF.mip[sapply(eleDF.mip, is.nan)] <- NA
+    
+    
+    
+    ### prepare CO2 df
+    co2DF <- ambDF.mip
+    d.rev <- dim(co2DF)[2]
+    co2DF[,5:d.rev] <- eleDF.mip[,5:d.rev]-ambDF.mip[,5:d.rev]
+    
+    ### prepare CO2 pct difference df
+    pctco2DF <- co2DF
+    pctco2DF[,5:d.rev] <- co2DF[,5:d.rev]/ambDF.mip[,5:d.rev]*100.0
+    
+    
+    
+    
+    ### calculate annual averages
+    sumDF2 <- summaryBy(Aleaf+GPP+LAI+NL+PL+NL_leaf+PL_leaf+LCN+LCP+LNP~ModName, FUN=c(mean,sd), data=co2DF,
+                        keep.names=T, na.rm=T)
+    
+    sumDF3 <- summaryBy(Aleaf+GPP+LAI+NL+PL+NL_leaf+PL_leaf+LCN+LCP+LNP~ModName, FUN=c(mean,sd), data=pctco2DF,
+                        keep.names=T, na.rm=T)
+    
+    
+    ### calculate multi-model means
+    pctco2DF$ModName2 <- "I_MM"
+    mmDF <- summaryBy(Aleaf+GPP+LAI+NL+PL+NL_leaf+PL_leaf+LCN+LCP+LNP~ModName2, FUN=c(mean,sd), data=pctco2DF,
+                      keep.names=T, na.rm=T)
+    colnames(mmDF) <- colnames(sumDF3)
+    
+    sumDF3 <- rbind(sumDF3, mmDF)
+    
+    ### add data
+    obsDF <- mmDF
+    obsDF$NL.mean <- NA
+    obsDF$NL_leaf.mean <- NA
+    obsDF$NL.sd <- NA
+    obsDF$NL_leaf.sd <- NA
+    obsDF$LNP.mean <- NA
+    obsDF$LNP.sd <- NA
+    obsDF$LCN.mean <- NA
+    obsDF$LCN.sd <- NA
+    
+    
+    obsDF$GPP.mean <- eucDF$GPP[eucDF$Group=="mean"&eucDF$Trt=="pct_diff"]
+    obsDF$GPP.sd <- eucDF$GPP[eucDF$Group=="sd"&eucDF$Trt=="pct_diff"]
+    
+    obsDF$LAI.mean <- eucDF$LAI[eucDF$Group=="mean"&eucDF$Trt=="pct_diff"]
+    obsDF$LAI.sd <- eucDF$LAI[eucDF$Group=="sd"&eucDF$Trt=="pct_diff"]
+    
+    obsDF$PL.mean <- eucDF$PL[eucDF$Group=="mean"&eucDF$Trt=="pct_diff"]
+    obsDF$PL.sd <- eucDF$PL[eucDF$Group=="sd"&eucDF$Trt=="pct_diff"]
+    
+    obsDF$LCP.mean <- eucDF$CPL[eucDF$Group=="mean"&eucDF$Trt=="pct_diff"]
+    obsDF$LCP.sd <- eucDF$CPL[eucDF$Group=="sd"&eucDF$Trt=="pct_diff"]
+    
+    
+    
+    
+    ### read in gpp simulation to ignore LAI effect
+    tmpDF <- read.csv("validation_dataset/EucFACE_C_Budget_data/MAESPA_output/maespa.year.ring.csv")
+    
+    tmpDF$Aleaf.550 <- with(tmpDF, GPP.sum.550/LAI.mean)
+    tmpDF$Aleaf.400 <- with(tmpDF, GPP.sum.400/LAI.mean)
+    tmpDF$Aleaf.diff <- with(tmpDF, (Aleaf.550-Aleaf.400)/Aleaf.400)
+    
+    ### calculate GPP field - considering LAI and SM influence
+    aDF <- tmpDF[tmpDF$Ring%in%c("R2", "R3", "R6"),]
+    eDF <- tmpDF[tmpDF$Ring%in%c("R1", "R4", "R5"),]
+    
+    asDF <- summaryBy(GPP.sum.400+Aleaf.400~year, data=aDF, FUN=mean, na.rm=T, keep.names=T)
+    esDF <- summaryBy(GPP.sum.550+Aleaf.550~year, data=eDF, FUN=mean, na.rm=T, keep.names=T)
+    
+    mgDF <- merge(asDF, esDF, by="year")
+    mgDF$diff <- with(mgDF, (GPP.sum.550-GPP.sum.400)/GPP.sum.400)
+    mgDF$Aleaf_diff <- with(mgDF, (Aleaf.550-Aleaf.400)/Aleaf.400)
+    
+    ### ring-specific values
+    obsDF$Aleaf.mean <- 11
+    obsDF$Aleaf.sd <- sd(mgDF$Aleaf_diff) * 100
+    
+    
+    ### PL leaf
+    v1 <- eucDF$PL[eucDF$Group=="mean"&eucDF$Trt=="aCO2"]/eucDF$LAI[eucDF$Group=="mean"&eucDF$Trt=="aCO2"]
+    v2 <- eucDF$PL[eucDF$Group=="mean"&eucDF$Trt=="eCO2"]/eucDF$LAI[eucDF$Group=="mean"&eucDF$Trt=="eCO2"]
+    
+    v3 <- sqrt((eucDF$PL[eucDF$Group=="sd"&eucDF$Trt=="aCO2"]^2+eucDF$LAI[eucDF$Group=="sd"&eucDF$Trt=="aCO2"]^2)/2)
+    v4 <- sqrt((eucDF$PL[eucDF$Group=="sd"&eucDF$Trt=="eCO2"]^2+eucDF$LAI[eucDF$Group=="sd"&eucDF$Trt=="eCO2"]^2)/2)
+    
+    
+    ### calculate PL leaf    
+    obsDF$PL_leaf.mean <- (v2-v1)/v1 * 100
+    obsDF$PL_leaf.sd <- sqrt((v3^2+v4^2+v3^2)/3)/v1 * 100
+    
+    obsDF$ModName <- "OBS"
+    
+    sumDF3 <- rbind(sumDF3, obsDF)
+    
+    
+    ### now prepare the plotting df
+    plotDF1 <- sumDF3[sumDF3$ModName%in%c("A_GDAYP", "B_ELMV1", 
+                                          "C_CABLP", "D_LPJGP",
+                                          "E_OCHDP", "F_QUINC",
+                                          "G_OCHDX", "H_QUJSM"),]
+    
+    plotDF2 <- sumDF3[sumDF3$ModName%in%c("I_MM", "OBS"),]
+    
+    
+    
+    ### plotting
+    p6 <- ggplot() +
+      geom_segment(aes(x=plotDF2$LCP.mean, xend = plotDF2$LCP.mean,
+                       y=plotDF2$Aleaf.mean+plotDF2$Aleaf.sd, 
+                       yend=plotDF2$Aleaf.mean-plotDF2$Aleaf.sd),
+                   lwd=0.5, color="grey")+
+      geom_segment(aes(x=plotDF2$LCP.mean+plotDF2$LCP.sd, 
+                       xend = plotDF2$LCP.mean-plotDF2$LCP.sd,
+                       y=plotDF2$Aleaf.mean, 
+                       yend=plotDF2$Aleaf.mean), 
+                   lwd=0.5, color="grey")+
+      geom_point(data=sumDF3, aes(LCP.mean, Aleaf.mean, color=ModName, pch=ModName), 
+                 size=4)+
+      theme_linedraw() +
+      theme(panel.grid.minor=element_blank(),
+            axis.text.x=element_text(size=12),
+            axis.title.x=element_text(size=14),
+            axis.text.y=element_text(size=12),
+            axis.title.y=element_text(size=14),
+            legend.text=element_text(size=12),
+            legend.title=element_text(size=14),
+            panel.grid.major=element_blank(),
+            legend.position="none",
+            legend.box = 'horizontal',
+            legend.box.just = 'left',
+            plot.title = element_text(size=14, face="bold.italic", 
+                                      hjust = 0.5))+
+      scale_color_manual(name="Model",
+                         values=c(col.values, "I_MM"="grey", "OBS"="black"),
+                         labels=c(model.labels, "I_MM"="M-M", "OBS"="OBS"))+
+      scale_shape_manual(name="Model",
+                         values=c("A_GDAYP"=19,"B_ELMV1"=19,
+                                  "C_CABLP"=19,"D_LPJGP"=19,
+                                  "E_OCHDP"=19,"F_QUINC"=19,
+                                  "G_OCHDX"=19,"H_QUJSM"=19,
+                                  "I_MM"=19, "OBS"=15))+
+      ylab(expression(paste(CO[2] * " effect on " * A[leaf]* " (%)")))+
+      #guides(fill = guide_legend(override.aes = list(col = c(col.values))),
+      #       color = guide_legend(nrow=12, byrow=F))+
+      xlab(expression(paste(CO[2] * " effect on leaf CP ratio (%)")))
+    
+    
+    
+    
+    
+    p7 <- ggplot() +
+      geom_segment(aes(x=plotDF2$LCN.mean, xend = plotDF2$LCN.mean,
+                       y=plotDF2$Aleaf.mean+plotDF2$Aleaf.sd, 
+                       yend=plotDF2$Aleaf.mean-plotDF2$Aleaf.sd),
+                   lwd=0.5, color="grey")+
+      geom_segment(aes(x=plotDF2$LCN.mean+plotDF2$LCN.sd, 
+                       xend = plotDF2$LCN.mean-plotDF2$LCN.sd,
+                       y=plotDF2$Aleaf.mean, 
+                       yend=plotDF2$Aleaf.mean), 
+                   lwd=0.5, color="grey")+
+      geom_point(data=sumDF3, aes(LCN.mean, Aleaf.mean, color=ModName, pch=ModName), 
+                 size=4)+
+      theme_linedraw() +
+      theme(panel.grid.minor=element_blank(),
+            axis.text.x=element_text(size=12),
+            axis.title.x=element_text(size=14),
+            axis.text.y=element_text(size=12),
+            axis.title.y=element_text(size=14),
+            legend.text=element_text(size=12),
+            legend.title=element_text(size=14),
+            panel.grid.major=element_blank(),
+            legend.position="none",
+            legend.box = 'horizontal',
+            legend.box.just = 'left',
+            plot.title = element_text(size=14, face="bold.italic", 
+                                      hjust = 0.5))+
+      scale_color_manual(name="Model",
+                         values=c(col.values, "I_MM"="grey", "OBS"="black"),
+                         labels=c(model.labels, "I_MM"="M-M", "OBS"="OBS"))+
+      scale_shape_manual(name="Model",
+                         values=c("A_GDAYP"=19,"B_ELMV1"=19,
+                                  "C_CABLP"=19,"D_LPJGP"=19,
+                                  "E_OCHDP"=19,"F_QUINC"=19,
+                                  "G_OCHDX"=19,"H_QUJSM"=19,
+                                  "I_MM"=19,"OBS"=15))+
+      ylab(expression(paste(CO[2] * " effect on " * A[leaf]* " (%)")))+
+      guides(fill = guide_legend(override.aes = list(col = c(col.values))),
+             color = guide_legend(nrow=12, byrow=F))+
+      xlab(expression(paste(CO[2] * " effect on leaf CN ratio (%)")))
+    
+    
+    p8 <- ggplot() +
+      geom_segment(aes(x=plotDF2$LNP.mean, xend = plotDF2$LNP.mean,
+                       y=plotDF2$Aleaf.mean+plotDF2$Aleaf.sd, 
+                       yend=plotDF2$Aleaf.mean-plotDF2$Aleaf.sd),
+                   lwd=0.5, color="grey")+
+      geom_segment(aes(x=plotDF2$LNP.mean+plotDF2$LNP.sd, 
+                       xend = plotDF2$LNP.mean-plotDF2$LNP.sd,
+                       y=plotDF2$Aleaf.mean, 
+                       yend=plotDF2$Aleaf.mean), 
+                   lwd=0.5, color="grey")+
+      geom_point(data=sumDF3, aes(LNP.mean, Aleaf.mean, color=ModName, pch=ModName), 
+                 size=4)+
+      theme_linedraw() +
+      theme(panel.grid.minor=element_blank(),
+            axis.text.x=element_text(size=12),
+            axis.title.x=element_text(size=14),
+            axis.text.y=element_text(size=12),
+            axis.title.y=element_text(size=14),
+            legend.text=element_text(size=12),
+            legend.title=element_text(size=14),
+            panel.grid.major=element_blank(),
+            legend.position="none",
+            legend.box = 'horizontal',
+            legend.box.just = 'left',
+            plot.title = element_text(size=14, face="bold.italic", 
+                                      hjust = 0.5))+
+      scale_color_manual(name="Model",
+                         values=c(col.values, "I_MM"="grey", "OBS"="black"),
+                         labels=c(model.labels, "I_MM"="M-M", "OBS"="OBS"))+
+      scale_shape_manual(name="Model",
+                         values=c("A_GDAYP"=19,"B_ELMV1"=19,
+                                  "C_CABLP"=19,"D_LPJGP"=19,
+                                  "E_OCHDP"=19,"F_QUINC"=19,
+                                  "G_OCHDX"=19,"H_QUJSM"=19,
+                                  "I_MM"=19,"OBS"=15))+
+      ylab(expression(paste(CO[2] * " effect on " * A[leaf]* " (%)")))+
+      guides(fill = guide_legend(override.aes = list(col = c(col.values))),
+             color = guide_legend(nrow=12, byrow=F))+
+      xlab(expression(paste(CO[2] * " effect on leaf NP ratio (%)")))
+    
+    
+    
+    p9 <- ggplot() +
+      geom_segment(aes(x=plotDF2$PL_leaf.mean, xend = plotDF2$PL_leaf.mean,
+                       y=plotDF2$Aleaf.mean+plotDF2$Aleaf.sd, 
+                       yend=plotDF2$Aleaf.mean-plotDF2$Aleaf.sd),
+                   lwd=0.5, color="grey")+
+      geom_segment(aes(x=plotDF2$PL_leaf.mean+plotDF2$PL_leaf.sd, 
+                       xend = plotDF2$PL_leaf.mean-plotDF2$PL_leaf.sd,
+                       y=plotDF2$Aleaf.mean, 
+                       yend=plotDF2$Aleaf.mean), 
+                   lwd=0.5, color="grey")+
+      geom_point(data=sumDF3, aes(PL_leaf.mean, Aleaf.mean, color=ModName, pch=ModName), 
+                 size=4)+
+      theme_linedraw() +
+      theme(panel.grid.minor=element_blank(),
+            axis.text.x=element_text(size=12),
+            axis.title.x=element_text(size=14),
+            axis.text.y=element_text(size=12),
+            axis.title.y=element_text(size=14),
+            legend.text=element_text(size=12),
+            legend.title=element_text(size=14),
+            panel.grid.major=element_blank(),
+            legend.position="none",
+            legend.box = 'horizontal',
+            legend.box.just = 'left',
+            plot.title = element_text(size=14, face="bold.italic", 
+                                      hjust = 0.5))+
+      scale_color_manual(name="Model",
+                         values=c(col.values, "I_MM"="grey", "OBS"="black"),
+                         labels=c(model.labels, "I_MM"="M-M", "OBS"="OBS"))+
+      scale_shape_manual(name="Model",
+                         values=c("A_GDAYP"=19,"B_ELMV1"=19,
+                                  "C_CABLP"=19,"D_LPJGP"=19,
+                                  "E_OCHDP"=19,"F_QUINC"=19,
+                                  "G_OCHDX"=19,"H_QUJSM"=19,
+                                  "I_MM"=19,"OBS"=15))+
+      ylab(expression(paste(CO[2] * " effect on " * A[leaf]* " (%)")))+
+      guides(fill = guide_legend(override.aes = list(col = c(col.values))),
+             color = guide_legend(nrow=12, byrow=F))+
+      xlab(expression(paste(CO[2] * " effect on leaf P (%)")))
+    
+    
+    
+    
+    
+    p10 <- ggplot() +
+      geom_segment(aes(x=plotDF2$NL_leaf.mean, xend = plotDF2$NL_leaf.mean,
+                       y=plotDF2$Aleaf.mean+plotDF2$Aleaf.sd, 
+                       yend=plotDF2$Aleaf.mean-plotDF2$Aleaf.sd),
+                   lwd=0.5, color="grey")+
+      geom_segment(aes(x=plotDF2$NL_leaf.mean+plotDF2$NL_leaf.sd, 
+                       xend = plotDF2$NL_leaf.mean-plotDF2$NL_leaf.sd,
+                       y=plotDF2$Aleaf.mean, 
+                       yend=plotDF2$Aleaf.mean), 
+                   lwd=0.5, color="grey")+
+      geom_point(data=sumDF3, aes(NL_leaf.mean, Aleaf.mean, color=ModName, pch=ModName), 
+                 size=4)+
+      theme_linedraw() +
+      theme(panel.grid.minor=element_blank(),
+            axis.text.x=element_text(size=12),
+            axis.title.x=element_text(size=14),
+            axis.text.y=element_text(size=12),
+            axis.title.y=element_text(size=14),
+            legend.text=element_text(size=12),
+            legend.title=element_text(size=14),
+            panel.grid.major=element_blank(),
+            legend.position="none",
+            legend.box = 'horizontal',
+            legend.box.just = 'left',
+            plot.title = element_text(size=14, face="bold.italic", 
+                                      hjust = 0.5))+
+      scale_color_manual(name="Model",
+                         values=c(col.values, "I_MM"="grey", "OBS"="black"),
+                         labels=c(model.labels, "I_MM"="M-M", "OBS"="OBS"))+
+      scale_shape_manual(name="Model",
+                         values=c("A_GDAYP"=19,"B_ELMV1"=19,
+                                  "C_CABLP"=19,"D_LPJGP"=19,
+                                  "E_OCHDP"=19,"F_QUINC"=19,
+                                  "G_OCHDX"=19,"H_QUJSM"=19,
+                                  "I_MM"=19,"OBS"=15))+
+      ylab(expression(paste(CO[2] * " effect on " * A[leaf]* " (%)")))+
+      guides(fill = guide_legend(override.aes = list(col = c(col.values))),
+             color = guide_legend(nrow=12, byrow=F))+
+      xlab(expression(paste(CO[2] * " effect on leaf N (%)")))
+    
+    
+    
+    
+    
+    plot_nutrient_row <- plot_grid(p1, p2, p3, p4, p5,
+                                   p9, p10,p6, p7, p8,
+                                   labels=c("", "", ""),
+                                   ncol=5, nrow=2, 
+                                   align="vh", axis = "l",
+                                   label_x=0.84, label_y=0.95,
+                                   label_size = 20)
+    
+    plots_top_row <- plot_grid(p3_mm, p3_co2, 
+                               labels=c("(a)", "(b)"),
+                               ncol=2, rel_widths=c(1, 0.5),
+                               align="vh", axis = "l",
+                               label_x=c(0.06, 0.84), label_y=0.95,
+                               label_size = 20)
+   
+    plots_mid_row <- plot_grid(p2_mm, p2_co2, 
+                               labels=c("(c)", "(d)"),
+                               ncol=2, rel_widths=c(1, 0.5),
+                               align="vh", axis = "l",
+                               label_x=c(0.06, 0.84), label_y=0.95,
+                               label_size = 20)
+    
+    plots_bot_right_first_row <- plot_grid(p1, p2, p5,
+                                           labels=c("(f)", "(g)", "(h)"),
+                                           ncol=3, 
+                                           align="vh", axis = "l",
+                                           label_x=c(0.82, 0.8, 0.78), label_y=0.95,
+                                           label_size = 20)
+    
+    plots_bot_right_second_row <- plot_grid(p9, p10, p8,
+                                            labels=c("(i)", "(j)", "(k)"),
+                                            ncol=3, 
+                                            align="vh", axis = "l",
+                                            label_x=c(0.82, 0.82, 0.78), label_y=0.95,
+                                            label_size = 20)
+    
+    plots_bot_right_column <- plot_grid(plots_bot_right_first_row,
+                                        plots_bot_right_second_row,
+                                        labels=c("", "", ""),
+                                        ncol=1, nrow=2,
+                                        rel_heigths=c(1,1),
+                                        align="vh", axis = "l",
+                                        label_x=0.82, label_y=0.95,
+                                        label_size = 20)
+    
+    
+    plots_bot_row <- plot_grid(p7_co2, plots_bot_right_column,
+                               labels=c("(e)"),
+                               ncol=2, 
+                               rel_widths=c(0.8, 1.4),
+                               align="vh", axis = "l",
+                               label_x=0.1, label_y=0.95,
+                               label_size = 20)
+    
+    
+    ###############################################################################
+
+    
     pdf(paste0(out.dir, "/MIP_normalized_photosynthesis_response_OBS_", 
                scenario, "_comparison_with_obs2.pdf"), 
-        width=14, height=7)
-    plot_grid(plots_top_row, plots_bottom_row,
-              ncol=1, rel_heights=c(1,1))
+        width=16, height=12)
+    
+    plot_grid(plots_top_row, plots_mid_row,
+              plots_bot_row,
+              ncol=1, rel_heights=c(1,1,2))
     
     dev.off()
     
@@ -888,222 +1641,222 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
     
     
     #########################################################################
-    #### time sequence
-
-    ### Aleaf
-    p1 <- ggplot() +
-      geom_point(data=ambDF2, aes(YEAR, Aleaf.mean, col=ModName))+
-      geom_line(data=ambDF2, aes(YEAR, Aleaf.mean, col=ModName, lty=ModName))+
-      theme_linedraw() +
-      theme(panel.grid.minor=element_blank(),
-            axis.text.x=element_text(size=12),
-            axis.title.x=element_blank(),
-            axis.text.y=element_text(size=12),
-            axis.title.y=element_text(size=14),
-            legend.text=element_text(size=12),
-            legend.title=element_text(size=14),
-            panel.grid.major=element_blank(),
-            legend.position="none",
-            legend.box = 'horizontal',
-            legend.box.just = 'left',
-            legend.key.width = unit(1.5,"cm"),
-            plot.title = element_text(size=14, face="bold.italic", 
-                                      hjust = 0.5))+
-      ylab(expression(paste(A[leaf]* " (g C " * m^2 * " " * d^-1, ")")))+
-      scale_color_manual(name="Model",
-                         values=col.values,
-                         labels=model.labels)+
-      scale_linetype_manual(name="Model", 
-                            values=linetype.values,
-                            labels=model.labels)+
-      guides(fill = guide_legend(override.aes = list(col = col.values,
-                                                     lty = linetype.values),
-                                 nrow=2, byrow=F))+
-      xlab(expression(paste("Year")))+
-      ylim(c(1,5))
-    
-    
-    p2 <- ggplot() +
-      geom_point(data=eleDF2, aes(YEAR, Aleaf.mean, col=ModName))+
-      geom_line(data=eleDF2, aes(YEAR, Aleaf.mean, col=ModName, lty=ModName))+
-      theme_linedraw() +
-      theme(panel.grid.minor=element_blank(),
-            axis.text.x=element_text(size=12),
-            axis.title.x=element_blank(),
-            axis.text.y=element_text(size=12),
-            axis.title.y=element_blank(),
-            legend.text=element_text(size=12),
-            legend.title=element_text(size=14),
-            panel.grid.major=element_blank(),
-            legend.position="none",
-            legend.box = 'horizontal',
-            legend.box.just = 'left',
-            legend.key.width = unit(1.5,"cm"),
-            plot.title = element_text(size=14, face="bold.italic", 
-                                      hjust = 0.5))+
-      ylab(expression(paste(A[leaf]* " (g C " * m^2 * " " * d^-1, ")")))+
-      scale_color_manual(name="Model",
-                         values=col.values,
-                         labels=model.labels)+
-      scale_linetype_manual(name="Model", 
-                            values=linetype.values,
-                            labels=model.labels)+
-      guides(fill = guide_legend(override.aes = list(col = col.values,
-                                                     lty = linetype.values),
-                                 nrow=2, byrow=F))+
-      xlab(expression(paste("Year")))+
-      ylim(c(1,5))
-    
-    ### LAI
-    p3 <- ggplot() +
-      geom_point(data=ambDF2, aes(YEAR, LAI.mean, col=ModName))+
-      geom_line(data=ambDF2, aes(YEAR,LAI.mean, col=ModName, lty=ModName))+
-      theme_linedraw() +
-      theme(panel.grid.minor=element_blank(),
-            axis.text.x=element_text(size=12),
-            axis.title.x=element_blank(),
-            axis.text.y=element_text(size=12),
-            axis.title.y=element_text(size=14),
-            legend.text=element_text(size=12),
-            legend.title=element_text(size=14),
-            panel.grid.major=element_blank(),
-            legend.position="none",
-            legend.box = 'horizontal',
-            legend.box.just = 'left',
-            legend.key.width = unit(1.5,"cm"),
-            plot.title = element_text(size=14, face="bold.italic", 
-                                      hjust = 0.5))+
-      ylab(expression(paste("LAI")))+
-      scale_color_manual(name="Model",
-                         values=col.values,
-                         labels=model.labels)+
-      scale_linetype_manual(name="Model", 
-                            values=linetype.values,
-                            labels=model.labels)+
-      guides(fill = guide_legend(override.aes = list(col = col.values,
-                                                     lty = linetype.values),
-                                 nrow=2, byrow=F))+
-      xlab(expression(paste("Year")))+
-      ylim(c(1,4.5))
-    
-    
-    p4 <- ggplot() +
-      geom_point(data=eleDF2, aes(YEAR, LAI.mean, col=ModName))+
-      geom_line(data=eleDF2, aes(YEAR, LAI.mean, col=ModName, lty=ModName))+
-      theme_linedraw() +
-      theme(panel.grid.minor=element_blank(),
-            axis.text.x=element_text(size=12),
-            axis.title.x=element_blank(),
-            axis.text.y=element_text(size=12),
-            axis.title.y=element_blank(),
-            legend.text=element_text(size=12),
-            legend.title=element_text(size=14),
-            panel.grid.major=element_blank(),
-            legend.position="none",
-            legend.box = 'horizontal',
-            legend.box.just = 'left',
-            legend.key.width = unit(1.5,"cm"),
-            plot.title = element_text(size=14, face="bold.italic", 
-                                      hjust = 0.5))+
-      ylab(expression(paste("LAI")))+
-      scale_color_manual(name="Model",
-                         values=col.values,
-                         labels=model.labels)+
-      scale_linetype_manual(name="Model", 
-                            values=linetype.values,
-                            labels=model.labels)+
-      guides(fill = guide_legend(override.aes = list(col = col.values,
-                                                     lty = linetype.values),
-                                 nrow=2, byrow=F))+
-      xlab(expression(paste("Year")))+
-      ylim(c(1,4.5))
-    
-    
-    p5 <- ggplot() +
-      geom_point(data=ambDF3, aes(YEAR, GPP, col=ModName))+
-      geom_line(data=ambDF3, aes(YEAR, GPP, col=ModName, lty=ModName))+
-      theme_linedraw() +
-      theme(panel.grid.minor=element_blank(),
-            axis.text.x=element_text(size=12),
-            axis.title.x=element_blank(),
-            axis.text.y=element_text(size=12),
-            axis.title.y=element_text(size=14),
-            legend.text=element_text(size=12),
-            legend.title=element_text(size=14),
-            panel.grid.major=element_blank(),
-            legend.position="none",
-            legend.box = 'horizontal',
-            legend.box.just = 'left',
-            legend.key.width = unit(1.5,"cm"),
-            plot.title = element_text(size=14, face="bold.italic", 
-                                      hjust = 0.5))+
-      ylab(expression(paste(GPP* " (g C " * m^2 * " " * yr^-1, ")")))+
-      scale_color_manual(name="Model",
-                         values=col.values,
-                         labels=model.labels)+
-      scale_linetype_manual(name="Model", 
-                            values=linetype.values,
-                            labels=model.labels)+
-      guides(fill = guide_legend(override.aes = list(col = col.values,
-                                                     lty = linetype.values),
-                                 nrow=2, byrow=F))+
-      xlab(expression(paste("Year")))+
-      ylim(c(1000,3500))
-    
-    
-    p6 <- ggplot() +
-      geom_point(data=eleDF3, aes(YEAR, GPP, col=ModName))+
-      geom_line(data=eleDF3, aes(YEAR, GPP, col=ModName, lty=ModName))+
-      theme_linedraw() +
-      theme(panel.grid.minor=element_blank(),
-            axis.text.x=element_text(size=12),
-            axis.title.x=element_blank(),
-            axis.text.y=element_text(size=12),
-            axis.title.y=element_blank(),
-            legend.text=element_text(size=12),
-            legend.title=element_text(size=14),
-            panel.grid.major=element_blank(),
-            legend.position="none",
-            legend.box = 'horizontal',
-            legend.box.just = 'left',
-            legend.key.width = unit(1.5,"cm"),
-            plot.title = element_text(size=14, face="bold.italic", 
-                                      hjust = 0.5))+
-      ylab(expression(paste(GPP * " (g C " * m^2 * " " * yr^-1, ")")))+
-      scale_color_manual(name="Model",
-                         values=col.values,
-                         labels=model.labels)+
-      scale_linetype_manual(name="Model", 
-                            values=linetype.values,
-                            labels=model.labels)+
-      guides(fill = guide_legend(override.aes = list(col = col.values,
-                                                     lty = linetype.values),
-                                 nrow=2, byrow=F))+
-      xlab(expression(paste("Year")))+
-      ylim(c(1000,3500))
-    
-    legend_top_row <- get_legend(p1 + theme(legend.position="bottom",
-                                            legend.box = 'horizontal',
-                                            legend.box.just = 'left'))
-    
-    plots_top_row <- plot_grid(p5, p6, 
-                               p1, p2, 
-                               p3, p4, 
-                               labels=c("(a)", "(b)", "(c)", "(d)",
-                                        "(e)", "(f)"),
-                               ncol=2, align="vh", axis = "l",
-                               label_x=0.86, label_y=0.95,
-                               label_size = 18)
-    
-    
-    #pdf(paste0(out.dir, "/MIP_normalized_photosynthesis_response_OBS_", 
-    #           scenario, "_AMB_comparison.pdf"), 
-    #    width=12, height=16)
-    #plot_grid(plots_top_row,
-    #          legend_top_row,
-    #          ncol=1, rel_heights=c(1,0.2))
+    ##### time sequence
+#
+    #### Aleaf
+    #p1 <- ggplot() +
+    #  geom_point(data=ambDF2, aes(YEAR, Aleaf.mean, col=ModName))+
+    #  geom_line(data=ambDF2, aes(YEAR, Aleaf.mean, col=ModName, lty=ModName))+
+    #  theme_linedraw() +
+    #  theme(panel.grid.minor=element_blank(),
+    #        axis.text.x=element_text(size=12),
+    #        axis.title.x=element_blank(),
+    #        axis.text.y=element_text(size=12),
+    #        axis.title.y=element_text(size=14),
+    #        legend.text=element_text(size=12),
+    #        legend.title=element_text(size=14),
+    #        panel.grid.major=element_blank(),
+    #        legend.position="none",
+    #        legend.box = 'horizontal',
+    #        legend.box.just = 'left',
+    #        legend.key.width = unit(1.5,"cm"),
+    #        plot.title = element_text(size=14, face="bold.italic", 
+    #                                  hjust = 0.5))+
+    #  ylab(expression(paste(A[leaf]* " (g C " * m^2 * " " * d^-1, ")")))+
+    #  scale_color_manual(name="Model",
+    #                     values=col.values,
+    #                     labels=model.labels)+
+    #  scale_linetype_manual(name="Model", 
+    #                        values=linetype.values,
+    #                        labels=model.labels)+
+    #  guides(fill = guide_legend(override.aes = list(col = col.values,
+    #                                                 lty = linetype.values),
+    #                             nrow=2, byrow=F))+
+    #  xlab(expression(paste("Year")))+
+    #  ylim(c(1,5))
     #
-    #dev.off()
+    #
+    #p2 <- ggplot() +
+    #  geom_point(data=eleDF2, aes(YEAR, Aleaf.mean, col=ModName))+
+    #  geom_line(data=eleDF2, aes(YEAR, Aleaf.mean, col=ModName, lty=ModName))+
+    #  theme_linedraw() +
+    #  theme(panel.grid.minor=element_blank(),
+    #        axis.text.x=element_text(size=12),
+    #        axis.title.x=element_blank(),
+    #        axis.text.y=element_text(size=12),
+    #        axis.title.y=element_blank(),
+    #        legend.text=element_text(size=12),
+    #        legend.title=element_text(size=14),
+    #        panel.grid.major=element_blank(),
+    #        legend.position="none",
+    #        legend.box = 'horizontal',
+    #        legend.box.just = 'left',
+    #        legend.key.width = unit(1.5,"cm"),
+    #        plot.title = element_text(size=14, face="bold.italic", 
+    #                                  hjust = 0.5))+
+    #  ylab(expression(paste(A[leaf]* " (g C " * m^2 * " " * d^-1, ")")))+
+    #  scale_color_manual(name="Model",
+    #                     values=col.values,
+    #                     labels=model.labels)+
+    #  scale_linetype_manual(name="Model", 
+    #                        values=linetype.values,
+    #                        labels=model.labels)+
+    #  guides(fill = guide_legend(override.aes = list(col = col.values,
+    #                                                 lty = linetype.values),
+    #                             nrow=2, byrow=F))+
+    #  xlab(expression(paste("Year")))+
+    #  ylim(c(1,5))
+    #
+    #### LAI
+    #p3 <- ggplot() +
+    #  geom_point(data=ambDF2, aes(YEAR, LAI.mean, col=ModName))+
+    #  geom_line(data=ambDF2, aes(YEAR,LAI.mean, col=ModName, lty=ModName))+
+    #  theme_linedraw() +
+    #  theme(panel.grid.minor=element_blank(),
+    #        axis.text.x=element_text(size=12),
+    #        axis.title.x=element_blank(),
+    #        axis.text.y=element_text(size=12),
+    #        axis.title.y=element_text(size=14),
+    #        legend.text=element_text(size=12),
+    #        legend.title=element_text(size=14),
+    #        panel.grid.major=element_blank(),
+    #        legend.position="none",
+    #        legend.box = 'horizontal',
+    #        legend.box.just = 'left',
+    #        legend.key.width = unit(1.5,"cm"),
+    #        plot.title = element_text(size=14, face="bold.italic", 
+    #                                  hjust = 0.5))+
+    #  ylab(expression(paste("LAI")))+
+    #  scale_color_manual(name="Model",
+    #                     values=col.values,
+    #                     labels=model.labels)+
+    #  scale_linetype_manual(name="Model", 
+    #                        values=linetype.values,
+    #                        labels=model.labels)+
+    #  guides(fill = guide_legend(override.aes = list(col = col.values,
+    #                                                 lty = linetype.values),
+    #                             nrow=2, byrow=F))+
+    #  xlab(expression(paste("Year")))+
+    #  ylim(c(1,4.5))
+    #
+    #
+    #p4 <- ggplot() +
+    #  geom_point(data=eleDF2, aes(YEAR, LAI.mean, col=ModName))+
+    #  geom_line(data=eleDF2, aes(YEAR, LAI.mean, col=ModName, lty=ModName))+
+    #  theme_linedraw() +
+    #  theme(panel.grid.minor=element_blank(),
+    #        axis.text.x=element_text(size=12),
+    #        axis.title.x=element_blank(),
+    #        axis.text.y=element_text(size=12),
+    #        axis.title.y=element_blank(),
+    #        legend.text=element_text(size=12),
+    #        legend.title=element_text(size=14),
+    #        panel.grid.major=element_blank(),
+    #        legend.position="none",
+    #        legend.box = 'horizontal',
+    #        legend.box.just = 'left',
+    #        legend.key.width = unit(1.5,"cm"),
+    #        plot.title = element_text(size=14, face="bold.italic", 
+    #                                  hjust = 0.5))+
+    #  ylab(expression(paste("LAI")))+
+    #  scale_color_manual(name="Model",
+    #                     values=col.values,
+    #                     labels=model.labels)+
+    #  scale_linetype_manual(name="Model", 
+    #                        values=linetype.values,
+    #                        labels=model.labels)+
+    #  guides(fill = guide_legend(override.aes = list(col = col.values,
+    #                                                 lty = linetype.values),
+    #                             nrow=2, byrow=F))+
+    #  xlab(expression(paste("Year")))+
+    #  ylim(c(1,4.5))
+    #
+    #
+    #p5 <- ggplot() +
+    #  geom_point(data=ambDF3, aes(YEAR, GPP, col=ModName))+
+    #  geom_line(data=ambDF3, aes(YEAR, GPP, col=ModName, lty=ModName))+
+    #  theme_linedraw() +
+    #  theme(panel.grid.minor=element_blank(),
+    #        axis.text.x=element_text(size=12),
+    #        axis.title.x=element_blank(),
+    #        axis.text.y=element_text(size=12),
+    #        axis.title.y=element_text(size=14),
+    #        legend.text=element_text(size=12),
+    #        legend.title=element_text(size=14),
+    #        panel.grid.major=element_blank(),
+    #        legend.position="none",
+    #        legend.box = 'horizontal',
+    #        legend.box.just = 'left',
+    #        legend.key.width = unit(1.5,"cm"),
+    #        plot.title = element_text(size=14, face="bold.italic", 
+    #                                  hjust = 0.5))+
+    #  ylab(expression(paste(GPP* " (g C " * m^2 * " " * yr^-1, ")")))+
+    #  scale_color_manual(name="Model",
+    #                     values=col.values,
+    #                     labels=model.labels)+
+    #  scale_linetype_manual(name="Model", 
+    #                        values=linetype.values,
+    #                        labels=model.labels)+
+    #  guides(fill = guide_legend(override.aes = list(col = col.values,
+    #                                                 lty = linetype.values),
+    #                             nrow=2, byrow=F))+
+    #  xlab(expression(paste("Year")))+
+    #  ylim(c(1000,3500))
+    #
+    #
+    #p6 <- ggplot() +
+    #  geom_point(data=eleDF3, aes(YEAR, GPP, col=ModName))+
+    #  geom_line(data=eleDF3, aes(YEAR, GPP, col=ModName, lty=ModName))+
+    #  theme_linedraw() +
+    #  theme(panel.grid.minor=element_blank(),
+    #        axis.text.x=element_text(size=12),
+    #        axis.title.x=element_blank(),
+    #        axis.text.y=element_text(size=12),
+    #        axis.title.y=element_blank(),
+    #        legend.text=element_text(size=12),
+    #        legend.title=element_text(size=14),
+    #        panel.grid.major=element_blank(),
+    #        legend.position="none",
+    #        legend.box = 'horizontal',
+    #        legend.box.just = 'left',
+    #        legend.key.width = unit(1.5,"cm"),
+    #        plot.title = element_text(size=14, face="bold.italic", 
+    #                                  hjust = 0.5))+
+    #  ylab(expression(paste(GPP * " (g C " * m^2 * " " * yr^-1, ")")))+
+    #  scale_color_manual(name="Model",
+    #                     values=col.values,
+    #                     labels=model.labels)+
+    #  scale_linetype_manual(name="Model", 
+    #                        values=linetype.values,
+    #                        labels=model.labels)+
+    #  guides(fill = guide_legend(override.aes = list(col = col.values,
+    #                                                 lty = linetype.values),
+    #                             nrow=2, byrow=F))+
+    #  xlab(expression(paste("Year")))+
+    #  ylim(c(1000,3500))
+    #
+    #legend_top_row <- get_legend(p1 + theme(legend.position="bottom",
+    #                                        legend.box = 'horizontal',
+    #                                        legend.box.just = 'left'))
+    #
+    #plots_top_row <- plot_grid(p5, p6, 
+    #                           p1, p2, 
+    #                           p3, p4, 
+    #                           labels=c("(a)", "(b)", "(c)", "(d)",
+    #                                    "(e)", "(f)"),
+    #                           ncol=2, align="vh", axis = "l",
+    #                           label_x=0.86, label_y=0.95,
+    #                           label_size = 18)
+    #
+    #
+    ##pdf(paste0(out.dir, "/MIP_normalized_photosynthesis_response_OBS_", 
+    ##           scenario, "_AMB_comparison.pdf"), 
+    ##    width=12, height=16)
+    ##plot_grid(plots_top_row,
+    ##          legend_top_row,
+    ##          ncol=1, rel_heights=c(1,0.2))
+    ##
+    ##dev.off()
     
 }    
 

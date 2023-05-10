@@ -176,8 +176,8 @@ plot_plant_p_cycle_responses <- function(eucDF,
               axis.title.y=element_text(size=14),
               legend.text=element_text(size=12),
               legend.title=element_text(size=14),
-              axis.text.x=element_text(size=14,angle = 45, 
-                                       vjust = 1, hjust = 1),
+              #axis.text.x=element_text(size=14,angle = 45, 
+              #                         vjust = 1, hjust = 1),
               panel.grid.major=element_blank(),
               legend.position=c(0.85,0.2),
               legend.box = 'horizontal',
@@ -432,7 +432,7 @@ plot_plant_p_cycle_responses <- function(eucDF,
     
     
     pdf(paste0(out.dir, "/MIP_time_averaged_", scenario, "_P_pools.pdf"), 
-        width=10, height=12)
+        width=16, height=8)
     plot_grid(p1, p2,   
               p3, p4,
               labels=c("(a)", "(b)", "(c)", "(d)"), label_x=0.1, label_y=0.95,
@@ -1458,6 +1458,19 @@ plot_plant_p_cycle_responses <- function(eucDF,
               label_size=24,
               ncol=2)
     dev.off()
+    
+    
+    
+    ###########################################################################
+    
+    ### use CO2 effect of CP flexibility / Pdem / Pupt / P net / delta Pveg to explain 
+    ### the CO2 effect on BP and NEP
+    
+    
+    
+    
+    
+    
     
     
    

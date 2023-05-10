@@ -82,171 +82,1064 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
     
     
     
-    ### loop through each model to plot
-    for (i in mod.list) {
-        
-        ### get the data
-        ## gpp
-        plotDF1 <- gppciDF[gppciDF$ModName==i,]
-        plotDF2 <- gppstackDF[gppstackDF$ModName==i,]
-        
-        ## fate of C
-        plotDF3 <- fateciDF[fateciDF$ModName==i,]
-        plotDF4 <- fatestackDF[fatestackDF$ModName==i,]
-        
-        ### alloc
-        plotDF5 <- allocDF[allocDF$ModName==i,]
-        
-        ### aCO2 vs. eCO2
-        p1 <- ggplot() +  
-            geom_bar(plotDF2, stat = "identity", 
-                     mapping=aes(Method, value.mean, fill=variable),
-                     position="stack", col="black") +
-            geom_errorbar(data=plotDF1, 
-                          mapping=aes(x=Method, ymin=value.mean-value.sd, 
-                                      ymax=value.mean+value.sd), 
-                          width=0.1, size=0.6, color="black") + 
-            geom_point(data=plotDF1, 
-                       mapping=aes(x=Method, y=value.mean), 
-                       size=2, shape=21, fill="white", col="black")+
-            xlab("") + 
-            facet_wrap( ~ Trt)+
-            ylab(expression(paste("GPP (g C ", m^-2, " ", yr^-1, ")"))) +
-            scale_fill_manual(name="Variable",
-                              values=c("GPP"=GreensPalette[1],
-                                       "NPP"=GreensPalette[3],
-                                       "RAU"=YlOrRdPalette[2],
-                                       "RHET"=YlOrRdPalette[6],
-                                       "deltaCVEG"=GreensPalette[6],
-                                       "deltaCSTOR"=GreensPalette[9],
-                                       "deltaCSOIL"=GreensPalette[4]),
-                              labels=c("GPP"="GPP", 
-                                       "NPP"="NPP",
-                                       "RAU"="RAU",
-                                       "RHET"="RHET",
-                                       "deltaCVEG"=expression(Delta * C[VEG]),
-                                       "deltaCSTOR"=expression(Delta * C[STOR]),
-                                       "deltaCSOIL"=expression(Delta * C[SOIL])))+
-            scale_x_discrete(breaks=c("GPP", "NPP+RAU", "R+deltaC"),
-                             labels=c("GPP"="GPP",
-                                      "NPP+RAU"="NPP+RAU",
-                                      "R+deltaC"=expression("R+"*Delta*"C"))) +
-            theme_linedraw() +
-            theme(panel.grid.minor=element_blank(),
-                  axis.title.x = element_text(size=14), 
-                  axis.text.x = element_text(size=14),
-                  axis.text.y=element_text(size=14),
-                  axis.title.y=element_text(size=14),
-                  legend.text=element_text(size=14),
-                  legend.title=element_text(size=14),
-                  panel.grid.major=element_blank(),
-                  legend.position="none",
-                  legend.text.align=0,
-                  strip.text.x = element_text(size = 20))
-        
-        ### CO2 effect
-        p2 <- ggplot() +  
-            geom_hline(yintercept=0)+
-            geom_bar(plotDF4, stat = "identity", 
-                     mapping=aes(Method, value.mean, fill=variable),
-                     position="stack", col="black") +
-            geom_errorbar(data=plotDF3, 
-                          mapping=aes(x=Method, ymin=value.mean-value.sd, 
-                                      ymax=value.mean+value.sd), 
-                          width=0.1, size=0.6, color="black") + 
-            geom_point(data=plotDF3, 
-                       mapping=aes(x=Method, y=value.mean), 
-                       size=2, shape=21, fill="white", col="black")+
-            xlab("") + 
-            ylab(expression(paste(CO[2] * " effect (g C ", m^-2, " ", yr^-1, ")"))) +
-            scale_fill_manual(name="Variable",
-                              values=c("GPP"=GreensPalette[1],
-                                       "NPP"=GreensPalette[3],
-                                       "RAU"=YlOrRdPalette[2],
-                                       "RHET"=YlOrRdPalette[6],
-                                       "deltaCVEG"=GreensPalette[6],
-                                       "deltaCSTOR"=GreensPalette[9],
-                                       "deltaCSOIL"=GreensPalette[4]),
-                              labels=c("GPP"="GPP", 
-                                       "NPP"="NPP",
-                                       "RAU"="RAU",
-                                       "RHET"="RHET",
-                                       "deltaCVEG"=expression(Delta * C[VEG]),
-                                       "deltaCSTOR"=expression(Delta * C[STOR]),
-                                       "deltaCSOIL"=expression(Delta * C[SOIL])))+
-            scale_x_discrete(breaks=c("GPP", "NPP+RAU", "R+deltaC"),
-                             labels=c("GPP"="GPP",
-                                      "NPP+RAU"="NPP+RAU",
-                                      "R+deltaC"=expression("R+"*Delta*"C"))) +
-            theme_linedraw() +
-            theme(panel.grid.minor=element_blank(),
-                  axis.title.x = element_text(size=14), 
-                  axis.text.x = element_text(size=14),
-                  axis.text.y=element_text(size=14),
-                  axis.title.y=element_text(size=14),
-                  legend.text=element_text(size=14),
-                  legend.title=element_text(size=14),
-                  panel.grid.major=element_blank(),
-                  legend.position="right",
-                  legend.text.align=0)#+
-        #scale_y_continuous(limits=c(-205, 600), 
-        #                   breaks=c(-200, -100, 0, 100, 200, 400, 600),
-        #                   labels=c(-200, -100, 0, 100, 200, 400, 600))+
-        #guides(fill=guide_legend(ncol=2),legend.justification = c(0, 1))+
-        #annotate(geom="text", x=1, y=-100, label="CABLP", size=7); p2
-        
-        
-        
-        
-        p3 <- ggplot(data=plotDF5, 
-                      aes(ymax=ymax, ymin=ymin, 
-                          xmax=4, xmin=3, fill=Variable)) +
-          geom_rect() +
-          geom_label( x=3.5, aes(y=labelPosition, label=label)) +
-          coord_polar(theta="y") + 
-          xlim(c(2, 4)) +
-          facet_wrap( ~ Trt)+
-          #theme_void() +
-          theme(axis.ticks = element_blank(),
-                panel.grid.minor=element_blank(),
-                axis.text.x=element_blank(),
-                axis.title.x=element_text(size=14),
-                axis.text.y=element_blank(),
-                axis.title.y=element_text(size=14),
-                legend.text=element_text(size=12),
-                legend.title=element_text(size=14),
-                panel.grid.major=element_blank(),
-                legend.position="none",
-                legend.box = 'horizontal',
-                legend.box.just = 'left',
-                plot.title = element_text(size=14, face="bold.italic", 
-                                          hjust = 0.5),
-                strip.text.x = element_text(size = 20))+
-          ylab("Allocation coefficient")+
-          scale_fill_manual(name="Variable",
-                            values=c("Canopy"=cbbPalette[4], 
-                                     "Wood"=cbbPalette[3],
-                                     "Root"=cbbPalette[8],
-                                     "Other"=cbbPalette[5]))+
-          guides(fill=guide_legend(nrow=2))
-        
-        
-        
-        lay <- rbind(c(1,1),
-                     c(2,3))
-        
-        ### Plotting
-        pdf(paste0(out.dir, "/fate_of_C_", i, ".pdf"), width=12, height=10)
-        
-        #plot_grid(p1, p2,
-        #          ncol=1)
-        
-        grid.arrange(p1, p2, p3, layout_matrix=lay)
-        dev.off()
-        
-    }
+    #### loop through each model to plot
+    #for (i in mod.list) {
+    #    
+    #    ### get the data
+    #    ## gpp
+    #    plotDF1 <- gppciDF[gppciDF$ModName==i,]
+    #    plotDF2 <- gppstackDF[gppstackDF$ModName==i,]
+    #    
+    #    ## fate of C
+    #    plotDF3 <- fateciDF[fateciDF$ModName==i,]
+    #    plotDF4 <- fatestackDF[fatestackDF$ModName==i,]
+    #    
+    #    ### alloc
+    #    plotDF5 <- allocDF[allocDF$ModName==i,]
+    #    
+    #    ### aCO2 vs. eCO2
+    #    p1 <- ggplot() +  
+    #        geom_bar(plotDF2, stat = "identity", 
+    #                 mapping=aes(Method, value.mean, fill=variable),
+    #                 position="stack", col="black") +
+    #        geom_errorbar(data=plotDF1, 
+    #                      mapping=aes(x=Method, ymin=value.mean-value.sd, 
+    #                                  ymax=value.mean+value.sd), 
+    #                      width=0.1, size=0.6, color="black") + 
+    #        geom_point(data=plotDF1, 
+    #                   mapping=aes(x=Method, y=value.mean), 
+    #                   size=2, shape=21, fill="white", col="black")+
+    #        xlab("") + 
+    #        facet_wrap( ~ Trt)+
+    #        ylab(expression(paste("GPP (g C ", m^-2, " ", yr^-1, ")"))) +
+    #        scale_fill_manual(name="Variable",
+    #                          values=c("GPP"=GreensPalette[1],
+    #                                   "NPP"=GreensPalette[3],
+    #                                   "RAU"=YlOrRdPalette[2],
+    #                                   "RHET"=YlOrRdPalette[6],
+    #                                   "deltaCVEG"=GreensPalette[6],
+    #                                   "deltaCSTOR"=GreensPalette[9],
+    #                                   "deltaCSOIL"=GreensPalette[4]),
+    #                          labels=c("GPP"="GPP", 
+    #                                   "NPP"="NPP",
+    #                                   "RAU"="RAU",
+    #                                   "RHET"="RHET",
+    #                                   "deltaCVEG"=expression(Delta * C[VEG]),
+    #                                   "deltaCSTOR"=expression(Delta * C[STOR]),
+    #                                   "deltaCSOIL"=expression(Delta * C[SOIL])))+
+    #        scale_x_discrete(breaks=c("GPP", "NPP+RAU", "R+deltaC"),
+    #                         labels=c("GPP"="GPP",
+    #                                  "NPP+RAU"="NPP+RAU",
+    #                                  "R+deltaC"=expression("R+"*Delta*"C"))) +
+    #        theme_linedraw() +
+    #        theme(panel.grid.minor=element_blank(),
+    #              axis.title.x = element_text(size=14), 
+    #              axis.text.x = element_text(size=14),
+    #              axis.text.y=element_text(size=14),
+    #              axis.title.y=element_text(size=14),
+    #              legend.text=element_text(size=14),
+    #              legend.title=element_text(size=14),
+    #              panel.grid.major=element_blank(),
+    #              legend.position="none",
+    #              legend.text.align=0,
+    #              strip.text.x = element_text(size = 20))
+    #    
+    #    ### CO2 effect
+    #    p2 <- ggplot() +  
+    #        geom_hline(yintercept=0)+
+    #        geom_bar(plotDF4, stat = "identity", 
+    #                 mapping=aes(Method, value.mean, fill=variable),
+    #                 position="stack", col="black") +
+    #        geom_errorbar(data=plotDF3, 
+    #                      mapping=aes(x=Method, ymin=value.mean-value.sd, 
+    #                                  ymax=value.mean+value.sd), 
+    #                      width=0.1, size=0.6, color="black") + 
+    #        geom_point(data=plotDF3, 
+    #                   mapping=aes(x=Method, y=value.mean), 
+    #                   size=2, shape=21, fill="white", col="black")+
+    #        xlab("") + 
+    #        ylab(expression(paste(CO[2] * " effect (g C ", m^-2, " ", yr^-1, ")"))) +
+    #        scale_fill_manual(name="Variable",
+    #                          values=c("GPP"=GreensPalette[1],
+    #                                   "NPP"=GreensPalette[3],
+    #                                   "RAU"=YlOrRdPalette[2],
+    #                                   "RHET"=YlOrRdPalette[6],
+    #                                   "deltaCVEG"=GreensPalette[6],
+    #                                   "deltaCSTOR"=GreensPalette[9],
+    #                                   "deltaCSOIL"=GreensPalette[4]),
+    #                          labels=c("GPP"="GPP", 
+    #                                   "NPP"="NPP",
+    #                                   "RAU"="RAU",
+    #                                   "RHET"="RHET",
+    #                                   "deltaCVEG"=expression(Delta * C[VEG]),
+    #                                   "deltaCSTOR"=expression(Delta * C[STOR]),
+    #                                   "deltaCSOIL"=expression(Delta * C[SOIL])))+
+    #        scale_x_discrete(breaks=c("GPP", "NPP+RAU", "R+deltaC"),
+    #                         labels=c("GPP"="GPP",
+    #                                  "NPP+RAU"="NPP+RAU",
+    #                                  "R+deltaC"=expression("R+"*Delta*"C"))) +
+    #        theme_linedraw() +
+    #        theme(panel.grid.minor=element_blank(),
+    #              axis.title.x = element_text(size=14), 
+    #              axis.text.x = element_text(size=14),
+    #              axis.text.y=element_text(size=14),
+    #              axis.title.y=element_text(size=14),
+    #              legend.text=element_text(size=14),
+    #              legend.title=element_text(size=14),
+    #              panel.grid.major=element_blank(),
+    #              legend.position="right",
+    #              legend.text.align=0)#+
+    #    #scale_y_continuous(limits=c(-205, 600), 
+    #    #                   breaks=c(-200, -100, 0, 100, 200, 400, 600),
+    #    #                   labels=c(-200, -100, 0, 100, 200, 400, 600))+
+    #    #guides(fill=guide_legend(ncol=2),legend.justification = c(0, 1))+
+    #    #annotate(geom="text", x=1, y=-100, label="CABLP", size=7); p2
+    #    
+    #    
+    #    
+    #    
+    #    p3 <- ggplot(data=plotDF5, 
+    #                  aes(ymax=ymax, ymin=ymin, 
+    #                      xmax=4, xmin=3, fill=Variable)) +
+    #      geom_rect() +
+    #      geom_label( x=3.5, aes(y=labelPosition, label=label)) +
+    #      coord_polar(theta="y") + 
+    #      xlim(c(2, 4)) +
+    #      facet_wrap( ~ Trt)+
+    #      #theme_void() +
+    #      theme(axis.ticks = element_blank(),
+    #            panel.grid.minor=element_blank(),
+    #            axis.text.x=element_blank(),
+    #            axis.title.x=element_text(size=14),
+    #            axis.text.y=element_blank(),
+    #            axis.title.y=element_text(size=14),
+    #            legend.text=element_text(size=12),
+    #            legend.title=element_text(size=14),
+    #            panel.grid.major=element_blank(),
+    #            legend.position="none",
+    #            legend.box = 'horizontal',
+    #            legend.box.just = 'left',
+    #            plot.title = element_text(size=14, face="bold.italic", 
+    #                                      hjust = 0.5),
+    #            strip.text.x = element_text(size = 20))+
+    #      ylab("Allocation coefficient")+
+    #      scale_fill_manual(name="Variable",
+    #                        values=c("Canopy"=cbbPalette[4], 
+    #                                 "Wood"=cbbPalette[3],
+    #                                 "Root"=cbbPalette[8],
+    #                                 "Other"=cbbPalette[5]))+
+    #      guides(fill=guide_legend(nrow=2))
+    #    
+    #    
+    #    
+    #    lay <- rbind(c(1,1),
+    #                 c(2,3))
+    #    
+    #    ### Plotting
+    #    pdf(paste0(out.dir, "/fate_of_C_", i, ".pdf"), width=12, height=10)
+    #    
+    #    #plot_grid(p1, p2,
+    #    #          ncol=1)
+    #    
+    #    grid.arrange(p1, p2, p3, layout_matrix=lay)
+    #    dev.off()
+    #    
+    #}
+    
+    
+    ################################################
+    i <- "A_GDAYP"
+    
+    ### get the data
+    ## gpp
+    plotDF1 <- gppciDF[gppciDF$ModName==i,]
+    plotDF2 <- gppstackDF[gppstackDF$ModName==i,]
+    
+    ## fate of C
+    plotDF3 <- fateciDF[fateciDF$ModName==i,]
+    plotDF4 <- fatestackDF[fatestackDF$ModName==i,]
+    
+    ### alloc
+    plotDF5 <- allocDF[allocDF$ModName==i,]
+    plotDF51 <- plotDF5[plotDF5$Trt=="amb",]
+    plotDF52 <- plotDF5[plotDF5$Trt=="ele",]
+    
+    
+    ### CO2 effect
+    p_gdayp1 <- ggplot() +  
+      geom_hline(yintercept=0)+
+      geom_bar(plotDF4, stat = "identity", 
+               mapping=aes(Method, value.mean, fill=variable),
+               position="stack", col="black") +
+      geom_errorbar(data=plotDF3, 
+                    mapping=aes(x=Method, ymin=value.mean-value.sd, 
+                                ymax=value.mean+value.sd), 
+                    width=0.1, size=0.6, color="black") + 
+      geom_point(data=plotDF3, 
+                 mapping=aes(x=Method, y=value.mean), 
+                 size=2, shape=21, fill="white", col="black")+
+      xlab("") + 
+      ylab(expression(paste(CO[2] * " effect (g C ", m^-2, " ", yr^-1, ")"))) +
+      scale_fill_manual(name="Component",
+                        values=c("GPP"=cbbPalette[6],
+                                 "NPP"=cbbPalette[3],
+                                 "RAU"=cbbPalette[2],
+                                 "RHET"=cbbPalette[8],
+                                 "deltaCVEG"=cbbPalette[4],
+                                 "deltaCSTOR"=cbbPalette[5],
+                                 "deltaCSOIL"=cbbPalette[7]),
+                        labels=c("GPP"="GPP", 
+                                 "NPP"="NPP",
+                                 "RAU"=expression(R[auto]),
+                                 "RHET"=expression(R[het]),
+                                 "deltaCVEG"=expression(Delta * C[veg]),
+                                 "deltaCSTOR"=expression(Delta * C[lab]),
+                                 "deltaCSOIL"=expression(Delta * C[soil])))+
+      scale_x_discrete(breaks=c("GPP", "NPP+RAU", "R+deltaC"),
+                       labels=c("GPP"="GPP",
+                                "NPP+RAU"=expression("NPP+" * R[auto]),
+                                "R+deltaC"=expression("R+"*Delta*"C"))) +
+      theme_linedraw() +
+      theme(panel.grid.minor=element_blank(),
+            axis.title.x = element_text(size=14), 
+            axis.text.x = element_text(size=14),
+            axis.text.y=element_text(size=14),
+            axis.title.y=element_text(size=14),
+            legend.text=element_text(size=14),
+            legend.title=element_text(size=14),
+            panel.grid.major=element_blank(),
+            legend.position="none",
+            legend.text.align=0)+
+    scale_y_continuous(limits=c(-50, 800), 
+                       breaks=c(0, 100, 200, 400, 600, 800),
+                       labels=c(0, 100, 200, 400, 600, 800))+
+    annotate(geom="text", x=1, y=750, label="GDAYP", size=7)
+    
+    
+    p_gdayp2 <- ggplot(data=plotDF5, 
+                       aes(ymax=ymax, ymin=ymin, 
+                           xmax=4, xmin=3, fill=Variable)) +
+      geom_rect() +
+      geom_label(x=3.5, aes(y=labelPosition, label=label)) +
+      coord_polar(theta="y") + 
+      xlim(c(2, 4)) +
+      facet_wrap( ~ Trt, labeller = as_labeller(c("amb"="AMB", "ele"="ELE")))+
+      theme_linedraw() +
+      theme(axis.ticks = element_blank(),
+            panel.grid.minor=element_blank(),
+            axis.text.x=element_blank(),
+            axis.title.x=element_text(size=14),
+            axis.text.y=element_blank(),
+            axis.title.y=element_text(size=14),
+            legend.text=element_text(size=12),
+            legend.title=element_text(size=14),
+            panel.grid.major=element_blank(),
+            legend.position="none",
+            legend.box = 'horizontal',
+            legend.box.just = 'left',
+            plot.title = element_text(size=14, face="bold.italic", 
+                                      hjust = 0.5),
+            strip.text.x = element_text(size = 20))+
+      ylab("GDAYP")+
+      scale_fill_manual(name="Variable",
+                        values=c("Canopy"=Diverge_hsv_Palette[2], 
+                                 "Wood"=Diverge_hsv_Palette[4],
+                                 "Root"=Diverge_hsv_Palette[6],
+                                 "Other"=Diverge_hsv_Palette[8]))+
+      guides(fill=guide_legend(nrow=2))
+  
+    
+    
+    
+    ################################################
+    i <- "B_ELMV1"
+    
+    ### get the data
+    ## gpp
+    plotDF1 <- gppciDF[gppciDF$ModName==i,]
+    plotDF2 <- gppstackDF[gppstackDF$ModName==i,]
+    
+    ## fate of C
+    plotDF3 <- fateciDF[fateciDF$ModName==i,]
+    plotDF4 <- fatestackDF[fatestackDF$ModName==i,]
+    
+    ### alloc
+    plotDF5 <- allocDF[allocDF$ModName==i,]
+    plotDF51 <- plotDF5[plotDF5$Trt=="amb",]
+    plotDF52 <- plotDF5[plotDF5$Trt=="ele",]
+    
+    
+    ### CO2 effect
+    p_elmv11 <- ggplot() +  
+      geom_hline(yintercept=0)+
+      geom_bar(plotDF4, stat = "identity", 
+               mapping=aes(Method, value.mean, fill=variable),
+               position="stack", col="black") +
+      geom_errorbar(data=plotDF3, 
+                    mapping=aes(x=Method, ymin=value.mean-value.sd, 
+                                ymax=value.mean+value.sd), 
+                    width=0.1, size=0.6, color="black") + 
+      geom_point(data=plotDF3, 
+                 mapping=aes(x=Method, y=value.mean), 
+                 size=2, shape=21, fill="white", col="black")+
+      xlab("") + 
+      ylab(expression(paste(CO[2] * " effect (g C ", m^-2, " ", yr^-1, ")"))) +
+      scale_fill_manual(name="Variable",
+                        values=c("GPP"=cbbPalette[6],
+                                 "NPP"=cbbPalette[3],
+                                 "RAU"=cbbPalette[2],
+                                 "RHET"=cbbPalette[8],
+                                 "deltaCVEG"=cbbPalette[4],
+                                 "deltaCSTOR"=cbbPalette[5],
+                                 "deltaCSOIL"=cbbPalette[7]),
+                        labels=c("GPP"="GPP", 
+                                 "NPP"="NPP",
+                                 "RAU"="RAU",
+                                 "RHET"="RHET",
+                                 "deltaCVEG"=expression(Delta * C[veg]),
+                                 "deltaCSTOR"=expression(Delta * C[lab]),
+                                 "deltaCSOIL"=expression(Delta * C[soil])))+
+      scale_x_discrete(breaks=c("GPP", "NPP+RAU", "R+deltaC"),
+                       labels=c("GPP"="GPP",
+                                "NPP+RAU"="NPP+RAU",
+                                "R+deltaC"=expression("R+"*Delta*"C"))) +
+      theme_linedraw() +
+      theme(panel.grid.minor=element_blank(),
+            axis.title.x = element_text(size=14), 
+            axis.text.x = element_text(size=14),
+            axis.text.y=element_text(size=14),
+            axis.title.y=element_blank(),
+            legend.text=element_text(size=14),
+            legend.title=element_text(size=14),
+            panel.grid.major=element_blank(),
+            legend.position="none",
+            legend.text.align=0)+
+      scale_y_continuous(limits=c(-50, 800), 
+                         breaks=c(0, 100, 200, 400, 600, 800),
+                         labels=c(0, 100, 200, 400, 600, 800))+
+      annotate(geom="text", x=1, y=750, label="ELMV1", size=7)
+    
+    
+    p_elmv12 <- ggplot(data=plotDF5, 
+                       aes(ymax=ymax, ymin=ymin, 
+                           xmax=4, xmin=3, fill=Variable)) +
+      geom_rect() +
+      geom_label(x=3.5, aes(y=labelPosition, label=label)) +
+      coord_polar(theta="y") + 
+      xlim(c(2, 4)) +
+      facet_wrap( ~ Trt, labeller = as_labeller(c("amb"="AMB", "ele"="ELE")))+
+      theme_linedraw() +
+      theme(axis.ticks = element_blank(),
+            panel.grid.minor=element_blank(),
+            axis.text.x=element_blank(),
+            axis.title.x=element_text(size=14),
+            axis.text.y=element_blank(),
+            axis.title.y=element_text(size=14),
+            legend.text=element_text(size=12),
+            legend.title=element_text(size=14),
+            panel.grid.major=element_blank(),
+            legend.position="none",
+            legend.box = 'horizontal',
+            legend.box.just = 'left',
+            plot.title = element_text(size=14, face="bold.italic", 
+                                      hjust = 0.5),
+            strip.text.x = element_text(size = 20))+
+      ylab("ELMV1")+
+      scale_fill_manual(name="Variable",
+                        values=c("Canopy"=Diverge_hsv_Palette[2], 
+                                 "Wood"=Diverge_hsv_Palette[4],
+                                 "Root"=Diverge_hsv_Palette[6],
+                                 "Other"=Diverge_hsv_Palette[8]))+
+      guides(fill=guide_legend(nrow=2))
+    
+    
+    
+    ################################################
+    i <- "C_CABLP"
+    
+    ### get the data
+    ## gpp
+    plotDF1 <- gppciDF[gppciDF$ModName==i,]
+    plotDF2 <- gppstackDF[gppstackDF$ModName==i,]
+    
+    ## fate of C
+    plotDF3 <- fateciDF[fateciDF$ModName==i,]
+    plotDF4 <- fatestackDF[fatestackDF$ModName==i,]
+    
+    ### alloc
+    plotDF5 <- allocDF[allocDF$ModName==i,]
+    plotDF51 <- plotDF5[plotDF5$Trt=="amb",]
+    plotDF52 <- plotDF5[plotDF5$Trt=="ele",]
+    
+    
+    ### CO2 effect
+    p_cablp1 <- ggplot() +  
+      geom_hline(yintercept=0)+
+      geom_bar(plotDF4, stat = "identity", 
+               mapping=aes(Method, value.mean, fill=variable),
+               position="stack", col="black") +
+      geom_errorbar(data=plotDF3, 
+                    mapping=aes(x=Method, ymin=value.mean-value.sd, 
+                                ymax=value.mean+value.sd), 
+                    width=0.1, size=0.6, color="black") + 
+      geom_point(data=plotDF3, 
+                 mapping=aes(x=Method, y=value.mean), 
+                 size=2, shape=21, fill="white", col="black")+
+      xlab("") + 
+      ylab(expression(paste(CO[2] * " effect (g C ", m^-2, " ", yr^-1, ")"))) +
+      scale_fill_manual(name="Variable",
+                        values=c("GPP"=cbbPalette[6],
+                                 "NPP"=cbbPalette[3],
+                                 "RAU"=cbbPalette[2],
+                                 "RHET"=cbbPalette[8],
+                                 "deltaCVEG"=cbbPalette[4],
+                                 "deltaCSTOR"=cbbPalette[5],
+                                 "deltaCSOIL"=cbbPalette[7]),
+                        labels=c("GPP"="GPP", 
+                                 "NPP"="NPP",
+                                 "RAU"="RAU",
+                                 "RHET"="RHET",
+                                 "deltaCVEG"=expression(Delta * C[veg]),
+                                 "deltaCSTOR"=expression(Delta * C[lab]),
+                                 "deltaCSOIL"=expression(Delta * C[soil])))+
+      scale_x_discrete(breaks=c("GPP", "NPP+RAU", "R+deltaC"),
+                       labels=c("GPP"="GPP",
+                                "NPP+RAU"="NPP+RAU",
+                                "R+deltaC"=expression("R+"*Delta*"C"))) +
+      theme_linedraw() +
+      theme(panel.grid.minor=element_blank(),
+            axis.title.x = element_text(size=14), 
+            axis.text.x = element_text(size=14),
+            axis.text.y=element_text(size=14),
+            axis.title.y=element_blank(),
+            legend.text=element_text(size=14),
+            legend.title=element_text(size=14),
+            panel.grid.major=element_blank(),
+            legend.position="none",
+            legend.text.align=0)+
+      scale_y_continuous(limits=c(-50, 800), 
+                         breaks=c(0, 100, 200, 400, 600, 800),
+                         labels=c(0, 100, 200, 400, 600, 800))+
+      annotate(geom="text", x=1, y=750, label="CABLP", size=7)
+    
+    
+    p_cablp2 <- ggplot(data=plotDF5, 
+                       aes(ymax=ymax, ymin=ymin, 
+                           xmax=4, xmin=3, fill=Variable)) +
+      geom_rect() +
+      geom_label(x=3.5, aes(y=labelPosition, label=label)) +
+      coord_polar(theta="y") + 
+      xlim(c(2, 4)) +
+      facet_wrap( ~ Trt, labeller = as_labeller(c("amb"="AMB", "ele"="ELE")))+
+      #theme_void() +
+      theme_linedraw() +
+      theme(axis.ticks = element_blank(),
+            panel.grid.minor=element_blank(),
+            axis.text.x=element_blank(),
+            axis.title.x=element_text(size=14),
+            axis.text.y=element_blank(),
+            axis.title.y=element_text(size=14),
+            legend.text=element_text(size=12),
+            legend.title=element_text(size=14),
+            panel.grid.major=element_blank(),
+            legend.position="none",
+            legend.box = 'horizontal',
+            legend.box.just = 'left',
+            plot.title = element_text(size=14, face="bold.italic", 
+                                      hjust = 0.5),
+            strip.text.x = element_text(size = 20))+
+      ylab("CABLP")+
+      scale_fill_manual(name="Variable",
+                        values=c("Canopy"=Diverge_hsv_Palette[2], 
+                                 "Wood"=Diverge_hsv_Palette[4],
+                                 "Root"=Diverge_hsv_Palette[6],
+                                 "Other"=Diverge_hsv_Palette[8]))+
+      guides(fill=guide_legend(nrow=2))
+    
+
+    
+    
+    ################################################
+    i <- "D_LPJGP"
+    
+    ### get the data
+    ## gpp
+    plotDF1 <- gppciDF[gppciDF$ModName==i,]
+    plotDF2 <- gppstackDF[gppstackDF$ModName==i,]
+    
+    ## fate of C
+    plotDF3 <- fateciDF[fateciDF$ModName==i,]
+    plotDF4 <- fatestackDF[fatestackDF$ModName==i,]
+    
+    ### alloc
+    plotDF5 <- allocDF[allocDF$ModName==i,]
+    plotDF51 <- plotDF5[plotDF5$Trt=="amb",]
+    plotDF52 <- plotDF5[plotDF5$Trt=="ele",]
+    
+    
+    ### CO2 effect
+    p_lpjgp1 <- ggplot() +  
+      geom_hline(yintercept=0)+
+      geom_bar(plotDF4, stat = "identity", 
+               mapping=aes(Method, value.mean, fill=variable),
+               position="stack", col="black") +
+      geom_errorbar(data=plotDF3, 
+                    mapping=aes(x=Method, ymin=value.mean-value.sd, 
+                                ymax=value.mean+value.sd), 
+                    width=0.1, size=0.6, color="black") + 
+      geom_point(data=plotDF3, 
+                 mapping=aes(x=Method, y=value.mean), 
+                 size=2, shape=21, fill="white", col="black")+
+      xlab("") + 
+      ylab(expression(paste(CO[2] * " effect (g C ", m^-2, " ", yr^-1, ")"))) +
+      scale_fill_manual(name="Variable",
+                        values=c("GPP"=cbbPalette[6],
+                                 "NPP"=cbbPalette[3],
+                                 "RAU"=cbbPalette[2],
+                                 "RHET"=cbbPalette[8],
+                                 "deltaCVEG"=cbbPalette[4],
+                                 "deltaCSTOR"=cbbPalette[5],
+                                 "deltaCSOIL"=cbbPalette[7]),
+                        labels=c("GPP"="GPP", 
+                                 "NPP"="NPP",
+                                 "RAU"="RAU",
+                                 "RHET"="RHET",
+                                 "deltaCVEG"=expression(Delta * C[veg]),
+                                 "deltaCSTOR"=expression(Delta * C[lab]),
+                                 "deltaCSOIL"=expression(Delta * C[soil])))+
+      scale_x_discrete(breaks=c("GPP", "NPP+RAU", "R+deltaC"),
+                       labels=c("GPP"="GPP",
+                                "NPP+RAU"="NPP+RAU",
+                                "R+deltaC"=expression("R+"*Delta*"C"))) +
+      theme_linedraw() +
+      theme(panel.grid.minor=element_blank(),
+            axis.title.x = element_text(size=14), 
+            axis.text.x = element_text(size=14),
+            axis.text.y=element_text(size=14),
+            axis.title.y=element_blank(),
+            legend.text=element_text(size=14),
+            legend.title=element_text(size=14),
+            panel.grid.major=element_blank(),
+            legend.position="none",
+            legend.text.align=0)+
+      scale_y_continuous(limits=c(-50, 800), 
+                         breaks=c(0, 100, 200, 400, 600, 800),
+                         labels=c(0, 100, 200, 400, 600, 800))+
+      annotate(geom="text", x=1, y=750, label="LPJGP", size=7)
+    
+    
+
+    p_lpjgp2 <- ggplot(data=plotDF5, 
+                       aes(ymax=ymax, ymin=ymin, 
+                           xmax=4, xmin=3, fill=Variable)) +
+      geom_rect() +
+      geom_label(x=3.5, aes(y=labelPosition, label=label)) +
+      coord_polar(theta="y") + 
+      xlim(c(2, 4)) +
+      facet_wrap( ~ Trt, labeller = as_labeller(c("amb"="AMB", "ele"="ELE")))+
+      #theme_void() +
+      theme_linedraw() +
+      theme(axis.ticks = element_blank(),
+            panel.grid.minor=element_blank(),
+            axis.text.x=element_blank(),
+            axis.title.x=element_text(size=14),
+            axis.text.y=element_blank(),
+            axis.title.y=element_text(size=14),
+            legend.text=element_text(size=12),
+            legend.title=element_text(size=14),
+            panel.grid.major=element_blank(),
+            legend.position="none",
+            legend.box = 'horizontal',
+            legend.box.just = 'left',
+            plot.title = element_text(size=14, face="bold.italic", 
+                                      hjust = 0.5),
+            strip.text.x = element_text(size = 20))+
+      ylab("LPJGP")+
+      scale_fill_manual(name="Variable",
+                        values=c("Canopy"=Diverge_hsv_Palette[2], 
+                                 "Wood"=Diverge_hsv_Palette[4],
+                                 "Root"=Diverge_hsv_Palette[6],
+                                 "Other"=Diverge_hsv_Palette[8]))+
+      guides(fill=guide_legend(nrow=2))
+    
+    plot(p_lpjgp2)
+    
+    
+    
+    
+    ################################################
+    i <- "E_OCHDP"
+    
+    ### get the data
+    ## gpp
+    plotDF1 <- gppciDF[gppciDF$ModName==i,]
+    plotDF2 <- gppstackDF[gppstackDF$ModName==i,]
+    
+    ## fate of C
+    plotDF3 <- fateciDF[fateciDF$ModName==i,]
+    plotDF4 <- fatestackDF[fatestackDF$ModName==i,]
+    
+    ### alloc
+    plotDF5 <- allocDF[allocDF$ModName==i,]
+    plotDF51 <- plotDF5[plotDF5$Trt=="amb",]
+    plotDF52 <- plotDF5[plotDF5$Trt=="ele",]
+    
+    
+    ### CO2 effect
+    p_ochdp1 <- ggplot() +  
+      geom_hline(yintercept=0)+
+      geom_bar(plotDF4, stat = "identity", 
+               mapping=aes(Method, value.mean, fill=variable),
+               position="stack", col="black") +
+      geom_errorbar(data=plotDF3, 
+                    mapping=aes(x=Method, ymin=value.mean-value.sd, 
+                                ymax=value.mean+value.sd), 
+                    width=0.1, size=0.6, color="black") + 
+      geom_point(data=plotDF3, 
+                 mapping=aes(x=Method, y=value.mean), 
+                 size=2, shape=21, fill="white", col="black")+
+      xlab("") + 
+      ylab(expression(paste(CO[2] * " effect (g C ", m^-2, " ", yr^-1, ")"))) +
+      scale_fill_manual(name="Variable",
+                        values=c("GPP"=cbbPalette[6],
+                                 "NPP"=cbbPalette[3],
+                                 "RAU"=cbbPalette[2],
+                                 "RHET"=cbbPalette[8],
+                                 "deltaCVEG"=cbbPalette[4],
+                                 "deltaCSTOR"=cbbPalette[5],
+                                 "deltaCSOIL"=cbbPalette[7]),
+                        labels=c("GPP"="GPP", 
+                                 "NPP"="NPP",
+                                 "RAU"="RAU",
+                                 "RHET"="RHET",
+                                 "deltaCVEG"=expression(Delta * C[veg]),
+                                 "deltaCSTOR"=expression(Delta * C[lab]),
+                                 "deltaCSOIL"=expression(Delta * C[soil])))+
+      scale_x_discrete(breaks=c("GPP", "NPP+RAU", "R+deltaC"),
+                       labels=c("GPP"="GPP",
+                                "NPP+RAU"="NPP+RAU",
+                                "R+deltaC"=expression("R+"*Delta*"C"))) +
+      theme_linedraw() +
+      theme(panel.grid.minor=element_blank(),
+            axis.title.x = element_text(size=14), 
+            axis.text.x = element_text(size=14),
+            axis.text.y=element_text(size=14),
+            axis.title.y=element_text(size=14),
+            legend.text=element_text(size=14),
+            legend.title=element_text(size=14),
+            panel.grid.major=element_blank(),
+            legend.position="none",
+            legend.text.align=0)+
+      scale_y_continuous(limits=c(-50, 800), 
+                         breaks=c(0, 100, 200, 400, 600, 800),
+                         labels=c(0, 100, 200, 400, 600, 800))+
+      annotate(geom="text", x=1, y=750, label="OCHDP", size=7)
+    
+    
+    p_ochdp2 <- ggplot(data=plotDF5, 
+                       aes(ymax=ymax, ymin=ymin, 
+                           xmax=4, xmin=3, fill=Variable)) +
+      geom_rect() +
+      geom_label(x=3.5, aes(y=labelPosition, label=label)) +
+      coord_polar(theta="y") + 
+      xlim(c(2, 4)) +
+      facet_wrap( ~ Trt, labeller = as_labeller(c("amb"="AMB", "ele"="ELE")))+
+      theme_linedraw() +
+      theme(axis.ticks = element_blank(),
+            panel.grid.minor=element_blank(),
+            axis.text.x=element_blank(),
+            axis.title.x=element_text(size=14),
+            axis.text.y=element_blank(),
+            axis.title.y=element_text(size=14),
+            legend.text=element_text(size=12),
+            legend.title=element_text(size=14),
+            panel.grid.major=element_blank(),
+            legend.position="none",
+            legend.box = 'horizontal',
+            legend.box.just = 'left',
+            plot.title = element_text(size=14, face="bold.italic", 
+                                      hjust = 0.5),
+            strip.text.x = element_text(size = 20))+
+      ylab("OCHDP")+
+      scale_fill_manual(name="Variable",
+                        values=c("Canopy"=Diverge_hsv_Palette[2], 
+                                 "Wood"=Diverge_hsv_Palette[4],
+                                 "Root"=Diverge_hsv_Palette[6],
+                                 "Other"=Diverge_hsv_Palette[8]))+
+      guides(fill=guide_legend(nrow=2))
+    
+    
+    
+    ################################################
+    i <- "F_QUINC"
+    
+    ### get the data
+    ## gpp
+    plotDF1 <- gppciDF[gppciDF$ModName==i,]
+    plotDF2 <- gppstackDF[gppstackDF$ModName==i,]
+    
+    ## fate of C
+    plotDF3 <- fateciDF[fateciDF$ModName==i,]
+    plotDF4 <- fatestackDF[fatestackDF$ModName==i,]
+    
+    ### alloc
+    plotDF5 <- allocDF[allocDF$ModName==i,]
+    plotDF51 <- plotDF5[plotDF5$Trt=="amb",]
+    plotDF52 <- plotDF5[plotDF5$Trt=="ele",]
+    
+    
+    ### CO2 effect
+    p_quinc1 <- ggplot() +  
+      geom_hline(yintercept=0)+
+      geom_bar(plotDF4, stat = "identity", 
+               mapping=aes(Method, value.mean, fill=variable),
+               position="stack", col="black") +
+      geom_errorbar(data=plotDF3, 
+                    mapping=aes(x=Method, ymin=value.mean-value.sd, 
+                                ymax=value.mean+value.sd), 
+                    width=0.1, size=0.6, color="black") + 
+      geom_point(data=plotDF3, 
+                 mapping=aes(x=Method, y=value.mean), 
+                 size=2, shape=21, fill="white", col="black")+
+      xlab("") + 
+      ylab(expression(paste(CO[2] * " effect (g C ", m^-2, " ", yr^-1, ")"))) +
+      scale_fill_manual(name="Variable",
+                        values=c("GPP"=cbbPalette[6],
+                                 "NPP"=cbbPalette[3],
+                                 "RAU"=cbbPalette[2],
+                                 "RHET"=cbbPalette[8],
+                                 "deltaCVEG"=cbbPalette[4],
+                                 "deltaCSTOR"=cbbPalette[5],
+                                 "deltaCSOIL"=cbbPalette[7]),
+                        labels=c("GPP"="GPP", 
+                                 "NPP"="NPP",
+                                 "RAU"="RAU",
+                                 "RHET"="RHET",
+                                 "deltaCVEG"=expression(Delta * C[veg]),
+                                 "deltaCSTOR"=expression(Delta * C[lab]),
+                                 "deltaCSOIL"=expression(Delta * C[soil])))+
+      scale_x_discrete(breaks=c("GPP", "NPP+RAU", "R+deltaC"),
+                       labels=c("GPP"="GPP",
+                                "NPP+RAU"="NPP+RAU",
+                                "R+deltaC"=expression("R+"*Delta*"C"))) +
+      theme_linedraw() +
+      theme(panel.grid.minor=element_blank(),
+            axis.title.x = element_text(size=14), 
+            axis.text.x = element_text(size=14),
+            axis.text.y=element_text(size=14),
+            axis.title.y=element_blank(),
+            legend.text=element_text(size=14),
+            legend.title=element_text(size=14),
+            panel.grid.major=element_blank(),
+            legend.position="none",
+            legend.text.align=0)+
+      scale_y_continuous(limits=c(-50, 800), 
+                         breaks=c(0, 100, 200, 400, 600, 800),
+                         labels=c(0, 100, 200, 400, 600, 800))+
+      annotate(geom="text", x=1, y=750, label="QUINC", size=7)
+    
+    
+
+    p_quinc2 <- ggplot(data=plotDF5, 
+                       aes(ymax=ymax, ymin=ymin, 
+                           xmax=4, xmin=3, fill=Variable)) +
+      geom_rect() +
+      geom_label(x=3.5, aes(y=labelPosition, label=label)) +
+      coord_polar(theta="y") + 
+      xlim(c(2, 4)) +
+      facet_wrap( ~ Trt, labeller = as_labeller(c("amb"="AMB", "ele"="ELE")))+
+      theme_linedraw() +
+      theme(axis.ticks = element_blank(),
+            panel.grid.minor=element_blank(),
+            axis.text.x=element_blank(),
+            axis.title.x=element_text(size=14),
+            axis.text.y=element_text(size=14),
+            axis.title.y=element_blank(),
+            legend.text=element_text(size=12),
+            legend.title=element_text(size=14),
+            panel.grid.major=element_blank(),
+            legend.position="none",
+            legend.box = 'horizontal',
+            legend.box.just = 'left',
+            plot.title = element_text(size=14, face="bold.italic", 
+                                      hjust = 0.5),
+            strip.text.x = element_text(size = 20))+
+      ylab("QUINC")+
+      scale_fill_manual(name="Variable",
+                        values=c("Canopy"=Diverge_hsv_Palette[2], 
+                                 "Wood"=Diverge_hsv_Palette[4],
+                                 "Root"=Diverge_hsv_Palette[6],
+                                 "Other"=Diverge_hsv_Palette[8]))+
+      guides(fill=guide_legend(nrow=2))
+    
+    
+    ################################################
+    i <- "G_OCHDX"
+    
+    ### get the data
+    ## gpp
+    plotDF1 <- gppciDF[gppciDF$ModName==i,]
+    plotDF2 <- gppstackDF[gppstackDF$ModName==i,]
+    
+    ## fate of C
+    plotDF3 <- fateciDF[fateciDF$ModName==i,]
+    plotDF4 <- fatestackDF[fatestackDF$ModName==i,]
+    
+    ### alloc
+    plotDF5 <- allocDF[allocDF$ModName==i,]
+    plotDF51 <- plotDF5[plotDF5$Trt=="amb",]
+    plotDF52 <- plotDF5[plotDF5$Trt=="ele",]
+    
+    
+    ### CO2 effect
+    p_ochdx1 <- ggplot() +  
+      geom_hline(yintercept=0)+
+      geom_bar(plotDF4, stat = "identity", 
+               mapping=aes(Method, value.mean, fill=variable),
+               position="stack", col="black") +
+      geom_errorbar(data=plotDF3, 
+                    mapping=aes(x=Method, ymin=value.mean-value.sd, 
+                                ymax=value.mean+value.sd), 
+                    width=0.1, size=0.6, color="black") + 
+      geom_point(data=plotDF3, 
+                 mapping=aes(x=Method, y=value.mean), 
+                 size=2, shape=21, fill="white", col="black")+
+      xlab("") + 
+      ylab(expression(paste(CO[2] * " effect (g C ", m^-2, " ", yr^-1, ")"))) +
+      scale_fill_manual(name="Variable",
+                        values=c("GPP"=cbbPalette[6],
+                                 "NPP"=cbbPalette[3],
+                                 "RAU"=cbbPalette[2],
+                                 "RHET"=cbbPalette[8],
+                                 "deltaCVEG"=cbbPalette[4],
+                                 "deltaCSTOR"=cbbPalette[5],
+                                 "deltaCSOIL"=cbbPalette[7]),
+                        labels=c("GPP"="GPP", 
+                                 "NPP"="NPP",
+                                 "RAU"="RAU",
+                                 "RHET"="RHET",
+                                 "deltaCVEG"=expression(Delta * C[veg]),
+                                 "deltaCSTOR"=expression(Delta * C[lab]),
+                                 "deltaCSOIL"=expression(Delta * C[soil])))+
+      scale_x_discrete(breaks=c("GPP", "NPP+RAU", "R+deltaC"),
+                       labels=c("GPP"="GPP",
+                                "NPP+RAU"="NPP+RAU",
+                                "R+deltaC"=expression("R+"*Delta*"C"))) +
+      theme_linedraw() +
+      theme(panel.grid.minor=element_blank(),
+            axis.title.x = element_text(size=14), 
+            axis.text.x = element_text(size=14),
+            axis.text.y=element_text(size=14),
+            axis.title.y=element_blank(),
+            legend.text=element_text(size=14),
+            legend.title=element_text(size=14),
+            panel.grid.major=element_blank(),
+            legend.position="none",
+            legend.text.align=0)+
+      scale_y_continuous(limits=c(-50, 800), 
+                         breaks=c(0, 100, 200, 400, 600, 800),
+                         labels=c(0, 100, 200, 400, 600, 800))+
+      annotate(geom="text", x=1, y=750, label="OCHDX", size=7)
+    
+    
+    p_ochdx2 <- ggplot(data=plotDF5, 
+                       aes(ymax=ymax, ymin=ymin, 
+                           xmax=4, xmin=3, fill=Variable)) +
+      geom_rect() +
+      geom_label(x=3.5, aes(y=labelPosition, label=label)) +
+      coord_polar(theta="y") + 
+      xlim(c(2, 4)) +
+      facet_wrap( ~ Trt, labeller = as_labeller(c("amb"="AMB", "ele"="ELE")))+
+      theme_linedraw() +
+      theme(axis.ticks = element_blank(),
+            panel.grid.minor=element_blank(),
+            axis.text.x=element_blank(),
+            axis.title.x=element_text(size=14),
+            axis.text.y=element_text(size=14),
+            axis.title.y=element_blank(),
+            legend.text=element_text(size=12),
+            legend.title=element_text(size=14),
+            panel.grid.major=element_blank(),
+            legend.position="none",
+            legend.box = 'horizontal',
+            legend.box.just = 'left',
+            plot.title = element_text(size=14, face="bold.italic", 
+                                      hjust = 0.5),
+            strip.text.x = element_text(size = 20))+
+      ylab("OCHDX")+
+      scale_fill_manual(name="Variable",
+                        values=c("Canopy"=Diverge_hsv_Palette[2], 
+                                 "Wood"=Diverge_hsv_Palette[4],
+                                 "Root"=Diverge_hsv_Palette[6],
+                                 "Other"=Diverge_hsv_Palette[8]))+
+      guides(fill=guide_legend(nrow=2))
+    
+    
+    ################################################
+    i <- "H_QUJSM"
+    
+    ### get the data
+    ## gpp
+    plotDF1 <- gppciDF[gppciDF$ModName==i,]
+    plotDF2 <- gppstackDF[gppstackDF$ModName==i,]
+    
+    ## fate of C
+    plotDF3 <- fateciDF[fateciDF$ModName==i,]
+    plotDF4 <- fatestackDF[fatestackDF$ModName==i,]
+    
+    ### alloc
+    plotDF5 <- allocDF[allocDF$ModName==i,]
+    plotDF51 <- plotDF5[plotDF5$Trt=="amb",]
+    plotDF52 <- plotDF5[plotDF5$Trt=="ele",]
+    
+    
+    ### CO2 effect
+    p_qujsm1 <- ggplot() +  
+      geom_hline(yintercept=0)+
+      geom_bar(plotDF4, stat = "identity", 
+               mapping=aes(Method, value.mean, fill=variable),
+               position="stack", col="black") +
+      geom_errorbar(data=plotDF3, 
+                    mapping=aes(x=Method, ymin=value.mean-value.sd, 
+                                ymax=value.mean+value.sd), 
+                    width=0.1, size=0.6, color="black") + 
+      geom_point(data=plotDF3, 
+                 mapping=aes(x=Method, y=value.mean), 
+                 size=2, shape=21, fill="white", col="black")+
+      xlab("") + 
+      ylab(expression(paste(CO[2] * " effect (g C ", m^-2, " ", yr^-1, ")"))) +
+      scale_fill_manual(name="Variable",
+                        values=c("GPP"=cbbPalette[6],
+                                 "NPP"=cbbPalette[3],
+                                 "RAU"=cbbPalette[2],
+                                 "RHET"=cbbPalette[8],
+                                 "deltaCVEG"=cbbPalette[4],
+                                 "deltaCSTOR"=cbbPalette[5],
+                                 "deltaCSOIL"=cbbPalette[7]),
+                        labels=c("GPP"="GPP", 
+                                 "NPP"="NPP",
+                                 "RAU"="RAU",
+                                 "RHET"="RHET",
+                                 "deltaCVEG"=expression(Delta * C[veg]),
+                                 "deltaCSTOR"=expression(Delta * C[lab]),
+                                 "deltaCSOIL"=expression(Delta * C[soil])))+
+      scale_x_discrete(breaks=c("GPP", "NPP+RAU", "R+deltaC"),
+                       labels=c("GPP"="GPP",
+                                "NPP+RAU"="NPP+RAU",
+                                "R+deltaC"=expression("R+"*Delta*"C"))) +
+      theme_linedraw() +
+      theme(panel.grid.minor=element_blank(),
+            axis.title.x = element_text(size=14), 
+            axis.text.x = element_text(size=14),
+            axis.text.y=element_text(size=14),
+            axis.title.y=element_blank(),
+            legend.text=element_text(size=14),
+            legend.title=element_text(size=14),
+            panel.grid.major=element_blank(),
+            legend.position="none",
+            legend.text.align=0)+
+      scale_y_continuous(limits=c(-50, 800), 
+                         breaks=c(0, 100, 200, 400, 600, 800),
+                         labels=c(0, 100, 200, 400, 600, 800))+
+      annotate(geom="text", x=1, y=750, label="QUJSM", size=7)
     
   
+    p_qujsm2 <- ggplot(data=plotDF5, 
+                       aes(ymax=ymax, ymin=ymin, 
+                           xmax=4, xmin=3, fill=Variable)) +
+      geom_rect() +
+      geom_label(x=3.5, aes(y=labelPosition, label=label)) +
+      coord_polar(theta="y") + 
+      xlim(c(2, 4)) +
+      facet_wrap( ~ Trt, labeller = as_labeller(c("amb"="AMB", "ele"="ELE")))+
+      theme_linedraw() +
+      theme(axis.ticks = element_blank(),
+            panel.grid.minor=element_blank(),
+            axis.text.x=element_blank(),
+            axis.title.x=element_text(size=14),
+            axis.text.y=element_blank(),
+            axis.title.y=element_text(size=14),
+            legend.text=element_text(size=12),
+            legend.title=element_text(size=14),
+            panel.grid.major=element_blank(),
+            legend.position="none",
+            legend.box = 'horizontal',
+            legend.box.just = 'left',
+            plot.title = element_text(size=14, face="bold.italic", 
+                                      hjust = 0.5),
+            strip.text.x = element_text(size = 20))+
+      ylab("QUJSM")+
+      scale_fill_manual(name="Variable",
+                        values=c("Canopy"=Diverge_hsv_Palette[2], 
+                                 "Wood"=Diverge_hsv_Palette[4],
+                                 "Root"=Diverge_hsv_Palette[6],
+                                 "Other"=Diverge_hsv_Palette[8]))+
+      guides(fill=guide_legend(nrow=2))
+    
+    
+    
+    
+    
+    ##############
+    plots_legend_row <-  get_legend(p_gdayp1 + theme(legend.position="bottom",
+                                                     legend.box = 'horizontal',
+                                                     legend.box.just = 'left')
+                                    + guides(fill=guide_legend(nrow=1,byrow=TRUE)))
+    
+    plots_2_row <- plot_grid(p_gdayp1, p_elmv11, p_cablp1, p_lpjgp1, 
+                             labels=c("(a)", "(b)", "(c)", "(d)"),
+                             ncol=4, align="vh", axis = "l",
+                             label_x=0.85, label_y=0.98,
+                             label_size = 18)
+    
+    
+    plots_4_row <- plot_grid(p_ochdp1, p_quinc1, p_ochdx1, p_qujsm1, 
+                             labels=c("(e)", "(f)", "(g)", "(h)"),
+                             ncol=4, align="vh", axis = "l",
+                             label_x=0.85, label_y=0.98,
+                             label_size = 18)
+    
+    
+    plots_3_row <- plot_grid(p_gdayp2, p_elmv12, p_cablp2, p_lpjgp2,
+                             labels=c(""),
+                             ncol=4, align="vh", axis = "l",
+                             label_x=0.86, label_y=0.98,
+                             label_size = 18)
+    
+    plots_5_row <- plot_grid(p_ochdp2, p_quinc2, p_ochdx2, p_qujsm2,
+                             labels=c(""),
+                             ncol=4, align="vh", axis = "l",
+                             label_x=0.86, label_y=0.98,
+                             label_size = 18)
+    
+    #plot_mm_row <- plot_grid()
+    
+    
+    pdf(paste0(out.dir, "/MIP_normalized_fate_of_C_", 
+               scenario, "_comparison3.pdf"), 
+        width=16, height=8)
+    plot_grid(plots_2_row,
+              plots_4_row,
+              plots_legend_row,
+              ncol=1, rel_heights=c(1, 1,0.2))
+    
+    dev.off()
+    
+    pdf(paste0(out.dir, "/MIP_normalized_fate_of_C_", 
+               scenario, "_comparison4.pdf"), 
+        width=16, height=8)
+    plot_grid(plots_3_row,
+              plots_5_row,
+              ncol=1, rel_heights=c(1, 1))
+    
+    dev.off()
+    
+    
+    
+    
+    
+  
+    ####################################################################################################################################
     
     #### Normalize to the CO2 effect on GPP
     subDF1 <- subset(fatestackDF, variable=="GPP")
@@ -300,21 +1193,25 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
             legend.text=element_text(size=12),
             legend.title=element_text(size=14),
             panel.grid.major=element_blank(),
-            legend.position="bottom",
+            legend.position="none",
             legend.box = 'horizontal',
             legend.box.just = 'left',
             plot.title = element_text(size=14, face="bold.italic", 
                                       hjust = 0.5))+
       ylab(expression(paste("Normalized " * CO[2] * " response")))+
+      #scale_fill_manual(name="Component",
+      #                  values=c("NPP"=GreensPalette[5],
+      #                           "RAU"=YlOrRdPalette[6]),
+      #                  labels=c("NPP"="NPP",
+      #                           "RAU"=expression(R[auto])))+
       scale_fill_manual(name="Component",
-                        values=c("NPP"=GreensPalette[5],
-                                 "RAU"=YlOrRdPalette[6]),
+                        values=c("NPP"=cbbPalette[3],
+                                 "RAU"=cbbPalette[2]),
                         labels=c("NPP"="NPP",
                                  "RAU"=expression(R[auto])))+
       scale_x_discrete(limit=c(mod.list.rev, "OBS"),
                        label=c(model.labels, 
-                               "OBS"=expression(bold("OBS"))));p1
-    
+                               "OBS"=expression(bold("OBS"))))
     
     
     p2 <- ggplot(data=plotDF2, 
@@ -322,53 +1219,102 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
       geom_hline(yintercept=c(0,1), lty=1)+
       geom_bar(stat = "identity", aes(fill=variable), 
                position=position_stack(), col="black") +
-      geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
+      geom_vline(xintercept=c(6.5, 8.5), lty=2)+
       theme_linedraw() +
       theme(panel.grid.minor=element_blank(),
             axis.text.x=element_text(size=12),
             axis.title.x=element_blank(),
             axis.text.y=element_text(size=12),
-            axis.title.y=element_text(size=14),
+            axis.title.y=element_blank(),
             legend.text=element_text(size=12),
             legend.title=element_text(size=14),
             panel.grid.major=element_blank(),
-            legend.position="bottom",
+            legend.position="none",
             legend.box = 'horizontal',
             legend.box.just = 'left',
             plot.title = element_text(size=14, face="bold.italic", 
                                       hjust = 0.5))+
       ylab(expression(paste("Normalized " * CO[2] * " response")))+
       scale_fill_manual(name="Component",
-                        values=c("RAU"=YlOrRdPalette[6],
-                                 "RHET"=YlOrRdPalette[8],
-                                 "deltaCVEG"=GreensPalette[7],
-                                 "deltaCSTOR"=GreensPalette[4],
-                                 "deltaCSOIL"=GreensPalette[9]),
+                        values=c("RAU"=cbbPalette[2],
+                                 "RHET"=cbbPalette[8],
+                                 "deltaCVEG"=cbbPalette[4],
+                                 "deltaCSTOR"=cbbPalette[5],
+                                 "deltaCSOIL"=cbbPalette[7]),
                         labels=c("RAU"=expression(R[auto]),
                                  "RHET"=expression(R[het]),
                                  "deltaCVEG"=expression(Delta * C[veg]),
-                                 "deltaCSTOR"=expression(Delta * C[store]),
+                                 "deltaCSTOR"=expression(Delta * C[lab]),
                                  "deltaCSOIL"=expression(Delta * C[soil])))+
+      #scale_fill_manual(name="Component",
+      #                  values=c("RAU"="#845EC2",
+      #                           "RHET"="#D65DB1",
+      #                           "deltaCVEG"="#2C73D2",
+      #                           "deltaCSTOR"="#008F7A",
+      #                           "deltaCSOIL"="#FBEAFF"),
+      #                  labels=c("RAU"=expression(R[auto]),
+      #                           "RHET"=expression(R[het]),
+      #                           "deltaCVEG"=expression(Delta * C[veg]),
+      #                           "deltaCSTOR"=expression(Delta * C[lab]),
+      #                           "deltaCSOIL"=expression(Delta * C[soil])))+
       scale_x_discrete(limit=c(mod.list.rev, "OBS"),
                        label=c(model.labels, 
-                               "OBS"=expression(bold("OBS")))); p2
+                               "OBS"=expression(bold("OBS"))))
+    
+    plot(p2)
     
 
+    
+    ####################################################################################################################################
     plots_top_row <- plot_grid(p1, p2, 
                                labels=c("(a)", "(b)"),
-                               ncol=1, align="vh", axis = "l",
+                               ncol=2, align="vh", axis = "l",
                                label_x=0.9, label_y=0.98,
                                label_size = 18)
+    
+    plots_legend_row <-  get_legend(p_gdayp1 + theme(legend.position="bottom",
+                                                     legend.box = 'horizontal',
+                                                     legend.box.just = 'left')
+                                    + guides(fill=guide_legend(nrow=1,byrow=TRUE)))
     
     
     pdf(paste0(out.dir, "/MIP_normalized_fate_of_C_", 
                scenario, "_comparison.pdf"), 
-        width=8, height=7)
+        width=14, height=4)
     plot_grid(plots_top_row,
-              ncol=1, rel_heights=c(1,0.1))
+              plots_legend_row,
+              ncol=1, rel_heights=c(1, 0.4, 0.8, 0.8))
     
     dev.off()
     
-    #  end
+    
+    
+    
+    
+    
+    
+    
+    #######################################################
+    
+    #plots_2_row <- plot_grid(p_gdayp1, p_elmv11, p_cablp1, p_lpjgp1, 
+    #                         p_ochdp1, p_quinc1, p_ochdx1, p_qujsm1, 
+    #                         labels=c("(c)", "(d)", "(e)", "(f)",
+    #                                  "(g)", "(h)", "(i)", "(j)"),
+    #                         ncol=8, align="h", axis = "l",
+    #                         label_x=0.86, label_y=0.98,
+    #                         label_size = 18)
+    #
+    #
+    #pdf(paste0(out.dir, "/MIP_normalized_fate_of_C_", 
+    #           scenario, "_comparison2.pdf"), 
+    #    width=16, height=8)
+    #plot_grid(plots_top_row,
+    #          plots_legend_row,
+    #          plots_2_row,
+    #          ncol=1, rel_heights=c(1, 0.2, 0.6))
+    #
+    #dev.off()
+    
+     #  end
 }
 

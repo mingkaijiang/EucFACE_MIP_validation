@@ -41,6 +41,11 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
     ambDF$BP <- rowSums(ambDF[,c("deltaCL","deltaCW","deltaCFR","deltaCCR","deltaCSTOR")], na.rm=T)
     eleDF$BP <- rowSums(eleDF[,c("deltaCL","deltaCW","deltaCFR","deltaCCR","deltaCSTOR")], na.rm=T)
     
+    ## biomass production
+    ambDF$deltaPVEG <- rowSums(ambDF[,c("deltaPL","deltaPW","deltaPFR","deltaPCR","deltaPSTOR")], na.rm=T)
+    eleDF$deltaPVEGP <- rowSums(eleDF[,c("deltaPL","deltaPW","deltaPFR","deltaPCR","deltaPSTOR")], na.rm=T)
+    
+    
     #obsDF$BP <- NA
     #obsDF$BP[obsDF$Group=="mean"&obsDF$Trt=="aCO2"] <- obsDF$deltaCL[obsDF$Group=="mean"&obsDF$Trt=="aCO2"] +
     #    obsDF$deltaCW[obsDF$Group=="mean"&obsDF$Trt=="aCO2"] +
@@ -215,6 +220,7 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
                             "CL", "CW", "CFR", "CCR", "CFLITA", "CMIC", "CSOIL",
                             "PL", "PW", "PFR", "PCR", "PFLITA", "PSOIL", "PPORG", "PPMIN",
                             "PDEM", "PGL", "PGW", "PGFR", "PGCR", 
+                            "deltaPVEG", 
                             "PLITIN", "PWLIN", "PFRLIN",
                             "PLAB", "PSEC", "POCC", "PUP", "PRETR", "PMIN", "PLEACH", 
                             "PUE", "GPP_use",
@@ -253,6 +259,7 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
     y.limits.list <- c("CPSOIL", "CPFLIT", "CPFR", "CPW", "CPL", 
                        "PUE",  "GPP_use",
                        "POCC", "PSEC", "PLAB",
+                       "deltaPVEG",
                        "PLEACH", "PMIN", "PRETR", "PUP", "PDEM",
                        "PFRLIN", "PWLIN", "PLITIN", 
                        "PGCR", "PGFR", "PGW", "PGL", 
@@ -296,6 +303,7 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
                       "PRETR"=expression(P[retr]), 
                       "PMIN"=expression(P[net]), 
                       "PLEACH"=expression(P[leach]),
+                      "deltaPVEG"=expression(Delta * P[veg]),
                       "PGL"=expression(P[gleaf]), 
                       "PGW"=expression(P[gwood]), 
                       "PGFR"=expression(P[gfroot]), 
@@ -354,6 +362,7 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
     
     y.limits.sub.list3 <- c("PUE", 
                             "GPP_use",
+                            "deltaPVEG",
                             "PLEACH", 
                             "PLITIN", 
                             "PGFR", "PGW", "PGL", 
@@ -514,6 +523,7 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
                             expression(P[gfroot]), 
                             expression(P[leaflit]), 
                             expression(P[leach]),
+                            expression(Delta * P[veg]),
                             expression(PUE[GPP]),
                             expression(PUE[NPP])))
     

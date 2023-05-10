@@ -3919,6 +3919,82 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
                                                                 obsDF$GPP_use[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                        1, 0)
     
+    
+    ### deltaPVEG
+    outDF$A_GDAYP[outDF$Variable=="deltaPVEG"] <- ifelse(modDF.sum$deltaPVEG.mean[modDF.sum$ModName=="A_GDAYP"]<=
+                                                      (obsDF$deltaPVEG[obsDF$Group=="mean"&obsDF$Trt==treatment]+
+                                                           obsDF$deltaPVEG[obsDF$Group=="sd"&obsDF$Trt==treatment])&
+                                                      modDF.sum$deltaPVEG.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                      (obsDF$deltaPVEG[obsDF$Group=="mean"&obsDF$Trt==treatment]-
+                                                           obsDF$deltaPVEG[obsDF$Group=="sd"&obsDF$Trt==treatment]),
+                                                  1, 0)
+    
+    outDF$B_ELMV1[outDF$Variable=="deltaPVEG"] <- ifelse(modDF.sum$deltaPVEG.mean[modDF.sum$ModName=="B_ELMV1"]<=
+                                                      (obsDF$deltaPVEG[obsDF$Group=="mean"&obsDF$Trt==treatment]+
+                                                           obsDF$deltaPVEG[obsDF$Group=="sd"&obsDF$Trt==treatment])&
+                                                      modDF.sum$deltaPVEG.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                      (obsDF$deltaPVEG[obsDF$Group=="mean"&obsDF$Trt==treatment]-
+                                                           obsDF$deltaPVEG[obsDF$Group=="sd"&obsDF$Trt==treatment]),
+                                                  1, 0)
+    
+    outDF$C_CABLP[outDF$Variable=="deltaPVEG"] <- ifelse(modDF.sum$deltaPVEG.mean[modDF.sum$ModName=="C_CABLP"]<=
+                                                      (obsDF$deltaPVEG[obsDF$Group=="mean"&obsDF$Trt==treatment]+
+                                                           obsDF$deltaPVEG[obsDF$Group=="sd"&obsDF$Trt==treatment])&
+                                                      modDF.sum$deltaPVEG.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                      (obsDF$deltaPVEG[obsDF$Group=="mean"&obsDF$Trt==treatment]-
+                                                           obsDF$deltaPVEG[obsDF$Group=="sd"&obsDF$Trt==treatment]),
+                                                  1, 0)
+    
+    
+    outDF$D_LPJGP[outDF$Variable=="deltaPVEG"] <- ifelse(modDF.sum$deltaPVEG.mean[modDF.sum$ModName=="D_LPJGP"]<=
+                                                      (obsDF$deltaPVEG[obsDF$Group=="mean"&obsDF$Trt==treatment]+
+                                                           obsDF$deltaPVEG[obsDF$Group=="sd"&obsDF$Trt==treatment])&
+                                                      modDF.sum$deltaPVEG.mean[modDF.sum$ModName=="D_LPJGP"]>=
+                                                      (obsDF$deltaPVEG[obsDF$Group=="mean"&obsDF$Trt==treatment]-
+                                                           obsDF$deltaPVEG[obsDF$Group=="sd"&obsDF$Trt==treatment]),
+                                                  1, 0)
+    
+    outDF$E_OCHDP[outDF$Variable=="deltaPVEG"] <- ifelse(modDF.sum$deltaPVEG.mean[modDF.sum$ModName=="E_OCHDP"]<=
+                                                      (obsDF$deltaPVEG[obsDF$Group=="mean"&obsDF$Trt==treatment]+
+                                                           obsDF$deltaPVEG[obsDF$Group=="sd"&obsDF$Trt==treatment])&
+                                                      modDF.sum$deltaPVEG.mean[modDF.sum$ModName=="E_OCHDP"]>=
+                                                      (obsDF$deltaPVEG[obsDF$Group=="mean"&obsDF$Trt==treatment]-
+                                                           obsDF$deltaPVEG[obsDF$Group=="sd"&obsDF$Trt==treatment]),
+                                                  1, 0)
+    
+    outDF$F_QUINC[outDF$Variable=="deltaPVEG"] <- ifelse(modDF.sum$deltaPVEG.mean[modDF.sum$ModName=="F_QUINC"]<=
+                                                      (obsDF$deltaPVEG[obsDF$Group=="mean"&obsDF$Trt==treatment]+
+                                                           obsDF$deltaPVEG[obsDF$Group=="sd"&obsDF$Trt==treatment])&
+                                                      modDF.sum$deltaPVEG.mean[modDF.sum$ModName=="F_QUINC"]>=
+                                                      (obsDF$deltaPVEG[obsDF$Group=="mean"&obsDF$Trt==treatment]-
+                                                           obsDF$deltaPVEG[obsDF$Group=="sd"&obsDF$Trt==treatment]),
+                                                  1, 0)
+    
+    outDF$G_OCHDX[outDF$Variable=="deltaPVEG"] <- ifelse(modDF.sum$deltaPVEG.mean[modDF.sum$ModName=="G_OCHDX"]<=
+                                                      (obsDF$deltaPVEG[obsDF$Group=="mean"&obsDF$Trt==treatment]+
+                                                           obsDF$deltaPVEG[obsDF$Group=="sd"&obsDF$Trt==treatment])&
+                                                      modDF.sum$deltaPVEG.mean[modDF.sum$ModName=="G_OCHDX"]>=
+                                                      (obsDF$deltaPVEG[obsDF$Group=="mean"&obsDF$Trt==treatment]-
+                                                           obsDF$deltaPVEG[obsDF$Group=="sd"&obsDF$Trt==treatment]),
+                                                  1, 0)
+    
+    outDF$H_QUJSM[outDF$Variable=="deltaPVEG"] <- ifelse(modDF.sum$deltaPVEG.mean[modDF.sum$ModName=="H_QUJSM"]<=
+                                                      (obsDF$deltaPVEG[obsDF$Group=="mean"&obsDF$Trt==treatment]+
+                                                           obsDF$deltaPVEG[obsDF$Group=="sd"&obsDF$Trt==treatment])&
+                                                      modDF.sum$deltaPVEG.mean[modDF.sum$ModName=="H_QUJSM"]>=
+                                                      (obsDF$deltaPVEG[obsDF$Group=="mean"&obsDF$Trt==treatment]-
+                                                           obsDF$deltaPVEG[obsDF$Group=="sd"&obsDF$Trt==treatment]),
+                                                  1, 0)
+    
+    outDF$I_MM[outDF$Variable=="deltaPVEG"] <- ifelse(modDF.sum$deltaPVEG.mean[modDF.sum$ModName=="I_MM"]<=
+                                                   (obsDF$deltaPVEG[obsDF$Group=="mean"&obsDF$Trt==treatment]+
+                                                        obsDF$deltaPVEG[obsDF$Group=="sd"&obsDF$Trt==treatment])&
+                                                   modDF.sum$deltaPVEG.mean[modDF.sum$ModName=="I_MM"]>=
+                                                   (obsDF$deltaPVEG[obsDF$Group=="mean"&obsDF$Trt==treatment]-
+                                                        obsDF$deltaPVEG[obsDF$Group=="sd"&obsDF$Trt==treatment]),
+                                               1, 0)
+    
+    
     return(outDF)
     
 }

@@ -135,7 +135,7 @@ theoretical_analysis_of_leaf_nutrient_effect_on_leaf_physiology(scenario="VAR")
 
 ###      Photosynthesis and relationship with leaf nutrients
 #plot_photosynthesis_relationships(scenario="FIX")
-plot_photosynthesis_relationships(scenario="VAR")
+plot_photosynthesis_relationships(scenario="VAR", eucDF=eucDF)
 
 
 
@@ -144,7 +144,7 @@ plot_photosynthesis_relationships(scenario="VAR")
 #scenario="FIX"
 #plot_normalized_GPP_response(scenario="FIX")
 scenario="VAR"
-plot_normalized_GPP_response(scenario="VAR")
+plot_normalized_GPP_response(scenario="VAR", eucDF=eucDF)
 
 
 

@@ -2132,6 +2132,45 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
                                                        1, 0)
     
     
+    ### deltaPVEG
+    outDF$A_GDAYP[outDF$Variable=="deltaPVEG"] <- ifelse(sign(modDF.sum$deltaPVEG.mean[modDF.sum$ModName=="A_GDAYP"])==
+                                                      sign(obsDF$deltaPVEG[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                  1, 0)
+    
+    outDF$B_ELMV1[outDF$Variable=="deltaPVEG"] <- ifelse(sign(modDF.sum$deltaPVEG.mean[modDF.sum$ModName=="B_ELMV1"])==
+                                                      sign(obsDF$deltaPVEG[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                  1, 0)
+    
+    outDF$C_CABLP[outDF$Variable=="deltaPVEG"] <- ifelse(sign(modDF.sum$deltaPVEG.mean[modDF.sum$ModName=="C_CABLP"])==
+                                                      sign(obsDF$deltaPVEG[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                  1, 0)
+    
+    
+    outDF$D_LPJGP[outDF$Variable=="deltaPVEG"] <- ifelse(sign(modDF.sum$deltaPVEG.mean[modDF.sum$ModName=="D_LPJGP"])==
+                                                      sign(obsDF$deltaPVEG[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                  1, 0)
+    
+    outDF$E_OCHDP[outDF$Variable=="deltaPVEG"] <- ifelse(sign(modDF.sum$deltaPVEG.mean[modDF.sum$ModName=="E_OCHDP"])==
+                                                      sign(obsDF$deltaPVEG[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                  1, 0)
+    
+    outDF$F_QUINC[outDF$Variable=="deltaPVEG"] <- ifelse(sign(modDF.sum$deltaPVEG.mean[modDF.sum$ModName=="F_QUINC"])==
+                                                      sign(obsDF$deltaPVEG[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                  1, 0)
+    
+    outDF$G_OCHDX[outDF$Variable=="deltaPVEG"] <- ifelse(sign(modDF.sum$deltaPVEG.mean[modDF.sum$ModName=="G_OCHDX"])==
+                                                      sign(obsDF$deltaPVEG[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                  1, 0)
+    
+    outDF$H_QUJSM[outDF$Variable=="deltaPVEG"] <- ifelse(sign(modDF.sum$deltaPVEG.mean[modDF.sum$ModName=="H_QUJSM"])==
+                                                      sign(obsDF$deltaPVEG[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                  1, 0)
+    
+    outDF$I_MM[outDF$Variable=="deltaPVEG"] <- ifelse(sign(modDF.sum$deltaPVEG.mean[modDF.sum$ModName=="I_MM"])==
+                                                   sign(obsDF$deltaPVEG[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                               1, 0)
+    
+    
     return(outDF)
     
 }

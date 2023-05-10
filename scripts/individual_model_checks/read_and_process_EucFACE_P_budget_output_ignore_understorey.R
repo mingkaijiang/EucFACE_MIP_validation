@@ -7,6 +7,9 @@ read_and_process_EucFACE_P_budget_output_ignore_understorey <- function() {
     budgetDF <- read.csv("validation_dataset/EucFACE_P_Budget/total_p_budget_unnormalized.csv")
     cpDF <- read.csv("validation_dataset/EucFACE_P_Budget/summary_cp_ratios.csv")
     
+    deltaDF <- read.csv("validation_dataset/EucFACE_P_Budget/summary_table_delta_P_pool_unnormalized.csv")
+    
+    
     inoutDF <- read.csv("validation_dataset/EucFACE_C_Budget_data/summary/inout.csv")
     nppDF <- read.csv("validation_dataset/EucFACE_C_Budget_data/summary/npp.csv")
     
@@ -738,6 +741,98 @@ read_and_process_EucFACE_P_budget_output_ignore_understorey <- function() {
     outDF$CPFLIT[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- (mean(cpDF$leaflitter[cpDF$Ring%in%c(1,4,5)], na.rm=T) - mean(cpDF$leaflitter[cpDF$Ring%in%c(2,3,6)], na.rm=T) ) / mean(cpDF$leaflitter[cpDF$Ring%in%c(2,3,6)], na.rm=T) * 100
     outDF$CPFLIT[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((outDF$CPFLIT[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+outDF$CPFLIT[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+
                                                                        outDF$CPFLIT[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2)/3)/mean(cpDF$leaflitter[cpDF$Ring%in%c(2,3,6)], na.rm=T)*100 
+    
+    
+    
+    
+    
+    ## deltaPL
+    outDF$deltaPL[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- deltaDF$aCO2[deltaDF$terms=="Canopy P Pool"]
+    outDF$deltaPL[outDF$Group=="mean"&outDF$Trt=="eCO2"] <- deltaDF$eCO2[deltaDF$terms=="Canopy P Pool"]
+    outDF$deltaPL[outDF$Group=="sd"&outDF$Trt=="aCO2"] <- deltaDF$aCO2_sd[deltaDF$terms=="Canopy P Pool"]
+    outDF$deltaPL[outDF$Group=="sd"&outDF$Trt=="eCO2"] <- deltaDF$eCO2_sd[deltaDF$terms=="Canopy P Pool"]
+    outDF$deltaPL[outDF$Group=="mean"&outDF$Trt=="diff"] <- outDF$deltaPL[outDF$Group=="mean"&outDF$Trt=="eCO2"] - outDF$deltaPL[outDF$Group=="mean"&outDF$Trt=="aCO2"]
+    outDF$deltaPL[outDF$Group=="sd"&outDF$Trt=="diff"] <- sqrt((outDF$deltaPL[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+
+                                                                    outDF$deltaPL[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2)/2)
+    
+    outDF$deltaPL[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- outDF$deltaPL[outDF$Group=="sd"&outDF$Trt=="diff"] / outDF$deltaPL[outDF$Group=="mean"&outDF$Trt=="aCO2"] * 100
+    outDF$deltaPL[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((outDF$deltaPL[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+outDF$deltaPL[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+
+                                                                        outDF$deltaPL[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2)/3)/abs(outDF$deltaPL[outDF$Group=="mean"&outDF$Trt=="aCO2"])*100
+    
+    
+    ## deltaPW
+    outDF$deltaPW[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- deltaDF$aCO2[deltaDF$terms=="Total Wood P Pool"]
+    outDF$deltaPW[outDF$Group=="mean"&outDF$Trt=="eCO2"] <- deltaDF$eCO2[deltaDF$terms=="Total Wood P Pool"]
+    outDF$deltaPW[outDF$Group=="sd"&outDF$Trt=="aCO2"] <- deltaDF$aCO2_sd[deltaDF$terms=="Total Wood P Pool"]
+    outDF$deltaPW[outDF$Group=="sd"&outDF$Trt=="eCO2"] <- deltaDF$eCO2_sd[deltaDF$terms=="Total Wood P Pool"]
+    outDF$deltaPW[outDF$Group=="mean"&outDF$Trt=="diff"] <- deltaDF$diff[deltaDF$terms=="Total Wood P Pool"]
+    outDF$deltaPW[outDF$Group=="sd"&outDF$Trt=="diff"] <- sqrt((deltaDF$aCO2_sd[deltaDF$terms=="Total Wood P Pool"]^2+
+                                                                    deltaDF$eCO2_sd[deltaDF$terms=="Total Wood P Pool"]^2)/2)
+    
+    outDF$deltaPW[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- deltaDF$percent_diff[deltaDF$terms=="Total Wood P Pool"]
+    outDF$deltaPW[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((deltaDF$aCO2_sd[deltaDF$terms=="Total Wood P Pool"]^2+deltaDF$aCO2_sd[deltaDF$terms=="Total Wood P Pool"]^2+
+                                                                        deltaDF$eCO2_sd[deltaDF$terms=="Total Wood P Pool"]^2)/3)/abs(deltaDF$aCO2[deltaDF$terms=="Total Wood P Pool"])*100
+    
+    ## deltaCFR
+    tmp <- colSums(deltaDF[deltaDF$terms%in%c("Fine Root P Pool"),2:7], na.rm=T)/2
+    amean <- mean(c(tmp[2], tmp[3], tmp[6]), na.rm=T)
+    emean <- mean(c(tmp[1], tmp[4], tmp[5]), na.rm=T)
+    asd <- sd(c(tmp[2], tmp[3], tmp[6]), na.rm=T)
+    esd <- sd(c(tmp[1], tmp[4], tmp[5]), na.rm=T)
+    diff <- (emean/amean - 1) * 100
+    
+    outDF$deltaPFR[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- amean
+    outDF$deltaPFR[outDF$Group=="mean"&outDF$Trt=="eCO2"] <- emean
+    outDF$deltaPFR[outDF$Group=="sd"&outDF$Trt=="aCO2"] <- asd
+    outDF$deltaPFR[outDF$Group=="sd"&outDF$Trt=="eCO2"] <- esd
+    outDF$deltaPFR[outDF$Group=="mean"&outDF$Trt=="diff"] <- emean-amean
+    outDF$deltaPFR[outDF$Group=="sd"&outDF$Trt=="diff"] <- sqrt((asd^2+esd^2)/2)
+    outDF$deltaPFR[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- diff
+    outDF$deltaPFR[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((asd^2+asd^2+esd^2)/3)/abs(amean)*100
+    
+    
+    ## delta PCR
+    outDF$deltaPCR[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- deltaDF$aCO2[deltaDF$terms=="Coarse Root P Pool"]
+    outDF$deltaPCR[outDF$Group=="mean"&outDF$Trt=="eCO2"] <- deltaDF$eCO2[deltaDF$terms=="Coarse Root P Pool"]
+    outDF$deltaPCR[outDF$Group=="sd"&outDF$Trt=="aCO2"] <- deltaDF$aCO2_sd[deltaDF$terms=="Coarse Root P Pool"]
+    outDF$deltaPCR[outDF$Group=="sd"&outDF$Trt=="eCO2"] <- deltaDF$eCO2_sd[deltaDF$terms=="Coarse Root P Pool"]
+    outDF$deltaPCR[outDF$Group=="mean"&outDF$Trt=="diff"] <- deltaDF$diff[deltaDF$terms=="Coarse Root P Pool"]
+    outDF$deltaPCR[outDF$Group=="sd"&outDF$Trt=="diff"] <- sqrt((deltaDF$aCO2_sd[deltaDF$terms=="Coarse Root P Pool"]^2+
+                                                                     deltaDF$eCO2_sd[deltaDF$terms=="Coarse Root P Pool"]^2)/2)
+    
+    outDF$deltaPCR[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- deltaDF$percent_diff[deltaDF$terms=="Coarse Root P Pool"]
+    outDF$deltaPCR[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((deltaDF$aCO2_sd[deltaDF$terms=="Coarse Root P Pool"]^2+deltaDF$aCO2_sd[deltaDF$terms=="Coarse Root P Pool"]^2+
+                                                                         deltaDF$eCO2_sd[deltaDF$terms=="Coarse Root P Pool"]^2)/3)/abs(deltaDF$aCO2[deltaDF$terms=="Coarse Root P Pool"])*100
+    
+    
+    
+    ### delta Pveg
+    outDF$deltaPVEG[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- outDF$deltaPL[outDF$Group=="mean"&outDF$Trt=="aCO2"]+
+        outDF$deltaPW[outDF$Group=="mean"&outDF$Trt=="aCO2"]+
+        outDF$deltaPFR[outDF$Group=="mean"&outDF$Trt=="aCO2"]+
+        outDF$deltaPCR[outDF$Group=="mean"&outDF$Trt=="aCO2"]
+    
+    outDF$deltaPVEG[outDF$Group=="mean"&outDF$Trt=="eCO2"] <- outDF$deltaPL[outDF$Group=="mean"&outDF$Trt=="eCO2"]+
+        outDF$deltaPW[outDF$Group=="mean"&outDF$Trt=="eCO2"]+
+        outDF$deltaPFR[outDF$Group=="mean"&outDF$Trt=="eCO2"]+
+        outDF$deltaPCR[outDF$Group=="mean"&outDF$Trt=="eCO2"]
+    
+    outDF$deltaPVEG[outDF$Group=="sd"&outDF$Trt=="aCO2"] <- sqrt((outDF$deltaPL[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+
+                                                                      outDF$deltaPW[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+
+                                                                      outDF$deltaPFR[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+
+                                                                      outDF$deltaPCR[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2)/4)
+    
+    outDF$deltaPVEG[outDF$Group=="sd"&outDF$Trt=="eCO2"] <- sqrt((outDF$deltaPL[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2+
+                                                                      outDF$deltaPW[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2+
+                                                                      outDF$deltaPFR[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2+
+                                                                      outDF$deltaPCR[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2)/4)
+    
+    outDF$deltaPVEG[outDF$Group=="mean"&outDF$Trt=="diff"] <- outDF$deltaPVEG[outDF$Group=="mean"&outDF$Trt=="eCO2"]-outDF$deltaPVEG[outDF$Group=="mean"&outDF$Trt=="aCO2"]
+    outDF$deltaPVEG[outDF$Group=="sd"&outDF$Trt=="diff"] <- sqrt((outDF$deltaPVEG[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+outDF$deltaPVEG[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2)/2)
+    
+    outDF$deltaPVEG[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- (outDF$deltaPVEG[outDF$Group=="mean"&outDF$Trt=="eCO2"]-outDF$deltaPVEG[outDF$Group=="mean"&outDF$Trt=="aCO2"])/outDF$deltaPVEG[outDF$Group=="mean"&outDF$Trt=="aCO2"]*100
+    outDF$deltaPVEG[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((outDF$deltaPVEG[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2+outDF$deltaPVEG[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+outDF$deltaPVEG[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2)/3)/abs(outDF$deltaPVEG[outDF$Group=="mean"&outDF$Trt=="aCO2"])*100
+    
     
     
 
