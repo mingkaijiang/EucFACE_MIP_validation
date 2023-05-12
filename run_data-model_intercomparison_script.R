@@ -183,6 +183,9 @@ scenario="VAR"
 plot_plant_p_cycle_responses(eucDF,
                              scenario="VAR")
 
+#plot_plant_p_cycle_responses2(eucDF,
+#                              scenario="VAR")
+
 plot_soil_p_cycle_responses(eucDF,
                             scenario="VAR")
 

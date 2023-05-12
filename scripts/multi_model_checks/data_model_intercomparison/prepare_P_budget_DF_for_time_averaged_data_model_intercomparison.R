@@ -41,11 +41,11 @@ prepare_P_budget_DF_for_time_averaged_data_model_intercomparison <- function(euc
     
     ### add obs data
     for (i in c("aCO2", "eCO2")) {
-        for (j in var.list1) {
+        for (j in var.list2) {
             
             tryCatch({
             myDF1$meanvalue[myDF1$Group=="obs"&myDF1$Trt==i&myDF1$Variable==j] <- eucDF[eucDF$Group=="mean"&eucDF$Trt==i,j]
-            myDF1$sdvalue[myDF1$Group=="obs"&myDF1$Trt==i&myDF1$Variable==j] <- eucDF[eucDF$Group=="mean"&eucDF$Trt==i,j]
+            myDF1$sdvalue[myDF1$Group=="obs"&myDF1$Trt==i&myDF1$Variable==j] <- eucDF[eucDF$Group=="sd"&eucDF$Trt==i,j]
             }, error=function(e){})
         }
         
@@ -204,6 +204,15 @@ prepare_P_budget_DF_for_time_averaged_data_model_intercomparison <- function(euc
             tryCatch({
                 myDF2$meanvalue[myDF2$Group==i&myDF2$Trt=="diff"&myDF2$Variable==j] <- myDF1$meanvalue[myDF1$Group==i&myDF1$Variable==j&myDF1$Trt=="eCO2"] - myDF1$meanvalue[myDF1$Group==i&myDF1$Variable==j&myDF1$Trt=="aCO2"]
                 myDF2$meanvalue[myDF2$Group==i&myDF2$Trt=="pct_diff"&myDF2$Variable==j] <- myDF2$meanvalue[myDF2$Group==i&myDF2$Trt=="diff"&myDF2$Variable==j]/myDF1$meanvalue[myDF1$Group==i&myDF1$Variable==j&myDF1$Trt=="aCO2"] * 100.0
+                
+                myDF2$sdvalue[myDF2$Group==i&myDF2$Trt=="diff"&myDF2$Variable==j] <- sqrt(sum(c(myDF1$sdvalue[myDF1$Group==i&myDF1$Variable==j&myDF1$Trt=="eCO2"]^2,
+                                                                                                myDF1$sdvalue[myDF1$Group==i&myDF1$Variable==j&myDF1$Trt=="aCO2"]^2), na.rm=T)/2)
+                
+                myDF2$sdvalue[myDF2$Group==i&myDF2$Trt=="pct_diff"&myDF2$Variable==j] <- sqrt(sum(c(myDF1$sdvalue[myDF1$Group==i&myDF1$Variable==j&myDF1$Trt=="eCO2"]^2,
+                                                                                                    myDF1$sdvalue[myDF1$Group==i&myDF1$Variable==j&myDF1$Trt=="aCO2"]^2,
+                                                                                                    myDF1$sdvalue[myDF1$Group==i&myDF1$Variable==j&myDF1$Trt=="aCO2"]^2), na.rm=T)/3)/myDF1$meanvalue[myDF1$Group==i&myDF1$Variable==j&myDF1$Trt=="aCO2"]*100
+                
+                
             }, error=function(e){})
         }
     }    

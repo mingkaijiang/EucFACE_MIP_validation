@@ -639,7 +639,7 @@ read_and_process_EucFACE_P_budget_output_not_ignore_understorey <- function() {
     outDF$PUP[outDF$Group=="sd"&outDF$Trt=="diff"] <- sqrt((outDF$PUP[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+
                                                                 outDF$PUP[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2)/2) 
     
-    outDF$PUP[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- (outDF$PUP[outDF$Group=="mean"&outDF$Trt=="eCO2"] - outDF$PUP[outDF$Group=="mean"&outDF$Trt=="aCO2"]) / outDF$PUP[outDF$Group=="mean"&outDF$Trt=="aCO2"]
+    outDF$PUP[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- (outDF$PUP[outDF$Group=="mean"&outDF$Trt=="eCO2"] - outDF$PUP[outDF$Group=="mean"&outDF$Trt=="aCO2"]) / outDF$PUP[outDF$Group=="mean"&outDF$Trt=="aCO2"] * 100
     outDF$PUP[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((outDF$PUP[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2+outDF$PUP[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+
                                                                     outDF$PUP[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2)/3)/outDF$PUP[outDF$Group=="mean"&outDF$Trt=="aCO2"]*100 
     

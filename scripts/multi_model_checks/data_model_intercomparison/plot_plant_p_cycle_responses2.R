@@ -1,4 +1,4 @@
-plot_plant_p_cycle_responses <- function(eucDF,
+plot_plant_p_cycle_responses2 <- function(eucDF,
                                          scenario) {
   
     
@@ -78,7 +78,7 @@ plot_plant_p_cycle_responses <- function(eucDF,
     plotDF1 <- vegDF[vegDF$Trt=="aCO2"&vegDF$Variable%in%c("deltaCL", "deltaCW", "deltaCFR", "deltaCCR", "deltaCSTOR"),]
     plotDF2 <- vegDF[vegDF$Trt=="aCO2"&vegDF$Variable%in%c("Tot"),]
     plotDF3 <- vegDF[vegDF$Trt=="diff"&vegDF$Variable%in%c("Tot"),]
-
+    
     ### add multi-model mean
     tmpDF <- plotDF1[plotDF1$Group%in%c("A_GDAYP", "B_ELMV1",
                                         "C_CABLP", "D_LPJGP",
@@ -352,6 +352,7 @@ plot_plant_p_cycle_responses <- function(eucDF,
     plotDF3 <- vegDF[vegDF$Trt=="diff"&vegDF$Variable%in%c("Tot"),]
     plotDF4 <- vegDF[vegDF$Trt=="diff"&vegDF$Variable%in%c("deltaPL","deltaPW","deltaPFR","deltaPSTOR"),]
     
+    
     ### add multi-model mean
     tmpDF <- plotDF1[plotDF1$Group%in%c("A_GDAYP", "B_ELMV1",
                                         "C_CABLP", "D_LPJGP",
@@ -620,10 +621,6 @@ plot_plant_p_cycle_responses <- function(eucDF,
     bpDF <- merge(bpDF, plotDF5, by=c("Group"))
     
     
-    plotDF5 <- plotDF3[,c("Group", "meanvalue", "sdvalue")]
-    colnames(plotDF5) <- c("Group", "PG_pct_mean", "PG_pct_sd")
-    bpDF <- merge(bpDF, plotDF5, by=c("Group"))
-    
     
     
     ### plotting 
@@ -735,48 +732,26 @@ plot_plant_p_cycle_responses <- function(eucDF,
                                                                             var.list=c("PGL", "PGW", "PGCR", "PGFR"),
                                                                             calculate.total=T)
     
+    
     pfluxDF2 <- pfluxDF2[pfluxDF2$Variable=="Tot",]
     pfluxDF2$Variable <- "Pdemand"
     
-    ### calculate PRETR
-    tmpDF1 <- pfluxDF1[pfluxDF1$Trt%in%c("aCO2", "eCO2"),]
-    tmpDF2 <- pfluxDF2[pfluxDF2$Trt%in%c("aCO2", "eCO2"),]
-    
-    
     pfluxDF3 <- pfluxDF1
-    pfluxDF3$Variable <- "PRETR"
     
-    for(i in unique(tmpDF1$Group)) {
-      for(j in unique(tmpDF1$Trt)) {
-        pfluxDF3$meanvalue[pfluxDF3$Group==i&pfluxDF3$Trt==j] <- tmpDF2$meanvalue[tmpDF2$Group==i&tmpDF2$Trt==j] - tmpDF1$meanvalue[tmpDF1$Group==i&tmpDF1$Trt==j] 
-        
-        pfluxDF3$sdvalue[pfluxDF3$Group==i&pfluxDF3$Trt==j] <- 
-          sqrt(sum(c(tmpDF2$sdvalue[tmpDF2$Group==i&tmpDF2$Trt==j], tmpDF1$sdvalue[tmpDF1$Group==i&tmpDF1$Trt==j]), na.rm=T)/2)
+    for(i in unique(pfluxDF3$Group)) {
+      for(j in unique(pfluxDF3$Trt)) {
+        pfluxDF3$meanvalue[pfluxDF3$Group==i&pfluxDF3$Trt==j] <- 
+          pfluxDF2$meanvalue[pfluxDF2$Group==i&pfluxDF2$Trt==j] - pfluxDF1$meanvalue[pfluxDF1$Group==i&pfluxDF1$Trt==j] 
       }
     }
     
-    for(i in unique(pfluxDF3$Group)) {
-      pfluxDF3$meanvalue[pfluxDF3$Group==i&pfluxDF3$Trt=="diff"] <- pfluxDF3$meanvalue[pfluxDF3$Group==i&pfluxDF3$Trt=="eCO2"]-pfluxDF3$meanvalue[pfluxDF3$Group==i&pfluxDF3$Trt=="aCO2"]
-      
-      pfluxDF3$sdvalue[pfluxDF3$Group==i&pfluxDF3$Trt=="diff"] <- sqrt(sum(c(pfluxDF3$sdvalue[pfluxDF3$Group==i&pfluxDF3$Trt=="eCO2"]^2,
-                                                                             pfluxDF3$sdvalue[pfluxDF3$Group==i&pfluxDF3$Trt=="aCO2"]^2),
-                                                                           na.rm=T)/2)
-      
-      pfluxDF3$meanvalue[pfluxDF3$Group==i&pfluxDF3$Trt=="pct_diff"] <- pfluxDF3$meanvalue[pfluxDF3$Group==i&pfluxDF3$Trt=="diff"]/pfluxDF3$meanvalue[pfluxDF3$Group==i&pfluxDF3$Trt=="aCO2"]*100
-      
-      pfluxDF3$sdvalue[pfluxDF3$Group==i&pfluxDF3$Trt=="pct_diff"] <- sqrt(sum(c(pfluxDF3$sdvalue[pfluxDF3$Group==i&pfluxDF3$Trt=="eCO2"]^2,
-                                                                                 pfluxDF3$sdvalue[pfluxDF3$Group==i&pfluxDF3$Trt=="aCO2"]^2,
-                                                                                 pfluxDF3$sdvalue[pfluxDF3$Group==i&pfluxDF3$Trt=="aCO2"]^2),
-                                                                               na.rm=T)/3)/pfluxDF3$meanvalue[pfluxDF3$Group==i&pfluxDF3$Trt=="aCO2"]*100
-      
-    }
+    pfluxDF3$Variable <- "Presorb"
     
-
     
     pfluxDF <- rbind(pfluxDF1, pfluxDF3)
     
     ### split into ambDF, pctDF
-    plotDF1 <- pfluxDF[pfluxDF$Trt=="aCO2"&pfluxDF$Variable%in%c("PRETR", "PUP"),]
+    plotDF1 <- pfluxDF[pfluxDF$Trt=="aCO2"&pfluxDF$Variable%in%c("Presorb", "PUP"),]
 
     plotDF2 <- pfluxDF2[pfluxDF2$Trt=="aCO2"&pfluxDF2$Variable%in%c("Pdemand"),]
     
@@ -784,9 +759,8 @@ plot_plant_p_cycle_responses <- function(eucDF,
     plotDF3 <- pfluxDF2[pfluxDF2$Trt=="pct_diff"&pfluxDF2$Variable%in%c("Pdemand"),]
     
     
-    plotDF4 <- pfluxDF[pfluxDF$Trt=="diff"&pfluxDF$Variable%in%c("PRETR", "PUP"),]
+    plotDF4 <- pfluxDF[pfluxDF$Trt=="diff"&pfluxDF$Variable%in%c("Presorb", "PUP"),]
     
-    plotDF42 <- pfluxDF[pfluxDF$Trt=="pct_diff"&pfluxDF$Variable%in%c("PRETR", "PUP"),]
     
     
     ### add multi-model mean
@@ -814,11 +788,6 @@ plot_plant_p_cycle_responses <- function(eucDF,
     colnames(tmpDF2) <- c("Variable", "Group", "Trt", "meanvalue", "sdvalue")
     
     plotDF2 <- rbind(plotDF2, tmpDF2)
-    
-    plotDF2$sdvalue[plotDF2$Group%in%c("A_GDAYP", "B_ELMV1",
-                                       "C_CABLP", "D_LPJGP",
-                                       "E_OCHDP", "F_QUINC",
-                                       "G_OCHDX", "H_QUJSM")] <- NA
     
     
     ### add multi-model mean
@@ -849,44 +818,20 @@ plot_plant_p_cycle_responses <- function(eucDF,
     plotDF4 <- rbind(plotDF4, tmpDF2)
     
     
-    ### add multi-model mean
-    tmpDF <- plotDF42[plotDF42$Group%in%c("A_GDAYP", "B_ELMV1",
-                                        "C_CABLP", "D_LPJGP",
-                                        "E_OCHDP", "F_QUINC",
-                                        "G_OCHDX", "H_QUJSM"),]
-    tmpDF2 <- summaryBy(meanvalue~Variable+Trt, FUN=c(mean,sd),
-                        na.rm=T, data=tmpDF, keep.names=T)
-    tmpDF2$Group <- "multi-model"
-    tmpDF2 <- tmpDF2[,c("Variable", "Group", "Trt", "meanvalue.mean", "meanvalue.sd")]
-    colnames(tmpDF2) <- c("Variable", "Group", "Trt", "meanvalue", "sdvalue")
-    
-    plotDF42 <- rbind(plotDF42, tmpDF2)
+    plotDF2$sdvalue[plotDF2$Group%in%c("A_GDAYP", "B_ELMV1",
+                                       "C_CABLP", "D_LPJGP",
+                                       "E_OCHDP", "F_QUINC",
+                                       "G_OCHDX", "H_QUJSM")] <- NA
     
     
-    
-    ### add to bp DF
     tmpDF1 <- plotDF4[plotDF4$Variable=="PUP",c("Group", "meanvalue", "sdvalue")]
-    tmpDF2 <- plotDF4[plotDF4$Variable=="PRETR",c("Group", "meanvalue", "sdvalue")]
+    tmpDF2 <- plotDF4[plotDF4$Variable=="Presorb",c("Group", "meanvalue", "sdvalue")]
     
     colnames(tmpDF1) <- c("Group", "PUP_mean", "PUP_sd")
-    colnames(tmpDF2) <- c("Group", "PRETR_mean", "PRETR_sd")
+    colnames(tmpDF2) <- c("Group", "Presorb_mean", "Presorb_sd")
     
     bpDF <- merge(bpDF, tmpDF1, by=c("Group"))
     bpDF <- merge(bpDF, tmpDF2, by=c("Group"))
-    
-    
-    
-    tmpDF1 <- plotDF42[plotDF42$Variable=="PUP",c("Group", "meanvalue", "sdvalue")]
-    tmpDF2 <- plotDF42[plotDF42$Variable=="PRETR",c("Group", "meanvalue", "sdvalue")]
-    
-    colnames(tmpDF1) <- c("Group", "PUP_pct_mean", "PUP_pct_sd")
-    colnames(tmpDF2) <- c("Group", "PRETR_pct_mean", "PRETR_pct_sd")
-    
-    bpDF <- merge(bpDF, tmpDF1, by=c("Group"))
-    bpDF <- merge(bpDF, tmpDF2, by=c("Group"))
-    
-    
-    
     
     
     ### plotting 
@@ -925,9 +870,9 @@ plot_plant_p_cycle_responses <- function(eucDF,
       ylab(expression(paste(P[demand] * " (g C " * m^2 * " " * yr^-1 * ")")))+
       scale_fill_manual(name=expression(P[demand]),
                         values=c("PUP"=Diverge_hsv_Palette[2],
-                                 "PRETR"=Diverge_hsv_Palette[8]),
+                                 "Presorb"=Diverge_hsv_Palette[8]),
                         labels=c("PUP"=expression(P[upt]), 
-                                 "PRETR"=expression(P[res])))+
+                                 "Presorb"=expression(P[res])))+
       guides(fill=guide_legend(nrow=2))+
       scale_x_discrete(limit=c(mod.list, "multi-model", "obs"),
                        label=c(model.labels, "multi-model"=expression(bold("M-M")),
@@ -1007,9 +952,9 @@ plot_plant_p_cycle_responses <- function(eucDF,
       ylab(expression(CO[2] * " effect (g P " * m^-2 * " " * yr^-1 * ")"))+
       scale_fill_manual(name=expression(P[demand]),
                         values=c("PUP"=Diverge_hsv_Palette[2],
-                                 "PRETR"=Diverge_hsv_Palette[8]),
+                                 "Presorb"=Diverge_hsv_Palette[8]),
                         labels=c("PUP"=expression(P[upt]), 
-                                 "PRETR"=expression(P[res])))+
+                                 "Presorb"=expression(P[res])))+
       guides(fill=guide_legend(nrow=2))+
       scale_x_discrete(limit=c(mod.list, "multi-model", "obs"),
                        label=c(model.labels, "multi-model"=expression(bold("M-M")),
@@ -1133,12 +1078,6 @@ plot_plant_p_cycle_responses <- function(eucDF,
     
     
     
-    plotDF5 <- plotDF3[,c("Group", "meanvalue", "sdvalue")]
-    colnames(plotDF5) <- c("Group", "PMIN_pct_mean", "PMIN_pct_sd")
-    bpDF <- merge(bpDF, plotDF5, by=c("Group"))
-    
-    
-    
     ### plotting 
     p9 <- ggplot(data=plotDF1, 
                  aes(Group, meanvalue, group=Variable)) +
@@ -1152,7 +1091,7 @@ plot_plant_p_cycle_responses <- function(eucDF,
       #geom_point(data=plotDF2, aes(x=Group, y=meanvalue), 
       #           position=position_dodge2(width=0.9), col="black",
       #         fill="white", size=2, pch=21)+
-      geom_vline(xintercept=c(6.5, 8.5), lty=2)+
+      geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
       xlab("")+
       theme_linedraw() +
       theme(panel.grid.minor=element_blank(),
@@ -1195,7 +1134,7 @@ plot_plant_p_cycle_responses <- function(eucDF,
       #geom_point(data=plotDF3, aes(x=Group, y=meanvalue), 
       #         position=position_dodge2(width=0.9), col="black",
       #         fill="white", size=2, pch=21)+
-      geom_vline(xintercept=c(6.5, 8.5), lty=2)+
+      geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
       xlab("")+
       theme_linedraw() +
       theme(panel.grid.minor=element_blank(),
@@ -1355,8 +1294,6 @@ plot_plant_p_cycle_responses <- function(eucDF,
       tmpDF1$meanvalue[tmpDF1$Group==i&tmpDF1$Trt=="aCO2"] <- ambDF.sum$GPP_use.mean[ambDF.sum$ModName==i]
       tmpDF1$meanvalue[tmpDF1$Group==i&tmpDF1$Trt=="eCO2"] <- eleDF.sum$GPP_use.mean[eleDF.sum$ModName==i]
       tmpDF1$meanvalue[tmpDF1$Group==i&tmpDF1$Trt=="diff"] <- annDF.diff.sum$GPP_use.mean[annDF.diff.sum$ModName==i]
-      tmpDF1$meanvalue[tmpDF1$Group==i&tmpDF1$Trt=="pct_diff"] <- tmpDF1$meanvalue[tmpDF1$Group==i&tmpDF1$Trt=="diff"]/tmpDF1$meanvalue[tmpDF1$Group==i&tmpDF1$Trt=="aCO2"]*100
-      
 
     }
     
@@ -1369,7 +1306,6 @@ plot_plant_p_cycle_responses <- function(eucDF,
     
     plotDF1 <- subDF2[subDF2$Trt=="aCO2",]
     plotDF2 <- subDF2[subDF2$Trt=="diff",]
-    plotDF3 <- subDF2[subDF2$Trt=="pct_diff",]
     
     
     ### add multi-model mean
@@ -1399,20 +1335,6 @@ plot_plant_p_cycle_responses <- function(eucDF,
     plotDF2 <- rbind(plotDF2, tmpDF2)
     
     
-    ### add multi-model mean
-    tmpDF <- plotDF3[plotDF3$Group%in%c("A_GDAYP", "B_ELMV1",
-                                        "C_CABLP", "D_LPJGP",
-                                        "E_OCHDP", "F_QUINC",
-                                        "G_OCHDX", "H_QUJSM"),]
-    tmpDF2 <- summaryBy(meanvalue~Variable+Trt, FUN=c(mean,sd),
-                        na.rm=T, data=tmpDF, keep.names=T)
-    tmpDF2$Group <- "multi-model"
-    tmpDF2 <- tmpDF2[,c("Variable", "Group", "Trt", "meanvalue.mean", "meanvalue.sd")]
-    colnames(tmpDF2) <- c("Variable", "Group", "Trt", "meanvalue", "sdvalue")
-    
-    plotDF3 <- rbind(plotDF3, tmpDF2)
-    
-    
     
     ### add into BP DF
     tmpDF1 <- plotDF2[plotDF2$Variable=="PUE",c("Group", "meanvalue", "sdvalue")]
@@ -1420,17 +1342,6 @@ plot_plant_p_cycle_responses <- function(eucDF,
     
     colnames(tmpDF1) <- c("Group", "PUE_mean", "PUE_sd")
     colnames(tmpDF2) <- c("Group", "GPP_PUE_mean", "GPP_PUE_sd")
-    
-    bpDF <- merge(bpDF, tmpDF1, by=c("Group"))
-    bpDF <- merge(bpDF, tmpDF2, by=c("Group"))
-    
-    
-    
-    tmpDF1 <- plotDF3[plotDF3$Variable=="PUE",c("Group", "meanvalue", "sdvalue")]
-    tmpDF2 <- plotDF3[plotDF3$Variable=="GPP_PUE",c("Group", "meanvalue", "sdvalue")]
-    
-    colnames(tmpDF1) <- c("Group", "PUE_pct_mean", "PUE_pct_sd")
-    colnames(tmpDF2) <- c("Group", "GPP_PUE_pct_mean", "GPP_PUE_pct_sd")
     
     bpDF <- merge(bpDF, tmpDF1, by=c("Group"))
     bpDF <- merge(bpDF, tmpDF2, by=c("Group"))
@@ -1592,18 +1503,7 @@ plot_plant_p_cycle_responses <- function(eucDF,
     bpDF <- merge(bpDF, tmpDF3, by=c("Group"))
     
     
-    ### add into BP DF
-    tmpDF1 <- plotDF2[plotDF2$Variable=="CPL",c("Group", "meanvalue", "sdvalue")]
-    tmpDF2 <- plotDF2[plotDF2$Variable=="CPW",c("Group", "meanvalue", "sdvalue")]
-    tmpDF3 <- plotDF2[plotDF2$Variable=="CPFR",c("Group", "meanvalue", "sdvalue")]
     
-    colnames(tmpDF1) <- c("Group", "CPL_pct_mean", "CPL_pct_sd")
-    colnames(tmpDF2) <- c("Group", "CPW_pct_mean", "CPW_pct_sd")
-    colnames(tmpDF3) <- c("Group", "CPFR_pct_mean", "CPFR_pct_sd")
-    
-    bpDF <- merge(bpDF, tmpDF1, by=c("Group"))
-    bpDF <- merge(bpDF, tmpDF2, by=c("Group"))
-    bpDF <- merge(bpDF, tmpDF3, by=c("Group"))
     
     
     
@@ -1699,7 +1599,7 @@ plot_plant_p_cycle_responses <- function(eucDF,
                                   "CPFR"=expression(CP[froot]),
                                   "CPFLIT"=expression(CP[flit]),
                                   "CPSOIL"=expression(CP[soil])))+
-        guides(fill=guide_legend(nrow=2))
+        guides(fill=guide_legend(nrow=2)); p14
     
     
     
@@ -1707,6 +1607,7 @@ plot_plant_p_cycle_responses <- function(eucDF,
     
     
     ###########################################################################
+    
     pdf(paste0(out.dir, "/MIP_time_averaged_", scenario, "_comparison_P_use_variables.pdf"), 
         width=16, height=20)
     plot_grid(p11, p12, # PUE
@@ -1726,7 +1627,7 @@ plot_plant_p_cycle_responses <- function(eucDF,
     ### use CO2 effect of CP flexibility / Pdem / Pupt / P net / delta Pveg to explain 
     ### the CO2 effect on BP and NEP
     
-    p1_co2 <- ggplot() +
+    p1 <- ggplot() +
       geom_segment(aes(x=bpDF$BP_mean, xend = bpDF$BP_mean,
                        y=bpDF$deltaPVEG_mean+bpDF$deltaPVEG_sd, 
                        yend=bpDF$deltaPVEG_mean-bpDF$deltaPVEG_sd),
@@ -1762,11 +1663,11 @@ plot_plant_p_cycle_responses <- function(eucDF,
                                   "G_OCHDX"=19,"H_QUJSM"=19,
                                   "multi-model"=19, "obs"=15))+
       xlab(expression(paste(CO[2] * " effect on BP (g C " * m^-2 * " " * yr^-1 * ")")))+
-      ylab(expression(paste(CO[2] * " effect on " * Delta * P[veg] * " ( g P " * m^-2 * " " * yr^-1 * ")")))
+      ylab(expression(paste(CO[2] * " effect on " * Delta * P[veg] * " ( g P " * m^-2 * " " * yr^-1 * ")"))); p1
     
     
     
-    p2_co2 <- ggplot() +
+    p2 <- ggplot() +
       geom_segment(aes(x=bpDF$BP_mean, xend = bpDF$BP_mean,
                        y=bpDF$PG_mean+bpDF$PG_sd, 
                        yend=bpDF$PG_mean-bpDF$PG_sd),
@@ -1802,51 +1703,11 @@ plot_plant_p_cycle_responses <- function(eucDF,
                                   "G_OCHDX"=19,"H_QUJSM"=19,
                                   "multi-model"=19, "obs"=15))+
       xlab(expression(paste(CO[2] * " effect on BP (g C " * m^-2 * " " * yr^-1 * ")")))+
-      ylab(expression(paste(CO[2] * " effect on " * P[dem] * " ( g P " * m^-2 * " " * yr^-1 * ")")))
+      ylab(expression(paste(CO[2] * " effect on " * P[dem] * " ( g P " * m^-2 * " " * yr^-1 * ")"))); p2
     
     
     
-    p3_co2 <- ggplot() +
-      geom_segment(aes(x=bpDF$BP_mean, xend = bpDF$BP_mean,
-                       y=bpDF$PG_pct_mean+bpDF$PG_pct_sd, 
-                       yend=bpDF$PG_pct_mean-bpDF$PG_pct_sd),
-                   lwd=0.5, color="grey")+
-      geom_segment(aes(x=bpDF$BP_mean+bpDF$BP_sd, 
-                       xend = bpDF$BP_mean-bpDF$BP_sd,
-                       y=bpDF$PG_pct_mean, 
-                       yend=bpDF$PG_pct_mean), 
-                   lwd=0.5, color="grey")+
-      geom_point(data=bpDF, aes(BP_mean, PG_pct_mean, color=Group, pch=Group), 
-                 size=4)+
-      theme_linedraw() +
-      theme(panel.grid.minor=element_blank(),
-            axis.text.x=element_text(size=12),
-            axis.title.x=element_text(size=14),
-            axis.text.y=element_text(size=12),
-            axis.title.y=element_text(size=14),
-            legend.text=element_text(size=12),
-            legend.title=element_text(size=14),
-            panel.grid.major=element_blank(),
-            legend.position="none",
-            legend.box = 'horizontal',
-            legend.box.just = 'left',
-            plot.title = element_text(size=14, face="bold.italic", 
-                                      hjust = 0.5))+
-      scale_color_manual(name="Model",
-                         values=c(col.values, "multi-model"="grey", "obs"="black"),
-                         labels=c(model.labels, "multi-model"="M-M", "obs"="OBS"))+
-      scale_shape_manual(name="Model",
-                         values=c("A_GDAYP"=19,"B_ELMV1"=19,
-                                  "C_CABLP"=19,"D_LPJGP"=19,
-                                  "E_OCHDP"=19,"F_QUINC"=19,
-                                  "G_OCHDX"=19,"H_QUJSM"=19,
-                                  "multi-model"=19, "obs"=15))+
-      xlab(expression(paste(CO[2] * " effect on BP (g C " * m^-2 * " " * yr^-1 * ")")))+
-      ylab(expression(paste(CO[2] * " effect on " * P[dem] * " (%)")))
-    
-    
-    
-    p4_co2 <- ggplot() +
+    p3 <- ggplot() +
       geom_segment(aes(x=bpDF$BP_mean, xend = bpDF$BP_mean,
                        y=bpDF$PUP_mean+bpDF$PUP_sd, 
                        yend=bpDF$PUP_mean-bpDF$PUP_sd),
@@ -1882,60 +1743,22 @@ plot_plant_p_cycle_responses <- function(eucDF,
                                   "G_OCHDX"=19,"H_QUJSM"=19,
                                   "multi-model"=19, "obs"=15))+
       xlab(expression(paste(CO[2] * " effect on BP (g C " * m^-2 * " " * yr^-1 * ")")))+
-      ylab(expression(paste(CO[2] * " effect on " * P[up] * " ( g P " * m^-2 * " " * yr^-1 * ")")))
+      ylab(expression(paste(CO[2] * " effect on " * P[up] * " ( g P " * m^-2 * " " * yr^-1 * ")"))); p3
     
     
     
-    p5_co2 <- ggplot() +
-      geom_segment(aes(x=bpDF$BP_mean, xend = bpDF$BP_mean,
-                       y=bpDF$PUP_pct_mean+bpDF$PUP_pct_sd, 
-                       yend=bpDF$PUP_pct_mean-bpDF$PUP_pct_sd),
-                   lwd=0.5, color="grey")+
-      geom_segment(aes(x=bpDF$BP_mean+bpDF$BP_sd, 
-                       xend = bpDF$BP_mean-bpDF$BP_sd,
-                       y=bpDF$PUP_pct_mean, 
-                       yend=bpDF$PUP_pct_mean), 
-                   lwd=0.5, color="grey")+
-      geom_point(data=bpDF, aes(BP_mean, PUP_pct_mean, color=Group, pch=Group), 
-                 size=4)+
-      theme_linedraw() +
-      theme(panel.grid.minor=element_blank(),
-            axis.text.x=element_text(size=12),
-            axis.title.x=element_text(size=14),
-            axis.text.y=element_text(size=12),
-            axis.title.y=element_text(size=14),
-            legend.text=element_text(size=12),
-            legend.title=element_text(size=14),
-            panel.grid.major=element_blank(),
-            legend.position="none",
-            legend.box = 'horizontal',
-            legend.box.just = 'left',
-            plot.title = element_text(size=14, face="bold.italic", 
-                                      hjust = 0.5))+
-      scale_color_manual(name="Model",
-                         values=c(col.values, "multi-model"="grey", "obs"="black"),
-                         labels=c(model.labels, "multi-model"="M-M", "obs"="OBS"))+
-      scale_shape_manual(name="Model",
-                         values=c("A_GDAYP"=19,"B_ELMV1"=19,
-                                  "C_CABLP"=19,"D_LPJGP"=19,
-                                  "E_OCHDP"=19,"F_QUINC"=19,
-                                  "G_OCHDX"=19,"H_QUJSM"=19,
-                                  "multi-model"=19, "obs"=15))+
-      xlab(expression(paste(CO[2] * " effect on BP (g C " * m^-2 * " " * yr^-1 * ")")))+
-      ylab(expression(paste(CO[2] * " effect on " * P[up] * " (%)")))
     
-    
-    p6_co2 <- ggplot() +
-      geom_segment(aes(x=bpDF$PRETR_mean, xend = bpDF$PRETR_mean,
+    p4 <- ggplot() +
+      geom_segment(aes(x=bpDF$Presorb_mean, xend = bpDF$Presorb_mean,
                        y=bpDF$PUP_mean+bpDF$PUP_sd, 
                        yend=bpDF$PUP_mean-bpDF$PUP_sd),
                    lwd=0.5, color="grey")+
-      geom_segment(aes(x=bpDF$PRETR_mean+bpDF$PRETR_sd, 
-                       xend = bpDF$PRETR_mean-bpDF$PRETR_sd,
+      geom_segment(aes(x=bpDF$Presorb_mean+bpDF$Presorb_sd, 
+                       xend = bpDF$Presorb_mean-bpDF$Presorb_sd,
                        y=bpDF$PUP_mean, 
                        yend=bpDF$PUP_mean), 
                    lwd=0.5, color="grey")+
-      geom_point(data=bpDF, aes(PRETR_mean, PUP_mean, color=Group, pch=Group), 
+      geom_point(data=bpDF, aes(Presorb_mean, PUP_mean, color=Group, pch=Group), 
                  size=4)+
       theme_linedraw() +
       theme(panel.grid.minor=element_blank(),
@@ -1960,56 +1783,13 @@ plot_plant_p_cycle_responses <- function(eucDF,
                                   "E_OCHDP"=19,"F_QUINC"=19,
                                   "G_OCHDX"=19,"H_QUJSM"=19,
                                   "multi-model"=19, "obs"=15))+
-      xlab(expression(paste(CO[2] * " effect on " * P[retr] * " ( g P " * m^-2 * " " * yr^-1 * ")")))+
-      ylab(expression(paste(CO[2] * " effect on " * P[upt] * " ( g P " * m^-2 * " " * yr^-1 * ")")))
+      xlab(expression(paste(CO[2] * " effect on " * P[up] * " ( g P " * m^-2 * " " * yr^-1 * ")")))+
+      ylab(expression(paste(CO[2] * " effect on " * P[res] * " ( g P " * m^-2 * " " * yr^-1 * ")"))); p4
     
     
     
     
-    p7_co2 <- ggplot() +
-      geom_segment(aes(x=bpDF$PRETR_pct_mean, xend = bpDF$PRETR_pct_mean,
-                       y=bpDF$PUP_pct_mean+bpDF$PUP_pct_sd, 
-                       yend=bpDF$PUP_pct_mean-bpDF$PUP_pct_sd),
-                   lwd=0.5, color="grey")+
-      geom_segment(aes(x=bpDF$PRETR_pct_mean+bpDF$PRETR_pct_sd, 
-                       xend = bpDF$PRETR_pct_mean-bpDF$PRETR_pct_sd,
-                       y=bpDF$PUP_pct_mean, 
-                       yend=bpDF$PUP_pct_mean), 
-                   lwd=0.5, color="grey")+
-      geom_point(data=bpDF, aes(PRETR_pct_mean, PUP_pct_mean, color=Group, pch=Group), 
-                 size=4)+
-      theme_linedraw() +
-      theme(panel.grid.minor=element_blank(),
-            axis.text.x=element_text(size=12),
-            axis.title.x=element_text(size=14),
-            axis.text.y=element_text(size=12),
-            axis.title.y=element_text(size=14),
-            legend.text=element_text(size=12),
-            legend.title=element_text(size=14),
-            panel.grid.major=element_blank(),
-            legend.position="none",
-            legend.box = 'horizontal',
-            legend.box.just = 'left',
-            plot.title = element_text(size=14, face="bold.italic", 
-                                      hjust = 0.5))+
-      scale_color_manual(name="Model",
-                         values=c(col.values, "multi-model"="grey", "obs"="black"),
-                         labels=c(model.labels, "multi-model"="M-M", "obs"="OBS"))+
-      scale_shape_manual(name="Model",
-                         values=c("A_GDAYP"=19,"B_ELMV1"=19,
-                                  "C_CABLP"=19,"D_LPJGP"=19,
-                                  "E_OCHDP"=19,"F_QUINC"=19,
-                                  "G_OCHDX"=19,"H_QUJSM"=19,
-                                  "multi-model"=19, "obs"=15))+
-      xlab(expression(paste(CO[2] * " effect on " * P[retr] * " (%)")))+
-      ylab(expression(paste(CO[2] * " effect on " * P[upt] * " (%)")))
-    
-    
-    
-    
-    
-    
-    p8_co2 <- ggplot() +
+    p5 <- ggplot() +
       geom_segment(aes(x=bpDF$PUP_mean, xend = bpDF$PUP_mean,
                        y=bpDF$PMIN_mean+bpDF$PMIN_sd, 
                        yend=bpDF$PMIN_mean-bpDF$PMIN_sd),
@@ -2045,505 +1825,21 @@ plot_plant_p_cycle_responses <- function(eucDF,
                                   "G_OCHDX"=19,"H_QUJSM"=19,
                                   "multi-model"=19, "obs"=15))+
       xlab(expression(paste(CO[2] * " effect on " * P[up] * " ( g P " * m^-2 * " " * yr^-1 * ")")))+
-      ylab(expression(paste(CO[2] * " effect on " * P[net] * " ( g P " * m^-2 * " " * yr^-1 * ")")))
-    
-    
-    p9_co2 <- ggplot() +
-      geom_segment(aes(x=bpDF$PUP_pct_mean, xend = bpDF$PUP_pct_mean,
-                       y=bpDF$PMIN_pct_mean+bpDF$PMIN_pct_sd, 
-                       yend=bpDF$PMIN_pct_mean-bpDF$PMIN_pct_sd),
-                   lwd=0.5, color="grey")+
-      geom_segment(aes(x=bpDF$PUP_pct_mean+bpDF$PUP_pct_sd, 
-                       xend = bpDF$PUP_pct_mean-bpDF$PUP_pct_sd,
-                       y=bpDF$PMIN_pct_mean, 
-                       yend=bpDF$PMIN_pct_mean), 
-                   lwd=0.5, color="grey")+
-      geom_point(data=bpDF, aes(PUP_pct_mean, PMIN_pct_mean, color=Group, pch=Group), 
-                 size=4)+
-      theme_linedraw() +
-      theme(panel.grid.minor=element_blank(),
-            axis.text.x=element_text(size=12),
-            axis.title.x=element_text(size=14),
-            axis.text.y=element_text(size=12),
-            axis.title.y=element_text(size=14),
-            legend.text=element_text(size=12),
-            legend.title=element_text(size=14),
-            panel.grid.major=element_blank(),
-            legend.position="none",
-            legend.box = 'horizontal',
-            legend.box.just = 'left',
-            plot.title = element_text(size=14, face="bold.italic", 
-                                      hjust = 0.5))+
-      scale_color_manual(name="Model",
-                         values=c(col.values, "multi-model"="grey", "obs"="black"),
-                         labels=c(model.labels, "multi-model"="M-M", "obs"="OBS"))+
-      scale_shape_manual(name="Model",
-                         values=c("A_GDAYP"=19,"B_ELMV1"=19,
-                                  "C_CABLP"=19,"D_LPJGP"=19,
-                                  "E_OCHDP"=19,"F_QUINC"=19,
-                                  "G_OCHDX"=19,"H_QUJSM"=19,
-                                  "multi-model"=19, "obs"=15))+
-      xlab(expression(paste(CO[2] * " effect on " * P[up] * " (%)")))+
-      ylab(expression(paste(CO[2] * " effect on " * P[net] * " (%)")))
-    
-    
-    
-    
-    p10_co2 <- ggplot() +
-      geom_segment(aes(x=bpDF$GPP_PUE_mean, xend = bpDF$GPP_PUE_mean,
-                       y=bpDF$PUE_mean+bpDF$PUE_sd, 
-                       yend=bpDF$PUE_mean-bpDF$PUE_sd),
-                   lwd=0.5, color="grey")+
-      geom_segment(aes(x=bpDF$GPP_PUE_mean+bpDF$GPP_PUE_sd, 
-                       xend = bpDF$GPP_PUE_mean-bpDF$GPP_PUE_sd,
-                       y=bpDF$PUE_mean, 
-                       yend=bpDF$PUE_mean), 
-                   lwd=0.5, color="grey")+
-      geom_point(data=bpDF, aes(GPP_PUE_mean, PUE_mean, color=Group, pch=Group), 
-                 size=4)+
-      theme_linedraw() +
-      theme(panel.grid.minor=element_blank(),
-            axis.text.x=element_text(size=12),
-            axis.title.x=element_text(size=14),
-            axis.text.y=element_text(size=12),
-            axis.title.y=element_text(size=14),
-            legend.text=element_text(size=12),
-            legend.title=element_text(size=14),
-            panel.grid.major=element_blank(),
-            legend.position="none",
-            legend.box = 'horizontal',
-            legend.box.just = 'left',
-            plot.title = element_text(size=14, face="bold.italic", 
-                                      hjust = 0.5))+
-      scale_color_manual(name="Model",
-                         values=c(col.values, "multi-model"="grey", "obs"="black"),
-                         labels=c(model.labels, "multi-model"="M-M", "obs"="OBS"))+
-      scale_shape_manual(name="Model",
-                         values=c("A_GDAYP"=19,"B_ELMV1"=19,
-                                  "C_CABLP"=19,"D_LPJGP"=19,
-                                  "E_OCHDP"=19,"F_QUINC"=19,
-                                  "G_OCHDX"=19,"H_QUJSM"=19,
-                                  "multi-model"=19, "obs"=15))+
-      xlab(expression(paste(CO[2] * " effect on " * PUE[GPP] * " ( g C " * g^-1 * " P)")))+
-      ylab(expression(paste(CO[2] * " effect on " * PUE[NPP] * " ( g C " * g^-1 * " P)")))
-    
-    
-    
-    
-    p11_co2 <- ggplot() +
-      geom_segment(aes(x=bpDF$GPP_PUE_pct_mean, xend = bpDF$GPP_PUE_pct_mean,
-                       y=bpDF$PUE_pct_mean+bpDF$PUE_pct_sd, 
-                       yend=bpDF$PUE_pct_mean-bpDF$PUE_pct_sd),
-                   lwd=0.5, color="grey")+
-      geom_segment(aes(x=bpDF$GPP_PUE_pct_mean+bpDF$GPP_PUE_pct_sd, 
-                       xend = bpDF$GPP_PUE_pct_mean-bpDF$GPP_PUE_pct_sd,
-                       y=bpDF$PUE_pct_mean, 
-                       yend=bpDF$PUE_pct_mean), 
-                   lwd=0.5, color="grey")+
-      geom_point(data=bpDF, aes(GPP_PUE_pct_mean, PUE_pct_mean, color=Group, pch=Group), 
-                 size=4)+
-      theme_linedraw() +
-      theme(panel.grid.minor=element_blank(),
-            axis.text.x=element_text(size=12),
-            axis.title.x=element_text(size=14),
-            axis.text.y=element_text(size=12),
-            axis.title.y=element_text(size=14),
-            legend.text=element_text(size=12),
-            legend.title=element_text(size=14),
-            panel.grid.major=element_blank(),
-            legend.position="none",
-            legend.box = 'horizontal',
-            legend.box.just = 'left',
-            plot.title = element_text(size=14, face="bold.italic", 
-                                      hjust = 0.5))+
-      scale_color_manual(name="Model",
-                         values=c(col.values, "multi-model"="grey", "obs"="black"),
-                         labels=c(model.labels, "multi-model"="M-M", "obs"="OBS"))+
-      scale_shape_manual(name="Model",
-                         values=c("A_GDAYP"=19,"B_ELMV1"=19,
-                                  "C_CABLP"=19,"D_LPJGP"=19,
-                                  "E_OCHDP"=19,"F_QUINC"=19,
-                                  "G_OCHDX"=19,"H_QUJSM"=19,
-                                  "multi-model"=19, "obs"=15))+
-      xlab(expression(paste(CO[2] * " effect on " * PUE[GPP] * " (%)")))+
-      ylab(expression(paste(CO[2] * " effect on " * PUE[NPP] * " (%)")))
-    
-    
-    
-    
-    p12_co2 <- ggplot() +
-      geom_segment(aes(x=bpDF$CPL_mean, xend = bpDF$CPL_mean,
-                       y=bpDF$CPFR_mean+bpDF$CPFR_sd, 
-                       yend=bpDF$CPFR_mean-bpDF$CPFR_sd),
-                   lwd=0.5, color="grey")+
-      geom_segment(aes(x=bpDF$CPL_mean+bpDF$CPL_sd, 
-                       xend = bpDF$CPL_mean-bpDF$CPL_sd,
-                       y=bpDF$CPFR_mean, 
-                       yend=bpDF$CPFR_mean), 
-                   lwd=0.5, color="grey")+
-      geom_point(data=bpDF, aes(CPL_mean, CPFR_mean, color=Group, pch=Group), 
-                 size=4)+
-      theme_linedraw() +
-      theme(panel.grid.minor=element_blank(),
-            axis.text.x=element_text(size=12),
-            axis.title.x=element_text(size=14),
-            axis.text.y=element_text(size=12),
-            axis.title.y=element_text(size=14),
-            legend.text=element_text(size=12),
-            legend.title=element_text(size=14),
-            panel.grid.major=element_blank(),
-            legend.position="none",
-            legend.box = 'horizontal',
-            legend.box.just = 'left',
-            plot.title = element_text(size=14, face="bold.italic", 
-                                      hjust = 0.5))+
-      scale_color_manual(name="Model",
-                         values=c(col.values, "multi-model"="grey", "obs"="black"),
-                         labels=c(model.labels, "multi-model"="M-M", "obs"="OBS"))+
-      scale_shape_manual(name="Model",
-                         values=c("A_GDAYP"=19,"B_ELMV1"=19,
-                                  "C_CABLP"=19,"D_LPJGP"=19,
-                                  "E_OCHDP"=19,"F_QUINC"=19,
-                                  "G_OCHDX"=19,"H_QUJSM"=19,
-                                  "multi-model"=19, "obs"=15))+
-      xlab(expression(paste(CO[2] * " effect on leaf CP (ele - amb)")))+
-      ylab(expression(paste(CO[2] * " effect on fineroot CP (ele - amb)")))
-    
-    
-    
-    
-    p13_co2 <- ggplot() +
-      geom_segment(aes(x=bpDF$CPL_pct_mean, xend = bpDF$CPL_pct_mean,
-                       y=bpDF$CPFR_pct_mean+bpDF$CPFR_pct_sd, 
-                       yend=bpDF$CPFR_pct_mean-bpDF$CPFR_pct_sd),
-                   lwd=0.5, color="grey")+
-      geom_segment(aes(x=bpDF$CPL_pct_mean+bpDF$CPL_pct_sd, 
-                       xend = bpDF$CPL_pct_mean-bpDF$CPL_pct_sd,
-                       y=bpDF$CPFR_pct_mean, 
-                       yend=bpDF$CPFR_pct_mean), 
-                   lwd=0.5, color="grey")+
-      geom_point(data=bpDF, aes(CPL_pct_mean, CPFR_pct_mean, color=Group, pch=Group), 
-                 size=4)+
-      theme_linedraw() +
-      theme(panel.grid.minor=element_blank(),
-            axis.text.x=element_text(size=12),
-            axis.title.x=element_text(size=14),
-            axis.text.y=element_text(size=12),
-            axis.title.y=element_text(size=14),
-            legend.text=element_text(size=12),
-            legend.title=element_text(size=14),
-            panel.grid.major=element_blank(),
-            legend.position="none",
-            legend.box = 'horizontal',
-            legend.box.just = 'left',
-            plot.title = element_text(size=14, face="bold.italic", 
-                                      hjust = 0.5))+
-      scale_color_manual(name="Model",
-                         values=c(col.values, "multi-model"="grey", "obs"="black"),
-                         labels=c(model.labels, "multi-model"="M-M", "obs"="OBS"))+
-      scale_shape_manual(name="Model",
-                         values=c("A_GDAYP"=19,"B_ELMV1"=19,
-                                  "C_CABLP"=19,"D_LPJGP"=19,
-                                  "E_OCHDP"=19,"F_QUINC"=19,
-                                  "G_OCHDX"=19,"H_QUJSM"=19,
-                                  "multi-model"=19, "obs"=15))+
-      xlab(expression(paste(CO[2] * " effect on leaf CP (%)")))+
-      ylab(expression(paste(CO[2] * " effect on fineroot CP (%)")))
-    
-    
-    
-    
-    
-    
-    p14_co2 <- ggplot() +
-      geom_segment(aes(x=bpDF$BP_mean, xend = bpDF$BP_mean,
-                       y=bpDF$CPW_pct_mean+bpDF$CPW_pct_sd, 
-                       yend=bpDF$CPW_pct_mean-bpDF$CPW_pct_sd),
-                   lwd=0.5, color="grey")+
-      geom_segment(aes(x=bpDF$BP_mean+bpDF$BP_sd, 
-                       xend = bpDF$BP_mean-bpDF$BP_sd,
-                       y=bpDF$CPW_pct_mean, 
-                       yend=bpDF$CPW_pct_mean), 
-                   lwd=0.5, color="grey")+
-      geom_point(data=bpDF, aes(BP_mean, CPW_pct_mean, color=Group, pch=Group), 
-                 size=4)+
-      theme_linedraw() +
-      theme(panel.grid.minor=element_blank(),
-            axis.text.x=element_text(size=12),
-            axis.title.x=element_text(size=14),
-            axis.text.y=element_text(size=12),
-            axis.title.y=element_text(size=14),
-            legend.text=element_text(size=12),
-            legend.title=element_text(size=14),
-            panel.grid.major=element_blank(),
-            legend.position="none",
-            legend.box = 'horizontal',
-            legend.box.just = 'left',
-            plot.title = element_text(size=14, face="bold.italic", 
-                                      hjust = 0.5))+
-      scale_color_manual(name="Model",
-                         values=c(col.values, "multi-model"="grey", "obs"="black"),
-                         labels=c(model.labels, "multi-model"="M-M", "obs"="OBS"))+
-      scale_shape_manual(name="Model",
-                         values=c("A_GDAYP"=19,"B_ELMV1"=19,
-                                  "C_CABLP"=19,"D_LPJGP"=19,
-                                  "E_OCHDP"=19,"F_QUINC"=19,
-                                  "G_OCHDX"=19,"H_QUJSM"=19,
-                                  "multi-model"=19, "obs"=15))+
-      xlab(expression(paste(CO[2] * " effect on BP (g C " * m^-2 * " " * yr^-1 * ")")))+
-      ylab(expression(paste(CO[2] * " effect on wood CP ratio (%)")))
-    
-    
-    
-    
-    p15_co2 <- ggplot() +
-      geom_segment(aes(x=bpDF$deltaPVEG_mean, xend = bpDF$deltaPVEG_mean,
-                       y=bpDF$PG_mean+bpDF$PG_sd, 
-                       yend=bpDF$PG_mean-bpDF$PG_sd),
-                   lwd=0.5, color="grey")+
-      geom_segment(aes(x=bpDF$deltaPVEG_mean+bpDF$deltaPVEG_sd, 
-                       xend = bpDF$deltaPVEG_mean-bpDF$deltaPVEG_sd,
-                       y=bpDF$PG_mean, 
-                       yend=bpDF$PG_mean), 
-                   lwd=0.5, color="grey")+
-      geom_point(data=bpDF, aes(deltaPVEG_mean, PG_mean, color=Group, pch=Group), 
-                 size=4)+
-      theme_linedraw() +
-      theme(panel.grid.minor=element_blank(),
-            axis.text.x=element_text(size=12),
-            axis.title.x=element_text(size=14),
-            axis.text.y=element_text(size=12),
-            axis.title.y=element_text(size=14),
-            legend.text=element_text(size=12),
-            legend.title=element_text(size=14),
-            panel.grid.major=element_blank(),
-            legend.position="none",
-            legend.box = 'horizontal',
-            legend.box.just = 'left',
-            plot.title = element_text(size=14, face="bold.italic", 
-                                      hjust = 0.5))+
-      scale_color_manual(name="Model",
-                         values=c(col.values, "multi-model"="grey", "obs"="black"),
-                         labels=c(model.labels, "multi-model"="M-M", "obs"="OBS"))+
-      scale_shape_manual(name="Model",
-                         values=c("A_GDAYP"=19,"B_ELMV1"=19,
-                                  "C_CABLP"=19,"D_LPJGP"=19,
-                                  "E_OCHDP"=19,"F_QUINC"=19,
-                                  "G_OCHDX"=19,"H_QUJSM"=19,
-                                  "multi-model"=19, "obs"=15))+
-      xlab(expression(paste(CO[2] * " effect on " * Delta * P[veg] * " (g P " * m^-2 * " " * yr^-1 * ")")))+
-      ylab(expression(paste(CO[2] * " effect on " * P[dem] * " (g P " * m^-2 * " " * yr^-1 * ")")))
-    
-    
-    p16_co2 <- ggplot() +
-      geom_segment(aes(y=bpDF$deltaPVEG_mean, yend = bpDF$deltaPVEG_mean,
-                       x=bpDF$PG_pct_mean+bpDF$PG_pct_sd, 
-                       xend=bpDF$PG_pct_mean-bpDF$PG_pct_sd),
-                   lwd=0.5, color="grey")+
-      geom_segment(aes(y=bpDF$deltaPVEG_mean+bpDF$deltaPVEG_sd, 
-                       yend = bpDF$deltaPVEG_mean-bpDF$deltaPVEG_sd,
-                       x=bpDF$PG_pct_mean, 
-                       xend=bpDF$PG_pct_mean), 
-                   lwd=0.5, color="grey")+
-      geom_point(data=bpDF, aes(PG_pct_mean, deltaPVEG_mean, color=Group, pch=Group), 
-                 size=4)+
-      theme_linedraw() +
-      theme(panel.grid.minor=element_blank(),
-            axis.text.x=element_text(size=12),
-            axis.title.x=element_text(size=14),
-            axis.text.y=element_text(size=12),
-            axis.title.y=element_text(size=14),
-            legend.text=element_text(size=12),
-            legend.title=element_text(size=14),
-            panel.grid.major=element_blank(),
-            legend.position="none",
-            legend.box = 'horizontal',
-            legend.box.just = 'left',
-            plot.title = element_text(size=14, face="bold.italic", 
-                                      hjust = 0.5))+
-      scale_color_manual(name="Model",
-                         values=c(col.values, "multi-model"="grey", "obs"="black"),
-                         labels=c(model.labels, "multi-model"="M-M", "obs"="OBS"))+
-      scale_shape_manual(name="Model",
-                         values=c("A_GDAYP"=19,"B_ELMV1"=19,
-                                  "C_CABLP"=19,"D_LPJGP"=19,
-                                  "E_OCHDP"=19,"F_QUINC"=19,
-                                  "G_OCHDX"=19,"H_QUJSM"=19,
-                                  "multi-model"=19, "obs"=15))+
-      ylab(expression(paste(CO[2] * " effect on " * Delta * P[veg] * " (g P " * m^-2 * " " * yr^-1 * ")")))+
-      xlab(expression(paste(CO[2] * " effect on " * P[dem] * " (%)")))
-    
-    
-    
-    
-    p17_co2 <- ggplot() +
-      geom_segment(aes(y=bpDF$deltaPVEG_mean, yend = bpDF$deltaPVEG_mean,
-                       x=bpDF$PUE_pct_mean+bpDF$PUE_pct_sd, 
-                       xend=bpDF$PUE_pct_mean-bpDF$PUE_pct_sd),
-                   lwd=0.5, color="grey")+
-      geom_segment(aes(y=bpDF$deltaPVEG_mean+bpDF$deltaPVEG_sd, 
-                       yend = bpDF$deltaPVEG_mean-bpDF$deltaPVEG_sd,
-                       x=bpDF$PUE_pct_mean, 
-                       xend=bpDF$PUE_pct_mean), 
-                   lwd=0.5, color="grey")+
-      geom_point(data=bpDF, aes(PUE_pct_mean, deltaPVEG_mean, color=Group, pch=Group), 
-                 size=4)+
-      theme_linedraw() +
-      theme(panel.grid.minor=element_blank(),
-            axis.text.x=element_text(size=12),
-            axis.title.x=element_text(size=14),
-            axis.text.y=element_text(size=12),
-            axis.title.y=element_text(size=14),
-            legend.text=element_text(size=12),
-            legend.title=element_text(size=14),
-            panel.grid.major=element_blank(),
-            legend.position="none",
-            legend.box = 'horizontal',
-            legend.box.just = 'left',
-            plot.title = element_text(size=14, face="bold.italic", 
-                                      hjust = 0.5))+
-      scale_color_manual(name="Model",
-                         values=c(col.values, "multi-model"="grey", "obs"="black"),
-                         labels=c(model.labels, "multi-model"="M-M", "obs"="OBS"))+
-      scale_shape_manual(name="Model",
-                         values=c("A_GDAYP"=19,"B_ELMV1"=19,
-                                  "C_CABLP"=19,"D_LPJGP"=19,
-                                  "E_OCHDP"=19,"F_QUINC"=19,
-                                  "G_OCHDX"=19,"H_QUJSM"=19,
-                                  "multi-model"=19, "obs"=15))+
-      ylab(expression(paste(CO[2] * " effect on " * Delta * P[veg] * " (g P " * m^-2 * " " * yr^-1 * ")")))+
-      xlab(expression(paste(CO[2] * " effect on " * PUE[NPP] * " (%)")))
-    
-    
+      ylab(expression(paste(CO[2] * " effect on " * P[net] * " ( g P " * m^-2 * " " * yr^-1 * ")"))); p5
     
     
     
     ###########################################################################
     
     pdf(paste0(out.dir, "/MIP_time_averaged_", scenario, "_comparison_P_use_variables2.pdf"), 
-        width=20, height=12)
-    plot_grid(p1_co2, p2_co2, p3_co2, p4_co2, p5_co2,
-              p6_co2, p7_co2, p8_co2, p9_co2, p10_co2,
-              p11_co2, p12_co2, p13_co2, p14_co2, NA,
-              #labels=c("(a)", "(b)", "(c)", "(d)", "(e)", 
-              #         "(f)", "(g)", "(h)", "(i)", "(j)", 
-              #         "(k)", "(l)", "(m)", "(n)"), 
-              label_x=0.1, label_y=0.95,
+        width=16, height=8)
+    plot_grid(p1, p2, p3, p4, p5,NA,
+              labels=c("(a)", "(b)", "(c)", "(d)",
+                       "(e)", "(f)"), label_x=0.1, label_y=0.95,
               label_size=24,
-              ncol=5, nrow=3)
+              ncol=3)
     dev.off()
-    
-    
-    
-    
-    
-    
-    ###########################################################################
-    
-    ### plot deltaPveg and Pdem on same row and merge with CO2 plot
-    plots_first_row <- plot_grid(p3, p4, p1_co2, 
-                                 label_x=0.1, label_y=0.95,
-                                 label_size=24,
-                                 rel_widths=c(2, 2, 1),
-                                 ncol=3, nrow=1)
-    
-    #plots_second_row <- plot_grid(p5, p6, p2_co2, 
-    #                              label_x=0.1, label_y=0.95,
-    #                              label_size=24,
-    #                              rel_widths=c(1.5, 1.5, 1),
-    #                              ncol=3, nrow=1)
-    #
-    
-    plots_second_row <- plot_grid(p5, p8, p15_co2, 
-                                  label_x=0.1, label_y=0.95,
-                                  label_size=24,
-                                  rel_widths=c(2, 2, 1),
-                                  ncol=3, nrow=1)
-    
-    
-    plots_third_row <- plot_grid(p13, p14, p13_co2, 
-                                  label_x=0.1, label_y=0.95,
-                                  label_size=24,
-                                  rel_widths=c(2, 2, 1),
-                                  ncol=3, nrow=1)
-    
-    plots_fourth_row <- plot_grid(p11, p12, p11_co2, 
-                                  label_x=0.1, label_y=0.95,
-                                  label_size=24,
-                                  rel_widths=c(2, 2, 1),
-                                  ncol=3, nrow=1)
-    
-    
-    
-    
-    pdf(paste0(out.dir, "/MIP_time_averaged_", scenario, "_comparison_P_use_variables3.pdf"), 
-        width=20, height=16)
-    plot_grid(plots_first_row,
-              plots_second_row,
-              plots_third_row,
-              plots_fourth_row,
-              ncol=1, nrow=4)
-    dev.off()  
-    
-    
-    
-    ###########################################################################
-    ### prepare fraction of the CO2 response of Pupt and Pretr as a fraction of 
-    ### the CO2 response of Pdemand
-    
-    
-    
-    
-    
-    
-    
-    
-    ###########################################################################
-    
-    plots_first_row <- plot_grid(p1_co2, p16_co2, p17_co2,
-                                 label_x=0.1, label_y=0.95,
-                                 label_size=24,
-                                 rel_widths=c(1,1),
-                                 ncol=3, nrow=1)
-    
-    
-    plots_second_row <- plot_grid(p13, p14,
-                                 label_x=0.1, label_y=0.95,
-                                 label_size=24,
-                                 rel_widths=c(1,1),
-                                 ncol=2, nrow=1)
-    
-    plots_legend_row1 <-  get_legend(p1_co2 + theme(legend.position="bottom",
-                                                      legend.box = 'horizontal',
-                                                      legend.box.just = 'left')
-                                     + guides(fill=guide_legend(nrow=1,byrow=TRUE)))
-    
-    
-    
-    plots_legend_row2 <-  get_legend(p13 + theme(legend.position="bottom",
-                                                    legend.box = 'horizontal',
-                                                    legend.box.just = 'left')
-                                     + guides(fill=guide_legend(nrow=1,byrow=TRUE)))
-    
-    
-    pdf(paste0(out.dir, "/MIP_time_averaged_", scenario, "_comparison_P_use_variables4.pdf"), 
-        width=16, height=12)
-    plot_grid(plots_first_row,
-              plots_legend_row1,
-              plots_second_row, 
-              plots_legend_row2,
-              rel_heights=c(1, 0.2, 1, 0.2),
-              nrow=4, ncol=1)
-    dev.off()
-    
-    
-    
-    
-    
-    
-    
-    
-    
+   
     
 }
 
