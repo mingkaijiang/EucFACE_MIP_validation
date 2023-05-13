@@ -647,17 +647,15 @@ compare_microbial_model_general_output <- function(scenario) {
                                   label_size = 18)
     
     
-    pdf(paste0(out.dir, "/MIP_microbial_model_carbon_combined.pdf"), 
-        width=10, height=12)
-    #grid.arrange(p3, p4, p5, p6,
-    #             ncol = 2)
-    plot_grid(plots_top_row,
-              legend_top_row,
-              plots_bottom_row,
-              legend_bottom_row,
-              ncol=1, rel_heights=c(1,0.2,1,0.2))
-    
-    dev.off()
+    #pdf(paste0(out.dir, "/MIP_microbial_model_carbon_combined.pdf"), 
+    #    width=10, height=12)
+    #plot_grid(plots_top_row,
+    #          legend_top_row,
+    #          plots_bottom_row,
+    #          legend_bottom_row,
+    #          ncol=1, rel_heights=c(1,0.2,1,0.2))
+    #
+    #dev.off()
     
     
     
@@ -967,13 +965,13 @@ compare_microbial_model_general_output <- function(scenario) {
     
     
     
-    pdf(paste0(out.dir, "/MIP_microbial_model_nutrient_combined.pdf"), 
-        width=10, height=12)
-    plot_grid(plots_top_row,
-              legend_top_row,
-              ncol=1, rel_heights=c(1,0.2))
-    
-    dev.off()
+    #pdf(paste0(out.dir, "/MIP_microbial_model_nutrient_combined.pdf"), 
+    #    width=10, height=12)
+    #plot_grid(plots_top_row,
+    #          legend_top_row,
+    #          ncol=1, rel_heights=c(1,0.2))
+    #
+    #dev.off()
     
     ### It looks like that it is more important to show the
     ### CO2 response of these nutrient fluxes. So from this

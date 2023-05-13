@@ -9,6 +9,10 @@ read_and_process_EucFACE_P_budget_output_ignore_understorey <- function() {
     
     deltaDF <- read.csv("validation_dataset/EucFACE_P_Budget/summary_table_delta_P_pool_unnormalized.csv")
     
+    ### revise percentage diff when aCO2 is negative values
+    deltaDF$percent_diff <- with(deltaDF, diff/abs(aCO2) * 100)
+    
+    
     
     inoutDF <- read.csv("validation_dataset/EucFACE_C_Budget_data/summary/inout.csv")
     nppDF <- read.csv("validation_dataset/EucFACE_C_Budget_data/summary/npp.csv")
@@ -43,7 +47,7 @@ read_and_process_EucFACE_P_budget_output_ignore_understorey <- function() {
     
     
     fluxDF$diff <- fluxDF$eCO2 - fluxDF$aCO2
-    fluxDF$percent_diff <- (fluxDF$eCO2 - fluxDF$aCO2)/fluxDF$aCO2 * 100
+    fluxDF$percent_diff <- (fluxDF$eCO2 - fluxDF$aCO2)/abs(fluxDF$aCO2) * 100
     
     fluxDF$aCO2_sd <- matrixStats::rowSds(as.matrix(subset(fluxDF, select=c(R2, R3, R6)), na.rm=T)) 
     fluxDF$eCO2_sd <- matrixStats::rowSds(as.matrix(subset(fluxDF, select=c(R1, R4, R5)), na.rm=T)) 
@@ -97,6 +101,7 @@ read_and_process_EucFACE_P_budget_output_ignore_understorey <- function() {
     p.var.list <- c("PL", "PW", "PCR", "PFR", "PSTOR",
                     "PFLIT", "PFLITA", "PFLITB", "PCLITB",
                     "PSOIL", "PPORG", "PPMIN", 
+                    "PMIC",
                     "PLAB", "PSEC", "POCC", 
                     "PGL", "PGW", "PGCR", "PGFR", "PGUOA",
                     "PLITIN", "PWLIN", "PCRLIN", "PFRLIN",

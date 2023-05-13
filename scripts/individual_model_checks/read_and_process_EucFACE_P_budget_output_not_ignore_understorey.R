@@ -9,6 +9,10 @@ read_and_process_EucFACE_P_budget_output_not_ignore_understorey <- function() {
     
     deltaDF <- read.csv("validation_dataset/EucFACE_P_Budget/summary_table_delta_P_pool_unnormalized.csv")
     
+    ### revise percentage diff when aCO2 is negative values
+    deltaDF$percent_diff <- with(deltaDF, diff/abs(aCO2) * 100)
+    
+    
     
     inoutDF <- read.csv("validation_dataset/EucFACE_C_Budget_data/summary/inout.csv")
     nppDF <- read.csv("validation_dataset/EucFACE_C_Budget_data/summary/npp.csv")
@@ -108,6 +112,7 @@ read_and_process_EucFACE_P_budget_output_not_ignore_understorey <- function() {
     p.var.list <- c("PL", "PW", "PCR", "PFR", "PSTOR",
                     "PFLIT", "PFLITA", "PFLITB", "PCLITB",
                     "PSOIL", "PPORG", "PPMIN", 
+                    "PMIC",
                     "PLAB", "PSEC", "POCC", 
                     "PGL", "PGW", "PGCR", "PGFR", "PGUOA",
                     "PLITIN", "PWLIN", "PCRLIN", "PFRLIN",
@@ -116,10 +121,10 @@ read_and_process_EucFACE_P_budget_output_not_ignore_understorey <- function() {
                     "PRETR",
                     "PUE", "GPP_use",
                     "PMRT", "PUPREQ",
-                    "CPL", "CPW", "CPFR", "CPSOIL", "CPFLIT",
+                    "CPL", "CPW", "CPFR", "CPSOIL", "CPFLIT","CPMIC",
                     "PDEM",
                     "deltaPL", "deltaPW", "delta_PCR", "deltaPFR", "deltaPSTOR",
-                    "deltaPVEG")
+                    "deltaPVEG", "deltaPMIC")
         
     ### prepare storage DF
     outDF <- data.frame(c("mean", "mean", "sd", "sd", "mean", "sd", "mean", "sd"),
@@ -270,6 +275,20 @@ read_and_process_EucFACE_P_budget_output_not_ignore_understorey <- function() {
     outDF$PPMIN[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- poolDF$percent_diff[poolDF$terms=="Soil Inorg P Pool 0-10cm"]
     outDF$PPMIN[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((poolDF$aCO2_sd[poolDF$terms=="Soil Inorg P Pool 0-10cm"]^2+poolDF$aCO2_sd[poolDF$terms=="Soil Inorg P Pool 0-10cm"]^2+
                                                                       poolDF$eCO2_sd[poolDF$terms=="Soil Inorg P Pool 0-10cm"]^2)/3)/poolDF$aCO2[poolDF$terms=="Soil Inorg P Pool 0-10cm"]*100 
+    
+    
+    ## PMIC
+    outDF$PMIC[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- poolDF$aCO2[poolDF$terms=="Microbial P Pool 0-10cm"]
+    outDF$PMIC[outDF$Group=="mean"&outDF$Trt=="eCO2"] <- poolDF$eCO2[poolDF$terms=="Microbial P Pool 0-10cm"]
+    outDF$PMIC[outDF$Group=="sd"&outDF$Trt=="aCO2"] <- poolDF$aCO2_sd[poolDF$terms=="Microbial P Pool 0-10cm"]
+    outDF$PMIC[outDF$Group=="sd"&outDF$Trt=="eCO2"] <- poolDF$eCO2_sd[poolDF$terms=="Microbial P Pool 0-10cm"]
+    outDF$PMIC[outDF$Group=="mean"&outDF$Trt=="diff"] <- poolDF$diff[poolDF$terms=="Microbial P Pool 0-10cm"]
+    outDF$PMIC[outDF$Group=="sd"&outDF$Trt=="diff"] <- sqrt((poolDF$aCO2_sd[poolDF$terms=="Microbial P Pool 0-10cm"]^2+
+                                                                  poolDF$eCO2_sd[poolDF$terms=="Microbial P Pool 0-10cm"]^2)/2)
+    
+    outDF$PMIC[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- poolDF$percent_diff[poolDF$terms=="Microbial P Pool 0-10cm"]
+    outDF$PMIC[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((poolDF$aCO2_sd[poolDF$terms=="Microbial P Pool 0-10cm"]^2+poolDF$aCO2_sd[poolDF$terms=="Microbial P Pool 0-10cm"]^2+
+                                                                      poolDF$eCO2_sd[poolDF$terms=="Microbial P Pool 0-10cm"]^2)/3)/poolDF$aCO2[poolDF$terms=="Microbial P Pool 0-10cm"]*100 
     
     
     ## PLAB
@@ -766,6 +785,19 @@ read_and_process_EucFACE_P_budget_output_not_ignore_understorey <- function() {
                                                                        outDF$CPFLIT[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2)/3)/mean(cpDF$leaflitter[cpDF$Ring%in%c(2,3,6)], na.rm=T)*100 
     
     
+    ## CPMIC
+    outDF$CPMIC[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- mean(cpDF$microbe[cpDF$Ring%in%c(2,3,6)], na.rm=T)
+    outDF$CPMIC[outDF$Group=="mean"&outDF$Trt=="eCO2"] <- mean(cpDF$microbe[cpDF$Ring%in%c(1,4,5)], na.rm=T)
+    outDF$CPMIC[outDF$Group=="sd"&outDF$Trt=="aCO2"] <- sd(cpDF$microbe[cpDF$Ring%in%c(2,3,6)], na.rm=T)
+    outDF$CPMIC[outDF$Group=="sd"&outDF$Trt=="eCO2"] <- sd(cpDF$microbe[cpDF$Ring%in%c(1,4,5)], na.rm=T)
+    outDF$CPMIC[outDF$Group=="mean"&outDF$Trt=="diff"] <- (mean(cpDF$microbe[cpDF$Ring%in%c(1,4,5)], na.rm=T) - mean(cpDF$microbe[cpDF$Ring%in%c(2,3,6)], na.rm=T) ) 
+    outDF$CPMIC[outDF$Group=="sd"&outDF$Trt=="diff"] <- sqrt((outDF$CPMIC[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+
+                                                                   outDF$CPMIC[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2)/2)
+    
+    outDF$CPMIC[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- (mean(cpDF$microbe[cpDF$Ring%in%c(1,4,5)], na.rm=T) - mean(cpDF$microbe[cpDF$Ring%in%c(2,3,6)], na.rm=T) ) / mean(cpDF$microbe[cpDF$Ring%in%c(2,3,6)], na.rm=T) * 100
+    outDF$CPMIC[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((outDF$CPMIC[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+outDF$CPMIC[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+
+                                                                       outDF$CPMIC[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2)/3)/mean(cpDF$microbe[cpDF$Ring%in%c(2,3,6)], na.rm=T)*100 
+    
     
     
     ## deltaPL
@@ -855,6 +887,19 @@ read_and_process_EucFACE_P_budget_output_not_ignore_understorey <- function() {
     outDF$deltaPVEG[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- (outDF$deltaPVEG[outDF$Group=="mean"&outDF$Trt=="eCO2"]-outDF$deltaPVEG[outDF$Group=="mean"&outDF$Trt=="aCO2"])/outDF$deltaPVEG[outDF$Group=="mean"&outDF$Trt=="aCO2"]*100
     outDF$deltaPVEG[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((outDF$deltaPVEG[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2+outDF$deltaPVEG[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+outDF$deltaPVEG[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2)/3)/abs(outDF$deltaPVEG[outDF$Group=="mean"&outDF$Trt=="aCO2"])*100
     
+    
+    ## delta PMIC
+    outDF$deltaPMIC[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- deltaDF$aCO2[deltaDF$terms=="Microbial P Pool 0-10cm"]
+    outDF$deltaPMIC[outDF$Group=="mean"&outDF$Trt=="eCO2"] <- deltaDF$eCO2[deltaDF$terms=="Microbial P Pool 0-10cm"]
+    outDF$deltaPMIC[outDF$Group=="sd"&outDF$Trt=="aCO2"] <- deltaDF$aCO2_sd[deltaDF$terms=="Microbial P Pool 0-10cm"]
+    outDF$deltaPMIC[outDF$Group=="sd"&outDF$Trt=="eCO2"] <- deltaDF$eCO2_sd[deltaDF$terms=="Microbial P Pool 0-10cm"]
+    outDF$deltaPMIC[outDF$Group=="mean"&outDF$Trt=="diff"] <- deltaDF$diff[deltaDF$terms=="Microbial P Pool 0-10cm"]
+    outDF$deltaPMIC[outDF$Group=="sd"&outDF$Trt=="diff"] <- sqrt((deltaDF$aCO2_sd[deltaDF$terms=="Microbial P Pool 0-10cm"]^2+
+                                                                 deltaDF$eCO2_sd[deltaDF$terms=="Microbial P Pool 0-10cm"]^2)/2)
+    
+    outDF$deltaPMIC[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- deltaDF$percent_diff[deltaDF$terms=="Microbial P Pool 0-10cm"]
+    outDF$deltaPMIC[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((deltaDF$aCO2_sd[deltaDF$terms=="Microbial P Pool 0-10cm"]^2+deltaDF$aCO2_sd[deltaDF$terms=="Microbial P Pool 0-10cm"]^2+
+                                                                     deltaDF$eCO2_sd[deltaDF$terms=="Microbial P Pool 0-10cm"]^2)/3)/deltaDF$aCO2[deltaDF$terms=="Microbial P Pool 0-10cm"]*100 
     
     
     

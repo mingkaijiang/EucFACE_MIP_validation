@@ -205,8 +205,8 @@ prepare_microbial_model_input()
 #scenario="FIX"
 #compare_microbial_model_general_output(scenario="FIX")
 
-scenario="VAR"
-compare_microbial_model_general_output(scenario="VAR")
+#scenario="VAR"
+#compare_microbial_model_general_output(scenario="VAR")
 
 
 ###  Investigate the MIMICS-like ORCHX performance
@@ -217,8 +217,7 @@ compare_microbial_model_general_output(scenario="VAR")
 ###   Combine the two
 #investigate_microbial_responses(scenario="FIX", compare.to.obs=F)
 scenario="VAR"
-compare.to.obs=T
-investigate_microbial_responses(scenario="VAR", compare.to.obs=T)
+investigate_microbial_responses(scenario="VAR", eucDF)
 
 
 ###   Investigate QUJSM

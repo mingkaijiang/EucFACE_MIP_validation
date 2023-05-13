@@ -7,6 +7,14 @@ read_and_process_EucFACE_C_budget_output_ignore_understorey <- function() {
     poolDF <- read.csv("validation_dataset/EucFACE_C_Budget_data/summary/pool.csv")
     nepDF <- read.csv("validation_dataset/EucFACE_C_Budget_data/summary/nep_normalized_summary_with_NPPmyco.csv")
     
+    
+    ### revise percentage diff when aCO2 is negative values
+    deltaDF$percent_diff <- with(deltaDF, diff/abs(aCO2) * 100)
+    
+    
+    
+    
+    
     ### revise Ra root to exclude understorey contribution (assume 50%)
     newDF <- inoutDF[inoutDF$term=="Ra root",]
     newDF$term <- "Ra overstorey root"

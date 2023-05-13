@@ -239,7 +239,7 @@ plot_CO2_response_ratio_for_individual_model(source.dir=paste0(getwd(), "/simula
 ### Prepare EucFACE observation datasets.
 ### Take codes from EucFACE C and nutrient budget assessment;
 ### don't use any unpublished data to compromise upcoming data-based publications.
-eucDF <- prepare_EucFACE_observation_dataset()
+eucDF <- prepare_EucFACE_observation_dataset(ignore.understorey=F)
 
 ### GDAY-CNP
 plot_CO2_response_comparison_against_data_for_individual_model(source.dir=paste0(getwd(), "/simulation_output/GDAYP"),

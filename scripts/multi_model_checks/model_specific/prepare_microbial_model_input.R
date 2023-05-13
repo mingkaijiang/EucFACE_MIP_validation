@@ -42,7 +42,7 @@ prepare_microbial_model_input <- function() {
                              "PCRRETR","PFRRETR","PWEA","PDEP") 
     
     
-    p.mod.names.ochdx <- c("YEAR","DOY", "NMICR", "PMICR") # OCHDX-specific
+    p.mod.names.ochdx <- c("YEAR","DOY", "CMICR", "NMICR", "PMICR") # OCHDX-specific
     
     
     p.mod.names.qujsm <- c("YEAR","DOY", 
@@ -209,7 +209,7 @@ prepare_microbial_model_input <- function() {
                             "NFLIT","PFLIT", 
                             "NPORG", "PPORG", 
                             #"PTPMIN", "PTPORG",
-                            "NMICR",  "PMICR",
+                            "CMICR", "NMICR",  "PMICR",
                             "CMIC10", "CMIC30", "CMIC60",
                             "CMOC", "CTMOC",
                             "NMIC10", "NMIC30", "NMIC60",
@@ -234,7 +234,7 @@ prepare_microbial_model_input <- function() {
                             "NFLIT","PFLIT", 
                             "NPORG", "PPORG", 
                             #"PTPMIN", "PTPORG",
-                            "NMICR", "PMICR",
+                            "CMICR", "NMICR", "PMICR",
                             "CMIC10", "CMIC30", "CMIC60",
                             "CMOC", "CTMOC",
                             "NMIC10", "NMIC30", "NMIC60",
