@@ -43,7 +43,7 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
     
     ## biomass production
     ambDF$deltaPVEG <- rowSums(ambDF[,c("deltaPL","deltaPW","deltaPFR","deltaPCR","deltaPSTOR")], na.rm=T)
-    eleDF$deltaPVEGP <- rowSums(eleDF[,c("deltaPL","deltaPW","deltaPFR","deltaPCR","deltaPSTOR")], na.rm=T)
+    eleDF$deltaPVEG <- rowSums(eleDF[,c("deltaPL","deltaPW","deltaPFR","deltaPCR","deltaPSTOR")], na.rm=T)
     
     
     #obsDF$BP <- NA
@@ -627,9 +627,13 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
         scale_fill_manual(name=expression("Predicted " * CO[2] * " sign"),
                           values=c("0"=cbbPalette[5], #"burlywood1",
                                    "1"=cbbPalette[4]),#"darkgreen"),
+                          #values=c("0"="#E8D5B5", #"burlywood1",
+                          #         "1"="#00C1FE"),#"darkgreen"),
                           labels=c("0"="Inconsistent with data",
                                    "1"="Consistent with data"))+
-        coord_fixed(); p1_1
+        coord_fixed()
+    
+    #plot(p1_1)
     
     
     

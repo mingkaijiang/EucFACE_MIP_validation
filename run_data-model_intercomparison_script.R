@@ -189,14 +189,6 @@ plot_plant_p_cycle_responses(eucDF,
 plot_soil_p_cycle_responses(eucDF,
                             scenario="VAR")
 
-## summary of results
-## 1. uncertainty range in data is large, 
-## 2. some signs of CO2 response in data are not easy to explain, possibly due to large uncertainty
-## 3. OCHDP and OCHDX have large Pnet flux;
-## 4. inconsistency in data and model regarding NEP, Pupt and Pnet, due to contribution of understorey
-## 5. 
-
-
 
 
 ##########################################################################
@@ -227,6 +219,7 @@ compare_microbial_model_general_output(scenario="VAR")
 scenario="VAR"
 compare.to.obs=T
 investigate_microbial_responses(scenario="VAR", compare.to.obs=T)
+
 
 ###   Investigate QUJSM
 #investigate_QUJSM_microbial_responses(scenario="FIX")

@@ -575,50 +575,52 @@ read_and_process_EucFACE_P_budget_output_not_ignore_understorey <- function() {
     
     
     ## PCRETR
-    outDF$PCRETR[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- fluxDF$aCO2[fluxDF$terms=="Coarseroot retrans P flux"]
-    outDF$PCRETR[outDF$Group=="mean"&outDF$Trt=="eCO2"] <- fluxDF$eCO2[fluxDF$terms=="Coarseroot retrans P flux"]
-    outDF$PCRETR[outDF$Group=="sd"&outDF$Trt=="aCO2"] <- fluxDF$aCO2_sd[fluxDF$terms=="Coarseroot retrans P flux"]
-    outDF$PCRETR[outDF$Group=="sd"&outDF$Trt=="eCO2"] <- fluxDF$eCO2_sd[fluxDF$terms=="Coarseroot retrans P flux"]
-    outDF$PCRETR[outDF$Group=="mean"&outDF$Trt=="diff"] <- fluxDF$diff[fluxDF$terms=="Coarseroot retrans P flux"]
-    outDF$PCRETR[outDF$Group=="sd"&outDF$Trt=="diff"] <- sqrt((fluxDF$aCO2_sd[fluxDF$terms=="Coarseroot retrans P flux"]^2+
+    outDF$PCRRETR[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- fluxDF$aCO2[fluxDF$terms=="Coarseroot retrans P flux"]
+    outDF$PCRRETR[outDF$Group=="mean"&outDF$Trt=="eCO2"] <- fluxDF$eCO2[fluxDF$terms=="Coarseroot retrans P flux"]
+    outDF$PCRRETR[outDF$Group=="sd"&outDF$Trt=="aCO2"] <- fluxDF$aCO2_sd[fluxDF$terms=="Coarseroot retrans P flux"]
+    outDF$PCRRETR[outDF$Group=="sd"&outDF$Trt=="eCO2"] <- fluxDF$eCO2_sd[fluxDF$terms=="Coarseroot retrans P flux"]
+    outDF$PCRRETR[outDF$Group=="mean"&outDF$Trt=="diff"] <- fluxDF$diff[fluxDF$terms=="Coarseroot retrans P flux"]
+    outDF$PCRRETR[outDF$Group=="sd"&outDF$Trt=="diff"] <- sqrt((fluxDF$aCO2_sd[fluxDF$terms=="Coarseroot retrans P flux"]^2+
                                                                        fluxDF$eCO2_sd[fluxDF$terms=="Coarseroot retrans P flux"]^2)/2)
     
-    outDF$PCRETR[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- fluxDF$percent_diff[fluxDF$terms=="Coarseroot retrans P flux"]
-    outDF$PCRETR[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((fluxDF$aCO2_sd[fluxDF$terms=="Coarseroot retrans P flux"]^2+fluxDF$aCO2_sd[fluxDF$terms=="Coarseroot retrans P flux"]^2+
+    outDF$PCRRETR[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- fluxDF$percent_diff[fluxDF$terms=="Coarseroot retrans P flux"]
+    outDF$PCRRETR[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((fluxDF$aCO2_sd[fluxDF$terms=="Coarseroot retrans P flux"]^2+fluxDF$aCO2_sd[fluxDF$terms=="Coarseroot retrans P flux"]^2+
                                                                        fluxDF$eCO2_sd[fluxDF$terms=="Coarseroot retrans P flux"]^2)/3)/fluxDF$aCO2[fluxDF$terms=="Coarseroot retrans P flux"]*100 
     
     
     ## PFRETR
-    outDF$PFRETR[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- fluxDF$aCO2[fluxDF$terms=="Fineroot retrans P flux"]
-    outDF$PFRETR[outDF$Group=="mean"&outDF$Trt=="eCO2"] <- fluxDF$eCO2[fluxDF$terms=="Fineroot retrans P flux"]
-    outDF$PFRETR[outDF$Group=="sd"&outDF$Trt=="aCO2"] <- fluxDF$aCO2_sd[fluxDF$terms=="Fineroot retrans P flux"]
-    outDF$PFRETR[outDF$Group=="sd"&outDF$Trt=="eCO2"] <- fluxDF$eCO2_sd[fluxDF$terms=="Fineroot retrans P flux"]
-    outDF$PFRETR[outDF$Group=="mean"&outDF$Trt=="diff"] <- fluxDF$diff[fluxDF$terms=="Fineroot retrans P flux"]
-    outDF$PFRETR[outDF$Group=="sd"&outDF$Trt=="diff"] <- sqrt((fluxDF$aCO2_sd[fluxDF$terms=="Fineroot retrans P flux"]^2+
+    outDF$PFRRETR[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- fluxDF$aCO2[fluxDF$terms=="Fineroot retrans P flux"]
+    outDF$PFRRETR[outDF$Group=="mean"&outDF$Trt=="eCO2"] <- fluxDF$eCO2[fluxDF$terms=="Fineroot retrans P flux"]
+    outDF$PFRRETR[outDF$Group=="sd"&outDF$Trt=="aCO2"] <- fluxDF$aCO2_sd[fluxDF$terms=="Fineroot retrans P flux"]
+    outDF$PFRRETR[outDF$Group=="sd"&outDF$Trt=="eCO2"] <- fluxDF$eCO2_sd[fluxDF$terms=="Fineroot retrans P flux"]
+    outDF$PFRRETR[outDF$Group=="mean"&outDF$Trt=="diff"] <- fluxDF$diff[fluxDF$terms=="Fineroot retrans P flux"]
+    outDF$PFRRETR[outDF$Group=="sd"&outDF$Trt=="diff"] <- sqrt((fluxDF$aCO2_sd[fluxDF$terms=="Fineroot retrans P flux"]^2+
                                                                        fluxDF$eCO2_sd[fluxDF$terms=="Fineroot retrans P flux"]^2)/2)
     
-    outDF$PFRETR[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- fluxDF$percent_diff[fluxDF$terms=="Fineroot retrans P flux"]
-    outDF$PFRETR[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((fluxDF$aCO2_sd[fluxDF$terms=="Fineroot retrans P flux"]^2+fluxDF$aCO2_sd[fluxDF$terms=="Fineroot retrans P flux"]^2+
+    outDF$PFRRETR[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- fluxDF$percent_diff[fluxDF$terms=="Fineroot retrans P flux"]
+    outDF$PFRRETR[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((fluxDF$aCO2_sd[fluxDF$terms=="Fineroot retrans P flux"]^2+fluxDF$aCO2_sd[fluxDF$terms=="Fineroot retrans P flux"]^2+
                                                                        fluxDF$eCO2_sd[fluxDF$terms=="Fineroot retrans P flux"]^2)/3)/fluxDF$aCO2[fluxDF$terms=="Fineroot retrans P flux"]*100 
     
     
     ## PRETR
     outDF$PRETR[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- outDF$PLRETR[outDF$Group=="mean"&outDF$Trt=="aCO2"]+
         outDF$PWRETR[outDF$Group=="mean"&outDF$Trt=="aCO2"]+
-        outDF$PFRETR[outDF$Group=="mean"&outDF$Trt=="aCO2"]
+        outDF$PFRRETR[outDF$Group=="mean"&outDF$Trt=="aCO2"] + outDF$PCRRETR[outDF$Group=="mean"&outDF$Trt=="aCO2"]
     
     outDF$PRETR[outDF$Group=="mean"&outDF$Trt=="eCO2"] <- outDF$PLRETR[outDF$Group=="mean"&outDF$Trt=="eCO2"]+
         outDF$PWRETR[outDF$Group=="mean"&outDF$Trt=="eCO2"]+
-        outDF$PFRETR[outDF$Group=="mean"&outDF$Trt=="eCO2"]
+        outDF$PFRRETR[outDF$Group=="mean"&outDF$Trt=="eCO2"]+ outDF$PCRRETR[outDF$Group=="mean"&outDF$Trt=="eCO2"]
     
     outDF$PRETR[outDF$Group=="sd"&outDF$Trt=="aCO2"] <- sqrt((outDF$PLRETR[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+
                                                                  outDF$PWRETR[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+
-                                                                 outDF$PFRETR[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2)/3)
+                                                                 outDF$PFRRETR[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+
+                                                                  outDF$PCRRETR[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2)/4)
     
     
     outDF$PRETR[outDF$Group=="sd"&outDF$Trt=="eCO2"] <- sqrt((outDF$PLRETR[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2+
                                                                   outDF$PWRETR[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2+
-                                                                  outDF$PFRETR[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2)/3)
+                                                                  outDF$PFRRETR[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2+
+                                                                  outDF$PCRRETR[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2)/4)
     
     
     outDF$PRETR[outDF$Group=="mean"&outDF$Trt=="diff"] <- outDF$PRETR[outDF$Group=="mean"&outDF$Trt=="eCO2"] - outDF$PRETR[outDF$Group=="mean"&outDF$Trt=="aCO2"]

@@ -248,7 +248,7 @@ plot_plant_p_cycle_responses <- function(eucDF,
                       position=position_dodge2(), width=0.3)+
         #geom_point(data=plotDF2, aes(x=Group, y=meanvalue), col="black",
         #         fill="white", size=2, pch=21)+
-        geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
+        geom_vline(xintercept=c(6.5, 8.5), lty=2)+
         xlab("")+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
@@ -262,7 +262,7 @@ plot_plant_p_cycle_responses <- function(eucDF,
               #axis.text.x=element_text(size=14,angle = 45, 
               #                         vjust = 1, hjust = 1),
               panel.grid.major=element_blank(),
-              legend.position=c(0.85,0.2),
+              legend.position=c(0.64,0.2),
               legend.box = 'horizontal',
               legend.box.just = 'left',
               legend.background = element_rect(fill="grey",
@@ -275,17 +275,22 @@ plot_plant_p_cycle_responses <- function(eucDF,
                          label=c(model.labels, "multi-model" = expression(bold("M-M")),
                                  "obs" = expression(bold("OBS"))))+
         scale_fill_manual(name=expression(P[veg]),
-                        values=c("PL"=cbbPalette[2],
-                                 "PW"=cbbPalette[3],
-                                 "PFR"=cbbPalette[4],
-                                 "PCR"=cbbPalette[7],
-                                 "PSTOR"=cbbPalette[8]),
+                        #values=c("PL"=cbbPalette[2],
+                        #         "PW"=cbbPalette[3],
+                        #         "PFR"=cbbPalette[4],
+                        #         "PCR"=cbbPalette[7],
+                        #         "PSTOR"=cbbPalette[8]),
+                        values=c("PL"="#FF6F91",
+                                 "PW"="#FFC75F",
+                                 "PFR"="#D65DB1",
+                                 "PCR"="#845EC2",
+                                 "PSTOR"="#FF9671"),
                         labels=c("PL"=expression(P[leaf]), 
                                  "PW"=expression(P[wood]), 
                                  "PFR"=expression(P[froot]), 
                                  "PCR"=expression(P[croot]),
                                  "PSTOR"=expression(P[store])))+
-        guides(fill=guide_legend(nrow=3)); p1
+        guides(fill=guide_legend(nrow=3))
     
     
     p2 <- ggplot(data=plotDF3, 
@@ -298,7 +303,7 @@ plot_plant_p_cycle_responses <- function(eucDF,
                       position=position_dodge2(), width=0.3)+
         #geom_point(data=plotDF3, aes(x=Group, y=meanvalue), col="black",
         #         fill="white", size=2, pch=21)+
-        geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
+        geom_vline(xintercept=c(6.5, 8.5), lty=2)+
         xlab("")+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
@@ -329,7 +334,7 @@ plot_plant_p_cycle_responses <- function(eucDF,
                                  "obs"="grey"),
                         labels=c(model.labels, "obs"= "OBS"))+
       guides(fill = guide_legend(override.aes = list(col = c(col.values, "multi-model"="grey30", "obs"="grey"))),
-             color = guide_legend(nrow=12, byrow=F)); p2
+             color = guide_legend(nrow=12, byrow=F))
     
     
     
@@ -432,7 +437,7 @@ plot_plant_p_cycle_responses <- function(eucDF,
                     position=position_dodge2(), width=0.3)+
       #geom_point(data=plotDF2, aes(x=Group, y=meanvalue), col="black",
       #           fill="white", size=2, pch=21)+
-      geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
+      geom_vline(xintercept=c(6.5, 8.5), lty=2)+
       xlab("")+
       theme_linedraw() +
       theme(panel.grid.minor=element_blank(),
@@ -445,7 +450,7 @@ plot_plant_p_cycle_responses <- function(eucDF,
             legend.text=element_text(size=12),
             legend.title=element_text(size=14),
             panel.grid.major=element_blank(),
-            legend.position=c(0.85,0.2),
+            legend.position=c(0.18,0.2),
             legend.box = 'horizontal',
             legend.box.just = 'left',
             legend.background = element_rect(fill="grey",
@@ -458,17 +463,17 @@ plot_plant_p_cycle_responses <- function(eucDF,
                        label=c(model.labels, "multi-model" = expression(bold("M-M")),
                                "obs" = expression(bold("OBS"))))+
       scale_fill_manual(name=expression(P[veg]),
-                        values=c("deltaPL"=cbbPalette[2],
-                                 "deltaPW"=cbbPalette[3],
-                                 "deltaPFR"=cbbPalette[4],
-                                 "deltaPCR"=cbbPalette[7],
-                                 "deltaPSTOR"=cbbPalette[8]),
+                        values=c("deltaPL"="#FF6F91",
+                                 "deltaPW"="#FFC75F",
+                                 "deltaPFR"="#D65DB1",
+                                 "deltaPCR"="#845EC2",
+                                 "deltaPSTOR"="#FF9671"),
                         labels=c("deltaPL"=expression(Delta*P[leaf]), 
                                  "deltaPW"=expression(Delta*P[wood]), 
                                  "deltaPFR"=expression(Delta*P[froot]), 
                                  "deltaPCR"=expression(Delta*P[croot]),
                                  "deltaPSTOR"=expression(Delta*P[store])))+
-      guides(fill=guide_legend(nrow=3)); p3
+      guides(fill=guide_legend(nrow=3))
     
     
     p4 <- ggplot(data=plotDF3, 
@@ -481,7 +486,7 @@ plot_plant_p_cycle_responses <- function(eucDF,
                     position=position_dodge2(), width=0.3)+
       #geom_point(data=plotDF3, aes(x=Group, y=meanvalue), col="black",
       #           fill="white", size=2, pch=21)+
-      geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
+      geom_vline(xintercept=c(6.5, 8.5), lty=2)+
       xlab("")+
       theme_linedraw() +
       theme(panel.grid.minor=element_blank(),
@@ -514,18 +519,18 @@ plot_plant_p_cycle_responses <- function(eucDF,
       guides(fill = guide_legend(override.aes = list(col = c(col.values, 
                                                              "multi-model"="grey30", 
                                                              "obs"="grey"))),
-             color = guide_legend(nrow=12, byrow=F));p4
+             color = guide_legend(nrow=12, byrow=F))
     
     
     
-    pdf(paste0(out.dir, "/MIP_time_averaged_", scenario, "_P_pools.pdf"), 
-        width=16, height=8)
-    plot_grid(p1, p2,   
-              p3, p4,
-              labels=c("(a)", "(b)", "(c)", "(d)"), label_x=0.1, label_y=0.95,
-              label_size=24,
-              ncol=2)
-    dev.off()
+    #pdf(paste0(out.dir, "/MIP_time_averaged_", scenario, "_P_pools.pdf"), 
+    #    width=16, height=8)
+    #plot_grid(p1, p2,   
+    #          p3, p4,
+    #          labels=c("(a)", "(b)", "(c)", "(d)"), label_x=0.1, label_y=0.95,
+    #          label_size=24,
+    #          ncol=2)
+    #dev.off()
     
     
     
@@ -552,6 +557,7 @@ plot_plant_p_cycle_responses <- function(eucDF,
     plotDF3 <- pfluxDF[pfluxDF$Trt=="pct_diff"&pfluxDF$Variable%in%c("Tot"),]
     plotDF4 <- pfluxDF[pfluxDF$Trt=="diff"&pfluxDF$Variable%in%c("Tot"),]
     
+    plotDF42 <- pfluxDF[pfluxDF$Trt=="diff"&pfluxDF$Variable%in%c("PGL", "PGW", "PGCR", "PGFR"),]
     
     
     ### add multi-model mean
@@ -615,6 +621,20 @@ plot_plant_p_cycle_responses <- function(eucDF,
     plotDF4 <- rbind(plotDF4, tmpDF2)
     
     
+    ### add multi-model mean
+    tmpDF <- plotDF42[plotDF42$Group%in%c("A_GDAYP", "B_ELMV1",
+                                        "C_CABLP", "D_LPJGP",
+                                        "E_OCHDP", "F_QUINC",
+                                        "G_OCHDX", "H_QUJSM"),]
+    tmpDF2 <- summaryBy(meanvalue~Variable+Trt, FUN=c(mean,sd),
+                        na.rm=T, data=tmpDF, keep.names=T)
+    tmpDF2$Group <- "multi-model"
+    tmpDF2 <- tmpDF2[,c("Variable", "Group", "Trt", "meanvalue.mean", "meanvalue.sd")]
+    colnames(tmpDF2) <- c("Variable", "Group", "Trt", "meanvalue", "sdvalue")
+    
+    plotDF42 <- rbind(plotDF42, tmpDF2)
+    
+    
     plotDF5 <- plotDF4[,c("Group", "meanvalue", "sdvalue")]
     colnames(plotDF5) <- c("Group", "PG_mean", "PG_sd")
     bpDF <- merge(bpDF, plotDF5, by=c("Group"))
@@ -638,7 +658,7 @@ plot_plant_p_cycle_responses <- function(eucDF,
                       position=position_dodge2(), width=0.3)+
         #geom_point(data=plotDF2, aes(x=Group, y=meanvalue), col="black",
         #         fill="white", size=2, pch=21)+
-        geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
+        geom_vline(xintercept=c(6.5, 8.5), lty=2)+
         xlab("")+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
@@ -651,7 +671,7 @@ plot_plant_p_cycle_responses <- function(eucDF,
               legend.text=element_text(size=12),
               legend.title=element_text(size=14),
               panel.grid.major=element_blank(),
-              legend.position=c(.8,.8),
+              legend.position=c(.64,.8),
               legend.box = 'horizontal',
               legend.box.just = 'left',
               legend.background = element_rect(fill="grey",
@@ -661,10 +681,10 @@ plot_plant_p_cycle_responses <- function(eucDF,
                                         hjust = 0.5))+
         ylab(expression(paste(P[demand] * " (g P " * m^2 * " " * yr^-1 * ")")))+
         scale_fill_manual(name=expression(P[demand]),
-                        values=c("PGL"=cbbPalette[2],
-                                 "PGW"=cbbPalette[3],
-                                 "PGFR"=cbbPalette[4],
-                                 "PGCR"=cbbPalette[7]),
+                          values=c("PGL"="#FF6F91",
+                                   "PGW"="#FFC75F",
+                                   "PGFR"="#D65DB1",
+                                   "PGCR"="#845EC2"),
                         labels=c("PGL"=expression(P[leaf]), 
                                  "PGW"=expression(P[wood]), 
                                  "PGFR"=expression(P[froot]), 
@@ -672,7 +692,7 @@ plot_plant_p_cycle_responses <- function(eucDF,
       guides(fill=guide_legend(nrow=2))+
         scale_x_discrete(limit=c(mod.list, "multi-model", "obs"),
                          label=c(model.labels, "multi-model"=expression(bold("M-M")),
-                                 "obs" = expression(bold("OBS")))); p5
+                                 "obs" = expression(bold("OBS"))))
     
     
     p6 <- ggplot(data=plotDF4, 
@@ -685,7 +705,7 @@ plot_plant_p_cycle_responses <- function(eucDF,
                     position=position_dodge2(), width=0.3)+
       #geom_point(data=plotDF3, aes(x=Group, y=meanvalue), col="black",
       #         fill="white", size=2, pch=21)+
-      geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
+      geom_vline(xintercept=c(6.5, 8.5), lty=2)+
       xlab("")+
       theme_linedraw() +
       theme(panel.grid.minor=element_blank(),
@@ -714,8 +734,58 @@ plot_plant_p_cycle_responses <- function(eucDF,
                                  "obs"="grey"),
                         labels=c(model.labels, "obs"= "OBS"))+
       guides(fill = guide_legend(override.aes = list(col = c(col.values, "multi-model"="grey30", "obs"="grey"))),
-             color = guide_legend(nrow=12, byrow=F)); p6
+             color = guide_legend(nrow=12, byrow=F))
     
+    
+    
+    
+    p62 <- ggplot(data=plotDF42, 
+                  aes(Group, meanvalue, group=Variable)) +
+      geom_bar(stat = "identity", aes(fill=Variable), 
+               position="stack", col="black") +
+      geom_errorbar(data=plotDF4,
+                    aes(x=Group, ymin=meanvalue-sdvalue,
+                        ymax=meanvalue+sdvalue), 
+                    col="black", 
+                    position=position_dodge2(), width=0.3)+
+      geom_point(data=plotDF4, aes(x=Group, y=meanvalue), 
+                 position=position_dodge2(width=0.9), col="black",
+                 fill="white", size=2, pch=21)+
+      geom_vline(xintercept=c(6.5, 8.5), lty=2)+
+      xlab("")+
+      theme_linedraw() +
+      theme(panel.grid.minor=element_blank(),
+            #axis.text.x=element_text(size=14,angle = 45, 
+            #                         vjust = 1, hjust = 1),
+            axis.text.x=element_text(size=14),
+            axis.title.x=element_text(size=14),
+            axis.text.y=element_text(size=12),
+            axis.title.y=element_text(size=14),
+            legend.text=element_text(size=12),
+            legend.title=element_text(size=14),
+            panel.grid.major=element_blank(),
+            legend.position="none",
+            legend.background = element_rect(fill="grey",
+                                             size=0.5, linetype="solid", 
+                                             colour ="black"),
+            legend.box = 'horizontal',
+            legend.box.just = 'left',
+            plot.title = element_text(size=14, face="bold.italic", 
+                                      hjust = 0.5))+
+      ylab(expression(CO[2] * " effect (g P " * m^-2 * " " * yr^-1 * ")"))+
+      scale_fill_manual(name=expression(P[demand]),
+                        values=c("PGL"="#FF6F91",
+                                 "PGW"="#FFC75F",
+                                 "PGFR"="#D65DB1",
+                                 "PGCR"="#845EC2"),
+                        labels=c("PGL"=expression(P[leaf]), 
+                                 "PGW"=expression(P[wood]), 
+                                 "PGFR"=expression(P[froot]), 
+                                 "PGCR"=expression(P[croot])))+
+      guides(fill=guide_legend(nrow=2))+
+      scale_x_discrete(limit=c(mod.list, "multi-model", "obs"),
+                       label=c(model.labels, "multi-model"=expression(bold("M-M")),
+                               "obs" = expression(bold("OBS"))));p62
     
     
     
@@ -735,6 +805,22 @@ plot_plant_p_cycle_responses <- function(eucDF,
                                                                             var.list=c("PGL", "PGW", "PGCR", "PGFR"),
                                                                             calculate.total=T)
     
+    #pfluxDF3 <- prepare_plot_DF_for_time_averaged_data_model_intercomparison(eucDF=eucDF,
+    #                                                                         ambDF=ambDF.sum,
+    #                                                                         eleDF=eleDF.sum,
+    #                                                                         difDF=annDF.diff.sum,
+    #                                                                         var.list=c("deltaPSTOR"),
+    #                                                                         calculate.total=F)
+    
+    #pfluxDF3 <- prepare_plot_DF_for_time_averaged_data_model_intercomparison(eucDF=eucDF,
+    #                                                                         ambDF=ambDF.sum,
+    #                                                                         eleDF=eleDF.sum,
+    #                                                                         difDF=annDF.diff.sum,
+    #                                                                         var.list=c("PLRETR", "PWRETR", "PFRRETR", "PCRRETR"),
+    #                                                                         calculate.total=T)
+    
+    
+    
     pfluxDF2 <- pfluxDF2[pfluxDF2$Variable=="Tot",]
     pfluxDF2$Variable <- "Pdemand"
     
@@ -751,7 +837,7 @@ plot_plant_p_cycle_responses <- function(eucDF,
         pfluxDF3$meanvalue[pfluxDF3$Group==i&pfluxDF3$Trt==j] <- tmpDF2$meanvalue[tmpDF2$Group==i&tmpDF2$Trt==j] - tmpDF1$meanvalue[tmpDF1$Group==i&tmpDF1$Trt==j] 
         
         pfluxDF3$sdvalue[pfluxDF3$Group==i&pfluxDF3$Trt==j] <- 
-          sqrt(sum(c(tmpDF2$sdvalue[tmpDF2$Group==i&tmpDF2$Trt==j], tmpDF1$sdvalue[tmpDF1$Group==i&tmpDF1$Trt==j]), na.rm=T)/2)
+          sqrt(sum(c(tmpDF2$sdvalue[tmpDF2$Group==i&tmpDF2$Trt==j]^2, tmpDF1$sdvalue[tmpDF1$Group==i&tmpDF1$Trt==j]^2), na.rm=T)/2)
       }
     }
     
@@ -787,6 +873,14 @@ plot_plant_p_cycle_responses <- function(eucDF,
     plotDF4 <- pfluxDF[pfluxDF$Trt=="diff"&pfluxDF$Variable%in%c("PRETR", "PUP"),]
     
     plotDF42 <- pfluxDF[pfluxDF$Trt=="pct_diff"&pfluxDF$Variable%in%c("PRETR", "PUP"),]
+    
+    
+    ### revise sd in the data, based on data
+    plotDF1$sdvalue[plotDF1$Variable=="PRETR"&plotDF1$Group=="obs"&plotDF1$Trt=="aCO2"] <- 0.03
+    plotDF1$sdvalue[plotDF1$Variable=="PRETR"&plotDF1$Group=="obs"&plotDF1$Trt=="eCO2"] <- 0.097
+    
+    plotDF4$sdvalue[plotDF4$Variable=="PRETR"&plotDF4$Group=="obs"&plotDF4$Trt=="diff"] <- sqrt((0.03^2+0.097^2)/2)
+    #plotDF42$sdvalue[plotDF42$Variable=="PRETR"&plotDF42$Group=="obs"&plotDF42$Trt=="pct_diff"] <- sqrt((0.03^2+0.097^2+0.03^2)/3)/plotDF1$sdvalue[plotDF1$Variable=="PRETR"&plotDF1$Group=="obs"&plotDF1$Trt=="aCO2"]*100
     
     
     ### add multi-model mean
@@ -901,7 +995,7 @@ plot_plant_p_cycle_responses <- function(eucDF,
                     position=position_dodge2(), width=0.3)+
       #geom_point(data=plotDF2, aes(x=Group, y=meanvalue), col="black",
       #         fill="white", size=2, pch=21)+
-      geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
+      geom_vline(xintercept=c(6.5, 8.5), lty=2)+
       xlab("")+
       theme_linedraw() +
       theme(panel.grid.minor=element_blank(),
@@ -935,47 +1029,9 @@ plot_plant_p_cycle_responses <- function(eucDF,
     
     
     
+    plotDF43 <- plotDF42[plotDF42$Group%in%c("multi-model", "obs"),]
     
-    #p6 <- ggplot(data=plotDF3, 
-    #             aes(Group, meanvalue)) +
-    #  geom_bar(stat = "identity", aes(fill=Group), 
-    #           position="stack", col="black") +
-    #  geom_errorbar(aes(x=Group, ymin=meanvalue-sdvalue,
-    #                    ymax=meanvalue+sdvalue), 
-    #                col="black", 
-    #                position=position_dodge2(), width=0.3)+
-    #  #geom_point(data=plotDF3, aes(x=Group, y=meanvalue), col="black",
-    #  #         fill="white", size=2, pch=21)+
-    #  geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
-    #  xlab("")+
-    #  theme_linedraw() +
-    #  theme(panel.grid.minor=element_blank(),
-    #        axis.text.x=element_text(size=12),
-    #        axis.title.x=element_text(size=14),
-    #        axis.text.y=element_text(size=12),
-    #        axis.title.y=element_text(size=14),
-    #        legend.text=element_text(size=12),
-    #        legend.title=element_text(size=14),
-    #        panel.grid.major=element_blank(),
-    #        legend.position="none",
-    #        legend.box = 'horizontal',
-    #        legend.box.just = 'left',
-    #        plot.title = element_text(size=14, face="bold.italic", 
-    #                                  hjust = 0.5))+
-    #  ylab(expression(CO[2] * " effect (%)"))+
-    #  scale_x_discrete(limit=c(mod.list, "multi-model", "obs"),
-    #                   label=c(model.labels, "multi-model"=expression(bold("M-M")),
-    #                           "obs" = expression(bold("OBS"))))+
-    #  scale_fill_manual(name="Model",
-    #                    values=c(col.values, 
-    #                             "multi-model"="grey30",
-    #                             "obs"="grey"),
-    #                    labels=c(model.labels, "obs"= "OBS"))+
-    #  guides(fill = guide_legend(override.aes = list(col = c(col.values, "multi-model"="grey30", "obs"="grey"))),
-    #         color = guide_legend(nrow=12, byrow=F)); p6
-    
-    
-    p8 <- ggplot(data=plotDF4, 
+    p8 <- ggplot(data=plotDF42, 
                  aes(Group, meanvalue, group=Variable)) +
       geom_bar(stat = "identity", aes(fill=Variable), 
                position=position_dodge2(), col="black") +
@@ -983,10 +1039,10 @@ plot_plant_p_cycle_responses <- function(eucDF,
                         ymax=meanvalue+sdvalue, group=Variable), 
                     col="black", 
                     position=position_dodge2(), width=0.9)+
-      #geom_point(data=plotDF4, aes(x=Group, y=meanvalue), 
-      #           position=position_dodge2(width=0.9), col="black",
-      #           fill="white", size=2, pch=21)+
-      geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
+      geom_point(data=plotDF43, aes(x=Group, y=meanvalue), 
+                 position=position_dodge2(width=0.9), col="black",
+                 fill="white", size=2, pch=21)+
+      geom_vline(xintercept=c(6.5, 8.5), lty=2)+
       xlab("")+
       theme_linedraw() +
       theme(panel.grid.minor=element_blank(),
@@ -1000,11 +1056,17 @@ plot_plant_p_cycle_responses <- function(eucDF,
             legend.title=element_text(size=14),
             panel.grid.major=element_blank(),
             legend.position="none",
+            legend.background = element_rect(fill="grey",
+                                             size=0.5, linetype="solid", 
+                                             colour ="black"),
             legend.box = 'horizontal',
             legend.box.just = 'left',
             plot.title = element_text(size=14, face="bold.italic", 
                                       hjust = 0.5))+
-      ylab(expression(CO[2] * " effect (g P " * m^-2 * " " * yr^-1 * ")"))+
+      #ylab(expression(CO[2] * " effect (g P " * m^-2 * " " * yr^-1 * ")"))+
+      ylab(expression(CO[2] * "(%)"))+
+      scale_y_continuous(limits=c(-22, 40),
+                         breaks=c(-20, -10, 0, 10, 20, 30))+
       scale_fill_manual(name=expression(P[demand]),
                         values=c("PUP"=Diverge_hsv_Palette[2],
                                  "PRETR"=Diverge_hsv_Palette[8]),
@@ -1015,15 +1077,15 @@ plot_plant_p_cycle_responses <- function(eucDF,
                        label=c(model.labels, "multi-model"=expression(bold("M-M")),
                                "obs" = expression(bold("OBS"))));p8
     
-    
+ 
     
     
     pdf(paste0(out.dir, "/MIP_time_averaged_", scenario, "_P_demand_and_uptake.pdf"), 
-        width=16, height=16)
-    plot_grid(p1, p2, 
-              p3, p4,
-              p5, p6,   
+        width=18, height=16)
+    plot_grid(p5, p62,   
               p7, p8,
+              p1, p2, 
+              p3, p4,
               labels=c("(a)", "(b)", "(c)", "(d)",
                        "(e)", "(f)", "(g)", "(h)"), label_x=0.1, label_y=0.95,
               label_size=24,
@@ -1448,7 +1510,7 @@ plot_plant_p_cycle_responses <- function(eucDF,
                         ymax=meanvalue+sdvalue), 
                     col="black", width=0.2,
                     position=position_dodge(width=1))+
-      geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
+      geom_vline(xintercept=c(6.5, 8.5), lty=2)+
       theme_linedraw() +
       theme(panel.grid.minor=element_blank(),
             #axis.text.x=element_text(size=14,angle = 45, 
@@ -1478,7 +1540,7 @@ plot_plant_p_cycle_responses <- function(eucDF,
                                  "GPP_PUE"=cbbPalette[6]),
                         label=c("PUE"=expression(PUE[BP]),
                                 "GPP_PUE"=expression(PUE[GPP])))+
-      guides(fill=guide_legend(nrow=2)); p11
+      guides(fill=guide_legend(nrow=2))
     
     
     
@@ -1487,7 +1549,7 @@ plot_plant_p_cycle_responses <- function(eucDF,
                   aes(Group, meanvalue)) +
       geom_bar(stat = "identity", aes(fill=Variable), 
                position=position_dodge2(), col="black") +
-      geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
+      geom_vline(xintercept=c(6.5, 8.5), lty=2)+
       xlab("")+
       theme_linedraw() +
       theme(panel.grid.minor=element_blank(),
@@ -1514,7 +1576,7 @@ plot_plant_p_cycle_responses <- function(eucDF,
                                  "GPP_PUE"=cbbPalette[6]),
                         label=c("PUE"=expression(PUE[BP]),
                                 "GPP_PUE"=expression(PUE[GPP])))+
-      guides(fill=guide_legend(nrow=2)); p12
+      guides(fill=guide_legend(nrow=2))
     
     
     
@@ -1621,7 +1683,7 @@ plot_plant_p_cycle_responses <- function(eucDF,
                         ymax=meanvalue+sdvalue), 
                     col="black", width=0.2,
                     position=position_dodge(width=1))+
-      geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
+      geom_vline(xintercept=c(6.5, 8.5), lty=2)+
       theme_linedraw() +
       theme(panel.grid.minor=element_blank(),
             #axis.text.x=element_text(size=14,angle = 45, 
@@ -1647,11 +1709,14 @@ plot_plant_p_cycle_responses <- function(eucDF,
                        label=c(model.labels, "multi-model"=expression(bold("M-M")),
                                "obs" = expression(bold("OBS"))))+
       scale_fill_manual(name="Variable",
-                        values=c("CPL"=cbbPalette[4], 
-                                 "CPW"=cbbPalette[3],
-                                 "CPFR"=cbbPalette[8],
-                                 "CPFLIT"=cbbPalette[2],
-                                 "CPSOIL"=cbbPalette[6]),
+                        #values=c("CPL"=cbbPalette[4], 
+                        #         "CPW"=cbbPalette[3],
+                        #         "CPFR"=cbbPalette[8],
+                        #         "CPFLIT"=cbbPalette[2],
+                        #         "CPSOIL"=cbbPalette[6]),
+                        values=c("CPL"="#FF6F91",
+                                 "CPW"="#FFC75F",
+                                 "CPFR"="#D65DB1"),
                         label=c("CPL"=expression(CP[leaf]),
                                 "CPW"=expression(CP[wood]),
                                 "CPFR"=expression(CP[froot]),
@@ -1666,7 +1731,7 @@ plot_plant_p_cycle_responses <- function(eucDF,
                  aes(Group, meanvalue)) +
         geom_bar(stat = "identity", aes(fill=Variable), 
                  position=position_dodge2(), col="black") +
-        geom_vline(xintercept=c(6.5, 8.5, 10.5), lty=2)+
+        geom_vline(xintercept=c(6.5, 8.5), lty=2)+
         xlab("")+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
@@ -1689,11 +1754,9 @@ plot_plant_p_cycle_responses <- function(eucDF,
                        label=c(model.labels, "multi-model"=expression(bold("M-M")),
                                "obs" = expression(bold("OBS"))))+
         scale_fill_manual(name="Variable",
-                          values=c("CPL"=cbbPalette[4], 
-                                   "CPW"=cbbPalette[3],
-                                   "CPFR"=cbbPalette[8],
-                                   "CPFLIT"=cbbPalette[2],
-                                   "CPSOIL"=cbbPalette[6]),
+                          values=c("CPL"="#FF6F91",
+                                   "CPW"="#FFC75F",
+                                   "CPFR"="#D65DB1"),
                           label=c("CPL"=expression(CP[leaf]),
                                   "CPW"=expression(CP[wood]),
                                   "CPFR"=expression(CP[froot]),
@@ -2377,16 +2440,16 @@ plot_plant_p_cycle_responses <- function(eucDF,
     
     
     p17_co2 <- ggplot() +
-      geom_segment(aes(y=bpDF$deltaPVEG_mean, yend = bpDF$deltaPVEG_mean,
+      geom_segment(aes(y=bpDF$PG_pct_mean, yend = bpDF$PG_pct_mean,
                        x=bpDF$PUE_pct_mean+bpDF$PUE_pct_sd, 
                        xend=bpDF$PUE_pct_mean-bpDF$PUE_pct_sd),
                    lwd=0.5, color="grey")+
-      geom_segment(aes(y=bpDF$deltaPVEG_mean+bpDF$deltaPVEG_sd, 
-                       yend = bpDF$deltaPVEG_mean-bpDF$deltaPVEG_sd,
+      geom_segment(aes(y=bpDF$PG_pct_mean+bpDF$PG_pct_sd, 
+                       yend = bpDF$PG_pct_mean-bpDF$PG_pct_sd,
                        x=bpDF$PUE_pct_mean, 
                        xend=bpDF$PUE_pct_mean), 
                    lwd=0.5, color="grey")+
-      geom_point(data=bpDF, aes(PUE_pct_mean, deltaPVEG_mean, color=Group, pch=Group), 
+      geom_point(data=bpDF, aes(PUE_pct_mean, PG_pct_mean, color=Group, pch=Group), 
                  size=4)+
       theme_linedraw() +
       theme(panel.grid.minor=element_blank(),
@@ -2411,11 +2474,11 @@ plot_plant_p_cycle_responses <- function(eucDF,
                                   "E_OCHDP"=19,"F_QUINC"=19,
                                   "G_OCHDX"=19,"H_QUJSM"=19,
                                   "multi-model"=19, "obs"=15))+
-      ylab(expression(paste(CO[2] * " effect on " * Delta * P[veg] * " (g P " * m^-2 * " " * yr^-1 * ")")))+
+      ylab(expression(paste(CO[2] * " effect on " * P[dem] * " (%)")))+
       xlab(expression(paste(CO[2] * " effect on " * PUE[NPP] * " (%)")))
     
     
-    
+    plot(p17_co2)
     
     
     ###########################################################################
@@ -2500,7 +2563,7 @@ plot_plant_p_cycle_responses <- function(eucDF,
     
     ###########################################################################
     
-    plots_first_row <- plot_grid(p1_co2, p16_co2, p17_co2,
+    plots_first_row <- plot_grid(p3_co2, p1_co2, p17_co2,
                                  label_x=0.1, label_y=0.95,
                                  label_size=24,
                                  rel_widths=c(1,1),
