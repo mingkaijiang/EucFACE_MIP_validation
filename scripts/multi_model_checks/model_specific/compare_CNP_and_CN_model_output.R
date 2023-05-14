@@ -157,6 +157,7 @@ compare_CNP_and_CN_model_output <- function(scenario) {
         geom_point(data=plotDF2, 
                       aes(x=Model, y=meanvalue), 
                       position="dodge", col="black", size=2, fill="white", pch=21) +
+        geom_vline(xintercept=2.5, lty=2)+
         #annotate("text", x=2, y=plotDF2$meanvalue[plotDF2$Model=="A_GDAYP"]*1.15, 
         #         label=(paste0(val1, "%")), size=10)+
         #annotate("text", x=4, y=plotDF2$meanvalue[plotDF2$Model=="D_LPJGP"]*1.15, 
@@ -209,7 +210,8 @@ compare_CNP_and_CN_model_output <- function(scenario) {
     ### calculate CO2 pct response difference
     plotDF3 <- plotDF2
     plotDF3$meanvalue <- (vegDF1$meanvalue[vegDF1$Variable=="Total"&vegDF1$Trt=="ele"]/vegDF1$meanvalue[vegDF1$Variable=="Total"&vegDF1$Trt=="amb"]-1)*100
-    plotDF3$sdvalue <- NA#sqrt((vegDF1$sdvalue[vegDF1$Variable=="Total"&vegDF1$Trt=="ele"]^2 + vegDF1$sdvalue[vegDF1$Variable=="Total"&vegDF1$Trt=="amb"]^2)/2)
+    plotDF3$sdvalue <- sqrt((vegDF1$sdvalue[vegDF1$Variable=="Total"&vegDF1$Trt=="ele"]^2 + vegDF1$sdvalue[vegDF1$Variable=="Total"&vegDF1$Trt=="amb"]^2+
+                                 + vegDF1$sdvalue[vegDF1$Variable=="Total"&vegDF1$Trt=="amb"]^2)/3)/vegDF1$meanvalue[vegDF1$Variable=="Total"&vegDF1$Trt=="amb"]
     
     val1 <- round((plotDF3$meanvalue[plotDF3$Model=="A_GDAYP"]-plotDF3$meanvalue[plotDF3$Model=="I_GDAYN"])/plotDF3$meanvalue[plotDF3$Model=="I_GDAYN"]*100, 1)
     val2 <- round((plotDF3$meanvalue[plotDF3$Model=="D_LPJGP"]-plotDF3$meanvalue[plotDF3$Model=="J_LPJGN"])/plotDF3$meanvalue[plotDF3$Model=="J_LPJGN"]*100, 1)
@@ -220,13 +222,14 @@ compare_CNP_and_CN_model_output <- function(scenario) {
                  aes(Model, meanvalue)) +
         geom_bar(stat = "identity", aes(fill=Model), 
                  position="stack", col="black") +
-        #geom_errorbar(aes(x=Model, ymin=meanvalue-sdvalue, ymax=meanvalue+sdvalue), 
-        #              position="dodge", width=0.2, col="black") +
+        geom_errorbar(aes(x=Model, ymin=meanvalue-sdvalue, ymax=meanvalue+sdvalue), 
+                      position="dodge", width=0.2, col="black") +
         #annotate("text", x=2, y=plotDF3$meanvalue[plotDF3$Model=="A_GDAYP"]*1.01, 
         #         label=(paste0(val1, "%")), size=10)+
         #annotate("text", x=4, y=plotDF3$meanvalue[plotDF3$Model=="D_LPJGP"]*1.01, 
         #         label=(paste0(val2, "%")), size=10)+
         theme_linedraw() +
+        geom_vline(xintercept=2.5, lty=2)+
         theme(panel.grid.minor=element_blank(),
               axis.text.x=element_text(size=12),
               axis.title.x=element_text(size=14),
@@ -240,7 +243,7 @@ compare_CNP_and_CN_model_output <- function(scenario) {
               legend.box.just = 'left',
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
-        ylab(expression(paste(C[veg] * " " * CO[2] *" response ratio (%)")))+
+        ylab(expression(paste(CO[2] *" effect on " * C[veg] * " (%)")))+
         scale_x_discrete(limit=c("I_GDAYN","A_GDAYP", 
                                  "J_LPJGN","D_LPJGP"),
                          label=c("GDAYN","GDAYP", 
@@ -413,7 +416,7 @@ compare_CNP_and_CN_model_output <- function(scenario) {
     ### Plotting C pools in CO2 pct response
     p4 <- ggplot(data=plotDF3, 
                  aes(Model, meanvalue)) +
-        geom_bar(stat = "identity", aes(fill=Model, alpha=Model), 
+        geom_bar(stat = "identity", aes(fill=Model), 
                  position="stack", col="black") +
         #annotate("text", x=2, y=plotDF3$meanvalue[plotDF3$Model=="B_GDAYP"]*1.01, 
         #         label=(paste0(val1, "%")), size=10)+
@@ -438,7 +441,7 @@ compare_CNP_and_CN_model_output <- function(scenario) {
               legend.box.just = 'left',
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
-        ylab(expression(paste(Delta * C[veg] * " " * CO[2] * " effect (g C " * m^2 * " " * yr^-1 * ")")))+
+        ylab(expression(paste(CO[2] * " effect on " * Delta * C[veg] * " (g C " * m^2 * " " * yr^-1 * ")")))+
         scale_x_discrete(limit=c("I_GDAYN","A_GDAYP", 
                                  "J_LPJGN","D_LPJGP"),
                          label=c("GDAYN","GDAYP", 

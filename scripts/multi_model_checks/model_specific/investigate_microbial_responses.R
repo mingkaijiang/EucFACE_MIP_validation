@@ -203,7 +203,7 @@ investigate_microbial_responses <- function (scenario, eucDF) {
               legend.box.just = 'left',
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
-        ylab(expression(paste(C[microbe] * " pools (g C " * m^2*")")))+
+        ylab(expression(paste(C[mic] * " (g C " * m^2*")")))+
         scale_x_discrete(limit=c("G_OCHDX","H_QUJSM", "OBS"),
                          label=c("G_OCHDX"= "OCHDX",
                                  "H_QUJSM"= "QUJSM",
@@ -279,7 +279,7 @@ investigate_microbial_responses <- function (scenario, eucDF) {
               legend.box.just = 'left',
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
-        ylab(expression(paste(Delta * C[microbe] * " pools (g C " * m^2 * " " * yr^-1 * ")")))+
+        ylab(expression(paste(Delta * C[mic] * " (g C " * m^2 * " " * yr^-1 * ")")))+
         scale_x_discrete(limit=c("G_OCHDX","H_QUJSM", "OBS"),
                          label=c("G_OCHDX"= "OCHDX",
                                  "H_QUJSM"= "QUJSM",
@@ -363,7 +363,7 @@ investigate_microbial_responses <- function (scenario, eucDF) {
               legend.box.just = 'left',
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
-        ylab(expression(paste(N[microbe] * " pools (g N " * m^2*")")))+
+        ylab(expression(paste(N[mic] * " (g N " * m^2*")")))+
         scale_x_discrete(limit=c("G_OCHDX","H_QUJSM", "OBS"),
                          label=c("G_OCHDX"= "OCHDX",
                                  "H_QUJSM"= "QUJSM",
@@ -448,7 +448,7 @@ investigate_microbial_responses <- function (scenario, eucDF) {
               legend.box.just = 'left',
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
-        ylab(expression(paste(P[microbe] * " pools (g P " * m^2*")")))+
+        ylab(expression(paste(P[mic] * " (g P " * m^2*")")))+
         scale_x_discrete(limit=c("G_OCHDX","H_QUJSM", "OBS"),
                          label=c("G_OCHDX"= "OCHDX",
                                  "H_QUJSM"= "QUJSM",
@@ -523,7 +523,7 @@ investigate_microbial_responses <- function (scenario, eucDF) {
               legend.box.just = 'left',
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
-        ylab(expression(paste(Delta * P[microbe] * " pools (g C " * m^2 * " " * yr^-1 * ")")))+
+        ylab(expression(paste(Delta * P[mic] * " (g C " * m^2 * " " * yr^-1 * ")")))+
         scale_x_discrete(limit=c("G_OCHDX","H_QUJSM", "OBS"),
                          label=c("G_OCHDX"= "OCHDX",
                                  "H_QUJSM"= "QUJSM",
@@ -581,11 +581,11 @@ investigate_microbial_responses <- function (scenario, eucDF) {
     
     
     pdf(paste0(out.dir, "/two_microbial_model_microbial_pools.pdf"), 
-        width=12, height=8)
-    grid.arrange(p1, p1_3, p1_4, 
+        width=10, height=8)
+    grid.arrange(p1, p1_2, #p1_3, p1_4, 
                  #p2, p2_2,
-                 p3, p3_3, p3_4, 
-                 nrow=2, ncol=3)
+                 p3, p3_2, #p3_3, p3_4, 
+                 nrow=2, ncol=2)
     dev.off()
     
     

@@ -387,70 +387,42 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
                                                            1, 0)
     
     ### deltaCMIC
-    #outDF$A_GDAYP[outDF$Variable=="deltaCMIC"] <- ifelse(modDF.sum$deltaCMIC.mean[modDF.sum$ModName=="A_GDAYP"]<=
-    #                                                           (obsDF$deltaCMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]+
-    #                                                                obsDF$deltaCMIC[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-    #                                                           modDF.sum$deltaCMIC.mean[modDF.sum$ModName=="A_GDAYP"]>=
-    #                                                           (obsDF$deltaCMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]-
-    #                                                                obsDF$deltaCMIC[obsDF$Group=="sd"&obsDF$Trt==treatment]),
-    #                                                       1, 0)
-    #
-    #outDF$B_ELMV1[outDF$Variable=="deltaCMIC"] <- ifelse(modDF.sum$deltaCMIC.mean[modDF.sum$ModName=="B_ELMV1"]<=
-    #                                                           (obsDF$deltaCMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]+
-    #                                                                obsDF$deltaCMIC[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-    #                                                           modDF.sum$deltaCMIC.mean[modDF.sum$ModName=="B_ELMV1"]>=
-    #                                                           (obsDF$deltaCMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]-
-    #                                                                obsDF$deltaCMIC[obsDF$Group=="sd"&obsDF$Trt==treatment]),
-    #                                                       1, 0)
-    #
-    #outDF$C_CABLP[outDF$Variable=="deltaCMIC"] <- ifelse(modDF.sum$deltaCMIC.mean[modDF.sum$ModName=="C_CABLP"]<=
-    #                                                           (obsDF$deltaCMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]+
-    #                                                                obsDF$deltaCMIC[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-    #                                                           modDF.sum$deltaCMIC.mean[modDF.sum$ModName=="C_CABLP"]>=
-    #                                                           (obsDF$deltaCMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]-
-    #                                                                obsDF$deltaCMIC[obsDF$Group=="sd"&obsDF$Trt==treatment]),
-    #                                                       1, 0)
-    #
-    #
-    #outDF$D_LPJGP[outDF$Variable=="deltaCMIC"] <- ifelse(modDF.sum$deltaCMIC.mean[modDF.sum$ModName=="D_LPJGP"]<=
-    #                                                           (obsDF$deltaCMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]+
-    #                                                                obsDF$deltaCMIC[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-    #                                                           modDF.sum$deltaCMIC.mean[modDF.sum$ModName=="D_LPJGP"]>=
-    #                                                           (obsDF$deltaCMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]-
-    #                                                                obsDF$deltaCMIC[obsDF$Group=="sd"&obsDF$Trt==treatment]),
-    #                                                       1, 0)
-    #
-    #outDF$E_OCHDP[outDF$Variable=="deltaCMIC"] <- ifelse(modDF.sum$deltaCMIC.mean[modDF.sum$ModName=="E_OCHDP"]<=
-    #                                                           (obsDF$deltaCMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]+
-    #                                                                obsDF$deltaCMIC[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-    #                                                           modDF.sum$deltaCMIC.mean[modDF.sum$ModName=="E_OCHDP"]>=
-    #                                                           (obsDF$deltaCMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]-
-    #                                                                obsDF$deltaCMIC[obsDF$Group=="sd"&obsDF$Trt==treatment]),
-    #                                                       1, 0)
-    #
-    #outDF$F_QUINC[outDF$Variable=="deltaCMIC"] <- ifelse(modDF.sum$deltaCMIC.mean[modDF.sum$ModName=="F_QUINC"]<=
-    #                                                           (obsDF$deltaCMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]+
-    #                                                                obsDF$deltaCMIC[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-    #                                                           modDF.sum$deltaCMIC.mean[modDF.sum$ModName=="F_QUINC"]>=
-    #                                                           (obsDF$deltaCMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]-
-    #                                                                obsDF$deltaCMIC[obsDF$Group=="sd"&obsDF$Trt==treatment]),
-    #                                                       1, 0)
-    #
-    #outDF$G_OCHDX[outDF$Variable=="deltaCMIC"] <- ifelse(modDF.sum$deltaCMIC.mean[modDF.sum$ModName=="G_OCHDX"]<=
-    #                                                           (obsDF$deltaCMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]+
-    #                                                                obsDF$deltaCMIC[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-    #                                                           modDF.sum$deltaCMIC.mean[modDF.sum$ModName=="G_OCHDX"]>=
-    #                                                           (obsDF$deltaCMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]-
-    #                                                                obsDF$deltaCMIC[obsDF$Group=="sd"&obsDF$Trt==treatment]),
-    #                                                       1, 0)
-    #
-    #outDF$H_QUJSM[outDF$Variable=="deltaCMIC"] <- ifelse(modDF.sum$deltaCMIC.mean[modDF.sum$ModName=="H_QUJSM"]<=
-    #                                                           (obsDF$deltaCMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]+
-    #                                                                obsDF$deltaCMIC[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-    #                                                           modDF.sum$deltaCMIC.mean[modDF.sum$ModName=="H_QUJSM"]>=
-    #                                                           (obsDF$deltaCMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]-
-    #                                                                obsDF$deltaCMIC[obsDF$Group=="sd"&obsDF$Trt==treatment]),
-    #                                                       1, 0)
+    outDF$A_GDAYP[outDF$Variable=="deltaCMIC"] <- ifelse(sign(modDF.sum$deltaCMIC.mean[modDF.sum$ModName=="A_GDAYP"])==
+                                                               sign(obsDF$deltaCMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                           1, 0)
+    
+    outDF$B_ELMV1[outDF$Variable=="deltaCMIC"] <- ifelse(sign(modDF.sum$deltaCMIC.mean[modDF.sum$ModName=="B_ELMV1"])==
+                                                               sign(obsDF$deltaCMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                           1, 0)
+    
+    outDF$C_CABLP[outDF$Variable=="deltaCMIC"] <- ifelse(sign(modDF.sum$deltaCMIC.mean[modDF.sum$ModName=="C_CABLP"])==
+                                                               sign(obsDF$deltaCMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                           1, 0)
+    
+    
+    outDF$D_LPJGP[outDF$Variable=="deltaCMIC"] <- ifelse(sign(modDF.sum$deltaCMIC.mean[modDF.sum$ModName=="D_LPJGP"])==
+                                                               sign(obsDF$deltaCMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                           1, 0)
+    
+    outDF$E_OCHDP[outDF$Variable=="deltaCMIC"] <- ifelse(sign(modDF.sum$deltaCMIC.mean[modDF.sum$ModName=="E_OCHDP"])==
+                                                               sign(obsDF$deltaCMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                           1, 0)
+    
+    outDF$F_QUINC[outDF$Variable=="deltaCMIC"] <- ifelse(sign(modDF.sum$deltaCMIC.mean[modDF.sum$ModName=="F_QUINC"])==
+                                                               sign(obsDF$deltaCMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                           1, 0)
+    
+    outDF$G_OCHDX[outDF$Variable=="deltaCMIC"] <- ifelse(sign(modDF.sum$deltaCMIC.mean[modDF.sum$ModName=="G_OCHDX"])==
+                                                               sign(obsDF$deltaCMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                           1, 0)
+    
+    outDF$H_QUJSM[outDF$Variable=="deltaCMIC"] <- ifelse(sign(modDF.sum$deltaCMIC.mean[modDF.sum$ModName=="H_QUJSM"])==
+                                                               sign(obsDF$deltaCMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                           1, 0)
+    
+    outDF$I_MM[outDF$Variable=="deltaCMIC"] <- ifelse(sign(modDF.sum$deltaCMIC.mean[modDF.sum$ModName=="I_MM"])==
+                                                            sign(obsDF$deltaCMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                        1, 0)
     
     ### CGL
     outDF$A_GDAYP[outDF$Variable=="CGL"] <- ifelse(sign(modDF.sum$CGL.mean[modDF.sum$ModName=="A_GDAYP"])==
@@ -836,70 +808,42 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
                                                       1, 0)
     
     ### CMIC
-    #outDF$A_GDAYP[outDF$Variable=="CMIC"] <- ifelse(modDF.sum$CMIC.mean[modDF.sum$ModName=="A_GDAYP"]<=
-    #                                                      (obsDF$CMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]+
-    #                                                           obsDF$CMIC[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-    #                                                      modDF.sum$CMIC.mean[modDF.sum$ModName=="A_GDAYP"]>=
-    #                                                      (obsDF$CMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]-
-    #                                                           obsDF$CMIC[obsDF$Group=="sd"&obsDF$Trt==treatment]),
-    #                                                  1, 0)
-    #
-    #outDF$B_ELMV1[outDF$Variable=="CMIC"] <- ifelse(modDF.sum$CMIC.mean[modDF.sum$ModName=="B_ELMV1"]<=
-    #                                                      (obsDF$CMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]+
-    #                                                           obsDF$CMIC[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-    #                                                      modDF.sum$CMIC.mean[modDF.sum$ModName=="B_ELMV1"]>=
-    #                                                      (obsDF$CMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]-
-    #                                                           obsDF$CMIC[obsDF$Group=="sd"&obsDF$Trt==treatment]),
-    #                                                  1, 0)
-    #
-    #outDF$C_CABLP[outDF$Variable=="CMIC"] <- ifelse(modDF.sum$CMIC.mean[modDF.sum$ModName=="C_CABLP"]<=
-    #                                                      (obsDF$CMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]+
-    #                                                           obsDF$CMIC[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-    #                                                      modDF.sum$CMIC.mean[modDF.sum$ModName=="C_CABLP"]>=
-    #                                                      (obsDF$CMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]-
-    #                                                           obsDF$CMIC[obsDF$Group=="sd"&obsDF$Trt==treatment]),
-    #                                                  1, 0)
-    #
-    #
-    #outDF$D_LPJGP[outDF$Variable=="CMIC"] <- ifelse(modDF.sum$CMIC.mean[modDF.sum$ModName=="D_LPJGP"]<=
-    #                                                      (obsDF$CMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]+
-    #                                                           obsDF$CMIC[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-    #                                                      modDF.sum$CMIC.mean[modDF.sum$ModName=="D_LPJGP"]>=
-    #                                                      (obsDF$CMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]-
-    #                                                           obsDF$CMIC[obsDF$Group=="sd"&obsDF$Trt==treatment]),
-    #                                                  1, 0)
-    #
-    #outDF$E_OCHDP[outDF$Variable=="CMIC"] <- ifelse(modDF.sum$CMIC.mean[modDF.sum$ModName=="E_OCHDP"]<=
-    #                                                      (obsDF$CMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]+
-    #                                                           obsDF$CMIC[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-    #                                                      modDF.sum$CMIC.mean[modDF.sum$ModName=="E_OCHDP"]>=
-    #                                                      (obsDF$CMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]-
-    #                                                           obsDF$CMIC[obsDF$Group=="sd"&obsDF$Trt==treatment]),
-    #                                                  1, 0)
-    #
-    #outDF$F_QUINC[outDF$Variable=="CMIC"] <- ifelse(modDF.sum$CMIC.mean[modDF.sum$ModName=="F_QUINC"]<=
-    #                                                      (obsDF$CMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]+
-    #                                                           obsDF$CMIC[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-    #                                                      modDF.sum$CMIC.mean[modDF.sum$ModName=="F_QUINC"]>=
-    #                                                      (obsDF$CMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]-
-    #                                                           obsDF$CMIC[obsDF$Group=="sd"&obsDF$Trt==treatment]),
-    #                                                  1, 0)
-    #
-    #outDF$G_OCHDX[outDF$Variable=="CMIC"] <- ifelse(modDF.sum$CMIC.mean[modDF.sum$ModName=="G_OCHDX"]<=
-    #                                                      (obsDF$CMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]+
-    #                                                           obsDF$CMIC[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-    #                                                      modDF.sum$CMIC.mean[modDF.sum$ModName=="G_OCHDX"]>=
-    #                                                      (obsDF$CMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]-
-    #                                                           obsDF$CMIC[obsDF$Group=="sd"&obsDF$Trt==treatment]),
-    #                                                  1, 0)
-    #
-    #outDF$H_QUJSM[outDF$Variable=="CMIC"] <- ifelse(modDF.sum$CMIC.mean[modDF.sum$ModName=="H_QUJSM"]<=
-    #                                                      (obsDF$CMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]+
-    #                                                           obsDF$CMIC[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-    #                                                      modDF.sum$CMIC.mean[modDF.sum$ModName=="H_QUJSM"]>=
-    #                                                      (obsDF$CMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]-
-    #                                                           obsDF$CMIC[obsDF$Group=="sd"&obsDF$Trt==treatment]),
-    #                                                  1, 0)
+    outDF$A_GDAYP[outDF$Variable=="CMIC"] <- ifelse(sign(modDF.sum$CMIC.mean[modDF.sum$ModName=="A_GDAYP"])==
+                                                               sign(obsDF$CMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                           1, 0)
+    
+    outDF$B_ELMV1[outDF$Variable=="CMIC"] <- ifelse(sign(modDF.sum$CMIC.mean[modDF.sum$ModName=="B_ELMV1"])==
+                                                               sign(obsDF$CMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                           1, 0)
+    
+    outDF$C_CABLP[outDF$Variable=="CMIC"] <- ifelse(sign(modDF.sum$CMIC.mean[modDF.sum$ModName=="C_CABLP"])==
+                                                               sign(obsDF$CMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                           1, 0)
+    
+    
+    outDF$D_LPJGP[outDF$Variable=="CMIC"] <- ifelse(sign(modDF.sum$CMIC.mean[modDF.sum$ModName=="D_LPJGP"])==
+                                                               sign(obsDF$CMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                           1, 0)
+    
+    outDF$E_OCHDP[outDF$Variable=="CMIC"] <- ifelse(sign(modDF.sum$CMIC.mean[modDF.sum$ModName=="E_OCHDP"])==
+                                                               sign(obsDF$CMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                           1, 0)
+    
+    outDF$F_QUINC[outDF$Variable=="CMIC"] <- ifelse(sign(modDF.sum$CMIC.mean[modDF.sum$ModName=="F_QUINC"])==
+                                                               sign(obsDF$CMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                           1, 0)
+    
+    outDF$G_OCHDX[outDF$Variable=="CMIC"] <- ifelse(sign(modDF.sum$CMIC.mean[modDF.sum$ModName=="G_OCHDX"])==
+                                                               sign(obsDF$CMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                           1, 0)
+    
+    outDF$H_QUJSM[outDF$Variable=="CMIC"] <- ifelse(sign(modDF.sum$CMIC.mean[modDF.sum$ModName=="H_QUJSM"])==
+                                                               sign(obsDF$CMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                           1, 0)
+    
+    outDF$I_MM[outDF$Variable=="CMIC"] <- ifelse(sign(modDF.sum$CMIC.mean[modDF.sum$ModName=="I_MM"])==
+                                                            sign(obsDF$CMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                        1, 0)
     
     ### CSOIL
     outDF$A_GDAYP[outDF$Variable=="CSOIL"] <- ifelse(sign(modDF.sum$CSOIL.mean[modDF.sum$ModName=="A_GDAYP"])==
@@ -2170,6 +2114,127 @@ assign_model_output_and_check_sign_agreement_with_obs <- function (obsDF, outDF,
                                                    sign(obsDF$deltaPVEG[obsDF$Group=="mean"&obsDF$Trt==treatment]),
                                                1, 0)
     
+    
+    
+    
+    ### deltaPMIC
+    outDF$A_GDAYP[outDF$Variable=="deltaPMIC"] <- ifelse(sign(modDF.sum$deltaPMIC.mean[modDF.sum$ModName=="A_GDAYP"])==
+                                                               sign(obsDF$deltaPMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                           1, 0)
+    
+    outDF$B_ELMV1[outDF$Variable=="deltaPMIC"] <- ifelse(sign(modDF.sum$deltaPMIC.mean[modDF.sum$ModName=="B_ELMV1"])==
+                                                               sign(obsDF$deltaPMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                           1, 0)
+    
+    outDF$C_CABLP[outDF$Variable=="deltaPMIC"] <- ifelse(sign(modDF.sum$deltaPMIC.mean[modDF.sum$ModName=="C_CABLP"])==
+                                                               sign(obsDF$deltaPMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                           1, 0)
+    
+    
+    outDF$D_LPJGP[outDF$Variable=="deltaPMIC"] <- ifelse(sign(modDF.sum$deltaPMIC.mean[modDF.sum$ModName=="D_LPJGP"])==
+                                                               sign(obsDF$deltaPMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                           1, 0)
+    
+    outDF$E_OCHDP[outDF$Variable=="deltaPMIC"] <- ifelse(sign(modDF.sum$deltaPMIC.mean[modDF.sum$ModName=="E_OCHDP"])==
+                                                               sign(obsDF$deltaPMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                           1, 0)
+    
+    outDF$F_QUINC[outDF$Variable=="deltaPMIC"] <- ifelse(sign(modDF.sum$deltaPMIC.mean[modDF.sum$ModName=="F_QUINC"])==
+                                                               sign(obsDF$deltaPMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                           1, 0)
+    
+    outDF$G_OCHDX[outDF$Variable=="deltaPMIC"] <- ifelse(sign(modDF.sum$deltaPMIC.mean[modDF.sum$ModName=="G_OCHDX"])==
+                                                               sign(obsDF$deltaPMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                           1, 0)
+    
+    outDF$H_QUJSM[outDF$Variable=="deltaPMIC"] <- ifelse(sign(modDF.sum$deltaPMIC.mean[modDF.sum$ModName=="H_QUJSM"])==
+                                                               sign(obsDF$deltaPMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                           1, 0)
+    
+    outDF$I_MM[outDF$Variable=="deltaPMIC"] <- ifelse(sign(modDF.sum$deltaPMIC.mean[modDF.sum$ModName=="I_MM"])==
+                                                            sign(obsDF$deltaPMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                        1, 0)
+    
+    
+    
+    
+    
+    ### PMIC
+    outDF$A_GDAYP[outDF$Variable=="PMIC"] <- ifelse(sign(modDF.sum$PMIC.mean[modDF.sum$ModName=="A_GDAYP"])==
+                                                               sign(obsDF$PMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                           1, 0)
+    
+    outDF$B_ELMV1[outDF$Variable=="PMIC"] <- ifelse(sign(modDF.sum$PMIC.mean[modDF.sum$ModName=="B_ELMV1"])==
+                                                               sign(obsDF$PMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                           1, 0)
+    
+    outDF$C_CABLP[outDF$Variable=="PMIC"] <- ifelse(sign(modDF.sum$PMIC.mean[modDF.sum$ModName=="C_CABLP"])==
+                                                               sign(obsDF$PMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                           1, 0)
+    
+    
+    outDF$D_LPJGP[outDF$Variable=="PMIC"] <- ifelse(sign(modDF.sum$PMIC.mean[modDF.sum$ModName=="D_LPJGP"])==
+                                                               sign(obsDF$PMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                           1, 0)
+    
+    outDF$E_OCHDP[outDF$Variable=="PMIC"] <- ifelse(sign(modDF.sum$PMIC.mean[modDF.sum$ModName=="E_OCHDP"])==
+                                                               sign(obsDF$PMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                           1, 0)
+    
+    outDF$F_QUINC[outDF$Variable=="PMIC"] <- ifelse(sign(modDF.sum$PMIC.mean[modDF.sum$ModName=="F_QUINC"])==
+                                                               sign(obsDF$PMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                           1, 0)
+    
+    outDF$G_OCHDX[outDF$Variable=="PMIC"] <- ifelse(sign(modDF.sum$PMIC.mean[modDF.sum$ModName=="G_OCHDX"])==
+                                                               sign(obsDF$PMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                           1, 0)
+    
+    outDF$H_QUJSM[outDF$Variable=="PMIC"] <- ifelse(sign(modDF.sum$PMIC.mean[modDF.sum$ModName=="H_QUJSM"])==
+                                                               sign(obsDF$PMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                           1, 0)
+    
+    outDF$I_MM[outDF$Variable=="PMIC"] <- ifelse(sign(modDF.sum$PMIC.mean[modDF.sum$ModName=="I_MM"])==
+                                                            sign(obsDF$PMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                        1, 0)
+    
+    
+    ### CPMIC
+    outDF$A_GDAYP[outDF$Variable=="CPMIC"] <- ifelse(sign(modDF.sum$CPMIC.mean[modDF.sum$ModName=="A_GDAYP"])==
+                                                               sign(obsDF$CPMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                           1, 0)
+    
+    outDF$B_ELMV1[outDF$Variable=="CPMIC"] <- ifelse(sign(modDF.sum$CPMIC.mean[modDF.sum$ModName=="B_ELMV1"])==
+                                                               sign(obsDF$CPMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                           1, 0)
+    
+    outDF$C_CABLP[outDF$Variable=="CPMIC"] <- ifelse(sign(modDF.sum$CPMIC.mean[modDF.sum$ModName=="C_CABLP"])==
+                                                               sign(obsDF$CPMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                           1, 0)
+    
+    
+    outDF$D_LPJGP[outDF$Variable=="CPMIC"] <- ifelse(sign(modDF.sum$CPMIC.mean[modDF.sum$ModName=="D_LPJGP"])==
+                                                               sign(obsDF$CPMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                           1, 0)
+    
+    outDF$E_OCHDP[outDF$Variable=="CPMIC"] <- ifelse(sign(modDF.sum$CPMIC.mean[modDF.sum$ModName=="E_OCHDP"])==
+                                                               sign(obsDF$CPMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                           1, 0)
+    
+    outDF$F_QUINC[outDF$Variable=="CPMIC"] <- ifelse(sign(modDF.sum$CPMIC.mean[modDF.sum$ModName=="F_QUINC"])==
+                                                               sign(obsDF$CPMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                           1, 0)
+    
+    outDF$G_OCHDX[outDF$Variable=="CPMIC"] <- ifelse(sign(modDF.sum$CPMIC.mean[modDF.sum$ModName=="G_OCHDX"])==
+                                                               sign(obsDF$CPMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                           1, 0)
+    
+    outDF$H_QUJSM[outDF$Variable=="CPMIC"] <- ifelse(sign(modDF.sum$CPMIC.mean[modDF.sum$ModName=="H_QUJSM"])==
+                                                               sign(obsDF$CPMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                           1, 0)
+    
+    outDF$I_MM[outDF$Variable=="CPMIC"] <- ifelse(sign(modDF.sum$CPMIC.mean[modDF.sum$ModName=="I_MM"])==
+                                                            sign(obsDF$CPMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]),
+                                                        1, 0)
     
     return(outDF)
     

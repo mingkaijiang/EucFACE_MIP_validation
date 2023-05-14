@@ -37,6 +37,9 @@ n.mod.list <- c("GDAYN", "LPJGN")
 ###       but are currently not included here. 
 #compile_obs_dataset_across_models(p.mod.list, n.mod.list)
 
+###   prepare microbial model input
+prepare_microbial_model_input()
+
 
 ### 2.3. Compile all future predicted datasets together.
 ###      Generate daily and annual output.
@@ -196,9 +199,6 @@ plot_soil_p_cycle_responses(eucDF,
 ###       show microbial effects with the two microbial enabled models
 ###      based on fixed climate forcing
 ###      add Csoil, Clit, Rh comparison plot
-
-###   prepare microbial model input
-prepare_microbial_model_input()
 
 
 ###   compare general variables

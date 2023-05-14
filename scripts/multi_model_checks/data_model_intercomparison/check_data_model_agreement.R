@@ -46,6 +46,90 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
     eleDF$deltaPVEG <- rowSums(eleDF[,c("deltaPL","deltaPW","deltaPFR","deltaPCR","deltaPSTOR")], na.rm=T)
     
     
+    ### add microbial pools, fluxes and CP ratios
+    # CMIC and PMIC
+    ambDF$CMIC <- NA
+    eleDF$CMIC <- NA
+    
+    ambDF$PMIC <- NA
+    eleDF$PMIC <- NA
+    
+    # deltaCMIC and deltaPMIC
+    ambDF$deltaCMIC <- NA
+    eleDF$deltaCMIC <- NA
+    
+    ambDF$deltaPMIC <- NA
+    eleDF$deltaPMIC <- NA
+    
+    # CPMIC
+    ambDF$CPMIC <- NA
+    eleDF$CPMIC <- NA
+    
+    
+    ### read in microbial dataset
+    ### because we are only interested in the general variable responses. 
+    tDF1 <- readRDS(paste0("output/MIP_output/processed_simulation/microbial_models/MIP_OBS_", scenario, "_AMB_annual.rds"))
+    tDF2 <- readRDS(paste0("output/MIP_output/processed_simulation/microbial_models/MIP_OBS_", scenario, "_ELE_annual.rds"))
+    
+    ### select model output
+    tDF1 <- subset(tDF1, ModName%in%c("E_OCHDP", "F_QUINC", 
+                                        "G_OCHDX", "H_QUJSM"))
+    
+    
+    tDF2 <- subset(tDF2, ModName%in%c("E_OCHDP", "F_QUINC", 
+                                        "G_OCHDX", "H_QUJSM"))
+    
+    ### just to plot NMIC and PMIC pool and their changes in aCO2 and eCO2
+    tDF1$Trt <- "amb"
+    tDF2$Trt <- "ele"
+    
+    myDF <- rbind(tDF1, tDF2)
+    
+    myDF <- myDF[,c("ModName", "YEAR", "Trt",
+                    "CMIC10", "CMIC30", "CMIC60",
+                    "NMIC10", 
+                    "PMIC10", "PMIC30", "PMIC60",
+                    "CMICR", "NMICR", "PMICR",
+                    "deltaCMIC10", "deltaCMIC30", "deltaCMIC60",
+                    "deltaPMIC10", "deltaPMIC30", "deltaPMIC60",
+                    "deltaCMICR",  "deltaPMICR")]
+    
+    myDF$CMIC10 <- ifelse(is.na(myDF$CMIC10), myDF$CMICR, myDF$CMIC10)
+    myDF$NMIC10 <- ifelse(is.na(myDF$NMIC10), myDF$NMICR, myDF$NMIC10)
+    myDF$PMIC10 <- ifelse(is.na(myDF$PMIC10), myDF$PMICR, myDF$PMIC10)
+    
+    myDF$deltaCMIC10 <- ifelse(is.na(myDF$deltaCMIC10), myDF$deltaCMICR, myDF$deltaCMIC10)
+    myDF$deltaPMIC10 <- ifelse(is.na(myDF$deltaPMIC10), myDF$deltaPMICR, myDF$deltaPMIC10)
+    
+
+    #tDF3 <- summaryBy(CMIC10+NMIC10+PMIC10+deltaCMIC10+deltaPMIC10~ModName+Trt,
+    #                   FUN=mean, data=myDF, na.rm=T, keep.names=T)
+    #
+    #tDF3 <- tDF3[tDF3$ModName%in%c("G_OCHDX","H_QUJSM"),]
+    
+    ### add microbial simulation output
+    for (i in c("G_OCHDX", "H_QUJSM")) {
+        for (k in 2013:2016) {
+            ambDF$CMIC[ambDF$ModName==i&ambDF$YEAR==k] <- myDF$CMIC10[myDF$ModName==i&myDF$YEAR==k&myDF$Trt=="amb"]
+            eleDF$CMIC[eleDF$ModName==i&eleDF$YEAR==k] <- myDF$CMIC10[myDF$ModName==i&myDF$YEAR==k&myDF$Trt=="ele"]
+            
+            ambDF$PMIC[ambDF$ModName==i&ambDF$YEAR==k] <- myDF$PMIC10[myDF$ModName==i&myDF$YEAR==k&myDF$Trt=="amb"]
+            eleDF$PMIC[eleDF$ModName==i&eleDF$YEAR==k] <- myDF$PMIC10[myDF$ModName==i&myDF$YEAR==k&myDF$Trt=="ele"]
+            
+            ambDF$deltaCMIC[ambDF$ModName==i&ambDF$YEAR==k] <- myDF$deltaCMIC10[myDF$ModName==i&myDF$YEAR==k&myDF$Trt=="amb"]
+            eleDF$deltaCMIC[eleDF$ModName==i&eleDF$YEAR==k] <- myDF$deltaCMIC10[myDF$ModName==i&myDF$YEAR==k&myDF$Trt=="ele"]
+            
+            ambDF$deltaPMIC[ambDF$ModName==i&ambDF$YEAR==k] <- myDF$deltaPMIC10[myDF$ModName==i&myDF$YEAR==k&myDF$Trt=="amb"]
+            eleDF$deltaPMIC[eleDF$ModName==i&eleDF$YEAR==k] <- myDF$deltaPMIC10[myDF$ModName==i&myDF$YEAR==k&myDF$Trt=="ele"]
+        }
+    }
+    
+    
+    ## CP ratios
+    ambDF$CPMIC <- with(ambDF, CMIC/PMIC)
+    eleDF$CPMIC <- with(eleDF, CMIC/PMIC)
+    
+    
     #obsDF$BP <- NA
     #obsDF$BP[obsDF$Group=="mean"&obsDF$Trt=="aCO2"] <- obsDF$deltaCL[obsDF$Group=="mean"&obsDF$Trt=="aCO2"] +
     #    obsDF$deltaCW[obsDF$Group=="mean"&obsDF$Trt=="aCO2"] +
@@ -219,12 +303,13 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
                             "LAI", 
                             "CL", "CW", "CFR", "CCR", "CFLITA", "CMIC", "CSOIL",
                             "PL", "PW", "PFR", "PCR", "PFLITA", "PSOIL", "PPORG", "PPMIN",
+                            "PMIC",
                             "PDEM", "PGL", "PGW", "PGFR", "PGCR", 
                             "deltaPVEG", 
                             "PLITIN", "PWLIN", "PFRLIN",
                             "PLAB", "PSEC", "POCC", "PUP", "PRETR", "PMIN", "PLEACH", 
                             "PUE", "GPP_use",
-                            "CPL", "CPW", "CPFR", "CPSOIL", "CPFLIT")
+                            "CPL", "CPW", "CPFR", "CPSOIL", "CPFLIT", "CPMIC")
     
     
     outDF1 <- data.frame("Variable"=data.variable.list,
@@ -256,15 +341,16 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
     
     
     ### prepare plot labels
-    y.limits.list <- c("CPSOIL", "CPFLIT", "CPFR", "CPW", "CPL", 
+    y.limits.list <- c("CPSOIL", "CPMIC", "CPFLIT", "CPFR", "CPW", "CPL", 
                        "PUE",  "GPP_use",
                        "POCC", "PSEC", "PLAB",
                        "deltaPVEG",
                        "PLEACH", "PMIN", "PRETR", "PUP", "PDEM",
                        "PFRLIN", "PWLIN", "PLITIN", 
                        "PGCR", "PGFR", "PGW", "PGL", 
-                       "PPMIN", "PPORG", "PSOIL", "PFLITA", "PCR", "PFR", "PW", "PL", 
-                       "CSOIL", #"CMIC", 
+                       "PPMIN", "PPORG", "PSOIL", "PMIC",
+                       "PFLITA", "PCR", "PFR", "PW", "PL", 
+                       "CSOIL", "CMIC", 
                        "CFLITA","CCR", "CFR", "CW", "CL", 
                        "LAI", 
                        "CGCR", "CGFR", "CGW", "CGL", 
@@ -288,13 +374,15 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
                       "CW"=expression(C[wood]), 
                       "CFR"=expression(C[froot]), 
                       "CCR"=expression(C[croot]), 
-                      "CFLITA"=expression(C[leaflit]), #"CMIC", 
+                      "CFLITA"=expression(C[leaflit]), 
+                      "CMIC"=expression(C[mic]), 
                       "CSOIL"=expression(C[soil]),
                       "PL"=expression(P[leaf]), 
                       "PW"=expression(P[wood]), 
                       "PFR"=expression(P[froot]), 
                       "PCR"=expression(P[croot]), 
                       "PFLITA"=expression(P[leaflit]), 
+                      "PMIC"=expression(P[mic]),
                       "PSOIL"=expression(P[soil]), 
                       "PPORG"=expression(P[org]), 
                       "PPMIN"=expression(P[inorg]),
@@ -319,6 +407,7 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
                       "CPL"=expression(CP[leaf]), 
                       "CPW"=expression(CP[wood]), 
                       "CPFR"=expression(CP[froot]), 
+                      "CPMIC"=expression(CP[mic]),
                       "CPSOIL"=expression(CP[soil]), 
                       "CPFLIT"=expression(CP[leaflit]))
     
@@ -354,26 +443,29 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
     colnames(plotDF5) <- c("Variable", "ModName", "aCO2", "CO2_magnitude", "CO2_sign")
     
     ### prepare subsets
-    y.limits.sub.list1 <- c("CSOIL", "CFLITA", 
+    y.limits.sub.list1 <- c("CSOIL", "CMIC",
+                            "CFLITA", 
                             "CFR", "CW", "CL", 
                             "LAI",
                             "CGFR", "CGW", "CGL", 
-                            "RHET", "NEP", "BP", "NPP", "GPP")
+                            "RHET", "BP", "NPP", "GPP", "NEP")
     
-    y.limits.sub.list3 <- c("PUE", 
-                            "GPP_use",
-                            "deltaPVEG",
+    y.limits.sub.list3 <- c("deltaPVEG",
                             "PLEACH", 
                             "PLITIN", 
                             "PGFR", "PGW", "PGL", 
                             "PMIN", "PRETR", "PUP", "PDEM")
     
     y.limits.sub.list4 <- c("PLAB",
-                            "PPMIN", "PPORG", "PSOIL", "PFLITA", 
+                            "PPMIN", "PPORG", "PSOIL", "PMIC",
+                            "PFLITA", 
                             "PFR", "PW", "PL")
     
     
-    y.limits.sub.list5 <- c("CPSOIL", "CPFLIT", "CPFR", "CPW", "CPL")
+    y.limits.sub.list5 <- c("PUE", 
+                            "GPP_use",
+                            "CPSOIL", "CPMIC",
+                            "CPFLIT", "CPFR", "CPW", "CPL")
     
     
     ### prepare to count the number of variables making correct predictions
@@ -484,7 +576,7 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
                       "F_QUINC" = "QUINC",
                       "G_OCHDX" = "OCHDX",
                       "H_QUJSM" = "QUJSM",
-                      "I_MM" = expression(bold("MM")))
+                      "I_MM" = expression(bold("M-M")))
     
     x.labels <- c("GDAYP",
                   "ELMV1",
@@ -494,14 +586,14 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
                   "QUINC",
                   "OCHDX",
                   "QUJSM",
-                  expression(bold("MM")))
+                  expression(bold("M-M")))
     
     
     
-    y.labels.list1 <- rev(c("GPP",
+    y.labels.list1 <- rev(c( "NEP",
+                             "GPP",
                             "NPP", 
                             expression(Delta*C[veg]), 
-                            "NEP", 
                             expression(R[het]), 
                             expression(NPP[leaf]), 
                             expression(NPP[wood]), 
@@ -511,6 +603,7 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
                             expression(C[wood]), 
                             expression(C[froot]), 
                             expression(C[leaflit]), 
+                            expression(C[mic]),
                             expression(C[soil])))
     
     
@@ -523,14 +616,13 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
                             expression(P[gfroot]), 
                             expression(P[leaflit]), 
                             expression(P[leach]),
-                            expression(Delta * P[veg]),
-                            expression(PUE[GPP]),
-                            expression(PUE[NPP])))
+                            expression(Delta * P[veg])))
     
     y.labels.list4 <- rev(c(expression(P[leaf]), 
                             expression(P[wood]), 
                             expression(P[froot]), 
                             expression(P[leaflit]), 
+                            expression(P[mic]),
                             expression(P[soil]), 
                             expression(P[org]), 
                             expression(P[inorg]),
@@ -541,21 +633,29 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
                             expression(CP[wood]), 
                             expression(CP[froot]), 
                             expression(CP[leaflit]),
-                            expression(CP[soil])))
+                            expression(CP[mic]),
+                            expression(CP[soil]),
+                            expression(PUE[GPP]),
+                            expression(PUE[NPP])))
     
     
     ##################################################################
     ### make plot
     
     p1 <- ggplot() + 
-        geom_tile(data = subDF5.1, aes(x=ModName, y=Variable, fill=aCO2), color="white",
+        #geom_tile(data = subDF5.1, aes(x=ModName, y=Variable, fill=aCO2), color="white",
+        #          width=1)+
+        #geom_point(data=subDF5.1, aes(x=ModName, y=Variable, pch=CO2_magnitude, color=CO2_sign),
+        #           size=4)+
+        geom_tile(data = subDF5.1, aes(x=xlab, y=ylab, fill=aCO2), color="white",
                   width=1)+
-        geom_point(data=subDF5.1, aes(x=ModName, y=Variable, pch=CO2_magnitude, color=CO2_sign),
-                   size=4)+
+        geom_point(data=subDF5.1, aes(x=xlab, y=ylab, size=CO2_magnitude, pch=CO2_sign))+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
-              axis.text.x=element_text(size=16,angle = 45, 
-                                       vjust = 1, hjust = 1),
+              axis.text.x.bottom=element_text(size=16,angle = 45, 
+                                              vjust = 1, hjust = 1),
+              axis.text.x.top=element_text(size=16,angle = 0,
+                                           vjust = 0.5, hjust = 0.5),
               axis.title.x=element_text(size=16),
               axis.text.y=element_text(size=16),
               axis.title.y=element_text(size=16),
@@ -569,24 +669,40 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
                                         hjust = 0.5))+
         ylab("")+
         xlab("")+
-        scale_x_discrete(limit=mod.list,label=model.labels)+
-        scale_y_discrete(limit=y.limits.sub.list1,label=y.labels.list)+
-        scale_shape_manual(name=expression("Predicted " * CO[2] * " response magnitude"),
-                           values=c("0"=19,
-                                    "1"=17),
-                           labels=c("0"="Outside data SD range",
-                                    "1"="Inside data SD range"))+
-        scale_color_manual(name=expression("Predicted " * CO[2] * " response sign"),
-                           values=c("0"="brown",
-                                    "1"="black"),
+        #scale_x_discrete(limit=mod.list,label=model.labels)+
+        #scale_y_discrete(limit=y.limits.sub.list1,label=y.labels.list)+
+        scale_x_continuous(breaks=c(1:9),label=x.labels,
+                           sec.axis = dup_axis(labels=sumDF1$count2))+
+        scale_y_continuous(breaks=c(1:dim(ylabDF1)[1]),label=y.labels.list1,
+                           sec.axis = dup_axis(labels=ylabDF1$count))+
+        #scale_shape_manual(name=expression("Predicted " * CO[2] * " response magnitude"),
+        #                   values=c("0"=21,
+        #                            "1"=19),
+        #                   labels=c("0"="Outside data SD range",
+        #                            "1"="Inside data SD range"))+
+        #scale_size_manual(name=expression("Predicted " * CO[2] * " response sign"),
+        #                   values=c("0"=1,
+        #                            "1"=4),
+        #                   labels=c("0"="Inconsistent with data",
+        #                            "1"="Consistent with data"))+
+        scale_shape_manual(name=expression("Predicted " * CO[2] * " response sign"),
+                           values=c("0"=21,
+                                    "1"=19),
                            labels=c("0"="Inconsistent with data",
                                     "1"="Consistent with data"))+
+        scale_size_manual(name=expression("Predicted " * CO[2] * " response magnitude"),
+                          values=c("0"=1,
+                                   "1"=4),
+                          labels=c("0"="Outside data SD range",
+                                   "1"="Inside data SD range"))+
         scale_fill_manual(name=expression("Predicted " * aCO[2] * " value"),
-                          values=c("0"="burlywood1",
-                                   "1"="green3"),
+                          values=c("0"="#DFF8D5",
+                                   "1"="#00D971"),
                           labels=c("0"="Outside data SD range",
                                    "1"="Inside data SD range"))+
         coord_fixed()
+    
+    #plot(p1)
     
     
     
@@ -625,8 +741,8 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
                            labels=c("0"="Outside data SD range",
                                     "1"="Within data SD range"))+
         scale_fill_manual(name=expression("Predicted " * CO[2] * " sign"),
-                          values=c("0"=cbbPalette[5], #"burlywood1",
-                                   "1"=cbbPalette[4]),#"darkgreen"),
+                          values=c("0"="#DFF8D5",
+                                   "1"="#00D971"),#"darkgreen"),
                           #values=c("0"="#E8D5B5", #"burlywood1",
                           #         "1"="#00C1FE"),#"darkgreen"),
                           labels=c("0"="Inconsistent with data",
@@ -638,14 +754,19 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
     
     
     p3 <- ggplot() + 
-        geom_tile(data = subDF5.3, aes(x=ModName, y=Variable, fill=aCO2), color="white",
+        geom_tile(data = subDF5.3, aes(x=xlab, y=ylab, fill=aCO2), color="white",
                   width=1)+
-        geom_point(data=subDF5.3, aes(x=ModName, y=Variable, pch=CO2_magnitude, color=CO2_sign),
-                   size=4)+
+        geom_point(data=subDF5.3, aes(x=xlab, y=ylab, size=CO2_magnitude, pch=CO2_sign))+
+        #geom_tile(data = subDF5.3, aes(x=ModName, y=Variable, fill=aCO2), color="white",
+        #          width=1)+
+        #geom_point(data=subDF5.3, aes(x=ModName, y=Variable, pch=CO2_magnitude, color=CO2_sign),
+        #           size=4)+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
-              axis.text.x=element_text(size=16,angle = 45, 
-                                       vjust = 1, hjust = 1),
+              axis.text.x.bottom=element_text(size=16,angle = 45, 
+                                              vjust = 1, hjust = 1),
+              axis.text.x.top=element_text(size=16,angle = 0,
+                                           vjust = 0.5, hjust = 0.5),
               axis.title.x=element_text(size=16),
               axis.text.y=element_text(size=16),
               axis.title.y=element_text(size=16),
@@ -659,23 +780,42 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
                                         hjust = 0.5))+
         ylab("")+
         xlab("")+
-        scale_x_discrete(limit=mod.list,label=model.labels)+
-        scale_y_discrete(limit=y.limits.sub.list3,label=y.labels.list)+
-        scale_shape_manual(name=expression("Predicted " * CO[2] * " response magnitude"),
-                           values=c("0"=19,
-                                    "1"=17),
-                           labels=c("0"="Outside data SD range",
-                                    "1"="Inside data SD range"))+
-        scale_color_manual(name=expression("Predicted " * CO[2] * " response sign"),
-                           values=c("0"="brown",
-                                    "1"="black"),
-                           labels=c("0"="Inconsistent with data",
-                                    "1"="Consistent with data"))+
+        scale_x_continuous(breaks=c(1:9),label=x.labels,
+                           sec.axis = dup_axis(labels=sumDF3$count2))+
+        scale_y_continuous(breaks=c(1:dim(ylabDF3)[1]),label=y.labels.list3,
+                           sec.axis = dup_axis(labels=ylabDF3$count))+
+        #scale_x_discrete(limit=mod.list,label=model.labels)+
+        #scale_y_discrete(limit=y.limits.sub.list3,label=y.labels.list)+
+        #scale_shape_manual(name=expression("Predicted " * CO[2] * " response magnitude"),
+        #                   values=c("0"=19,
+        #                            "1"=17),
+        #                   labels=c("0"="Outside data SD range",
+        #                            "1"="Inside data SD range"))+
+        #scale_color_manual(name=expression("Predicted " * CO[2] * " response sign"),
+        #                   values=c("0"="brown",
+        #                            "1"="black"),
+        #                   labels=c("0"="Inconsistent with data",
+        #                            "1"="Consistent with data"))+
+        #scale_fill_manual(name=expression("Predicted " * aCO[2] * " value"),
+        #                  values=c("0"="#DFF8D5",
+        #                           "1"="#00D971"),
+        #                  labels=c("0"="Outside data range",
+        #                           "1"="Inside data range"))+
+    scale_shape_manual(name=expression("Predicted " * CO[2] * " response sign"),
+                       values=c("0"=21,
+                                "1"=19),
+                       labels=c("0"="Inconsistent with data",
+                                "1"="Consistent with data"))+
+        scale_size_manual(name=expression("Predicted " * CO[2] * " response magnitude"),
+                          values=c("0"=1,
+                                   "1"=4),
+                          labels=c("0"="Outside data SD range",
+                                   "1"="Inside data SD range"))+
         scale_fill_manual(name=expression("Predicted " * aCO[2] * " value"),
-                          values=c("0"="burlywood1",
-                                   "1"="green3"),
-                          labels=c("0"="Outside data range",
-                                   "1"="Inside data range"))+
+                          values=c("0"="#DFF8D5",
+                                   "1"="#00D971"),
+                          labels=c("0"="Outside data SD range",
+                                   "1"="Inside data SD range"))+
         coord_fixed()
     
     
@@ -715,22 +855,27 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
                            labels=c("0"="Outside data SD range",
                                     "1"="Within data SD range"))+
         scale_fill_manual(name=expression("Predicted " * CO[2] * " sign"),
-                          values=c("0"=cbbPalette[5], #"burlywood1",
-                                   "1"=cbbPalette[4]),#"darkgreen"),
+                          values=c("0"="#DFF8D5",
+                                   "1"="#00D971"),#"darkgreen"),
                           labels=c("0"="Inconsistent with data",
                                    "1"="Consistent with data"))+
         coord_fixed()
     
     
     p4 <- ggplot() + 
-        geom_tile(data = subDF5.4, aes(x=ModName, y=Variable, fill=aCO2), color="white",
+        geom_tile(data = subDF5.4, aes(x=xlab, y=ylab, fill=aCO2), color="white",
                   width=1)+
-        geom_point(data=subDF5.4, aes(x=ModName, y=Variable, pch=CO2_magnitude, color=CO2_sign),
-                   size=4)+
+        geom_point(data=subDF5.4, aes(x=xlab, y=ylab, size=CO2_magnitude, pch=CO2_sign))+
+        #geom_tile(data = subDF5.4, aes(x=ModName, y=Variable, fill=aCO2), color="white",
+        #          width=1)+
+        #geom_point(data=subDF5.4, aes(x=ModName, y=Variable, pch=CO2_magnitude, color=CO2_sign),
+        #           size=4)+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
-              axis.text.x=element_text(size=16,angle = 45, 
-                                       vjust = 1, hjust = 1),
+              axis.text.x.bottom=element_text(size=16,angle = 45, 
+                                              vjust = 1, hjust = 1),
+              axis.text.x.top=element_text(size=16,angle = 0,
+                                           vjust = 0.5, hjust = 0.5),
               axis.title.x=element_text(size=16),
               axis.text.y=element_text(size=16),
               axis.title.y=element_text(size=16),
@@ -744,23 +889,42 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
                                         hjust = 0.5))+
         ylab("")+
         xlab("")+
-        scale_x_discrete(limit=mod.list,label=model.labels)+
-        scale_y_discrete(limit=y.limits.sub.list4,label=y.labels.list)+
-        scale_shape_manual(name=expression("Predicted " * CO[2] * " response magnitude"),
-                           values=c("0"=19,
-                                    "1"=17),
-                           labels=c("0"="Outside data SD range",
-                                    "1"="Inside data SD range"))+
-        scale_color_manual(name=expression("Predicted " * CO[2] * " response sign"),
-                           values=c("0"="brown",
-                                    "1"="black"),
-                           labels=c("0"="Inconsistent with data",
-                                    "1"="Consistent with data"))+
+        scale_x_continuous(breaks=c(1:9),label=x.labels,
+                           sec.axis = dup_axis(labels=sumDF4$count2))+
+        scale_y_continuous(breaks=c(1:dim(ylabDF4)[1]),label=y.labels.list4,
+                           sec.axis = dup_axis(labels=ylabDF4$count))+
+        #scale_x_discrete(limit=mod.list,label=model.labels)+
+        #scale_y_discrete(limit=y.limits.sub.list4,label=y.labels.list)+
+        #scale_shape_manual(name=expression("Predicted " * CO[2] * " response magnitude"),
+        #                   values=c("0"=19,
+        #                            "1"=17),
+        #                   labels=c("0"="Outside data SD range",
+        #                            "1"="Inside data SD range"))+
+        #scale_color_manual(name=expression("Predicted " * CO[2] * " response sign"),
+        #                   values=c("0"="brown",
+        #                            "1"="black"),
+        #                   labels=c("0"="Inconsistent with data",
+        #                            "1"="Consistent with data"))+
+        #scale_fill_manual(name=expression("Predicted " * aCO[2] * " value"),
+        #                  values=c("0"="#DFF8D5",
+        #                           "1"="#00D971"),
+        #                  labels=c("0"="Outside data range",
+        #                           "1"="Inside data range"))+
+    scale_shape_manual(name=expression("Predicted " * CO[2] * " response sign"),
+                       values=c("0"=21,
+                                "1"=19),
+                       labels=c("0"="Inconsistent with data",
+                                "1"="Consistent with data"))+
+        scale_size_manual(name=expression("Predicted " * CO[2] * " response magnitude"),
+                          values=c("0"=1,
+                                   "1"=4),
+                          labels=c("0"="Outside data SD range",
+                                   "1"="Inside data SD range"))+
         scale_fill_manual(name=expression("Predicted " * aCO[2] * " value"),
-                          values=c("0"="burlywood1",
-                                   "1"="green3"),
-                          labels=c("0"="Outside data range",
-                                   "1"="Inside data range"))+
+                          values=c("0"="#DFF8D5",
+                                   "1"="#00D971"),
+                          labels=c("0"="Outside data SD range",
+                                   "1"="Inside data SD range"))+
         coord_fixed()
     
     
@@ -800,8 +964,8 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
                            labels=c("0"="Outside data SD range",
                                     "1"="Within data SD range"))+
         scale_fill_manual(name=expression("Predicted " * CO[2] * " sign"),
-                          values=c("0"=cbbPalette[5], #"burlywood1",
-                                   "1"=cbbPalette[4]),#"darkgreen"),
+                          values=c("0"="#DFF8D5",
+                                   "1"="#00D971"),#"darkgreen"),
                           labels=c("0"="Inconsistent with data",
                                    "1"="Consistent with data"))+
         coord_fixed()
@@ -809,14 +973,19 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
     
     
     p5 <- ggplot() + 
-        geom_tile(data = subDF5.5, aes(x=ModName, y=Variable, fill=aCO2), color="white",
+        geom_tile(data = subDF5.5, aes(x=xlab, y=ylab, fill=aCO2), color="white",
                   width=1)+
-        geom_point(data=subDF5.5, aes(x=ModName, y=Variable, pch=CO2_magnitude, color=CO2_sign),
-                   size=4)+
+        geom_point(data=subDF5.5, aes(x=xlab, y=ylab, size=CO2_magnitude, pch=CO2_sign))+
+        #geom_tile(data = subDF5.5, aes(x=ModName, y=Variable, fill=aCO2), color="white",
+        #          width=1)+
+        #geom_point(data=subDF5.5, aes(x=ModName, y=Variable, pch=CO2_magnitude, color=CO2_sign),
+        #           size=4)+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
-              axis.text.x=element_text(size=16,angle = 45, 
-                                       vjust = 1, hjust = 1),
+              axis.text.x.bottom=element_text(size=16,angle = 45, 
+                                              vjust = 1, hjust = 1),
+              axis.text.x.top=element_text(size=16,angle = 0,
+                                           vjust = 0.5, hjust = 0.5),
               axis.title.x=element_text(size=16),
               axis.text.y=element_text(size=16),
               axis.title.y=element_text(size=16),
@@ -830,23 +999,42 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
                                         hjust = 0.5))+
         ylab("")+
         xlab("")+
-        scale_x_discrete(limit=mod.list,label=model.labels)+
-        scale_y_discrete(limit=y.limits.sub.list5,label=y.labels.list)+
-        scale_shape_manual(name=expression("Predicted " * CO[2] * " response magnitude"),
-                           values=c("0"=19,
-                                    "1"=17),
-                           labels=c("0"="Outside data SD range",
-                                    "1"="Inside data SD range"))+
-        scale_color_manual(name=expression("Predicted " * CO[2] * " response sign"),
-                           values=c("0"="brown",
-                                    "1"="black"),
-                           labels=c("0"="Inconsistent with data",
-                                    "1"="Consistent with data"))+
+        scale_x_continuous(breaks=c(1:9),label=x.labels,
+                           sec.axis = dup_axis(labels=sumDF5$count2))+
+        scale_y_continuous(breaks=c(1:dim(ylabDF5)[1]),label=y.labels.list5,
+                           sec.axis = dup_axis(labels=ylabDF5$count))+
+        #scale_x_discrete(limit=mod.list,label=model.labels)+
+        #scale_y_discrete(limit=y.limits.sub.list5,label=y.labels.list)+
+        #scale_shape_manual(name=expression("Predicted " * CO[2] * " response magnitude"),
+        #                   values=c("0"=19,
+        #                            "1"=17),
+        #                   labels=c("0"="Outside data SD range",
+        #                            "1"="Inside data SD range"))+
+        #scale_color_manual(name=expression("Predicted " * CO[2] * " response sign"),
+        #                   values=c("0"="brown",
+        #                            "1"="black"),
+        #                   labels=c("0"="Inconsistent with data",
+        #                            "1"="Consistent with data"))+
+        #scale_fill_manual(name=expression("Predicted " * aCO[2] * " value"),
+        #                  values=c("0"="#DFF8D5",
+        #                           "1"="#00D971"),
+        #                  labels=c("0"="Outside data range",
+        #                           "1"="Inside data range"))+
+    scale_shape_manual(name=expression("Predicted " * CO[2] * " response sign"),
+                       values=c("0"=21,
+                                "1"=19),
+                       labels=c("0"="Inconsistent with data",
+                                "1"="Consistent with data"))+
+        scale_size_manual(name=expression("Predicted " * CO[2] * " response magnitude"),
+                          values=c("0"=1,
+                                   "1"=4),
+                          labels=c("0"="Outside data SD range",
+                                   "1"="Inside data SD range"))+
         scale_fill_manual(name=expression("Predicted " * aCO[2] * " value"),
-                          values=c("0"="burlywood1",
-                                   "1"="green3"),
-                          labels=c("0"="Outside data range",
-                                   "1"="Inside data range"))+
+                          values=c("0"="#DFF8D5",
+                                   "1"="#00D971"),
+                          labels=c("0"="Outside data SD range",
+                                   "1"="Inside data SD range"))+
         coord_fixed()
     
     
@@ -886,8 +1074,8 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
                            labels=c("0"="Outside data SD range",
                                     "1"="Within data SD range"))+
         scale_fill_manual(name=expression("Predicted " * CO[2] * " sign"),
-                          values=c("0"=cbbPalette[5], #"burlywood1",
-                                   "1"=cbbPalette[4]),#"darkgreen"),
+                          values=c("0"="#DFF8D5",
+                                   "1"="#00D971"),#"darkgreen"),
                           labels=c("0"="Inconsistent with data",
                                    "1"="Consistent with data"))+
         coord_fixed()
@@ -910,7 +1098,7 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
     
     
     pdf(paste0(out.dir, "/multi-model_comparison_agreement_with_data.pdf"), 
-        width=16, height=10)
+        width=20, height=10)
     plot_grid(plots_top_row, legend_bottom_row, rel_heights=c(1,0.2),
               ncol=1)
     dev.off()

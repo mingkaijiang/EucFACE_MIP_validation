@@ -82,7 +82,8 @@ compare_two_MIP_results <- function() {
                                     "OCNX"=Diverge_hsv_Palette[7],
                                     "SDVM"=Diverge_hsv_Palette[8]))
     
-    
+
+    #plot(p1)    
 
     plotDF2 <- myDF[myDF$variable=="NPP",]
     subDF2 <- myDF2[myDF2$variable=="NPP",]
