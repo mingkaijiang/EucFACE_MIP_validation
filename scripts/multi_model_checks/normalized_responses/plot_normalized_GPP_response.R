@@ -1642,8 +1642,8 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
     
     plots_top_column <- plot_grid(p3_mm, 
                                   p2_mm, 
-                                  p1_mm,
-                                  labels=c("(a)", "(b)", "(c)"),
+                                  #p1_mm,
+                                  labels=c("(a)", "(b)"),
                                   ncol=1, #rel_widths=c(1, 1, 1),
                                   align="vh", axis = "l",
                                   label_x=0.04, label_y=0.95,
@@ -1651,7 +1651,7 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
     
     
     plots_bottom_row <- plot_grid(p3_co2, p2_co2, p7_co2, 
-                                  labels=c("(d)", "(e)", "(f)"),
+                                  labels=c("(c)", "(d)", "(e)"),
                                   ncol=3, rel_widths=c(1.2, 0.8, 1),
                                   align="vh", axis = "l",
                                   label_x=c(0.86, 0.8, 0.83), label_y=0.95,

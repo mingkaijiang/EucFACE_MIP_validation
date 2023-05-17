@@ -1278,14 +1278,13 @@ plot_soil_p_cycle_responses <- function(eucDF,
       ###########################################################################
       
       pdf(paste0(out.dir, "/MIP_time_averaged_", scenario, "_comparison_soil_P_variables.pdf"), 
-          width=16, height=12)
+          width=16, height=8)
       plot_grid(p3, p4,
-                p1, p2,
+                #p1, p2,
                 #p1_1, p2_1,
                 #p3_1, p4_1,
                 p9, p10,
-                labels=c("(a)", "(b)", "(c)", "(d)",
-                         "(e)", "(f)"), label_x=0.1, label_y=0.95,
+                labels=c("(a)", "(b)", "(c)", "(d)"), label_x=0.1, label_y=0.95,
                 label_size=24,
                 ncol=2)
       dev.off()

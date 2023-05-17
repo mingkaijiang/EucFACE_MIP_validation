@@ -38,7 +38,7 @@ n.mod.list <- c("GDAYN", "LPJGN")
 #compile_obs_dataset_across_models(p.mod.list, n.mod.list)
 
 ###   prepare microbial model input
-prepare_microbial_model_input()
+#prepare_microbial_model_input()
 
 
 ### 2.3. Compile all future predicted datasets together.
@@ -182,7 +182,6 @@ trace_fate_of_carbon_MIP_plot(scenario="VAR")
 ###      because this is used to compare against data
 ###      Go into function to plot.
 scenario="VAR"
-
 plot_plant_p_cycle_responses(eucDF,
                              scenario="VAR")
 
