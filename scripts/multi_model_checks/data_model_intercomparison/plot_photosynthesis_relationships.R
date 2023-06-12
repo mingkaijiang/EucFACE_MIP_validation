@@ -457,17 +457,76 @@ plot_photosynthesis_relationships <- function(scenario, eucDF) {
     
     
     ### PL leaf
-    v1 <- eucDF$PL[eucDF$Group=="mean"&eucDF$Trt=="aCO2"]/eucDF$LAI[eucDF$Group=="mean"&eucDF$Trt=="aCO2"]
-    v2 <- eucDF$PL[eucDF$Group=="mean"&eucDF$Trt=="eCO2"]/eucDF$LAI[eucDF$Group=="mean"&eucDF$Trt=="eCO2"]
+    laiDF <- read.csv("validation_dataset/EucFACE_LAI_2012_2016.csv")
     
-    v3 <- sqrt((eucDF$PL[eucDF$Group=="sd"&eucDF$Trt=="aCO2"]^2+eucDF$LAI[eucDF$Group=="sd"&eucDF$Trt=="aCO2"]^2)/2)
-    v4 <- sqrt((eucDF$PL[eucDF$Group=="sd"&eucDF$Trt=="eCO2"]^2+eucDF$LAI[eucDF$Group=="sd"&eucDF$Trt=="eCO2"]^2)/2)
+    pl <- c(0.21/eucDF$LAI[eucDF$Group=="mean"&eucDF$Trt=="eCO2"], 
+            0.24/eucDF$LAI[eucDF$Group=="mean"&eucDF$Trt=="aCO2"], 
+            0.20/eucDF$LAI[eucDF$Group=="mean"&eucDF$Trt=="aCO2"], 
+            0.22/eucDF$LAI[eucDF$Group=="mean"&eucDF$Trt=="eCO2"], 
+            0.26/eucDF$LAI[eucDF$Group=="mean"&eucDF$Trt=="eCO2"], 
+            0.23/eucDF$LAI[eucDF$Group=="mean"&eucDF$Trt=="aCO2"])
+    
+    
+    v1 <- mean(c(pl[2],pl[3],pl[6]))
+    v2 <- mean(c(pl[1],pl[4],pl[5]))
+    
+    v3 <- sd(c(pl[2],pl[3],pl[6]))
+    v4 <- sd(c(pl[1],pl[4],pl[5]))
     
 
     ### calculate PL leaf    
     obsDF$PL_leaf.mean <- (v2-v1)/v1 * 100
-    obsDF$PL_leaf.sd <- sqrt((v3^2+v4^2+v3^2)/3) * 100
+    obsDF$PL_leaf.sd <- sqrt((v3^2+v4^2)/2) / v1 * 100
     
+    
+    ### NL leaf
+    nl <- c(4.61/eucDF$LAI[eucDF$Group=="mean"&eucDF$Trt=="eCO2"], 
+            4.93/eucDF$LAI[eucDF$Group=="mean"&eucDF$Trt=="aCO2"], 
+            4.34/eucDF$LAI[eucDF$Group=="mean"&eucDF$Trt=="aCO2"], 
+            4.75/eucDF$LAI[eucDF$Group=="mean"&eucDF$Trt=="eCO2"], 
+            5.48/eucDF$LAI[eucDF$Group=="mean"&eucDF$Trt=="eCO2"], 
+            4.57/eucDF$LAI[eucDF$Group=="mean"&eucDF$Trt=="aCO2"])
+    
+    v1 <- mean(c(nl[2],nl[3],nl[6]))
+    v2 <- mean(c(nl[1],nl[4],nl[5]))
+    
+    v3 <- sd(c(nl[2],nl[3],nl[6]))
+    v4 <- sd(c(nl[1],nl[4],nl[5]))
+    
+    
+    ### calculate NL leaf    
+    obsDF$NL_leaf.mean <- (v2-v1)/v1 * 100
+    obsDF$NL_leaf.sd <- sqrt((v3^2+v4^2)/2) / v1 * 100
+    
+    
+    ### CN leaf
+    v1 <- mean(c(33.88,33.95,38.3))
+    v2 <- mean(c(33.27, 34.01, 33.08))
+    
+    v3 <- sd(c(33.88,33.95,38.3))
+    v4 <- sd(c(33.27, 34.01, 33.08))
+    
+    
+    ### calculate CN leaf    
+    obsDF$LCN.mean <- (v2-v1)/v1 * 100
+    obsDF$LCN.sd <- sqrt((v3^2+v4^2)/2) / v1 * 100
+    
+    
+    ### NP leaf
+    v1 <- mean(c(23.0, 22.87, 22.85))
+    v2 <- mean(c(22.52, 23.55, 21.88))
+    
+    v3 <- sd(c(23.0, 22.87, 22.85))
+    v4 <- sd(c(22.52, 23.55, 21.88))
+    
+    
+    ### calculate CN leaf    
+    obsDF$LNP.mean <- (v2-v1)/v1 * 100
+    obsDF$LNP.sd <- sqrt((v3^2+v4^2)/2) / v1 * 100
+    
+    
+    
+    ### assign obs to model dataframe
     obsDF$ModName <- "OBS"
     
     sumDF3 <- rbind(sumDF3, obsDF)
