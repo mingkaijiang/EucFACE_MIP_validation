@@ -4,26 +4,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
     
     ###########################################################################
     ### GPP
-    outDF$A_GDAYP[outDF$Variable=="GPP"] <- ifelse(modDF.sum$GPP.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="GPP"] <- ifelse(modDF.sum$GPP.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                        (obsDF$GPP[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                             obsDF$GPP[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                       modDF.sum$GPP.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                       modDF.sum$GPP.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                        (obsDF$GPP[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                             obsDF$GPP[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                    1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="GPP"] <- ifelse(modDF.sum$GPP.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="GPP"] <- ifelse(modDF.sum$GPP.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                          (obsDF$GPP[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                               obsDF$GPP[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                         modDF.sum$GPP.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                         modDF.sum$GPP.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                          (obsDF$GPP[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                               obsDF$GPP[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                      1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="GPP"] <- ifelse(modDF.sum$GPP.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="GPP"] <- ifelse(modDF.sum$GPP.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                          (obsDF$GPP[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                               obsDF$GPP[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                         modDF.sum$GPP.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                         modDF.sum$GPP.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                          (obsDF$GPP[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                               obsDF$GPP[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                      1, 0)
@@ -79,26 +79,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
     
     
     ### NPP
-    outDF$A_GDAYP[outDF$Variable=="NPP"] <- ifelse(modDF.sum$NPP.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="NPP"] <- ifelse(modDF.sum$NPP.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                          (obsDF$NPP[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                               obsDF$NPP[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                         modDF.sum$NPP.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                         modDF.sum$NPP.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                          (obsDF$NPP[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                               obsDF$NPP[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                      1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="NPP"] <- ifelse(modDF.sum$NPP.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="NPP"] <- ifelse(modDF.sum$NPP.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                          (obsDF$NPP[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                               obsDF$NPP[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                         modDF.sum$NPP.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                         modDF.sum$NPP.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                          (obsDF$NPP[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                               obsDF$NPP[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                      1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="NPP"] <- ifelse(modDF.sum$NPP.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="NPP"] <- ifelse(modDF.sum$NPP.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                          (obsDF$NPP[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                               obsDF$NPP[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                         modDF.sum$NPP.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                         modDF.sum$NPP.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                          (obsDF$NPP[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                               obsDF$NPP[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                      1, 0)
@@ -153,26 +153,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
                                                    1, 0)
     
     ### NEP
-    outDF$A_GDAYP[outDF$Variable=="NEP"] <- ifelse(modDF.sum$NEP.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="NEP"] <- ifelse(modDF.sum$NEP.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                          (obsDF$NEP[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                               obsDF$NEP[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                         modDF.sum$NEP.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                         modDF.sum$NEP.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                          (obsDF$NEP[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                               obsDF$NEP[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                      1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="NEP"] <- ifelse(modDF.sum$NEP.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="NEP"] <- ifelse(modDF.sum$NEP.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                          (obsDF$NEP[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                               obsDF$NEP[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                         modDF.sum$NEP.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                         modDF.sum$NEP.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                          (obsDF$NEP[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                               obsDF$NEP[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                      1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="NEP"] <- ifelse(modDF.sum$NEP.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="NEP"] <- ifelse(modDF.sum$NEP.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                          (obsDF$NEP[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                               obsDF$NEP[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                         modDF.sum$NEP.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                         modDF.sum$NEP.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                          (obsDF$NEP[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                               obsDF$NEP[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                      1, 0)
@@ -228,26 +228,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
                                                    1, 0)
     
     ### RHET
-    outDF$A_GDAYP[outDF$Variable=="RHET"] <- ifelse(modDF.sum$RHET.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="RHET"] <- ifelse(modDF.sum$RHET.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                           (obsDF$RHET[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                obsDF$RHET[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                          modDF.sum$RHET.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                          modDF.sum$RHET.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                           (obsDF$RHET[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                obsDF$RHET[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                       1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="RHET"] <- ifelse(modDF.sum$RHET.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="RHET"] <- ifelse(modDF.sum$RHET.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                           (obsDF$RHET[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                obsDF$RHET[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                          modDF.sum$RHET.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                          modDF.sum$RHET.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                           (obsDF$RHET[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                obsDF$RHET[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                       1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="RHET"] <- ifelse(modDF.sum$RHET.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="RHET"] <- ifelse(modDF.sum$RHET.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                           (obsDF$RHET[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                obsDF$RHET[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                          modDF.sum$RHET.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                          modDF.sum$RHET.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                           (obsDF$RHET[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                obsDF$RHET[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                       1, 0)
@@ -302,26 +302,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
                                                     1, 0)
     
     ### BP
-    outDF$A_GDAYP[outDF$Variable=="BP"] <- ifelse(modDF.sum$BP.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="BP"] <- ifelse(modDF.sum$BP.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                         (obsDF$BP[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                              obsDF$BP[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                        modDF.sum$BP.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                        modDF.sum$BP.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                         (obsDF$BP[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                              obsDF$BP[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                     1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="BP"] <- ifelse(modDF.sum$BP.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="BP"] <- ifelse(modDF.sum$BP.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                         (obsDF$BP[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                              obsDF$BP[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                        modDF.sum$BP.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                        modDF.sum$BP.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                         (obsDF$BP[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                              obsDF$BP[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                     1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="BP"] <- ifelse(modDF.sum$BP.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="BP"] <- ifelse(modDF.sum$BP.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                         (obsDF$BP[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                              obsDF$BP[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                        modDF.sum$BP.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                        modDF.sum$BP.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                         (obsDF$BP[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                              obsDF$BP[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                     1, 0)
@@ -377,26 +377,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
     
     
     ### deltaCL
-    outDF$A_GDAYP[outDF$Variable=="deltaCL"] <- ifelse(modDF.sum$deltaCL.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="deltaCL"] <- ifelse(modDF.sum$deltaCL.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                              (obsDF$deltaCL[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                   obsDF$deltaCL[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                             modDF.sum$deltaCL.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                             modDF.sum$deltaCL.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                              (obsDF$deltaCL[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                   obsDF$deltaCL[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                          1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="deltaCL"] <- ifelse(modDF.sum$deltaCL.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="deltaCL"] <- ifelse(modDF.sum$deltaCL.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                              (obsDF$deltaCL[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                   obsDF$deltaCL[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                             modDF.sum$deltaCL.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                             modDF.sum$deltaCL.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                              (obsDF$deltaCL[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                   obsDF$deltaCL[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                          1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="deltaCL"] <- ifelse(modDF.sum$deltaCL.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="deltaCL"] <- ifelse(modDF.sum$deltaCL.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                              (obsDF$deltaCL[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                   obsDF$deltaCL[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                             modDF.sum$deltaCL.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                             modDF.sum$deltaCL.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                              (obsDF$deltaCL[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                   obsDF$deltaCL[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                          1, 0)
@@ -452,26 +452,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
                                                        1, 0)
     
     ### deltaCW
-    outDF$A_GDAYP[outDF$Variable=="deltaCW"] <- ifelse(modDF.sum$deltaCW.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="deltaCW"] <- ifelse(modDF.sum$deltaCW.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                              (obsDF$deltaCW[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                   obsDF$deltaCW[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                             modDF.sum$deltaCW.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                             modDF.sum$deltaCW.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                              (obsDF$deltaCW[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                   obsDF$deltaCW[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                          1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="deltaCW"] <- ifelse(modDF.sum$deltaCW.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="deltaCW"] <- ifelse(modDF.sum$deltaCW.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                              (obsDF$deltaCW[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                   obsDF$deltaCW[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                             modDF.sum$deltaCW.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                             modDF.sum$deltaCW.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                              (obsDF$deltaCW[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                   obsDF$deltaCW[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                          1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="deltaCW"] <- ifelse(modDF.sum$deltaCW.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="deltaCW"] <- ifelse(modDF.sum$deltaCW.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                              (obsDF$deltaCW[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                   obsDF$deltaCW[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                             modDF.sum$deltaCW.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                             modDF.sum$deltaCW.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                              (obsDF$deltaCW[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                   obsDF$deltaCW[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                          1, 0)
@@ -527,26 +527,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
     
     
     ### deltaCFR
-    outDF$A_GDAYP[outDF$Variable=="deltaCFR"] <- ifelse(modDF.sum$deltaCFR.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="deltaCFR"] <- ifelse(modDF.sum$deltaCFR.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                               (obsDF$deltaCFR[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                    obsDF$deltaCFR[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                              modDF.sum$deltaCFR.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                              modDF.sum$deltaCFR.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                               (obsDF$deltaCFR[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                    obsDF$deltaCFR[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                           1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="deltaCFR"] <- ifelse(modDF.sum$deltaCFR.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="deltaCFR"] <- ifelse(modDF.sum$deltaCFR.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                               (obsDF$deltaCFR[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                    obsDF$deltaCFR[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                              modDF.sum$deltaCFR.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                              modDF.sum$deltaCFR.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                               (obsDF$deltaCFR[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                    obsDF$deltaCFR[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                           1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="deltaCFR"] <- ifelse(modDF.sum$deltaCFR.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="deltaCFR"] <- ifelse(modDF.sum$deltaCFR.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                               (obsDF$deltaCFR[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                    obsDF$deltaCFR[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                              modDF.sum$deltaCFR.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                              modDF.sum$deltaCFR.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                               (obsDF$deltaCFR[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                    obsDF$deltaCFR[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                           1, 0)
@@ -601,26 +601,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
                                                         1, 0)
     
     ### deltaCCR
-    outDF$A_GDAYP[outDF$Variable=="deltaCCR"] <- ifelse(modDF.sum$deltaCCR.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="deltaCCR"] <- ifelse(modDF.sum$deltaCCR.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                               (obsDF$deltaCCR[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                    obsDF$deltaCCR[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                              modDF.sum$deltaCCR.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                              modDF.sum$deltaCCR.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                               (obsDF$deltaCCR[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                    obsDF$deltaCCR[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                           1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="deltaCCR"] <- ifelse(modDF.sum$deltaCCR.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="deltaCCR"] <- ifelse(modDF.sum$deltaCCR.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                               (obsDF$deltaCCR[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                    obsDF$deltaCCR[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                              modDF.sum$deltaCCR.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                              modDF.sum$deltaCCR.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                               (obsDF$deltaCCR[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                    obsDF$deltaCCR[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                           1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="deltaCCR"] <- ifelse(modDF.sum$deltaCCR.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="deltaCCR"] <- ifelse(modDF.sum$deltaCCR.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                               (obsDF$deltaCCR[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                    obsDF$deltaCCR[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                              modDF.sum$deltaCCR.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                              modDF.sum$deltaCCR.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                               (obsDF$deltaCCR[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                    obsDF$deltaCCR[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                           1, 0)
@@ -675,26 +675,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
                                                         1, 0)
     
     ### deltaCFLITA
-    outDF$A_GDAYP[outDF$Variable=="deltaCFLITA"] <- ifelse(modDF.sum$deltaCFLITA.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="deltaCFLITA"] <- ifelse(modDF.sum$deltaCFLITA.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                                  (obsDF$deltaCFLITA[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                       obsDF$deltaCFLITA[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                                 modDF.sum$deltaCFLITA.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                                 modDF.sum$deltaCFLITA.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                                  (obsDF$deltaCFLITA[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                       obsDF$deltaCFLITA[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                              1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="deltaCFLITA"] <- ifelse(modDF.sum$deltaCFLITA.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="deltaCFLITA"] <- ifelse(modDF.sum$deltaCFLITA.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                                  (obsDF$deltaCFLITA[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                       obsDF$deltaCFLITA[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                                 modDF.sum$deltaCFLITA.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                                 modDF.sum$deltaCFLITA.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                                  (obsDF$deltaCFLITA[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                       obsDF$deltaCFLITA[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                              1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="deltaCFLITA"] <- ifelse(modDF.sum$deltaCFLITA.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="deltaCFLITA"] <- ifelse(modDF.sum$deltaCFLITA.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                                  (obsDF$deltaCFLITA[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                       obsDF$deltaCFLITA[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                                 modDF.sum$deltaCFLITA.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                                 modDF.sum$deltaCFLITA.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                                  (obsDF$deltaCFLITA[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                       obsDF$deltaCFLITA[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                              1, 0)
@@ -749,26 +749,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
                                                            1, 0)
     
     ### deltaCMIC
-    #outDF$A_GDAYP[outDF$Variable=="deltaCMIC"] <- ifelse(modDF.sum$deltaCMIC.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    #outDF$C_GDAYP[outDF$Variable=="deltaCMIC"] <- ifelse(modDF.sum$deltaCMIC.mean[modDF.sum$ModName=="C_GDAYP"]<=
     #                                                           (obsDF$deltaCMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]+
     #                                                                obsDF$deltaCMIC[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-    #                                                           modDF.sum$deltaCMIC.mean[modDF.sum$ModName=="A_GDAYP"]>=
+    #                                                           modDF.sum$deltaCMIC.mean[modDF.sum$ModName=="C_GDAYP"]>=
     #                                                           (obsDF$deltaCMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]-
     #                                                                obsDF$deltaCMIC[obsDF$Group=="sd"&obsDF$Trt==treatment]),
     #                                                       1, 0)
     #
-    #outDF$B_ELMV1[outDF$Variable=="deltaCMIC"] <- ifelse(modDF.sum$deltaCMIC.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    #outDF$A_ELMV1[outDF$Variable=="deltaCMIC"] <- ifelse(modDF.sum$deltaCMIC.mean[modDF.sum$ModName=="A_ELMV1"]<=
     #                                                           (obsDF$deltaCMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]+
     #                                                                obsDF$deltaCMIC[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-    #                                                           modDF.sum$deltaCMIC.mean[modDF.sum$ModName=="B_ELMV1"]>=
+    #                                                           modDF.sum$deltaCMIC.mean[modDF.sum$ModName=="A_ELMV1"]>=
     #                                                           (obsDF$deltaCMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]-
     #                                                                obsDF$deltaCMIC[obsDF$Group=="sd"&obsDF$Trt==treatment]),
     #                                                       1, 0)
     #
-    #outDF$C_CABLP[outDF$Variable=="deltaCMIC"] <- ifelse(modDF.sum$deltaCMIC.mean[modDF.sum$ModName=="C_CABLP"]<=
+    #outDF$B_CABLP[outDF$Variable=="deltaCMIC"] <- ifelse(modDF.sum$deltaCMIC.mean[modDF.sum$ModName=="B_CABLP"]<=
     #                                                           (obsDF$deltaCMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]+
     #                                                                obsDF$deltaCMIC[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-    #                                                           modDF.sum$deltaCMIC.mean[modDF.sum$ModName=="C_CABLP"]>=
+    #                                                           modDF.sum$deltaCMIC.mean[modDF.sum$ModName=="B_CABLP"]>=
     #                                                           (obsDF$deltaCMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]-
     #                                                                obsDF$deltaCMIC[obsDF$Group=="sd"&obsDF$Trt==treatment]),
     #                                                       1, 0)
@@ -815,26 +815,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
     #                                                       1, 0)
     
     ### CGL
-    outDF$A_GDAYP[outDF$Variable=="CGL"] <- ifelse(modDF.sum$CGL.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="CGL"] <- ifelse(modDF.sum$CGL.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                          (obsDF$CGL[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                               obsDF$CGL[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                         modDF.sum$CGL.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                         modDF.sum$CGL.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                          (obsDF$CGL[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                               obsDF$CGL[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                      1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="CGL"] <- ifelse(modDF.sum$CGL.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="CGL"] <- ifelse(modDF.sum$CGL.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                          (obsDF$CGL[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                               obsDF$CGL[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                         modDF.sum$CGL.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                         modDF.sum$CGL.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                          (obsDF$CGL[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                               obsDF$CGL[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                      1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="CGL"] <- ifelse(modDF.sum$CGL.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="CGL"] <- ifelse(modDF.sum$CGL.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                          (obsDF$CGL[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                               obsDF$CGL[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                         modDF.sum$CGL.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                         modDF.sum$CGL.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                          (obsDF$CGL[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                               obsDF$CGL[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                      1, 0)
@@ -889,26 +889,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
                                                    1, 0)
     
     ### CGW
-    outDF$A_GDAYP[outDF$Variable=="CGW"] <- ifelse(modDF.sum$CGW.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="CGW"] <- ifelse(modDF.sum$CGW.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                          (obsDF$CGW[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                               obsDF$CGW[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                         modDF.sum$CGW.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                         modDF.sum$CGW.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                          (obsDF$CGW[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                               obsDF$CGW[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                      1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="CGW"] <- ifelse(modDF.sum$CGW.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="CGW"] <- ifelse(modDF.sum$CGW.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                          (obsDF$CGW[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                               obsDF$CGW[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                         modDF.sum$CGW.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                         modDF.sum$CGW.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                          (obsDF$CGW[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                               obsDF$CGW[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                      1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="CGW"] <- ifelse(modDF.sum$CGW.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="CGW"] <- ifelse(modDF.sum$CGW.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                          (obsDF$CGW[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                               obsDF$CGW[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                         modDF.sum$CGW.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                         modDF.sum$CGW.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                          (obsDF$CGW[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                               obsDF$CGW[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                      1, 0)
@@ -963,26 +963,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
                                                    1, 0)
     
     ### CGFR
-    outDF$A_GDAYP[outDF$Variable=="CGFR"] <- ifelse(modDF.sum$CGFR.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="CGFR"] <- ifelse(modDF.sum$CGFR.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                           (obsDF$CGFR[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                obsDF$CGFR[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                          modDF.sum$CGFR.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                          modDF.sum$CGFR.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                           (obsDF$CGFR[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                obsDF$CGFR[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                       1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="CGFR"] <- ifelse(modDF.sum$CGFR.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="CGFR"] <- ifelse(modDF.sum$CGFR.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                           (obsDF$CGFR[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                obsDF$CGFR[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                          modDF.sum$CGFR.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                          modDF.sum$CGFR.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                           (obsDF$CGFR[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                obsDF$CGFR[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                       1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="CGFR"] <- ifelse(modDF.sum$CGFR.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="CGFR"] <- ifelse(modDF.sum$CGFR.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                           (obsDF$CGFR[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                obsDF$CGFR[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                          modDF.sum$CGFR.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                          modDF.sum$CGFR.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                           (obsDF$CGFR[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                obsDF$CGFR[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                       1, 0)
@@ -1037,26 +1037,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
                                                     1, 0)
     
     ### CGCR
-    outDF$A_GDAYP[outDF$Variable=="CGCR"] <- ifelse(modDF.sum$CGCR.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="CGCR"] <- ifelse(modDF.sum$CGCR.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                           (obsDF$CGCR[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                obsDF$CGCR[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                          modDF.sum$CGCR.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                          modDF.sum$CGCR.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                           (obsDF$CGCR[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                obsDF$CGCR[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                       1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="CGCR"] <- ifelse(modDF.sum$CGCR.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="CGCR"] <- ifelse(modDF.sum$CGCR.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                           (obsDF$CGCR[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                obsDF$CGCR[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                          modDF.sum$CGCR.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                          modDF.sum$CGCR.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                           (obsDF$CGCR[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                obsDF$CGCR[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                       1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="CGCR"] <- ifelse(modDF.sum$CGCR.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="CGCR"] <- ifelse(modDF.sum$CGCR.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                           (obsDF$CGCR[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                obsDF$CGCR[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                          modDF.sum$CGCR.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                          modDF.sum$CGCR.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                           (obsDF$CGCR[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                obsDF$CGCR[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                       1, 0)
@@ -1111,26 +1111,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
                                                     1, 0)
     
     ### LAI
-    outDF$A_GDAYP[outDF$Variable=="LAI"] <- ifelse(modDF.sum$LAI.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="LAI"] <- ifelse(modDF.sum$LAI.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                          (obsDF$LAI[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                               obsDF$LAI[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                         modDF.sum$LAI.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                         modDF.sum$LAI.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                          (obsDF$LAI[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                               obsDF$LAI[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                      1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="LAI"] <- ifelse(modDF.sum$LAI.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="LAI"] <- ifelse(modDF.sum$LAI.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                          (obsDF$LAI[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                               obsDF$LAI[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                         modDF.sum$LAI.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                         modDF.sum$LAI.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                          (obsDF$LAI[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                               obsDF$LAI[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                      1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="LAI"] <- ifelse(modDF.sum$LAI.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="LAI"] <- ifelse(modDF.sum$LAI.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                          (obsDF$LAI[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                               obsDF$LAI[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                         modDF.sum$LAI.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                         modDF.sum$LAI.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                          (obsDF$LAI[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                               obsDF$LAI[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                      1, 0)
@@ -1187,26 +1187,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
     
     
     ### CL
-    outDF$A_GDAYP[outDF$Variable=="CL"] <- ifelse(modDF.sum$CL.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="CL"] <- ifelse(modDF.sum$CL.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                         (obsDF$CL[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                              obsDF$CL[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                        modDF.sum$CL.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                        modDF.sum$CL.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                         (obsDF$CL[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                              obsDF$CL[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                     1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="CL"] <- ifelse(modDF.sum$CL.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="CL"] <- ifelse(modDF.sum$CL.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                         (obsDF$CL[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                              obsDF$CL[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                        modDF.sum$CL.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                        modDF.sum$CL.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                         (obsDF$CL[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                              obsDF$CL[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                     1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="CL"] <- ifelse(modDF.sum$CL.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="CL"] <- ifelse(modDF.sum$CL.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                         (obsDF$CL[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                              obsDF$CL[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                        modDF.sum$CL.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                        modDF.sum$CL.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                         (obsDF$CL[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                              obsDF$CL[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                     1, 0)
@@ -1261,26 +1261,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
                                                   1, 0)
     
     ### CW
-    outDF$A_GDAYP[outDF$Variable=="CW"] <- ifelse(modDF.sum$CW.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="CW"] <- ifelse(modDF.sum$CW.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                         (obsDF$CW[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                              obsDF$CW[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                        modDF.sum$CW.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                        modDF.sum$CW.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                         (obsDF$CW[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                              obsDF$CW[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                     1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="CW"] <- ifelse(modDF.sum$CW.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="CW"] <- ifelse(modDF.sum$CW.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                         (obsDF$CW[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                              obsDF$CW[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                        modDF.sum$CW.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                        modDF.sum$CW.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                         (obsDF$CW[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                              obsDF$CW[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                     1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="CW"] <- ifelse(modDF.sum$CW.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="CW"] <- ifelse(modDF.sum$CW.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                         (obsDF$CW[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                              obsDF$CW[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                        modDF.sum$CW.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                        modDF.sum$CW.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                         (obsDF$CW[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                              obsDF$CW[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                     1, 0)
@@ -1335,26 +1335,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
                                                   1, 0)
     
     ### CFR
-    outDF$A_GDAYP[outDF$Variable=="CFR"] <- ifelse(modDF.sum$CFR.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="CFR"] <- ifelse(modDF.sum$CFR.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                          (obsDF$CFR[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                               obsDF$CFR[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                         modDF.sum$CFR.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                         modDF.sum$CFR.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                          (obsDF$CFR[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                               obsDF$CFR[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                      1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="CFR"] <- ifelse(modDF.sum$CFR.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="CFR"] <- ifelse(modDF.sum$CFR.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                          (obsDF$CFR[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                               obsDF$CFR[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                         modDF.sum$CFR.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                         modDF.sum$CFR.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                          (obsDF$CFR[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                               obsDF$CFR[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                      1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="CFR"] <- ifelse(modDF.sum$CFR.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="CFR"] <- ifelse(modDF.sum$CFR.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                          (obsDF$CFR[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                               obsDF$CFR[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                         modDF.sum$CFR.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                         modDF.sum$CFR.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                          (obsDF$CFR[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                               obsDF$CFR[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                      1, 0)
@@ -1409,26 +1409,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
                                                    1, 0)
     
     ### CCR
-    outDF$A_GDAYP[outDF$Variable=="CCR"] <- ifelse(modDF.sum$CCR.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="CCR"] <- ifelse(modDF.sum$CCR.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                          (obsDF$CCR[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                               obsDF$CCR[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                         modDF.sum$CCR.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                         modDF.sum$CCR.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                          (obsDF$CCR[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                               obsDF$CCR[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                      1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="CCR"] <- ifelse(modDF.sum$CCR.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="CCR"] <- ifelse(modDF.sum$CCR.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                          (obsDF$CCR[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                               obsDF$CCR[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                         modDF.sum$CCR.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                         modDF.sum$CCR.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                          (obsDF$CCR[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                               obsDF$CCR[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                      1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="CCR"] <- ifelse(modDF.sum$CCR.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="CCR"] <- ifelse(modDF.sum$CCR.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                          (obsDF$CCR[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                               obsDF$CCR[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                         modDF.sum$CCR.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                         modDF.sum$CCR.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                          (obsDF$CCR[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                               obsDF$CCR[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                      1, 0)
@@ -1483,26 +1483,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
                                                    1, 0)
     
     ### CFLITA
-    outDF$A_GDAYP[outDF$Variable=="CFLITA"] <- ifelse(modDF.sum$CFLITA.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="CFLITA"] <- ifelse(modDF.sum$CFLITA.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                             (obsDF$CFLITA[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                  obsDF$CFLITA[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                            modDF.sum$CFLITA.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                            modDF.sum$CFLITA.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                             (obsDF$CFLITA[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                  obsDF$CFLITA[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                         1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="CFLITA"] <- ifelse(modDF.sum$CFLITA.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="CFLITA"] <- ifelse(modDF.sum$CFLITA.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                             (obsDF$CFLITA[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                  obsDF$CFLITA[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                            modDF.sum$CFLITA.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                            modDF.sum$CFLITA.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                             (obsDF$CFLITA[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                  obsDF$CFLITA[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                         1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="CFLITA"] <- ifelse(modDF.sum$CFLITA.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="CFLITA"] <- ifelse(modDF.sum$CFLITA.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                             (obsDF$CFLITA[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                  obsDF$CFLITA[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                            modDF.sum$CFLITA.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                            modDF.sum$CFLITA.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                             (obsDF$CFLITA[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                  obsDF$CFLITA[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                         1, 0)
@@ -1557,26 +1557,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
                                                       1, 0)
     
     ### CMIC
-    #outDF$A_GDAYP[outDF$Variable=="CMIC"] <- ifelse(modDF.sum$CMIC.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    #outDF$C_GDAYP[outDF$Variable=="CMIC"] <- ifelse(modDF.sum$CMIC.mean[modDF.sum$ModName=="C_GDAYP"]<=
     #                                                      (obsDF$CMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]+
     #                                                           obsDF$CMIC[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-    #                                                      modDF.sum$CMIC.mean[modDF.sum$ModName=="A_GDAYP"]>=
+    #                                                      modDF.sum$CMIC.mean[modDF.sum$ModName=="C_GDAYP"]>=
     #                                                      (obsDF$CMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]-
     #                                                           obsDF$CMIC[obsDF$Group=="sd"&obsDF$Trt==treatment]),
     #                                                  1, 0)
     #
-    #outDF$B_ELMV1[outDF$Variable=="CMIC"] <- ifelse(modDF.sum$CMIC.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    #outDF$A_ELMV1[outDF$Variable=="CMIC"] <- ifelse(modDF.sum$CMIC.mean[modDF.sum$ModName=="A_ELMV1"]<=
     #                                                      (obsDF$CMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]+
     #                                                           obsDF$CMIC[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-    #                                                      modDF.sum$CMIC.mean[modDF.sum$ModName=="B_ELMV1"]>=
+    #                                                      modDF.sum$CMIC.mean[modDF.sum$ModName=="A_ELMV1"]>=
     #                                                      (obsDF$CMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]-
     #                                                           obsDF$CMIC[obsDF$Group=="sd"&obsDF$Trt==treatment]),
     #                                                  1, 0)
     #
-    #outDF$C_CABLP[outDF$Variable=="CMIC"] <- ifelse(modDF.sum$CMIC.mean[modDF.sum$ModName=="C_CABLP"]<=
+    #outDF$B_CABLP[outDF$Variable=="CMIC"] <- ifelse(modDF.sum$CMIC.mean[modDF.sum$ModName=="B_CABLP"]<=
     #                                                      (obsDF$CMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]+
     #                                                           obsDF$CMIC[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-    #                                                      modDF.sum$CMIC.mean[modDF.sum$ModName=="C_CABLP"]>=
+    #                                                      modDF.sum$CMIC.mean[modDF.sum$ModName=="B_CABLP"]>=
     #                                                      (obsDF$CMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]-
     #                                                           obsDF$CMIC[obsDF$Group=="sd"&obsDF$Trt==treatment]),
     #                                                  1, 0)
@@ -1623,26 +1623,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
     #                                                  1, 0)
     
     ### CSOIL
-    outDF$A_GDAYP[outDF$Variable=="CSOIL"] <- ifelse(modDF.sum$CSOIL.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="CSOIL"] <- ifelse(modDF.sum$CSOIL.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                            (obsDF$CSOIL[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                 obsDF$CSOIL[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                           modDF.sum$CSOIL.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                           modDF.sum$CSOIL.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                            (obsDF$CSOIL[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                 obsDF$CSOIL[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                        1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="CSOIL"] <- ifelse(modDF.sum$CSOIL.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="CSOIL"] <- ifelse(modDF.sum$CSOIL.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                            (obsDF$CSOIL[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                 obsDF$CSOIL[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                           modDF.sum$CSOIL.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                           modDF.sum$CSOIL.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                            (obsDF$CSOIL[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                 obsDF$CSOIL[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                        1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="CSOIL"] <- ifelse(modDF.sum$CSOIL.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="CSOIL"] <- ifelse(modDF.sum$CSOIL.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                            (obsDF$CSOIL[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                 obsDF$CSOIL[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                           modDF.sum$CSOIL.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                           modDF.sum$CSOIL.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                            (obsDF$CSOIL[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                 obsDF$CSOIL[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                        1, 0)
@@ -1697,26 +1697,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
                                                      1, 0)
     
     ### PL
-    outDF$A_GDAYP[outDF$Variable=="PL"] <- ifelse(modDF.sum$PL.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="PL"] <- ifelse(modDF.sum$PL.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                         (obsDF$PL[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                              obsDF$PL[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                        modDF.sum$PL.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                        modDF.sum$PL.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                         (obsDF$PL[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                              obsDF$PL[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                     1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="PL"] <- ifelse(modDF.sum$PL.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="PL"] <- ifelse(modDF.sum$PL.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                         (obsDF$PL[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                              obsDF$PL[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                        modDF.sum$PL.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                        modDF.sum$PL.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                         (obsDF$PL[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                              obsDF$PL[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                     1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="PL"] <- ifelse(modDF.sum$PL.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="PL"] <- ifelse(modDF.sum$PL.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                         (obsDF$PL[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                              obsDF$PL[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                        modDF.sum$PL.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                        modDF.sum$PL.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                         (obsDF$PL[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                              obsDF$PL[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                     1, 0)
@@ -1771,26 +1771,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
                                                   1, 0)
     
     ### PW
-    outDF$A_GDAYP[outDF$Variable=="PW"] <- ifelse(modDF.sum$PW.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="PW"] <- ifelse(modDF.sum$PW.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                         (obsDF$PW[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                              obsDF$PW[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                        modDF.sum$PW.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                        modDF.sum$PW.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                         (obsDF$PW[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                              obsDF$PW[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                     1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="PW"] <- ifelse(modDF.sum$PW.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="PW"] <- ifelse(modDF.sum$PW.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                         (obsDF$PW[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                              obsDF$PW[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                        modDF.sum$PW.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                        modDF.sum$PW.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                         (obsDF$PW[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                              obsDF$PW[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                     1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="PW"] <- ifelse(modDF.sum$PW.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="PW"] <- ifelse(modDF.sum$PW.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                         (obsDF$PW[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                              obsDF$PW[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                        modDF.sum$PW.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                        modDF.sum$PW.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                         (obsDF$PW[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                              obsDF$PW[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                     1, 0)
@@ -1845,26 +1845,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
                                                   1, 0)
     
     ### PFR
-    outDF$A_GDAYP[outDF$Variable=="PFR"] <- ifelse(modDF.sum$PFR.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="PFR"] <- ifelse(modDF.sum$PFR.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                          (obsDF$PFR[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                               obsDF$PFR[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                         modDF.sum$PFR.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                         modDF.sum$PFR.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                          (obsDF$PFR[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                               obsDF$PFR[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                      1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="PFR"] <- ifelse(modDF.sum$PFR.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="PFR"] <- ifelse(modDF.sum$PFR.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                          (obsDF$PFR[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                               obsDF$PFR[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                         modDF.sum$PFR.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                         modDF.sum$PFR.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                          (obsDF$PFR[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                               obsDF$PFR[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                      1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="PFR"] <- ifelse(modDF.sum$PFR.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="PFR"] <- ifelse(modDF.sum$PFR.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                          (obsDF$PFR[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                               obsDF$PFR[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                         modDF.sum$PFR.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                         modDF.sum$PFR.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                          (obsDF$PFR[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                               obsDF$PFR[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                      1, 0)
@@ -1919,26 +1919,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
                                                    1, 0)
     
     ### PCR
-    outDF$A_GDAYP[outDF$Variable=="PCR"] <- ifelse(modDF.sum$PCR.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="PCR"] <- ifelse(modDF.sum$PCR.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                          (obsDF$PCR[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                               obsDF$PCR[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                         modDF.sum$PCR.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                         modDF.sum$PCR.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                          (obsDF$PCR[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                               obsDF$PCR[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                      1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="PCR"] <- ifelse(modDF.sum$PCR.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="PCR"] <- ifelse(modDF.sum$PCR.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                          (obsDF$PCR[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                               obsDF$PCR[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                         modDF.sum$PCR.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                         modDF.sum$PCR.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                          (obsDF$PCR[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                               obsDF$PCR[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                      1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="PCR"] <- ifelse(modDF.sum$PCR.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="PCR"] <- ifelse(modDF.sum$PCR.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                          (obsDF$PCR[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                               obsDF$PCR[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                         modDF.sum$PCR.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                         modDF.sum$PCR.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                          (obsDF$PCR[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                               obsDF$PCR[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                      1, 0)
@@ -1993,26 +1993,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
                                                    1, 0)
     
     ### PFLITA
-    outDF$A_GDAYP[outDF$Variable=="PFLITA"] <- ifelse(modDF.sum$PFLITA.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="PFLITA"] <- ifelse(modDF.sum$PFLITA.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                             (obsDF$PFLITA[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                  obsDF$PFLITA[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                            modDF.sum$PFLITA.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                            modDF.sum$PFLITA.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                             (obsDF$PFLITA[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                  obsDF$PFLITA[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                         1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="PFLITA"] <- ifelse(modDF.sum$PFLITA.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="PFLITA"] <- ifelse(modDF.sum$PFLITA.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                             (obsDF$PFLITA[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                  obsDF$PFLITA[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                            modDF.sum$PFLITA.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                            modDF.sum$PFLITA.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                             (obsDF$PFLITA[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                  obsDF$PFLITA[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                         1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="PFLITA"] <- ifelse(modDF.sum$PFLITA.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="PFLITA"] <- ifelse(modDF.sum$PFLITA.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                             (obsDF$PFLITA[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                  obsDF$PFLITA[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                            modDF.sum$PFLITA.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                            modDF.sum$PFLITA.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                             (obsDF$PFLITA[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                  obsDF$PFLITA[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                         1, 0)
@@ -2067,26 +2067,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
                                                       1, 0)
     
     ### PSOIL
-    outDF$A_GDAYP[outDF$Variable=="PSOIL"] <- ifelse(modDF.sum$PSOIL.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="PSOIL"] <- ifelse(modDF.sum$PSOIL.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                            (obsDF$PSOIL[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                 obsDF$PSOIL[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                           modDF.sum$PSOIL.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                           modDF.sum$PSOIL.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                            (obsDF$PSOIL[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                 obsDF$PSOIL[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                        1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="PSOIL"] <- ifelse(modDF.sum$PSOIL.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="PSOIL"] <- ifelse(modDF.sum$PSOIL.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                            (obsDF$PSOIL[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                 obsDF$PSOIL[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                           modDF.sum$PSOIL.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                           modDF.sum$PSOIL.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                            (obsDF$PSOIL[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                 obsDF$PSOIL[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                        1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="PSOIL"] <- ifelse(modDF.sum$PSOIL.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="PSOIL"] <- ifelse(modDF.sum$PSOIL.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                            (obsDF$PSOIL[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                 obsDF$PSOIL[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                           modDF.sum$PSOIL.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                           modDF.sum$PSOIL.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                            (obsDF$PSOIL[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                 obsDF$PSOIL[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                        1, 0)
@@ -2141,26 +2141,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
                                                      1, 0)
     
     ### PPORG
-    outDF$A_GDAYP[outDF$Variable=="PPORG"] <- ifelse(modDF.sum$PPORG.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="PPORG"] <- ifelse(modDF.sum$PPORG.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                            (obsDF$PPORG[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                 obsDF$PPORG[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                           modDF.sum$PPORG.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                           modDF.sum$PPORG.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                            (obsDF$PPORG[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                 obsDF$PPORG[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                        1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="PPORG"] <- ifelse(modDF.sum$PPORG.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="PPORG"] <- ifelse(modDF.sum$PPORG.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                            (obsDF$PPORG[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                 obsDF$PPORG[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                           modDF.sum$PPORG.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                           modDF.sum$PPORG.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                            (obsDF$PPORG[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                 obsDF$PPORG[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                        1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="PPORG"] <- ifelse(modDF.sum$PPORG.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="PPORG"] <- ifelse(modDF.sum$PPORG.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                            (obsDF$PPORG[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                 obsDF$PPORG[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                           modDF.sum$PPORG.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                           modDF.sum$PPORG.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                            (obsDF$PPORG[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                 obsDF$PPORG[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                        1, 0)
@@ -2215,26 +2215,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
                                                      1, 0)
     
     ### PPMIN
-    outDF$A_GDAYP[outDF$Variable=="PPMIN"] <- ifelse(modDF.sum$PPMIN.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="PPMIN"] <- ifelse(modDF.sum$PPMIN.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                            (obsDF$PPMIN[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                 obsDF$PPMIN[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                           modDF.sum$PPMIN.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                           modDF.sum$PPMIN.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                            (obsDF$PPMIN[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                 obsDF$PPMIN[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                        1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="PPMIN"] <- ifelse(modDF.sum$PPMIN.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="PPMIN"] <- ifelse(modDF.sum$PPMIN.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                            (obsDF$PPMIN[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                 obsDF$PPMIN[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                           modDF.sum$PPMIN.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                           modDF.sum$PPMIN.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                            (obsDF$PPMIN[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                 obsDF$PPMIN[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                        1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="PPMIN"] <- ifelse(modDF.sum$PPMIN.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="PPMIN"] <- ifelse(modDF.sum$PPMIN.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                            (obsDF$PPMIN[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                 obsDF$PPMIN[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                           modDF.sum$PPMIN.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                           modDF.sum$PPMIN.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                            (obsDF$PPMIN[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                 obsDF$PPMIN[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                        1, 0)
@@ -2289,26 +2289,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
                                                      1, 0)
     
     ### PDEM
-    outDF$A_GDAYP[outDF$Variable=="PDEM"] <- ifelse(modDF.sum$PDEM.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="PDEM"] <- ifelse(modDF.sum$PDEM.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                           (obsDF$PDEM[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                obsDF$PDEM[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                          modDF.sum$PDEM.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                          modDF.sum$PDEM.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                           (obsDF$PDEM[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                obsDF$PDEM[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                       1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="PDEM"] <- ifelse(modDF.sum$PDEM.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="PDEM"] <- ifelse(modDF.sum$PDEM.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                           (obsDF$PDEM[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                obsDF$PDEM[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                          modDF.sum$PDEM.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                          modDF.sum$PDEM.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                           (obsDF$PDEM[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                obsDF$PDEM[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                       1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="PDEM"] <- ifelse(modDF.sum$PDEM.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="PDEM"] <- ifelse(modDF.sum$PDEM.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                           (obsDF$PDEM[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                obsDF$PDEM[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                          modDF.sum$PDEM.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                          modDF.sum$PDEM.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                           (obsDF$PDEM[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                obsDF$PDEM[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                       1, 0)
@@ -2363,26 +2363,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
                                                     1, 0)
     
     ### PGL
-    outDF$A_GDAYP[outDF$Variable=="PGL"] <- ifelse(modDF.sum$PGL.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="PGL"] <- ifelse(modDF.sum$PGL.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                          (obsDF$PGL[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                               obsDF$PGL[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                         modDF.sum$PGL.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                         modDF.sum$PGL.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                          (obsDF$PGL[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                               obsDF$PGL[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                      1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="PGL"] <- ifelse(modDF.sum$PGL.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="PGL"] <- ifelse(modDF.sum$PGL.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                          (obsDF$PGL[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                               obsDF$PGL[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                         modDF.sum$PGL.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                         modDF.sum$PGL.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                          (obsDF$PGL[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                               obsDF$PGL[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                      1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="PGL"] <- ifelse(modDF.sum$PGL.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="PGL"] <- ifelse(modDF.sum$PGL.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                          (obsDF$PGL[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                               obsDF$PGL[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                         modDF.sum$PGL.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                         modDF.sum$PGL.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                          (obsDF$PGL[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                               obsDF$PGL[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                      1, 0)
@@ -2437,26 +2437,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
                                                    1, 0)
     
     ### PGW
-    outDF$A_GDAYP[outDF$Variable=="PGW"] <- ifelse(modDF.sum$PGW.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="PGW"] <- ifelse(modDF.sum$PGW.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                          (obsDF$PGW[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                               obsDF$PGW[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                         modDF.sum$PGW.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                         modDF.sum$PGW.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                          (obsDF$PGW[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                               obsDF$PGW[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                      1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="PGW"] <- ifelse(modDF.sum$PGW.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="PGW"] <- ifelse(modDF.sum$PGW.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                          (obsDF$PGW[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                               obsDF$PGW[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                         modDF.sum$PGW.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                         modDF.sum$PGW.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                          (obsDF$PGW[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                               obsDF$PGW[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                      1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="PGW"] <- ifelse(modDF.sum$PGW.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="PGW"] <- ifelse(modDF.sum$PGW.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                          (obsDF$PGW[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                               obsDF$PGW[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                         modDF.sum$PGW.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                         modDF.sum$PGW.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                          (obsDF$PGW[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                               obsDF$PGW[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                      1, 0)
@@ -2511,26 +2511,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
                                                    1, 0)
     
     ### PGFR
-    outDF$A_GDAYP[outDF$Variable=="PGFR"] <- ifelse(modDF.sum$PGFR.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="PGFR"] <- ifelse(modDF.sum$PGFR.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                           (obsDF$PGFR[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                obsDF$PGFR[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                          modDF.sum$PGFR.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                          modDF.sum$PGFR.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                           (obsDF$PGFR[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                obsDF$PGFR[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                       1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="PGFR"] <- ifelse(modDF.sum$PGFR.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="PGFR"] <- ifelse(modDF.sum$PGFR.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                           (obsDF$PGFR[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                obsDF$PGFR[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                          modDF.sum$PGFR.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                          modDF.sum$PGFR.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                           (obsDF$PGFR[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                obsDF$PGFR[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                       1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="PGFR"] <- ifelse(modDF.sum$PGFR.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="PGFR"] <- ifelse(modDF.sum$PGFR.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                           (obsDF$PGFR[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                obsDF$PGFR[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                          modDF.sum$PGFR.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                          modDF.sum$PGFR.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                           (obsDF$PGFR[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                obsDF$PGFR[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                       1, 0)
@@ -2585,26 +2585,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
                                                     1, 0)
     
     ### PGCR
-    outDF$A_GDAYP[outDF$Variable=="PGCR"] <- ifelse(modDF.sum$PGCR.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="PGCR"] <- ifelse(modDF.sum$PGCR.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                           (obsDF$PGCR[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                obsDF$PGCR[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                          modDF.sum$PGCR.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                          modDF.sum$PGCR.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                           (obsDF$PGCR[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                obsDF$PGCR[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                       1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="PGCR"] <- ifelse(modDF.sum$PGCR.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="PGCR"] <- ifelse(modDF.sum$PGCR.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                           (obsDF$PGCR[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                obsDF$PGCR[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                          modDF.sum$PGCR.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                          modDF.sum$PGCR.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                           (obsDF$PGCR[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                obsDF$PGCR[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                       1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="PGCR"] <- ifelse(modDF.sum$PGCR.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="PGCR"] <- ifelse(modDF.sum$PGCR.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                           (obsDF$PGCR[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                obsDF$PGCR[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                          modDF.sum$PGCR.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                          modDF.sum$PGCR.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                           (obsDF$PGCR[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                obsDF$PGCR[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                       1, 0)
@@ -2659,26 +2659,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
                                                     1, 0)
     
     ### PLITIN
-    outDF$A_GDAYP[outDF$Variable=="PLITIN"] <- ifelse(modDF.sum$PLITIN.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="PLITIN"] <- ifelse(modDF.sum$PLITIN.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                             (obsDF$PLITIN[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                  obsDF$PLITIN[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                            modDF.sum$PLITIN.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                            modDF.sum$PLITIN.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                             (obsDF$PLITIN[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                  obsDF$PLITIN[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                         1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="PLITIN"] <- ifelse(modDF.sum$PLITIN.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="PLITIN"] <- ifelse(modDF.sum$PLITIN.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                             (obsDF$PLITIN[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                  obsDF$PLITIN[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                            modDF.sum$PLITIN.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                            modDF.sum$PLITIN.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                             (obsDF$PLITIN[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                  obsDF$PLITIN[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                         1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="PLITIN"] <- ifelse(modDF.sum$PLITIN.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="PLITIN"] <- ifelse(modDF.sum$PLITIN.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                             (obsDF$PLITIN[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                  obsDF$PLITIN[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                            modDF.sum$PLITIN.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                            modDF.sum$PLITIN.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                             (obsDF$PLITIN[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                  obsDF$PLITIN[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                         1, 0)
@@ -2733,26 +2733,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
                                                       1, 0)
     
     ### PWLIN
-    outDF$A_GDAYP[outDF$Variable=="PWLIN"] <- ifelse(modDF.sum$PWLIN.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="PWLIN"] <- ifelse(modDF.sum$PWLIN.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                            (obsDF$PWLIN[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                 obsDF$PWLIN[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                           modDF.sum$PWLIN.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                           modDF.sum$PWLIN.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                            (obsDF$PWLIN[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                 obsDF$PWLIN[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                        1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="PWLIN"] <- ifelse(modDF.sum$PWLIN.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="PWLIN"] <- ifelse(modDF.sum$PWLIN.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                            (obsDF$PWLIN[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                 obsDF$PWLIN[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                           modDF.sum$PWLIN.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                           modDF.sum$PWLIN.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                            (obsDF$PWLIN[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                 obsDF$PWLIN[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                        1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="PWLIN"] <- ifelse(modDF.sum$PWLIN.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="PWLIN"] <- ifelse(modDF.sum$PWLIN.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                            (obsDF$PWLIN[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                 obsDF$PWLIN[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                           modDF.sum$PWLIN.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                           modDF.sum$PWLIN.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                            (obsDF$PWLIN[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                 obsDF$PWLIN[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                        1, 0)
@@ -2808,26 +2808,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
                                                      1, 0)
     
     ### PFRLIN
-    outDF$A_GDAYP[outDF$Variable=="PFRLIN"] <- ifelse(modDF.sum$PFRLIN.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="PFRLIN"] <- ifelse(modDF.sum$PFRLIN.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                             (obsDF$PFRLIN[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                  obsDF$PFRLIN[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                            modDF.sum$PFRLIN.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                            modDF.sum$PFRLIN.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                             (obsDF$PFRLIN[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                  obsDF$PFRLIN[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                         1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="PFRLIN"] <- ifelse(modDF.sum$PFRLIN.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="PFRLIN"] <- ifelse(modDF.sum$PFRLIN.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                             (obsDF$PFRLIN[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                  obsDF$PFRLIN[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                            modDF.sum$PFRLIN.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                            modDF.sum$PFRLIN.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                             (obsDF$PFRLIN[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                  obsDF$PFRLIN[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                         1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="PFRLIN"] <- ifelse(modDF.sum$PFRLIN.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="PFRLIN"] <- ifelse(modDF.sum$PFRLIN.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                             (obsDF$PFRLIN[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                  obsDF$PFRLIN[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                            modDF.sum$PFRLIN.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                            modDF.sum$PFRLIN.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                             (obsDF$PFRLIN[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                  obsDF$PFRLIN[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                         1, 0)
@@ -2882,26 +2882,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
                                                       1, 0)
     
     ### PLAB
-    outDF$A_GDAYP[outDF$Variable=="PLAB"] <- ifelse(modDF.sum$PLAB.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="PLAB"] <- ifelse(modDF.sum$PLAB.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                           (obsDF$PLAB[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                obsDF$PLAB[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                          modDF.sum$PLAB.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                          modDF.sum$PLAB.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                           (obsDF$PLAB[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                obsDF$PLAB[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                       1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="PLAB"] <- ifelse(modDF.sum$PLAB.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="PLAB"] <- ifelse(modDF.sum$PLAB.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                           (obsDF$PLAB[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                obsDF$PLAB[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                          modDF.sum$PLAB.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                          modDF.sum$PLAB.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                           (obsDF$PLAB[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                obsDF$PLAB[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                       1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="PLAB"] <- ifelse(modDF.sum$PLAB.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="PLAB"] <- ifelse(modDF.sum$PLAB.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                           (obsDF$PLAB[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                obsDF$PLAB[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                          modDF.sum$PLAB.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                          modDF.sum$PLAB.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                           (obsDF$PLAB[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                obsDF$PLAB[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                       1, 0)
@@ -2956,26 +2956,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
                                                     1, 0)
     
     ### PSEC
-    outDF$A_GDAYP[outDF$Variable=="PLAB"] <- ifelse(modDF.sum$PSEC.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="PLAB"] <- ifelse(modDF.sum$PSEC.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                           (obsDF$PSEC[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                obsDF$PSEC[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                          modDF.sum$PSEC.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                          modDF.sum$PSEC.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                           (obsDF$PSEC[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                obsDF$PSEC[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                       1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="PSEC"] <- ifelse(modDF.sum$PSEC.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="PSEC"] <- ifelse(modDF.sum$PSEC.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                           (obsDF$PSEC[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                obsDF$PSEC[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                          modDF.sum$PSEC.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                          modDF.sum$PSEC.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                           (obsDF$PSEC[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                obsDF$PSEC[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                       1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="PSEC"] <- ifelse(modDF.sum$PSEC.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="PSEC"] <- ifelse(modDF.sum$PSEC.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                           (obsDF$PSEC[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                obsDF$PSEC[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                          modDF.sum$PSEC.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                          modDF.sum$PSEC.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                           (obsDF$PSEC[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                obsDF$PSEC[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                       1, 0)
@@ -3030,26 +3030,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
                                                     1, 0)
     
     ### POCC
-    outDF$A_GDAYP[outDF$Variable=="POCC"] <- ifelse(modDF.sum$POCC.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="POCC"] <- ifelse(modDF.sum$POCC.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                           (obsDF$POCC[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                obsDF$POCC[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                          modDF.sum$POCC.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                          modDF.sum$POCC.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                           (obsDF$POCC[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                obsDF$POCC[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                       1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="POCC"] <- ifelse(modDF.sum$POCC.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="POCC"] <- ifelse(modDF.sum$POCC.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                           (obsDF$POCC[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                obsDF$POCC[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                          modDF.sum$POCC.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                          modDF.sum$POCC.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                           (obsDF$POCC[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                obsDF$POCC[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                       1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="POCC"] <- ifelse(modDF.sum$POCC.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="POCC"] <- ifelse(modDF.sum$POCC.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                           (obsDF$POCC[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                obsDF$POCC[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                          modDF.sum$POCC.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                          modDF.sum$POCC.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                           (obsDF$POCC[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                obsDF$POCC[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                       1, 0)
@@ -3104,26 +3104,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
                                                     1, 0)
     
     ### PUP
-    outDF$A_GDAYP[outDF$Variable=="PUP"] <- ifelse(modDF.sum$PUP.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="PUP"] <- ifelse(modDF.sum$PUP.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                          (obsDF$PUP[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                               obsDF$PUP[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                         modDF.sum$PUP.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                         modDF.sum$PUP.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                          (obsDF$PUP[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                               obsDF$PUP[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                      1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="PUP"] <- ifelse(modDF.sum$PUP.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="PUP"] <- ifelse(modDF.sum$PUP.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                          (obsDF$PUP[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                               obsDF$PUP[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                         modDF.sum$PUP.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                         modDF.sum$PUP.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                          (obsDF$PUP[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                               obsDF$PUP[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                      1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="PUP"] <- ifelse(modDF.sum$PUP.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="PUP"] <- ifelse(modDF.sum$PUP.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                          (obsDF$PUP[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                               obsDF$PUP[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                         modDF.sum$PUP.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                         modDF.sum$PUP.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                          (obsDF$PUP[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                               obsDF$PUP[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                      1, 0)
@@ -3179,26 +3179,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
                                                    1, 0)
     
     ### PRETR
-    outDF$A_GDAYP[outDF$Variable=="PRETR"] <- ifelse(modDF.sum$PRETR.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="PRETR"] <- ifelse(modDF.sum$PRETR.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                            (obsDF$PRETR[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                 obsDF$PRETR[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                           modDF.sum$PRETR.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                           modDF.sum$PRETR.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                            (obsDF$PRETR[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                 obsDF$PRETR[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                        1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="PRETR"] <- ifelse(modDF.sum$PRETR.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="PRETR"] <- ifelse(modDF.sum$PRETR.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                            (obsDF$PRETR[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                 obsDF$PRETR[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                           modDF.sum$PRETR.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                           modDF.sum$PRETR.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                            (obsDF$PRETR[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                 obsDF$PRETR[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                        1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="PRETR"] <- ifelse(modDF.sum$PRETR.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="PRETR"] <- ifelse(modDF.sum$PRETR.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                            (obsDF$PRETR[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                 obsDF$PRETR[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                           modDF.sum$PRETR.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                           modDF.sum$PRETR.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                            (obsDF$PRETR[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                 obsDF$PRETR[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                        1, 0)
@@ -3253,26 +3253,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
                                                      1, 0)
     
     ### PMIN
-    outDF$A_GDAYP[outDF$Variable=="PMIN"] <- ifelse(modDF.sum$PMIN.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="PMIN"] <- ifelse(modDF.sum$PMIN.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                           (obsDF$PMIN[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                obsDF$PMIN[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                          modDF.sum$PMIN.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                          modDF.sum$PMIN.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                           (obsDF$PMIN[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                obsDF$PMIN[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                       1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="PMIN"] <- ifelse(modDF.sum$PMIN.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="PMIN"] <- ifelse(modDF.sum$PMIN.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                           (obsDF$PMIN[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                obsDF$PMIN[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                          modDF.sum$PMIN.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                          modDF.sum$PMIN.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                           (obsDF$PMIN[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                obsDF$PMIN[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                       1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="PMIN"] <- ifelse(modDF.sum$PMIN.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="PMIN"] <- ifelse(modDF.sum$PMIN.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                           (obsDF$PMIN[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                obsDF$PMIN[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                          modDF.sum$PMIN.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                          modDF.sum$PMIN.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                           (obsDF$PMIN[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                obsDF$PMIN[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                       1, 0)
@@ -3327,26 +3327,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
                                                     1, 0)
     
     ### PLEACH
-    outDF$A_GDAYP[outDF$Variable=="PLEACH"] <- ifelse(modDF.sum$PLEACH.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="PLEACH"] <- ifelse(modDF.sum$PLEACH.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                             (obsDF$PLEACH[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                  obsDF$PLEACH[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                            modDF.sum$PLEACH.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                            modDF.sum$PLEACH.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                             (obsDF$PLEACH[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                  obsDF$PLEACH[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                         1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="PLEACH"] <- ifelse(modDF.sum$PLEACH.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="PLEACH"] <- ifelse(modDF.sum$PLEACH.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                             (obsDF$PLEACH[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                  obsDF$PLEACH[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                            modDF.sum$PLEACH.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                            modDF.sum$PLEACH.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                             (obsDF$PLEACH[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                  obsDF$PLEACH[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                         1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="PLEACH"] <- ifelse(modDF.sum$PLEACH.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="PLEACH"] <- ifelse(modDF.sum$PLEACH.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                             (obsDF$PLEACH[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                  obsDF$PLEACH[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                            modDF.sum$PLEACH.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                            modDF.sum$PLEACH.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                             (obsDF$PLEACH[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                  obsDF$PLEACH[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                         1, 0)
@@ -3401,26 +3401,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
                                                       1, 0)
     
     ### PUE
-    outDF$A_GDAYP[outDF$Variable=="PUE"] <- ifelse(modDF.sum$PUE.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="PUE"] <- ifelse(modDF.sum$PUE.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                          (obsDF$PUE[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                               obsDF$PUE[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                         modDF.sum$PUE.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                         modDF.sum$PUE.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                          (obsDF$PUE[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                               obsDF$PUE[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                      1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="PUE"] <- ifelse(modDF.sum$PUE.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="PUE"] <- ifelse(modDF.sum$PUE.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                          (obsDF$PUE[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                               obsDF$PUE[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                         modDF.sum$PUE.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                         modDF.sum$PUE.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                          (obsDF$PUE[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                               obsDF$PUE[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                      1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="PUE"] <- ifelse(modDF.sum$PUE.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="PUE"] <- ifelse(modDF.sum$PUE.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                          (obsDF$PUE[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                               obsDF$PUE[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                         modDF.sum$PUE.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                         modDF.sum$PUE.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                          (obsDF$PUE[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                               obsDF$PUE[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                      1, 0)
@@ -3475,26 +3475,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
                                                    1, 0)
     
     ### CPL
-    outDF$A_GDAYP[outDF$Variable=="CPL"] <- ifelse(modDF.sum$CPL.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="CPL"] <- ifelse(modDF.sum$CPL.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                          (obsDF$CPL[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                               obsDF$CPL[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                         modDF.sum$CPL.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                         modDF.sum$CPL.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                          (obsDF$CPL[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                               obsDF$CPL[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                      1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="CPL"] <- ifelse(modDF.sum$CPL.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="CPL"] <- ifelse(modDF.sum$CPL.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                          (obsDF$CPL[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                               obsDF$CPL[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                         modDF.sum$CPL.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                         modDF.sum$CPL.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                          (obsDF$CPL[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                               obsDF$CPL[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                      1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="CPL"] <- ifelse(modDF.sum$CPL.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="CPL"] <- ifelse(modDF.sum$CPL.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                          (obsDF$CPL[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                               obsDF$CPL[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                         modDF.sum$CPL.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                         modDF.sum$CPL.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                          (obsDF$CPL[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                               obsDF$CPL[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                      1, 0)
@@ -3549,26 +3549,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
                                                    1, 0)
     
     ### CPW
-    outDF$A_GDAYP[outDF$Variable=="CPW"] <- ifelse(modDF.sum$CPW.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="CPW"] <- ifelse(modDF.sum$CPW.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                          (obsDF$CPW[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                               obsDF$CPW[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                         modDF.sum$CPW.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                         modDF.sum$CPW.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                          (obsDF$CPW[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                               obsDF$CPW[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                      1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="CPW"] <- ifelse(modDF.sum$CPW.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="CPW"] <- ifelse(modDF.sum$CPW.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                          (obsDF$CPW[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                               obsDF$CPW[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                         modDF.sum$CPW.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                         modDF.sum$CPW.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                          (obsDF$CPW[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                               obsDF$CPW[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                      1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="CPW"] <- ifelse(modDF.sum$CPW.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="CPW"] <- ifelse(modDF.sum$CPW.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                          (obsDF$CPW[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                               obsDF$CPW[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                         modDF.sum$CPW.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                         modDF.sum$CPW.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                          (obsDF$CPW[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                               obsDF$CPW[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                      1, 0)
@@ -3623,26 +3623,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
                                                    1, 0)
     
     ### CPFR
-    outDF$A_GDAYP[outDF$Variable=="CPFR"] <- ifelse(modDF.sum$CPFR.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="CPFR"] <- ifelse(modDF.sum$CPFR.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                           (obsDF$CPFR[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                obsDF$CPFR[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                          modDF.sum$CPFR.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                          modDF.sum$CPFR.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                           (obsDF$CPFR[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                obsDF$CPFR[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                       1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="CPFR"] <- ifelse(modDF.sum$CPFR.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="CPFR"] <- ifelse(modDF.sum$CPFR.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                           (obsDF$CPFR[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                obsDF$CPFR[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                          modDF.sum$CPFR.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                          modDF.sum$CPFR.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                           (obsDF$CPFR[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                obsDF$CPFR[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                       1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="CPFR"] <- ifelse(modDF.sum$CPFR.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="CPFR"] <- ifelse(modDF.sum$CPFR.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                           (obsDF$CPFR[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                obsDF$CPFR[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                          modDF.sum$CPFR.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                          modDF.sum$CPFR.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                           (obsDF$CPFR[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                obsDF$CPFR[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                       1, 0)
@@ -3697,26 +3697,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
                                                     1, 0)
     
     ### CPSOIL
-    outDF$A_GDAYP[outDF$Variable=="CPSOIL"] <- ifelse(modDF.sum$CPSOIL.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="CPSOIL"] <- ifelse(modDF.sum$CPSOIL.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                             (obsDF$CPSOIL[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                  obsDF$CPSOIL[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                            modDF.sum$CPSOIL.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                            modDF.sum$CPSOIL.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                             (obsDF$CPSOIL[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                  obsDF$CPSOIL[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                         1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="CPSOIL"] <- ifelse(modDF.sum$CPSOIL.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="CPSOIL"] <- ifelse(modDF.sum$CPSOIL.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                             (obsDF$CPSOIL[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                  obsDF$CPSOIL[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                            modDF.sum$CPSOIL.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                            modDF.sum$CPSOIL.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                             (obsDF$CPSOIL[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                  obsDF$CPSOIL[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                         1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="CPSOIL"] <- ifelse(modDF.sum$CPSOIL.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="CPSOIL"] <- ifelse(modDF.sum$CPSOIL.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                             (obsDF$CPSOIL[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                  obsDF$CPSOIL[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                            modDF.sum$CPSOIL.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                            modDF.sum$CPSOIL.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                             (obsDF$CPSOIL[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                  obsDF$CPSOIL[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                         1, 0)
@@ -3771,26 +3771,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
                                                       1, 0)
     
     ### CPFLIT
-    outDF$A_GDAYP[outDF$Variable=="CPFLIT"] <- ifelse(modDF.sum$CPFLIT.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="CPFLIT"] <- ifelse(modDF.sum$CPFLIT.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                             (obsDF$CPFLIT[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                  obsDF$CPFLIT[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                            modDF.sum$CPFLIT.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                            modDF.sum$CPFLIT.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                             (obsDF$CPFLIT[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                  obsDF$CPFLIT[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                         1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="CPFLIT"] <- ifelse(modDF.sum$CPFLIT.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="CPFLIT"] <- ifelse(modDF.sum$CPFLIT.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                             (obsDF$CPFLIT[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                  obsDF$CPFLIT[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                            modDF.sum$CPFLIT.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                            modDF.sum$CPFLIT.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                             (obsDF$CPFLIT[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                  obsDF$CPFLIT[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                         1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="CPFLIT"] <- ifelse(modDF.sum$CPFLIT.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="CPFLIT"] <- ifelse(modDF.sum$CPFLIT.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                             (obsDF$CPFLIT[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                  obsDF$CPFLIT[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                            modDF.sum$CPFLIT.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                            modDF.sum$CPFLIT.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                             (obsDF$CPFLIT[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                  obsDF$CPFLIT[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                         1, 0)
@@ -3846,26 +3846,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
     
     
     ### GPP use
-    outDF$A_GDAYP[outDF$Variable=="GPP_use"] <- ifelse(modDF.sum$GPP_use.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="GPP_use"] <- ifelse(modDF.sum$GPP_use.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                        (obsDF$GPP_use[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                             obsDF$GPP_use[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                       modDF.sum$GPP_use.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                       modDF.sum$GPP_use.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                        (obsDF$GPP_use[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                             obsDF$GPP_use[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                    1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="GPP_use"] <- ifelse(modDF.sum$GPP_use.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="GPP_use"] <- ifelse(modDF.sum$GPP_use.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                        (obsDF$GPP_use[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                             obsDF$GPP_use[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                       modDF.sum$GPP_use.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                       modDF.sum$GPP_use.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                        (obsDF$GPP_use[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                             obsDF$GPP_use[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                    1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="GPP_use"] <- ifelse(modDF.sum$GPP_use.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="GPP_use"] <- ifelse(modDF.sum$GPP_use.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                        (obsDF$GPP_use[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                             obsDF$GPP_use[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                       modDF.sum$GPP_use.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                       modDF.sum$GPP_use.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                        (obsDF$GPP_use[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                             obsDF$GPP_use[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                    1, 0)
@@ -3921,26 +3921,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
     
     
     ### deltaPVEG
-    outDF$A_GDAYP[outDF$Variable=="deltaPVEG"] <- ifelse(modDF.sum$deltaPVEG.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="deltaPVEG"] <- ifelse(modDF.sum$deltaPVEG.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                       (obsDF$deltaPVEG[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                            obsDF$deltaPVEG[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                      modDF.sum$deltaPVEG.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                      modDF.sum$deltaPVEG.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                       (obsDF$deltaPVEG[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                            obsDF$deltaPVEG[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                   1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="deltaPVEG"] <- ifelse(modDF.sum$deltaPVEG.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="deltaPVEG"] <- ifelse(modDF.sum$deltaPVEG.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                       (obsDF$deltaPVEG[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                            obsDF$deltaPVEG[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                      modDF.sum$deltaPVEG.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                      modDF.sum$deltaPVEG.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                       (obsDF$deltaPVEG[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                            obsDF$deltaPVEG[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                   1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="deltaPVEG"] <- ifelse(modDF.sum$deltaPVEG.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="deltaPVEG"] <- ifelse(modDF.sum$deltaPVEG.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                       (obsDF$deltaPVEG[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                            obsDF$deltaPVEG[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                      modDF.sum$deltaPVEG.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                      modDF.sum$deltaPVEG.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                       (obsDF$deltaPVEG[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                            obsDF$deltaPVEG[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                   1, 0)
@@ -3998,26 +3998,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
     
     
     ### CMIC
-    outDF$A_GDAYP[outDF$Variable=="CMIC"] <- ifelse(modDF.sum$CMIC.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="CMIC"] <- ifelse(modDF.sum$CMIC.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                              (obsDF$CMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                   obsDF$CMIC[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                             modDF.sum$CMIC.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                             modDF.sum$CMIC.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                              (obsDF$CMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                   obsDF$CMIC[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                          1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="CMIC"] <- ifelse(modDF.sum$CMIC.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="CMIC"] <- ifelse(modDF.sum$CMIC.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                              (obsDF$CMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                   obsDF$CMIC[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                             modDF.sum$CMIC.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                             modDF.sum$CMIC.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                              (obsDF$CMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                   obsDF$CMIC[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                          1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="CMIC"] <- ifelse(modDF.sum$CMIC.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="CMIC"] <- ifelse(modDF.sum$CMIC.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                              (obsDF$CMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                   obsDF$CMIC[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                             modDF.sum$CMIC.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                             modDF.sum$CMIC.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                              (obsDF$CMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                   obsDF$CMIC[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                          1, 0)
@@ -4075,26 +4075,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
     
     
     ### PMIC
-    outDF$A_GDAYP[outDF$Variable=="PMIC"] <- ifelse(modDF.sum$PMIC.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="PMIC"] <- ifelse(modDF.sum$PMIC.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                         (obsDF$PMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                              obsDF$PMIC[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                        modDF.sum$PMIC.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                        modDF.sum$PMIC.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                         (obsDF$PMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                              obsDF$PMIC[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                     1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="PMIC"] <- ifelse(modDF.sum$PMIC.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="PMIC"] <- ifelse(modDF.sum$PMIC.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                         (obsDF$PMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                              obsDF$PMIC[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                        modDF.sum$PMIC.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                        modDF.sum$PMIC.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                         (obsDF$PMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                              obsDF$PMIC[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                     1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="PMIC"] <- ifelse(modDF.sum$PMIC.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="PMIC"] <- ifelse(modDF.sum$PMIC.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                         (obsDF$PMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                              obsDF$PMIC[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                        modDF.sum$PMIC.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                        modDF.sum$PMIC.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                         (obsDF$PMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                              obsDF$PMIC[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                     1, 0)
@@ -4151,26 +4151,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
     
     
     ### deltadeltaCMIC
-    outDF$A_GDAYP[outDF$Variable=="deltaCMIC"] <- ifelse(modDF.sum$deltaCMIC.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="deltaCMIC"] <- ifelse(modDF.sum$deltaCMIC.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                         (obsDF$deltaCMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                              obsDF$deltaCMIC[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                        modDF.sum$deltaCMIC.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                        modDF.sum$deltaCMIC.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                         (obsDF$deltaCMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                              obsDF$deltaCMIC[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                     1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="deltaCMIC"] <- ifelse(modDF.sum$deltaCMIC.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="deltaCMIC"] <- ifelse(modDF.sum$deltaCMIC.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                         (obsDF$deltaCMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                              obsDF$deltaCMIC[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                        modDF.sum$deltaCMIC.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                        modDF.sum$deltaCMIC.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                         (obsDF$deltaCMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                              obsDF$deltaCMIC[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                     1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="deltaCMIC"] <- ifelse(modDF.sum$deltaCMIC.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="deltaCMIC"] <- ifelse(modDF.sum$deltaCMIC.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                         (obsDF$deltaCMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                              obsDF$deltaCMIC[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                        modDF.sum$deltaCMIC.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                        modDF.sum$deltaCMIC.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                         (obsDF$deltaCMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                              obsDF$deltaCMIC[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                     1, 0)
@@ -4227,26 +4227,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
     
     
     ### deltaPMIC
-    outDF$A_GDAYP[outDF$Variable=="deltaPMIC"] <- ifelse(modDF.sum$deltaPMIC.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="deltaPMIC"] <- ifelse(modDF.sum$deltaPMIC.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                              (obsDF$deltaPMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                   obsDF$deltaPMIC[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                             modDF.sum$deltaPMIC.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                             modDF.sum$deltaPMIC.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                              (obsDF$deltaPMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                   obsDF$deltaPMIC[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                          1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="deltaPMIC"] <- ifelse(modDF.sum$deltaPMIC.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="deltaPMIC"] <- ifelse(modDF.sum$deltaPMIC.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                              (obsDF$deltaPMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                   obsDF$deltaPMIC[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                             modDF.sum$deltaPMIC.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                             modDF.sum$deltaPMIC.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                              (obsDF$deltaPMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                   obsDF$deltaPMIC[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                          1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="deltaPMIC"] <- ifelse(modDF.sum$deltaPMIC.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="deltaPMIC"] <- ifelse(modDF.sum$deltaPMIC.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                              (obsDF$deltaPMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                   obsDF$deltaPMIC[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                             modDF.sum$deltaPMIC.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                             modDF.sum$deltaPMIC.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                              (obsDF$deltaPMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                   obsDF$deltaPMIC[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                          1, 0)
@@ -4303,26 +4303,26 @@ assign_model_output_and_check_with_obs <- function (obsDF, outDF,
     
     
     ### CPMIC
-    outDF$A_GDAYP[outDF$Variable=="CPMIC"] <- ifelse(modDF.sum$CPMIC.mean[modDF.sum$ModName=="A_GDAYP"]<=
+    outDF$C_GDAYP[outDF$Variable=="CPMIC"] <- ifelse(modDF.sum$CPMIC.mean[modDF.sum$ModName=="C_GDAYP"]<=
                                                              (obsDF$CPMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                   obsDF$CPMIC[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                             modDF.sum$CPMIC.mean[modDF.sum$ModName=="A_GDAYP"]>=
+                                                             modDF.sum$CPMIC.mean[modDF.sum$ModName=="C_GDAYP"]>=
                                                              (obsDF$CPMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                   obsDF$CPMIC[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                          1, 0)
     
-    outDF$B_ELMV1[outDF$Variable=="CPMIC"] <- ifelse(modDF.sum$CPMIC.mean[modDF.sum$ModName=="B_ELMV1"]<=
+    outDF$A_ELMV1[outDF$Variable=="CPMIC"] <- ifelse(modDF.sum$CPMIC.mean[modDF.sum$ModName=="A_ELMV1"]<=
                                                              (obsDF$CPMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                   obsDF$CPMIC[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                             modDF.sum$CPMIC.mean[modDF.sum$ModName=="B_ELMV1"]>=
+                                                             modDF.sum$CPMIC.mean[modDF.sum$ModName=="A_ELMV1"]>=
                                                              (obsDF$CPMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                   obsDF$CPMIC[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                          1, 0)
     
-    outDF$C_CABLP[outDF$Variable=="CPMIC"] <- ifelse(modDF.sum$CPMIC.mean[modDF.sum$ModName=="C_CABLP"]<=
+    outDF$B_CABLP[outDF$Variable=="CPMIC"] <- ifelse(modDF.sum$CPMIC.mean[modDF.sum$ModName=="B_CABLP"]<=
                                                              (obsDF$CPMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]+
                                                                   obsDF$CPMIC[obsDF$Group=="sd"&obsDF$Trt==treatment])&
-                                                             modDF.sum$CPMIC.mean[modDF.sum$ModName=="C_CABLP"]>=
+                                                             modDF.sum$CPMIC.mean[modDF.sum$ModName=="B_CABLP"]>=
                                                              (obsDF$CPMIC[obsDF$Group=="mean"&obsDF$Trt==treatment]-
                                                                   obsDF$CPMIC[obsDF$Group=="sd"&obsDF$Trt==treatment]),
                                                          1, 0)

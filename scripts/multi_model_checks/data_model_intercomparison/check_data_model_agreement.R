@@ -231,7 +231,7 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
     ### calculate multi-model mean
     ## ambDF
     n <- (dim(ambDF.sum)[2]-1)/2+1
-    tmpDF <- ambDF.sum[ambDF.sum$ModName=="A_GDAYP",]
+    tmpDF <- ambDF.sum[ambDF.sum$ModName=="C_GDAYP",]
     tmpDF$ModName <- "I_MM"
     subDF <- ambDF.sum[,1:n]
     subDF$MM <- "I_MM"
@@ -246,7 +246,7 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
     
     ## eleDF
     n <- (dim(eleDF.sum)[2]-1)/2+1
-    tmpDF <- eleDF.sum[eleDF.sum$ModName=="A_GDAYP",]
+    tmpDF <- eleDF.sum[eleDF.sum$ModName=="C_GDAYP",]
     tmpDF$ModName <- "I_MM"
     subDF <- eleDF.sum[,1:n]
     subDF$MM <- "I_MM"
@@ -260,7 +260,7 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
     
     ## annDF.diff.sum
     n <- (dim(annDF.diff.sum)[2]-1)/2+1
-    tmpDF <- annDF.diff.sum[annDF.diff.sum$ModName=="A_GDAYP",]
+    tmpDF <- annDF.diff.sum[annDF.diff.sum$ModName=="C_GDAYP",]
     tmpDF$ModName <- "I_MM"
     subDF <- annDF.diff.sum[,1:n]
     subDF$MM <- "I_MM"
@@ -274,7 +274,7 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
     
     ## pctDF.diff.sum
     n <- (dim(annDF.pct.diff.sum)[2]-1)/2+1
-    tmpDF <- annDF.pct.diff.sum[annDF.pct.diff.sum$ModName=="A_GDAYP",]
+    tmpDF <- annDF.pct.diff.sum[annDF.pct.diff.sum$ModName=="C_GDAYP",]
     tmpDF$ModName <- "I_MM"
     subDF <- annDF.pct.diff.sum[,1:n]
     subDF$MM <- "I_MM"
@@ -313,8 +313,8 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
     
     
     outDF1 <- data.frame("Variable"=data.variable.list,
-                         "A_GDAYP"=NA, "B_ELMV1"=NA,
-                         "C_CABLP"=NA, "D_LPJGP"=NA,
+                         "A_ELMV1"=NA, "B_CABLP"=NA, 
+                         "C_GDAYP"=NA, "D_LPJGP"=NA,
                          "E_OCHDP"=NA, "F_QUINC"=NA,
                          "G_OCHDX"=NA, "H_QUJSM"=NA,
                          "I_MM"=NA)
@@ -568,9 +568,9 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
     ##################################################################    
     ### plot labelling
     
-    model.labels <- c("A_GDAYP" = "GDAYP",
-                      "B_ELMV1" = "ELMV1",
-                      "C_CABLP" = "CABLP",
+    model.labels <- c("A_ELMV1" = "ELMV1",
+                      "B_CABLP" = "CABLP",
+                      "C_GDAYP" = "GDAYP",
                       "D_LPJGP" = "LPJGP",
                       "E_OCHDP" = "OCDHP",
                       "F_QUINC" = "QUINC",

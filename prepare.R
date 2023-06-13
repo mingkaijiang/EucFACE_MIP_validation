@@ -52,9 +52,10 @@ for(z in sourcefiles)source(z)
 
 
 #### color palette:
-model.names <- c("A_GDAYP",
-                 "B_ELMV1",
-                 "C_CABLP",
+model.names <- c(#"A_GDAYP",
+                 "A_ELMV1",
+                 "B_CABLP",
+                 "C_GDAYP",
                  "D_LPJGP",
                  "E_OCHDP",
                  "F_QUINC",
@@ -106,9 +107,10 @@ Diverge_hsv_Palette <- colorspace::diverge_hcl(8)
 #                "I_GDAYN" = set3Palette[1],
 #                "J_LPJGN" = set3Palette[4])
 
-col.values <- c("A_GDAYP" = SpectralPalette[1],
-                "B_ELMV1" = SpectralPalette[2],
-                "C_CABLP" = SpectralPalette[3],
+col.values <- c(#"A_GDAYP" = SpectralPalette[1],
+                "A_ELMV1" = SpectralPalette[1],
+                "B_CABLP" = SpectralPalette[2],
+                "C_GDAYP" = SpectralPalette[3],
                 "D_LPJGP" = SpectralPalette[4],
                 "E_OCHDP" = SpectralPalette[5],
                 "F_QUINC" = SpectralPalette[6],
@@ -119,9 +121,10 @@ col.values <- c("A_GDAYP" = SpectralPalette[1],
 #"K_CABLP-VD" = SpectralPalette[3],
 #"L_LPJGP-VD" = SpectralPalette[4])
 
-linetype.values <- c("A_GDAYP" = 1,
-                     "B_ELMV1" = 1,
-                     "C_CABLP" = 1,
+linetype.values <- c(#"A_GDAYP" = 1,
+                     "A_ELMV1" = 1,
+                     "B_CABLP" = 1,
+                     "C_GDAYP" = 1,
                      "D_LPJGP" = 1,
                      "E_OCHDP" = 1,
                      "F_QUINC" = 1,
@@ -132,9 +135,10 @@ linetype.values <- c("A_GDAYP" = 1,
                      #"K_CABLP-VD" = 3,
                      #"L_LPJGP-VD" = 3)
 
-model.labels <- c("A_GDAYP" = "GDAYP",
-                  "B_ELMV1" = "ELMV1",
-                  "C_CABLP" = "CABLP",
+model.labels <- c(#"A_GDAYP" = "GDAYP",
+                  "A_ELMV1" = "ELMV1",
+                  "B_CABLP" = "CABLP",
+                  "C_GDAYP" = "GDAYP",
                   "D_LPJGP" = "LPJGP",
                   "E_OCHDP" = "OCDHP",
                   "F_QUINC" = "QUINC",

@@ -184,9 +184,9 @@ compile_obs_dataset_across_models <- function(p.mod.list,
             #outDF$ModName <- gsub("CABLP-VD", "CVD", outDF$ModName)
             #outDF$ModName <- gsub("LPJGP-VD", "LVD", outDF$ModName)
             
-            outDF$ModName <- gsub("GDAYP", "A_GDAYP", outDF$ModName)
-            outDF$ModName <- gsub("ELMV1", "B_ELMV1", outDF$ModName)
-            outDF$ModName <- gsub("CABLP", "C_CABLP", outDF$ModName)
+            outDF$ModName <- gsub("GDAYP", "C_GDAYP", outDF$ModName)
+            outDF$ModName <- gsub("ELMV1", "A_ELMV1", outDF$ModName)
+            outDF$ModName <- gsub("CABLP", "B_CABLP", outDF$ModName)
             outDF$ModName <- gsub("LPJGP", "D_LPJGP", outDF$ModName)
             outDF$ModName <- gsub("OCHDP", "E_OCHDP", outDF$ModName)
             outDF$ModName <- gsub("QUINC", "F_QUINC", outDF$ModName)

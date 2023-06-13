@@ -64,27 +64,28 @@ check_forcing_data_consistency <- function(scenario) {
     
     plotDF <- rbind(obsDF, ambDF)
     
-    plotDF$PAR[plotDF$ModName%in%c("I_GDAYN", "A_GDAYP", "C_CABLP")] <- plotDF$PAR[plotDF$ModName%in%c("I_GDAYN", "A_GDAYP", "C_CABLP")] * 2
+    plotDF$PAR[plotDF$ModName%in%c("I_GDAYN", "C_GDAYP", "B_CABLP")] <- plotDF$PAR[plotDF$ModName%in%c("I_GDAYN", "C_GDAYP", "B_CABLP")] * 2
     
     
     ##################################################################
     
     
-    col.values <- c("A_GDAYP" = SpectralPalette[1],
-                    "B_ELMV1" = SpectralPalette[2],
-                    "C_CABLP" = SpectralPalette[3],
+    col.values <- c(
+                    "A_ELMV1" = SpectralPalette[1],
+                    "B_CABLP" = SpectralPalette[2],
+                    "C_GDAYP" = SpectralPalette[3],
                     "D_LPJGP" = SpectralPalette[4],
                     "E_OCHDP" = SpectralPalette[5],
                     "F_QUINC" = SpectralPalette[6],
                     "G_OCHDX" = SpectralPalette[7],
                     "H_QUJSM" = SpectralPalette[8],
-                    "I_GDAYN" = SpectralPalette[1],
+                    "I_GDAYN" = SpectralPalette[3],
                     "J_LPJGN" = SpectralPalette[4])
     
     
-    model.labels <- c("A_GDAYP" = "GDAYP",
-                      "B_ELMV1" = "ELMV1",
-                      "C_CABLP" = "CABLP",
+    model.labels <- c("C_GDAYP" = "GDAYP",
+                      "A_ELMV1" = "ELMV1",
+                      "B_CABLP" = "CABLP",
                       "D_LPJGP" = "LPJGP",
                       "E_OCHDP" = "OCDHP",
                       "F_QUINC" = "QUINC",
@@ -94,9 +95,9 @@ check_forcing_data_consistency <- function(scenario) {
                       "J_LPJGN" = "LPJGN")
     
     
-    linetype.values <- c("A_GDAYP" = 1,
-                         "B_ELMV1" = 1,
-                         "C_CABLP" = 1,
+    linetype.values <- c("C_GDAYP" = 1,
+                         "A_ELMV1" = 1,
+                         "B_CABLP" = 1,
                          "D_LPJGP" = 1,
                          "E_OCHDP" = 1,
                          "F_QUINC" = 1,
