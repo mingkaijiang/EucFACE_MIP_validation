@@ -18,11 +18,11 @@ compare_CNP_and_CN_model_output <- function(scenario) {
     eleDF <- readRDS(paste0("output/MIP_output/processed_simulation/MIP_OBS_", scenario, "_ELE_annual.rds"))
     
     ### select GDAYN, GDAYP, LPJGN, LPJGP model output
-    ambDF <- subset(ambDF, ModName%in%c("I_GDAYN", "A_GDAYP",
+    ambDF <- subset(ambDF, ModName%in%c("I_GDAYN", "C_GDAYP",
                                         "J_LPJGN", "D_LPJGP"))
     
     
-    eleDF <- subset(eleDF, ModName%in%c("I_GDAYN", "A_GDAYP",
+    eleDF <- subset(eleDF, ModName%in%c("I_GDAYN", "C_GDAYP",
                                         "J_LPJGN", "D_LPJGP"))
     
     
@@ -38,7 +38,7 @@ compare_CNP_and_CN_model_output <- function(scenario) {
     diffDF$ModName <- gsub("I_GDAYN", "GDAY", diffDF$ModName)
     diffDF$ModName <- gsub("J_LPJGN", "LPJG", diffDF$ModName)
     
-    diffDF[diffDF$ModName=="GDAY",3:d] <- ambDF[ambDF$ModName=="A_GDAYP",3:d] - ambDF[ambDF$ModName=="I_GDAYN",3:d]
+    diffDF[diffDF$ModName=="GDAY",3:d] <- ambDF[ambDF$ModName=="C_GDAYP",3:d] - ambDF[ambDF$ModName=="I_GDAYN",3:d]
     diffDF[diffDF$ModName=="LPJG",3:d] <- ambDF[ambDF$ModName=="D_LPJGP",3:d] - ambDF[ambDF$ModName=="J_LPJGN",3:d]
     
     
@@ -86,7 +86,7 @@ compare_CNP_and_CN_model_output <- function(scenario) {
     
     ##################################################################
     #### Plotting
-    mod.list1 <- c("A_GDAYP", "D_LPJGP", "I_GDAYN", "J_LPJGN")
+    mod.list1 <- c("C_GDAYP", "D_LPJGP", "I_GDAYN", "J_LPJGN")
     mod.list2 <- c("GDAY", "LPJG")
     
     
@@ -142,7 +142,7 @@ compare_CNP_and_CN_model_output <- function(scenario) {
     plotDF1 <- subset(vegDF1, Variable%in%c("CL", "CW", "CFR", "CCR", "CSTOR") & Trt=="amb")
     plotDF2 <- subset(vegDF1, Variable%in%c("Total") & Trt=="amb")
     
-    val1 <- round((plotDF2$meanvalue[plotDF2$Model=="A_GDAYP"]-plotDF2$meanvalue[plotDF2$Model=="I_GDAYN"])/plotDF2$meanvalue[plotDF2$Model=="I_GDAYN"]*100, 1)
+    val1 <- round((plotDF2$meanvalue[plotDF2$Model=="C_GDAYP"]-plotDF2$meanvalue[plotDF2$Model=="I_GDAYN"])/plotDF2$meanvalue[plotDF2$Model=="I_GDAYN"]*100, 1)
     val2 <- round((plotDF2$meanvalue[plotDF2$Model=="D_LPJGP"]-plotDF2$meanvalue[plotDF2$Model=="J_LPJGN"])/plotDF2$meanvalue[plotDF2$Model=="J_LPJGN"]*100, 1)
     
     
@@ -151,14 +151,14 @@ compare_CNP_and_CN_model_output <- function(scenario) {
                  aes(Model, meanvalue)) +
         geom_bar(stat = "identity", aes(fill=Variable, alpha=Model), 
                  position="stack", col="black") +
-        geom_errorbar(data=plotDF2, 
-                      aes(x=Model, ymin=meanvalue-sdvalue, ymax=meanvalue+sdvalue), 
-                      position="dodge", width=0.2, col="black") +
+        #geom_errorbar(data=plotDF2, 
+        #              aes(x=Model, ymin=meanvalue-sdvalue, ymax=meanvalue+sdvalue), 
+        #              position="dodge", width=0.2, col="black") +
         geom_point(data=plotDF2, 
                       aes(x=Model, y=meanvalue), 
                       position="dodge", col="black", size=2, fill="white", pch=21) +
         geom_vline(xintercept=2.5, lty=2)+
-        #annotate("text", x=2, y=plotDF2$meanvalue[plotDF2$Model=="A_GDAYP"]*1.15, 
+        #annotate("text", x=2, y=plotDF2$meanvalue[plotDF2$Model=="C_GDAYP"]*1.15, 
         #         label=(paste0(val1, "%")), size=10)+
         #annotate("text", x=4, y=plotDF2$meanvalue[plotDF2$Model=="D_LPJGP"]*1.15, 
         #         label=(paste0(val2, "%")), size=10)+
@@ -177,7 +177,7 @@ compare_CNP_and_CN_model_output <- function(scenario) {
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
         ylab(expression(paste(C[veg] * " pools (g C " * m^2*")")))+
-        scale_x_discrete(limit=c("I_GDAYN","A_GDAYP", 
+        scale_x_discrete(limit=c("I_GDAYN","C_GDAYP", 
                                  "J_LPJGN","D_LPJGP"),
                          label=c("GDAYN","GDAYP", 
                                  "LPJGN","LPJGP"))+
@@ -199,7 +199,7 @@ compare_CNP_and_CN_model_output <- function(scenario) {
                                                             "CCR"=cbbPalette[7],
                                                             "CSTOR"=cbbPalette[8])),
                                    nrow=5, byrow=F))+
-        scale_alpha_manual(values=c("A_GDAYP" = 1.0, 
+        scale_alpha_manual(values=c("C_GDAYP" = 1.0, 
                                     "D_LPJGP" = 1.0,
                                     "I_GDAYN" = 0.3, 
                                     "J_LPJGN" = 0.3),
@@ -213,7 +213,7 @@ compare_CNP_and_CN_model_output <- function(scenario) {
     plotDF3$sdvalue <- sqrt((vegDF1$sdvalue[vegDF1$Variable=="Total"&vegDF1$Trt=="ele"]^2 + vegDF1$sdvalue[vegDF1$Variable=="Total"&vegDF1$Trt=="amb"]^2+
                                  + vegDF1$sdvalue[vegDF1$Variable=="Total"&vegDF1$Trt=="amb"]^2)/3)/vegDF1$meanvalue[vegDF1$Variable=="Total"&vegDF1$Trt=="amb"]
     
-    val1 <- round((plotDF3$meanvalue[plotDF3$Model=="A_GDAYP"]-plotDF3$meanvalue[plotDF3$Model=="I_GDAYN"])/plotDF3$meanvalue[plotDF3$Model=="I_GDAYN"]*100, 1)
+    val1 <- round((plotDF3$meanvalue[plotDF3$Model=="C_GDAYP"]-plotDF3$meanvalue[plotDF3$Model=="I_GDAYN"])/plotDF3$meanvalue[plotDF3$Model=="I_GDAYN"]*100, 1)
     val2 <- round((plotDF3$meanvalue[plotDF3$Model=="D_LPJGP"]-plotDF3$meanvalue[plotDF3$Model=="J_LPJGN"])/plotDF3$meanvalue[plotDF3$Model=="J_LPJGN"]*100, 1)
     
     
@@ -222,9 +222,9 @@ compare_CNP_and_CN_model_output <- function(scenario) {
                  aes(Model, meanvalue)) +
         geom_bar(stat = "identity", aes(fill=Model), 
                  position="stack", col="black") +
-        geom_errorbar(aes(x=Model, ymin=meanvalue-sdvalue, ymax=meanvalue+sdvalue), 
-                      position="dodge", width=0.2, col="black") +
-        #annotate("text", x=2, y=plotDF3$meanvalue[plotDF3$Model=="A_GDAYP"]*1.01, 
+        #geom_errorbar(aes(x=Model, ymin=meanvalue-sdvalue, ymax=meanvalue+sdvalue), 
+        #              position="dodge", width=0.2, col="black") +
+        #annotate("text", x=2, y=plotDF3$meanvalue[plotDF3$Model=="C_GDAYP"]*1.01, 
         #         label=(paste0(val1, "%")), size=10)+
         #annotate("text", x=4, y=plotDF3$meanvalue[plotDF3$Model=="D_LPJGP"]*1.01, 
         #         label=(paste0(val2, "%")), size=10)+
@@ -244,18 +244,18 @@ compare_CNP_and_CN_model_output <- function(scenario) {
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
         ylab(expression(paste(CO[2] *" effect on " * C[veg] * " (%)")))+
-        scale_x_discrete(limit=c("I_GDAYN","A_GDAYP", 
+        scale_x_discrete(limit=c("I_GDAYN","C_GDAYP", 
                                  "J_LPJGN","D_LPJGP"),
                          label=c("GDAYN","GDAYP", 
                                  "LPJGN","LPJGP"))+
         xlab("")+
-        #scale_alpha_manual(values=c("A_GDAYP" = 1.0, 
+        #scale_alpha_manual(values=c("C_GDAYP" = 1.0, 
         #                            "D_LPJGP" = 1.0,
         #                            "I_GDAYN" = 0.3, 
         #                            "J_LPJGN" = 0.3),
         #                   label=c("GDAYP","LPJGP", 
         #                           "GDAYN","LPJGN"))+
-        scale_fill_manual(values=c("A_GDAYP" = "grey", "D_LPJGP" = "grey",
+        scale_fill_manual(values=c("C_GDAYP" = "grey", "D_LPJGP" = "grey",
                                    "I_GDAYN" = "white", "J_LPJGN" = "white"),
                           label=c("GDAYP","LPJGP", 
                                   "GDAYN","LPJGN"))+
@@ -319,7 +319,7 @@ compare_CNP_and_CN_model_output <- function(scenario) {
         plotDF2$sdvalue[plotDF2$Model==i] <- smDF$sdvalue[smDF$Model==i]
     }
     
-    val1 <- round((plotDF2$meanvalue[plotDF2$Model=="A_GDAYP"]-plotDF2$meanvalue[plotDF2$Model=="I_GDAYN"])/plotDF2$meanvalue[plotDF2$Model=="I_GDAYN"]*100, 1)
+    val1 <- round((plotDF2$meanvalue[plotDF2$Model=="C_GDAYP"]-plotDF2$meanvalue[plotDF2$Model=="I_GDAYN"])/plotDF2$meanvalue[plotDF2$Model=="I_GDAYN"]*100, 1)
     val2 <- round((plotDF2$meanvalue[plotDF2$Model=="D_LPJGP"]-plotDF2$meanvalue[plotDF2$Model=="J_LPJGN"])/plotDF2$meanvalue[plotDF2$Model=="J_LPJGN"]*100, 1)
     
     
@@ -333,10 +333,10 @@ compare_CNP_and_CN_model_output <- function(scenario) {
         #annotate("text", x=4, y=plotDF2$meanvalue[plotDF2$Model=="C_LPJGP"]*1.2, 
         #         label=(paste0(val2, "%")), size=10)+
         geom_point(data=plotDF2, aes(x=Model, y=meanvalue), fill="white", pch=21, col="black")+
-        geom_errorbar(data=plotDF2, aes(x=Model,
-                                     ymin=meanvalue-sdvalue,
-                                     ymax=meanvalue+sdvalue),
-                      position="dodge", width=0.5)+
+        #geom_errorbar(data=plotDF2, aes(x=Model,
+        #                             ymin=meanvalue-sdvalue,
+        #                             ymax=meanvalue+sdvalue),
+        #              position="dodge", width=0.5)+
         theme_linedraw() +
         geom_vline(xintercept=2.5, lty=2)+
         theme(panel.grid.minor=element_blank(),
@@ -353,7 +353,7 @@ compare_CNP_and_CN_model_output <- function(scenario) {
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
         ylab(expression(paste(Delta * C[veg] * " (g C " * m^2 * " " * yr^-1 * ")")))+
-        scale_x_discrete(limit=c("I_GDAYN","A_GDAYP", 
+        scale_x_discrete(limit=c("I_GDAYN","C_GDAYP", 
                                  "J_LPJGN","D_LPJGP"),
                          label=c("GDAYN","GDAYP", 
                                  "LPJGN","LPJGP"))+
@@ -375,7 +375,7 @@ compare_CNP_and_CN_model_output <- function(scenario) {
                                                             "CCR"=cbbPalette[7],
                                                             "CSTOR"=cbbPalette[8])),
                                    nrow=1, byrow=F))+
-        scale_alpha_manual(values=c("A_GDAYP" = 1.0, 
+        scale_alpha_manual(values=c("C_GDAYP" = 1.0, 
                                     "D_LPJGP" = 1.0,
                                     "I_GDAYN" = 0.3, 
                                     "J_LPJGN" = 0.3),
@@ -409,7 +409,7 @@ compare_CNP_and_CN_model_output <- function(scenario) {
         plotDF3$sdvalue[plotDF3$Model==i] <- smDF$sdvalue[smDF$Model==i]
     }
     
-    val1 <- round((plotDF3$meanvalue[plotDF3$Model=="A_GDAYP"]-plotDF3$meanvalue[plotDF3$Model=="I_GDAYN"])/plotDF3$meanvalue[plotDF3$Model=="I_GDAYN"]*100, 1)
+    val1 <- round((plotDF3$meanvalue[plotDF3$Model=="C_GDAYP"]-plotDF3$meanvalue[plotDF3$Model=="I_GDAYN"])/plotDF3$meanvalue[plotDF3$Model=="I_GDAYN"]*100, 1)
     val2 <- round((plotDF3$meanvalue[plotDF3$Model=="D_LPJGP"]-plotDF3$meanvalue[plotDF3$Model=="J_LPJGN"])/plotDF3$meanvalue[plotDF3$Model=="J_LPJGN"]*100, 1)
     
     
@@ -423,10 +423,10 @@ compare_CNP_and_CN_model_output <- function(scenario) {
         #annotate("text", x=4, y=plotDF3$meanvalue[plotDF3$Model=="C_LPJGP"]*1.01, 
         #         label=(paste0(val2, "%")), size=10)+
         theme_linedraw() +
-        geom_errorbar(data=plotDF3, aes(x=Model,
-                                        ymin=meanvalue-sdvalue,
-                                        ymax=meanvalue+sdvalue),
-                      position="dodge", width=0.5)+
+        #geom_errorbar(data=plotDF3, aes(x=Model,
+        #                                ymin=meanvalue-sdvalue,
+        #                                ymax=meanvalue+sdvalue),
+        #              position="dodge", width=0.5)+
         geom_vline(xintercept=2.5, lty=2)+
         theme(panel.grid.minor=element_blank(),
               axis.text.x=element_text(size=12),
@@ -442,18 +442,18 @@ compare_CNP_and_CN_model_output <- function(scenario) {
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
         ylab(expression(paste(CO[2] * " effect on " * Delta * C[veg] * " (g C " * m^2 * " " * yr^-1 * ")")))+
-        scale_x_discrete(limit=c("I_GDAYN","A_GDAYP", 
+        scale_x_discrete(limit=c("I_GDAYN","C_GDAYP", 
                                  "J_LPJGN","D_LPJGP"),
                          label=c("GDAYN","GDAYP", 
                                  "LPJGN","LPJGP"))+
         xlab("")+
-        #scale_alpha_manual(values=c("A_GDAYP" = 1.0, 
+        #scale_alpha_manual(values=c("C_GDAYP" = 1.0, 
         #                            "D_LPJGP" = 1.0,
         #                            "I_GDAYN" = 0.3, 
         #                            "J_LPJGN" = 0.3),
         #                   label=c("GDAYP","LPJGP", 
         #                           "GDAYN","LPJGN"))+
-        scale_fill_manual(values=c("A_GDAYP" = "grey", "D_LPJGP" = "grey",
+        scale_fill_manual(values=c("C_GDAYP" = "grey", "D_LPJGP" = "grey",
                                    "I_GDAYN" = "white", "J_LPJGN" = "white"),
                           label=c("GDAYP","LPJGP", 
                                   "GDAYN","LPJGN"));p4
@@ -498,10 +498,10 @@ compare_CNP_and_CN_model_output <- function(scenario) {
                  aes(Model, meanvalue, group=Variable)) +
         geom_bar(stat = "identity", aes(fill=Variable, alpha=Model), 
                  position=position_dodge(), col="black") +
-        geom_errorbar(aes(x=Model, 
-                          ymin=meanvalue-sdvalue, 
-                          ymax=meanvalue+sdvalue), 
-                      position=position_dodge()) +
+        #geom_errorbar(aes(x=Model, 
+        #                  ymin=meanvalue-sdvalue, 
+        #                  ymax=meanvalue+sdvalue), 
+        #              position=position_dodge()) +
         geom_vline(xintercept=2.5, lty=2)+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
@@ -518,7 +518,7 @@ compare_CNP_and_CN_model_output <- function(scenario) {
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
         ylab(expression(paste("Carbon fluxes (g C " * m^2 * " " * yr^-1 * ")")))+
-        scale_x_discrete(limit=c("I_GDAYN","A_GDAYP", 
+        scale_x_discrete(limit=c("I_GDAYN","C_GDAYP", 
                                  "J_LPJGN","D_LPJGP"),
                          label=c("GDAYN","GDAYP", 
                                  "LPJGN","LPJGP"))+
@@ -530,7 +530,7 @@ compare_CNP_and_CN_model_output <- function(scenario) {
                           labels=c("GPP", "NPP", 
                                    expression(R[auto])))+
         scale_alpha_manual(name="Model",
-                           values=c("A_GDAYP" = 1.0, 
+                           values=c("C_GDAYP" = 1.0, 
                                     "D_LPJGP" = 1.0,
                                     "I_GDAYN" = 0.3, 
                                     "J_LPJGN" = 0.3),
@@ -540,7 +540,7 @@ compare_CNP_and_CN_model_output <- function(scenario) {
         #                                                    "NPP"="green",
         #                                                    "RAU"="red")),
         #                           nrow=1, byrow=F))+
-        guides(fill=guide_legend(expression(C[flux])), alpha = FALSE); p5
+        guides(fill=guide_legend(expression(C[flux])), alpha = FALSE)
     
     
     ### pct CO2 effect
@@ -564,10 +564,10 @@ compare_CNP_and_CN_model_output <- function(scenario) {
                  aes(Model, meanvalue, group=Variable)) +
         geom_bar(stat = "identity", aes(fill=Variable, alpha=Model), 
                  position=position_dodge(), col="black") +
-        geom_errorbar(aes(x=Model, 
-                          ymin=meanvalue-sdvalue, 
-                          ymax=meanvalue+sdvalue), 
-                      position=position_dodge()) +
+        #geom_errorbar(aes(x=Model, 
+        #                  ymin=meanvalue-sdvalue, 
+        #                  ymax=meanvalue+sdvalue), 
+        #              position=position_dodge()) +
         geom_vline(xintercept=2.5, lty=2)+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
@@ -584,7 +584,7 @@ compare_CNP_and_CN_model_output <- function(scenario) {
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
         ylab(expression(paste("Carbon fluxes " * CO[2] *" response (%)")))+
-        scale_x_discrete(limit=c("I_GDAYN","A_GDAYP", 
+        scale_x_discrete(limit=c("I_GDAYN","C_GDAYP", 
                                  "J_LPJGN","D_LPJGP"),
                          label=c("GDAYN","GDAYP", 
                                  "LPJGN","LPJGP"))+
@@ -600,12 +600,12 @@ compare_CNP_and_CN_model_output <- function(scenario) {
                                                             "RAU"="red")),
                                    nrow=1, byrow=F))+
         scale_alpha_manual(name="Model",
-                           values=c("A_GDAYP" = 1.0, 
+                           values=c("C_GDAYP" = 1.0, 
                                     "D_LPJGP" = 1.0,
                                     "I_GDAYN" = 0.3, 
                                     "J_LPJGN" = 0.3),
                            label=c("GDAYP","LPJGP", 
-                                   "GDAYN","LPJGN")); p6
+                                   "GDAYN","LPJGN"))
     
     
     #gg.gap::gg.gap(plot=p4,

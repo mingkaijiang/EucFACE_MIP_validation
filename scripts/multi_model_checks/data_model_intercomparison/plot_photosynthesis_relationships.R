@@ -21,18 +21,18 @@ plot_photosynthesis_relationships <- function(scenario, eucDF) {
     eleDF[eleDF<=-999] <- NA
     
     ### remove two N only models
-    ambDF <- ambDF[ambDF$ModName%in%c("A_GDAYP",
-                                      "B_ELMV1",
-                                      "C_CABLP",
+    ambDF <- ambDF[ambDF$ModName%in%c("A_ELMV1",
+                                      "B_CABLP",
+                                      "C_GDAYP",
                                       "D_LPJGP",
                                       "E_OCHDP",
                                       "F_QUINC",
                                       "G_OCHDX",
                                       "H_QUJSM"),]
     
-    eleDF <- eleDF[eleDF$ModName%in%c("A_GDAYP",
-                                      "B_ELMV1",
-                                      "C_CABLP",
+    eleDF <- eleDF[eleDF$ModName%in%c("A_ELMV1",
+                                      "B_CABLP",
+                                      "C_GDAYP",
                                       "D_LPJGP",
                                       "E_OCHDP",
                                       "F_QUINC",
@@ -533,8 +533,8 @@ plot_photosynthesis_relationships <- function(scenario, eucDF) {
     
     
     ### now prepare the plotting df
-    plotDF1 <- sumDF3[sumDF3$ModName%in%c("A_GDAYP", "B_ELMV1", 
-                                          "C_CABLP", "D_LPJGP",
+    plotDF1 <- sumDF3[sumDF3$ModName%in%c("A_ELMV1", "B_CABLP", 
+                                          "C_GDAYP", "D_LPJGP",
                                           "E_OCHDP", "F_QUINC",
                                           "G_OCHDX", "H_QUJSM"),]
     
@@ -573,8 +573,8 @@ plot_photosynthesis_relationships <- function(scenario, eucDF) {
                         values=c(col.values, "I_MM"="grey", "OBS"="black"),
                         labels=c(model.labels, "I_MM"="M-M", "OBS"="OBS"))+
       scale_shape_manual(name="Model",
-                         values=c("A_GDAYP"=19,"B_ELMV1"=19,
-                                  "C_CABLP"=19,"D_LPJGP"=19,
+                         values=c("C_GDAYP"=19,"A_ELMV1"=19,
+                                  "B_CABLP"=19,"D_LPJGP"=19,
                                   "E_OCHDP"=19,"F_QUINC"=19,
                                   "G_OCHDX"=19,"H_QUJSM"=19,
                                   "I_MM"=19, "OBS"=15))+
@@ -617,8 +617,8 @@ plot_photosynthesis_relationships <- function(scenario, eucDF) {
                         values=c(col.values, "I_MM"="grey", "OBS"="black"),
                         labels=c(model.labels, "I_MM"="M-M", "OBS"="OBS"))+
       scale_shape_manual(name="Model",
-                         values=c("A_GDAYP"=19,"B_ELMV1"=19,
-                                  "C_CABLP"=19,"D_LPJGP"=19,
+                         values=c("C_GDAYP"=19,"A_ELMV1"=19,
+                                  "B_CABLP"=19,"D_LPJGP"=19,
                                   "E_OCHDP"=19,"F_QUINC"=19,
                                   "G_OCHDX"=19,"H_QUJSM"=19,
                                   "I_MM"=19,"OBS"=15))+
@@ -658,8 +658,8 @@ plot_photosynthesis_relationships <- function(scenario, eucDF) {
                         values=c(col.values, "I_MM"="grey", "OBS"="black"),
                         labels=c(model.labels, "I_MM"="M-M", "OBS"="OBS"))+
       scale_shape_manual(name="Model",
-                         values=c("A_GDAYP"=19,"B_ELMV1"=19,
-                                  "C_CABLP"=19,"D_LPJGP"=19,
+                         values=c("C_GDAYP"=19,"A_ELMV1"=19,
+                                  "B_CABLP"=19,"D_LPJGP"=19,
                                   "E_OCHDP"=19,"F_QUINC"=19,
                                   "G_OCHDX"=19,"H_QUJSM"=19,
                                   "I_MM"=19,"OBS"=15))+
@@ -700,8 +700,8 @@ plot_photosynthesis_relationships <- function(scenario, eucDF) {
                         values=c(col.values, "I_MM"="grey", "OBS"="black"),
                         labels=c(model.labels, "I_MM"="M-M", "OBS"="OBS"))+
       scale_shape_manual(name="Model",
-                         values=c("A_GDAYP"=19,"B_ELMV1"=19,
-                                  "C_CABLP"=19,"D_LPJGP"=19,
+                         values=c("C_GDAYP"=19,"A_ELMV1"=19,
+                                  "B_CABLP"=19,"D_LPJGP"=19,
                                   "E_OCHDP"=19,"F_QUINC"=19,
                                   "G_OCHDX"=19,"H_QUJSM"=19,
                                   "I_MM"=19,"OBS"=15))+
@@ -744,8 +744,8 @@ plot_photosynthesis_relationships <- function(scenario, eucDF) {
                         values=c(col.values, "I_MM"="grey", "OBS"="black"),
                         labels=c(model.labels, "I_MM"="M-M", "OBS"="OBS"))+
       scale_shape_manual(name="Model",
-                         values=c("A_GDAYP"=19,"B_ELMV1"=19,
-                                  "C_CABLP"=19,"D_LPJGP"=19,
+                         values=c("C_GDAYP"=19,"A_ELMV1"=19,
+                                  "B_CABLP"=19,"D_LPJGP"=19,
                                   "E_OCHDP"=19,"F_QUINC"=19,
                                   "G_OCHDX"=19,"H_QUJSM"=19,
                                   "I_MM"=19,"OBS"=15))+

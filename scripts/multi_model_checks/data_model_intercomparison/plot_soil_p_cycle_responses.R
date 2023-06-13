@@ -67,8 +67,8 @@ plot_soil_p_cycle_responses <- function(eucDF,
       
       
       ### check GDAY PUP
-      #ambDF.sum$PUP.mean[ambDF.sum$ModName=="A_GDAYP"]
-      #eleDF.sum$PUP.mean[eleDF.sum$ModName=="A_GDAYP"]
+      #ambDF.sum$PUP.mean[ambDF.sum$ModName=="C_GDAYP"]
+      #eleDF.sum$PUP.mean[eleDF.sum$ModName=="C_GDAYP"]
       
       
       ##########################################################################
@@ -91,14 +91,14 @@ plot_soil_p_cycle_responses <- function(eucDF,
       plotDF2 <- plabDF[plabDF$Trt=="pct_diff",]
       
       ### ELMV1 assumes top 1 m soil, not top 10 cm
-      plotDF1$meanvalue[plotDF1$Group=="B_ELMV1"] <- plotDF1$meanvalue[plotDF1$Group=="B_ELMV1"]/ 10
-      plotDF1$sdvalue[plotDF1$Group=="B_ELMV1"] <- plotDF1$sdvalue[plotDF1$Group=="B_ELMV1"]/ 10
+      plotDF1$meanvalue[plotDF1$Group=="A_ELMV1"] <- plotDF1$meanvalue[plotDF1$Group=="A_ELMV1"]/ 10
+      plotDF1$sdvalue[plotDF1$Group=="A_ELMV1"] <- plotDF1$sdvalue[plotDF1$Group=="A_ELMV1"]/ 10
       
       
       
       ### add multi-model mean
-      tmpDF <- plotDF1[plotDF1$Group%in%c("A_GDAYP", "B_ELMV1",
-                                          "C_CABLP", "D_LPJGP",
+      tmpDF <- plotDF1[plotDF1$Group%in%c("C_GDAYP", "A_ELMV1",
+                                          "B_CABLP", "D_LPJGP",
                                           "E_OCHDP", "F_QUINC",
                                           "G_OCHDX", "H_QUJSM"),]
       tmpDF2 <- summaryBy(meanvalue~Variable+Trt, FUN=c(mean,sd),
@@ -110,8 +110,8 @@ plot_soil_p_cycle_responses <- function(eucDF,
       plotDF1 <- rbind(plotDF1, tmpDF2)
       
       ### add multi-model mean
-      tmpDF <- plotDF2[plotDF2$Group%in%c("A_GDAYP", "B_ELMV1",
-                                          "C_CABLP", "D_LPJGP",
+      tmpDF <- plotDF2[plotDF2$Group%in%c("C_GDAYP", "A_ELMV1",
+                                          "B_CABLP", "D_LPJGP",
                                           "E_OCHDP", "F_QUINC",
                                           "G_OCHDX", "H_QUJSM"),]
       tmpDF2 <- summaryBy(meanvalue~Variable+Trt, FUN=c(mean,sd),
@@ -123,8 +123,8 @@ plot_soil_p_cycle_responses <- function(eucDF,
       plotDF2 <- rbind(plotDF2, tmpDF2)
       
       
-      plotDF2$sdvalue[plotDF2$Group%in%c("A_GDAYP", "B_ELMV1",
-                                         "C_CABLP", "D_LPJGP",
+      plotDF2$sdvalue[plotDF2$Group%in%c("C_GDAYP", "A_ELMV1",
+                                         "B_CABLP", "D_LPJGP",
                                          "E_OCHDP", "F_QUINC",
                                          "G_OCHDX", "H_QUJSM")] <- NA
       
@@ -242,14 +242,14 @@ plot_soil_p_cycle_responses <- function(eucDF,
       plotDF2 <- plabDF[plabDF$Trt=="pct_diff",]
       
       ### ELMV1 assumes top 1 m soil, not top 10 cm
-      plotDF1$meanvalue[plotDF1$Group=="B_ELMV1"] <- plotDF1$meanvalue[plotDF1$Group=="B_ELMV1"]/ 10
-      plotDF1$sdvalue[plotDF1$Group=="B_ELMV1"] <- plotDF1$sdvalue[plotDF1$Group=="B_ELMV1"]/ 10
+      plotDF1$meanvalue[plotDF1$Group=="A_ELMV1"] <- plotDF1$meanvalue[plotDF1$Group=="A_ELMV1"]/ 10
+      plotDF1$sdvalue[plotDF1$Group=="A_ELMV1"] <- plotDF1$sdvalue[plotDF1$Group=="A_ELMV1"]/ 10
       
       
       
       ### add multi-model mean
-      tmpDF <- plotDF1[plotDF1$Group%in%c("A_GDAYP", "B_ELMV1",
-                                          "C_CABLP", "D_LPJGP",
+      tmpDF <- plotDF1[plotDF1$Group%in%c("C_GDAYP", "A_ELMV1",
+                                          "B_CABLP", "D_LPJGP",
                                           "E_OCHDP", "F_QUINC",
                                           "G_OCHDX", "H_QUJSM"),]
       tmpDF2 <- summaryBy(meanvalue~Variable+Trt, FUN=c(mean,sd),
@@ -261,8 +261,8 @@ plot_soil_p_cycle_responses <- function(eucDF,
       plotDF1 <- rbind(plotDF1, tmpDF2)
       
       ### add multi-model mean
-      tmpDF <- plotDF2[plotDF2$Group%in%c("A_GDAYP", "B_ELMV1",
-                                          "C_CABLP", "D_LPJGP",
+      tmpDF <- plotDF2[plotDF2$Group%in%c("C_GDAYP", "A_ELMV1",
+                                          "B_CABLP", "D_LPJGP",
                                           "E_OCHDP", "F_QUINC",
                                           "G_OCHDX", "H_QUJSM"),]
       tmpDF2 <- summaryBy(meanvalue~Variable+Trt, FUN=c(mean,sd),
@@ -274,8 +274,8 @@ plot_soil_p_cycle_responses <- function(eucDF,
       plotDF2 <- rbind(plotDF2, tmpDF2)
       
       
-      plotDF2$sdvalue[plotDF2$Group%in%c("A_GDAYP", "B_ELMV1",
-                                         "C_CABLP", "D_LPJGP",
+      plotDF2$sdvalue[plotDF2$Group%in%c("C_GDAYP", "A_ELMV1",
+                                         "B_CABLP", "D_LPJGP",
                                          "E_OCHDP", "F_QUINC",
                                          "G_OCHDX", "H_QUJSM")] <- NA
       
@@ -414,8 +414,8 @@ plot_soil_p_cycle_responses <- function(eucDF,
       plotDF3$meanvalue[plotDF3$Group=="G_OCHDX"] <- plotDF3$meanvalue[plotDF3$Group=="G_OCHDX"]/ 2
       
       ### add multi-model mean
-      tmpDF <- plotDF1[plotDF1$Group%in%c("A_GDAYP", "B_ELMV1",
-                                          "C_CABLP", "D_LPJGP",
+      tmpDF <- plotDF1[plotDF1$Group%in%c("C_GDAYP", "A_ELMV1",
+                                          "B_CABLP", "D_LPJGP",
                                           "E_OCHDP", "F_QUINC",
                                           "G_OCHDX", "H_QUJSM"),]
       tmpDF2 <- summaryBy(meanvalue~Variable+Trt, FUN=c(mean,sd),
@@ -427,8 +427,8 @@ plot_soil_p_cycle_responses <- function(eucDF,
       plotDF1 <- rbind(plotDF1, tmpDF2)
       
       ### add multi-model mean
-      tmpDF <- plotDF2[plotDF2$Group%in%c("A_GDAYP", "B_ELMV1",
-                                          "C_CABLP", "D_LPJGP",
+      tmpDF <- plotDF2[plotDF2$Group%in%c("C_GDAYP", "A_ELMV1",
+                                          "B_CABLP", "D_LPJGP",
                                           "E_OCHDP", "F_QUINC",
                                           "G_OCHDX", "H_QUJSM"),]
       tmpDF2 <- summaryBy(meanvalue~Variable+Trt, FUN=c(mean,sd),
@@ -440,15 +440,15 @@ plot_soil_p_cycle_responses <- function(eucDF,
       plotDF2 <- rbind(plotDF2, tmpDF2)
       
       
-      plotDF2$sdvalue[plotDF2$Group%in%c("A_GDAYP", "B_ELMV1",
-                                         "C_CABLP", "D_LPJGP",
+      plotDF2$sdvalue[plotDF2$Group%in%c("C_GDAYP", "A_ELMV1",
+                                         "B_CABLP", "D_LPJGP",
                                          "E_OCHDP", "F_QUINC",
                                          "G_OCHDX", "H_QUJSM")] <- NA
       
       
       ### add multi-model mean
-      tmpDF <- plotDF3[plotDF3$Group%in%c("A_GDAYP", "B_ELMV1",
-                                          "C_CABLP", "D_LPJGP",
+      tmpDF <- plotDF3[plotDF3$Group%in%c("C_GDAYP", "A_ELMV1",
+                                          "B_CABLP", "D_LPJGP",
                                           "E_OCHDP", "F_QUINC",
                                           "G_OCHDX", "H_QUJSM"),]
       tmpDF2 <- summaryBy(meanvalue~Variable+Trt, FUN=c(mean,sd),
@@ -462,8 +462,8 @@ plot_soil_p_cycle_responses <- function(eucDF,
       
       
       ### add multi-model mean
-      tmpDF <- plotDF4[plotDF4$Group%in%c("A_GDAYP", "B_ELMV1",
-                                          "C_CABLP", "D_LPJGP",
+      tmpDF <- plotDF4[plotDF4$Group%in%c("C_GDAYP", "A_ELMV1",
+                                          "B_CABLP", "D_LPJGP",
                                           "E_OCHDP", "F_QUINC",
                                           "G_OCHDX", "H_QUJSM"),]
       tmpDF2 <- summaryBy(meanvalue~Variable+Trt, FUN=c(mean,sd),
@@ -692,14 +692,14 @@ plot_soil_p_cycle_responses <- function(eucDF,
     
       
       ### elmv1 is for top 1 m, scale it down
-      plotDF1$meanvalue[plotDF1$Group=="B_ELMV1"] <- plotDF1$meanvalue[plotDF1$Group=="B_ELMV1"]/ 10
-      plotDF1$sdvalue[plotDF1$Group=="B_ELMV1"] <- plotDF1$sdvalue[plotDF1$Group=="B_ELMV1"]/ 10
+      plotDF1$meanvalue[plotDF1$Group=="A_ELMV1"] <- plotDF1$meanvalue[plotDF1$Group=="A_ELMV1"]/ 10
+      plotDF1$sdvalue[plotDF1$Group=="A_ELMV1"] <- plotDF1$sdvalue[plotDF1$Group=="A_ELMV1"]/ 10
       
       
       
       ### add multi-model mean
-      tmpDF <- plotDF1[plotDF1$Group%in%c("A_GDAYP", "B_ELMV1",
-                                          "C_CABLP", "D_LPJGP",
+      tmpDF <- plotDF1[plotDF1$Group%in%c("C_GDAYP", "A_ELMV1",
+                                          "B_CABLP", "D_LPJGP",
                                           "E_OCHDP", "F_QUINC",
                                           "G_OCHDX", "H_QUJSM"),]
       tmpDF2 <- summaryBy(meanvalue~Variable+Trt, FUN=c(mean,sd),
@@ -711,8 +711,8 @@ plot_soil_p_cycle_responses <- function(eucDF,
       plotDF1 <- rbind(plotDF1, tmpDF2)
       
       ### add multi-model mean
-      tmpDF <- plotDF2[plotDF2$Group%in%c("A_GDAYP", "B_ELMV1",
-                                          "C_CABLP", "D_LPJGP",
+      tmpDF <- plotDF2[plotDF2$Group%in%c("C_GDAYP", "A_ELMV1",
+                                          "B_CABLP", "D_LPJGP",
                                           "E_OCHDP", "F_QUINC",
                                           "G_OCHDX", "H_QUJSM"),]
       tmpDF2 <- summaryBy(meanvalue~Variable+Trt, FUN=c(mean,sd),
@@ -723,15 +723,15 @@ plot_soil_p_cycle_responses <- function(eucDF,
       
       plotDF2 <- rbind(plotDF2, tmpDF2)
       
-      plotDF2$sdvalue[plotDF2$Group%in%c("A_GDAYP", "B_ELMV1",
-                                         "C_CABLP", "D_LPJGP",
+      plotDF2$sdvalue[plotDF2$Group%in%c("C_GDAYP", "A_ELMV1",
+                                         "B_CABLP", "D_LPJGP",
                                          "E_OCHDP", "F_QUINC",
                                          "G_OCHDX", "H_QUJSM")] <- NA
       
       
       ### add multi-model mean
-      tmpDF <- plotDF3[plotDF3$Group%in%c("A_GDAYP", "B_ELMV1",
-                                          "C_CABLP", "D_LPJGP",
+      tmpDF <- plotDF3[plotDF3$Group%in%c("C_GDAYP", "A_ELMV1",
+                                          "B_CABLP", "D_LPJGP",
                                           "E_OCHDP", "F_QUINC",
                                           "G_OCHDX", "H_QUJSM"),]
       tmpDF2 <- summaryBy(meanvalue~Variable+Trt, FUN=c(mean,sd),
@@ -837,14 +837,14 @@ plot_soil_p_cycle_responses <- function(eucDF,
       
       
       ### elmv1 is for top 1 m, scale it down
-      plotDF1$meanvalue[plotDF1$Group=="B_ELMV1"] <- plotDF1$meanvalue[plotDF1$Group=="B_ELMV1"]/ 10
-      plotDF1$sdvalue[plotDF1$Group=="B_ELMV1"] <- plotDF1$sdvalue[plotDF1$Group=="B_ELMV1"]/ 10
+      plotDF1$meanvalue[plotDF1$Group=="A_ELMV1"] <- plotDF1$meanvalue[plotDF1$Group=="A_ELMV1"]/ 10
+      plotDF1$sdvalue[plotDF1$Group=="A_ELMV1"] <- plotDF1$sdvalue[plotDF1$Group=="A_ELMV1"]/ 10
       
       
       
       ### add multi-model mean
-      tmpDF <- plotDF1[plotDF1$Group%in%c("A_GDAYP", "B_ELMV1",
-                                          "C_CABLP", "D_LPJGP",
+      tmpDF <- plotDF1[plotDF1$Group%in%c("C_GDAYP", "A_ELMV1",
+                                          "B_CABLP", "D_LPJGP",
                                           "E_OCHDP", "F_QUINC",
                                           "G_OCHDX", "H_QUJSM"),]
       tmpDF2 <- summaryBy(meanvalue~Variable+Trt, FUN=c(mean,sd),
@@ -856,8 +856,8 @@ plot_soil_p_cycle_responses <- function(eucDF,
       plotDF1 <- rbind(plotDF1, tmpDF2)
       
       ### add multi-model mean
-      tmpDF <- plotDF2[plotDF2$Group%in%c("A_GDAYP", "B_ELMV1",
-                                          "C_CABLP", "D_LPJGP",
+      tmpDF <- plotDF2[plotDF2$Group%in%c("C_GDAYP", "A_ELMV1",
+                                          "B_CABLP", "D_LPJGP",
                                           "E_OCHDP", "F_QUINC",
                                           "G_OCHDX", "H_QUJSM"),]
       tmpDF2 <- summaryBy(meanvalue~Variable+Trt, FUN=c(mean,sd),
@@ -868,15 +868,15 @@ plot_soil_p_cycle_responses <- function(eucDF,
       
       plotDF2 <- rbind(plotDF2, tmpDF2)
       
-      plotDF2$sdvalue[plotDF2$Group%in%c("A_GDAYP", "B_ELMV1",
-                                         "C_CABLP", "D_LPJGP",
+      plotDF2$sdvalue[plotDF2$Group%in%c("C_GDAYP", "A_ELMV1",
+                                         "B_CABLP", "D_LPJGP",
                                          "E_OCHDP", "F_QUINC",
                                          "G_OCHDX", "H_QUJSM")] <- NA
       
       
       ### add multi-model mean
-      tmpDF <- plotDF3[plotDF3$Group%in%c("A_GDAYP", "B_ELMV1",
-                                          "C_CABLP", "D_LPJGP",
+      tmpDF <- plotDF3[plotDF3$Group%in%c("C_GDAYP", "A_ELMV1",
+                                          "B_CABLP", "D_LPJGP",
                                           "E_OCHDP", "F_QUINC",
                                           "G_OCHDX", "H_QUJSM"),]
       tmpDF2 <- summaryBy(meanvalue~Variable+Trt, FUN=c(mean,sd),
@@ -979,14 +979,14 @@ plot_soil_p_cycle_responses <- function(eucDF,
       plotDF2 <- plabDF[plabDF$Trt=="pct_diff",]
       
       ### ELMV1 assumes top 1 m soil, not top 10 cm
-      #plotDF1$meanvalue[plotDF1$Group=="B_ELMV1"] <- plotDF1$meanvalue[plotDF1$Group=="B_ELMV1"]
-      #plotDF1$sdvalue[plotDF1$Group=="B_ELMV1"] <- plotDF1$sdvalue[plotDF1$Group=="B_ELMV1"]/ 10
+      #plotDF1$meanvalue[plotDF1$Group=="A_ELMV1"] <- plotDF1$meanvalue[plotDF1$Group=="A_ELMV1"]
+      #plotDF1$sdvalue[plotDF1$Group=="A_ELMV1"] <- plotDF1$sdvalue[plotDF1$Group=="A_ELMV1"]/ 10
       
       
       
       ### add multi-model mean
-      tmpDF <- plotDF1[plotDF1$Group%in%c("A_GDAYP", "B_ELMV1",
-                                          "C_CABLP", "D_LPJGP",
+      tmpDF <- plotDF1[plotDF1$Group%in%c("C_GDAYP", "A_ELMV1",
+                                          "B_CABLP", "D_LPJGP",
                                           "E_OCHDP", "F_QUINC",
                                           "G_OCHDX", "H_QUJSM"),]
       tmpDF2 <- summaryBy(meanvalue~Variable+Trt, FUN=c(mean,sd),
@@ -998,8 +998,8 @@ plot_soil_p_cycle_responses <- function(eucDF,
       plotDF1 <- rbind(plotDF1, tmpDF2)
       
       ### add multi-model mean
-      tmpDF <- plotDF2[plotDF2$Group%in%c("A_GDAYP", "B_ELMV1",
-                                          "C_CABLP", "D_LPJGP",
+      tmpDF <- plotDF2[plotDF2$Group%in%c("C_GDAYP", "A_ELMV1",
+                                          "B_CABLP", "D_LPJGP",
                                           "E_OCHDP", "F_QUINC",
                                           "G_OCHDX", "H_QUJSM"),]
       tmpDF2 <- summaryBy(meanvalue~Variable+Trt, FUN=c(mean,sd),
@@ -1011,8 +1011,8 @@ plot_soil_p_cycle_responses <- function(eucDF,
       plotDF2 <- rbind(plotDF2, tmpDF2)
       
       
-      plotDF2$sdvalue[plotDF2$Group%in%c("A_GDAYP", "B_ELMV1",
-                                         "C_CABLP", "D_LPJGP",
+      plotDF2$sdvalue[plotDF2$Group%in%c("C_GDAYP", "A_ELMV1",
+                                         "B_CABLP", "D_LPJGP",
                                          "E_OCHDP", "F_QUINC",
                                          "G_OCHDX", "H_QUJSM")] <- NA
       
@@ -1147,8 +1147,8 @@ plot_soil_p_cycle_responses <- function(eucDF,
                            values=c(col.values, "multi-model"="grey", "obs"="black"),
                            labels=c(model.labels, "multi-model"="M-M", "obs"="OBS"))+
         scale_shape_manual(name="Model",
-                           values=c("A_GDAYP"=19,"B_ELMV1"=19,
-                                    "C_CABLP"=19,"D_LPJGP"=19,
+                           values=c("C_GDAYP"=19,"A_ELMV1"=19,
+                                    "B_CABLP"=19,"D_LPJGP"=19,
                                     "E_OCHDP"=19,"F_QUINC"=19,
                                     "G_OCHDX"=19,"H_QUJSM"=19,
                                     "multi-model"=19, "obs"=15))+
@@ -1187,8 +1187,8 @@ plot_soil_p_cycle_responses <- function(eucDF,
                            values=c(col.values, "multi-model"="grey", "obs"="black"),
                            labels=c(model.labels, "multi-model"="M-M", "obs"="OBS"))+
         scale_shape_manual(name="Model",
-                           values=c("A_GDAYP"=19,"B_ELMV1"=19,
-                                    "C_CABLP"=19,"D_LPJGP"=19,
+                           values=c("C_GDAYP"=19,"A_ELMV1"=19,
+                                    "B_CABLP"=19,"D_LPJGP"=19,
                                     "E_OCHDP"=19,"F_QUINC"=19,
                                     "G_OCHDX"=19,"H_QUJSM"=19,
                                     "multi-model"=19, "obs"=15))+
@@ -1226,8 +1226,8 @@ plot_soil_p_cycle_responses <- function(eucDF,
                            values=c(col.values, "multi-model"="grey", "obs"="black"),
                            labels=c(model.labels, "multi-model"="M-M", "obs"="OBS"))+
         scale_shape_manual(name="Model",
-                           values=c("A_GDAYP"=19,"B_ELMV1"=19,
-                                    "C_CABLP"=19,"D_LPJGP"=19,
+                           values=c("C_GDAYP"=19,"A_ELMV1"=19,
+                                    "B_CABLP"=19,"D_LPJGP"=19,
                                     "E_OCHDP"=19,"F_QUINC"=19,
                                     "G_OCHDX"=19,"H_QUJSM"=19,
                                     "multi-model"=19, "obs"=15))+
@@ -1265,8 +1265,8 @@ plot_soil_p_cycle_responses <- function(eucDF,
                            values=c(col.values, "multi-model"="grey", "obs"="black"),
                            labels=c(model.labels, "multi-model"="M-M", "obs"="OBS"))+
         scale_shape_manual(name="Model",
-                           values=c("A_GDAYP"=19,"B_ELMV1"=19,
-                                    "C_CABLP"=19,"D_LPJGP"=19,
+                           values=c("C_GDAYP"=19,"A_ELMV1"=19,
+                                    "B_CABLP"=19,"D_LPJGP"=19,
                                     "E_OCHDP"=19,"F_QUINC"=19,
                                     "G_OCHDX"=19,"H_QUJSM"=19,
                                     "multi-model"=19, "obs"=15))+

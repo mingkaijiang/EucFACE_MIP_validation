@@ -248,7 +248,7 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
     
     
     ################################################
-    i <- "A_GDAYP"
+    i <- "C_GDAYP"
     
     ### get the data
     ## gpp
@@ -319,7 +319,7 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
             axis.title.x = element_text(size=14), 
             axis.text.x = element_text(size=14),
             axis.text.y=element_text(size=14),
-            axis.title.y=element_text(size=14),
+            axis.title.y=element_blank(),
             legend.text=element_text(size=14),
             legend.title=element_text(size=14),
             panel.grid.major=element_blank(),
@@ -345,7 +345,7 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
             axis.text.x=element_blank(),
             axis.title.x=element_text(size=14),
             axis.text.y=element_blank(),
-            axis.title.y=element_text(size=14),
+            axis.title.y=element_blank(),
             legend.text=element_text(size=12),
             legend.title=element_text(size=14),
             panel.grid.major=element_blank(),
@@ -367,7 +367,7 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
     
     
     ################################################
-    i <- "B_ELMV1"
+    i <- "A_ELMV1"
     
     ### get the data
     ## gpp
@@ -423,7 +423,7 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
             axis.title.x = element_text(size=14), 
             axis.text.x = element_text(size=14),
             axis.text.y=element_text(size=14),
-            axis.title.y=element_blank(),
+            axis.title.y=element_text(size=14),
             legend.text=element_text(size=14),
             legend.title=element_text(size=14),
             panel.grid.major=element_blank(),
@@ -470,7 +470,7 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
     
     
     ################################################
-    i <- "C_CABLP"
+    i <- "B_CABLP"
     
     ### get the data
     ## gpp
@@ -1101,7 +1101,7 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
                                                      legend.box.just = 'left')
                                     + guides(fill=guide_legend(nrow=1,byrow=TRUE)))
     
-    plots_2_row <- plot_grid(p_gdayp1, p_elmv11, p_cablp1, p_lpjgp1, 
+    plots_2_row <- plot_grid(p_elmv11, p_cablp1, p_gdayp1, p_lpjgp1, 
                              labels=c("(a)", "(b)", "(c)", "(d)"),
                              ncol=4, align="vh", axis = "l",
                              label_x=0.85, label_y=0.98,
@@ -1115,7 +1115,7 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
                              label_size = 18)
     
     
-    plots_3_row <- plot_grid(p_gdayp2, p_elmv12, p_cablp2, p_lpjgp2,
+    plots_3_row <- plot_grid(p_elmv12, p_cablp2, p_gdayp2, p_lpjgp2,
                              labels=c(""),
                              ncol=4, align="vh", axis = "l",
                              label_x=0.86, label_y=0.98,
@@ -1193,8 +1193,8 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
     
     
     ### add multi-model means
-    tmpDF <- plotDF1[plotDF1$ModName%in%c("A_GDAYP", "B_ELMV1",
-                                          "C_CABLP", "D_LPJGP",
+    tmpDF <- plotDF1[plotDF1$ModName%in%c("C_GDAYP", "A_ELMV1",
+                                          "B_CABLP", "D_LPJGP",
                                           "E_OCHDP", "F_QUINC",
                                           "G_OCHDX", "H_QUJSM"),]
     tmpDF2 <- summaryBy(norm.value~variable, FUN=mean,
@@ -1206,8 +1206,8 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
     
     
     ### add multi-model means
-    tmpDF <- plotDF2[plotDF2$ModName%in%c("A_GDAYP", "B_ELMV1",
-                                          "C_CABLP", "D_LPJGP",
+    tmpDF <- plotDF2[plotDF2$ModName%in%c("C_GDAYP", "A_ELMV1",
+                                          "B_CABLP", "D_LPJGP",
                                           "E_OCHDP", "F_QUINC",
                                           "G_OCHDX", "H_QUJSM"),]
     tmpDF2 <- summaryBy(norm.value~variable, FUN=mean,
@@ -1416,8 +1416,8 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
     
     
     ### add multi-model mean
-    tmpDF <- plotDF1[plotDF1$Group%in%c("A_GDAYP", "B_ELMV1",
-                                        "C_CABLP", "D_LPJGP",
+    tmpDF <- plotDF1[plotDF1$Group%in%c("C_GDAYP", "A_ELMV1",
+                                        "B_CABLP", "D_LPJGP",
                                         "E_OCHDP", "F_QUINC",
                                         "G_OCHDX", "H_QUJSM"),]
     tmpDF2 <- summaryBy(meanvalue~Variable+Trt, FUN=c(mean,sd),
@@ -1429,8 +1429,8 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
     plotDF1 <- rbind(plotDF1, tmpDF2)
     
     ### add multi-model mean
-    tmpDF <- plotDF2[plotDF2$Group%in%c("A_GDAYP", "B_ELMV1",
-                                        "C_CABLP", "D_LPJGP",
+    tmpDF <- plotDF2[plotDF2$Group%in%c("C_GDAYP", "A_ELMV1",
+                                        "B_CABLP", "D_LPJGP",
                                         "E_OCHDP", "F_QUINC",
                                         "G_OCHDX", "H_QUJSM"),]
     tmpDF2 <- summaryBy(meanvalue~Variable+Trt, FUN=c(mean,sd),
@@ -1443,8 +1443,8 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
     
     
     ### add multi-model mean
-    tmpDF <- plotDF3[plotDF3$Group%in%c("A_GDAYP", "B_ELMV1",
-                                        "C_CABLP", "D_LPJGP",
+    tmpDF <- plotDF3[plotDF3$Group%in%c("C_GDAYP", "A_ELMV1",
+                                        "B_CABLP", "D_LPJGP",
                                         "E_OCHDP", "F_QUINC",
                                         "G_OCHDX", "H_QUJSM"),]
     tmpDF2 <- summaryBy(meanvalue~Variable+Trt, FUN=c(mean,sd),
@@ -1456,16 +1456,16 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
     plotDF3 <- rbind(plotDF3, tmpDF2)
     
     
-    plotDF2$sdvalue[plotDF2$Group%in%c("A_GDAYP", "B_ELMV1",
-                                       "C_CABLP", "D_LPJGP",
+    plotDF2$sdvalue[plotDF2$Group%in%c("C_GDAYP", "A_ELMV1",
+                                       "B_CABLP", "D_LPJGP",
                                        "E_OCHDP", "F_QUINC",
                                        "G_OCHDX", "H_QUJSM")] <- NA
     
     
     
     ### add multi-model mean
-    tmpDF <- plotDF4[plotDF4$Group%in%c("A_GDAYP", "B_ELMV1",
-                                        "C_CABLP", "D_LPJGP",
+    tmpDF <- plotDF4[plotDF4$Group%in%c("C_GDAYP", "A_ELMV1",
+                                        "B_CABLP", "D_LPJGP",
                                         "E_OCHDP", "F_QUINC",
                                         "G_OCHDX", "H_QUJSM"),]
     tmpDF2 <- summaryBy(meanvalue~Variable+Trt, FUN=c(mean,sd),
@@ -1642,8 +1642,8 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
     
     
     ### add multi-model mean
-    tmpDF <- plotDF1[plotDF1$Group%in%c("A_GDAYP", "B_ELMV1",
-                                        "C_CABLP", "D_LPJGP",
+    tmpDF <- plotDF1[plotDF1$Group%in%c("C_GDAYP", "A_ELMV1",
+                                        "B_CABLP", "D_LPJGP",
                                         "E_OCHDP", "F_QUINC",
                                         "G_OCHDX", "H_QUJSM"),]
     tmpDF2 <- summaryBy(meanvalue~Variable+Trt, FUN=c(mean,sd),
@@ -1655,8 +1655,8 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
     plotDF1 <- rbind(plotDF1, tmpDF2)
     
     ### add multi-model mean
-    tmpDF <- plotDF2[plotDF2$Group%in%c("A_GDAYP", "B_ELMV1",
-                                        "C_CABLP", "D_LPJGP",
+    tmpDF <- plotDF2[plotDF2$Group%in%c("C_GDAYP", "A_ELMV1",
+                                        "B_CABLP", "D_LPJGP",
                                         "E_OCHDP", "F_QUINC",
                                         "G_OCHDX", "H_QUJSM"),]
     tmpDF2 <- summaryBy(meanvalue~Variable+Trt, FUN=c(mean,sd),
@@ -1668,8 +1668,8 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
     plotDF2 <- rbind(plotDF2, tmpDF2)
     
     
-    plotDF2$sdvalue[plotDF2$Group%in%c("A_GDAYP", "B_ELMV1",
-                                       "C_CABLP", "D_LPJGP",
+    plotDF2$sdvalue[plotDF2$Group%in%c("C_GDAYP", "A_ELMV1",
+                                       "B_CABLP", "D_LPJGP",
                                        "E_OCHDP", "F_QUINC",
                                        "G_OCHDX", "H_QUJSM")] <- NA
     

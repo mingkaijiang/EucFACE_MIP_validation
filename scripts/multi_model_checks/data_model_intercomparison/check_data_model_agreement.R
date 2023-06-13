@@ -578,9 +578,9 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
                       "H_QUJSM" = "QUJSM",
                       "I_MM" = expression(bold("M-M")))
     
-    x.labels <- c("GDAYP",
-                  "ELMV1",
+    x.labels <- c("ELMV1",
                   "CABLP",
+                  "GDAYP",
                   "LPJGP",
                   "OCDHP",
                   "QUINC",

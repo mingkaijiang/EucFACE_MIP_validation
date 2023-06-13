@@ -73,8 +73,8 @@ plot_growth_and_nep_response <- function(scenario, eucDF) {
     
     
     ### add multi-model mean
-    tmpDF <- plotDF1[plotDF1$Group%in%c("A_GDAYP", "B_ELMV1",
-                                        "C_CABLP", "D_LPJGP",
+    tmpDF <- plotDF1[plotDF1$Group%in%c("C_GDAYP", "A_ELMV1",
+                                        "B_CABLP", "D_LPJGP",
                                         "E_OCHDP", "F_QUINC",
                                         "G_OCHDX", "H_QUJSM"),]
     tmpDF2 <- summaryBy(meanvalue~Variable+Trt, FUN=c(mean,sd),
@@ -86,8 +86,8 @@ plot_growth_and_nep_response <- function(scenario, eucDF) {
     plotDF1 <- rbind(plotDF1, tmpDF2)
     
     ### add multi-model mean
-    tmpDF <- plotDF2[plotDF2$Group%in%c("A_GDAYP", "B_ELMV1",
-                                        "C_CABLP", "D_LPJGP",
+    tmpDF <- plotDF2[plotDF2$Group%in%c("C_GDAYP", "A_ELMV1",
+                                        "B_CABLP", "D_LPJGP",
                                         "E_OCHDP", "F_QUINC",
                                         "G_OCHDX", "H_QUJSM"),]
     tmpDF2 <- summaryBy(meanvalue~Variable+Trt, FUN=c(mean,sd),
@@ -100,8 +100,8 @@ plot_growth_and_nep_response <- function(scenario, eucDF) {
     
     
     ### add multi-model mean
-    tmpDF <- plotDF3[plotDF3$Group%in%c("A_GDAYP", "B_ELMV1",
-                                        "C_CABLP", "D_LPJGP",
+    tmpDF <- plotDF3[plotDF3$Group%in%c("C_GDAYP", "A_ELMV1",
+                                        "B_CABLP", "D_LPJGP",
                                         "E_OCHDP", "F_QUINC",
                                         "G_OCHDX", "H_QUJSM"),]
     tmpDF2 <- summaryBy(meanvalue~Variable+Trt, FUN=c(mean,sd),
@@ -113,8 +113,8 @@ plot_growth_and_nep_response <- function(scenario, eucDF) {
     plotDF3 <- rbind(plotDF3, tmpDF2)
     
     
-    plotDF2$sdvalue[plotDF2$Group%in%c("A_GDAYP", "B_ELMV1",
-                                       "C_CABLP", "D_LPJGP",
+    plotDF2$sdvalue[plotDF2$Group%in%c("C_GDAYP", "A_ELMV1",
+                                       "B_CABLP", "D_LPJGP",
                                        "E_OCHDP", "F_QUINC",
                                        "G_OCHDX", "H_QUJSM")] <- NA
     
@@ -241,8 +241,8 @@ plot_growth_and_nep_response <- function(scenario, eucDF) {
 
     
     ### add multi-model mean
-    tmpDF <- plotDF1[plotDF1$Group%in%c("A_GDAYP", "B_ELMV1",
-                                        "C_CABLP", "D_LPJGP",
+    tmpDF <- plotDF1[plotDF1$Group%in%c("C_GDAYP", "A_ELMV1",
+                                        "B_CABLP", "D_LPJGP",
                                         "E_OCHDP", "F_QUINC",
                                         "G_OCHDX", "H_QUJSM"),]
     tmpDF2 <- summaryBy(meanvalue~Variable+Trt, FUN=c(mean,sd),
@@ -254,8 +254,8 @@ plot_growth_and_nep_response <- function(scenario, eucDF) {
     plotDF1 <- rbind(plotDF1, tmpDF2)
     
     ### add multi-model mean
-    tmpDF <- plotDF2[plotDF2$Group%in%c("A_GDAYP", "B_ELMV1",
-                                        "C_CABLP", "D_LPJGP",
+    tmpDF <- plotDF2[plotDF2$Group%in%c("C_GDAYP", "A_ELMV1",
+                                        "B_CABLP", "D_LPJGP",
                                         "E_OCHDP", "F_QUINC",
                                         "G_OCHDX", "H_QUJSM"),]
     tmpDF2 <- summaryBy(meanvalue~Variable+Trt, FUN=c(mean,sd),
@@ -267,8 +267,8 @@ plot_growth_and_nep_response <- function(scenario, eucDF) {
     plotDF2 <- rbind(plotDF2, tmpDF2)
     
     
-    plotDF2$sdvalue[plotDF2$Group%in%c("A_GDAYP", "B_ELMV1",
-                                       "C_CABLP", "D_LPJGP",
+    plotDF2$sdvalue[plotDF2$Group%in%c("C_GDAYP", "A_ELMV1",
+                                       "B_CABLP", "D_LPJGP",
                                        "E_OCHDP", "F_QUINC",
                                        "G_OCHDX", "H_QUJSM")] <- NA
     
@@ -384,8 +384,8 @@ plot_growth_and_nep_response <- function(scenario, eucDF) {
     plotDF4 <- cfluxDF[cfluxDF$Trt=="diff"&cfluxDF$Variable%in%c("Tot"),]
     
     ### add multi-model mean
-    tmpDF <- plotDF1[plotDF1$Group%in%c("A_GDAYP", "B_ELMV1",
-                                        "C_CABLP", "D_LPJGP",
+    tmpDF <- plotDF1[plotDF1$Group%in%c("C_GDAYP", "A_ELMV1",
+                                        "B_CABLP", "D_LPJGP",
                                         "E_OCHDP", "F_QUINC",
                                         "G_OCHDX", "H_QUJSM"),]
     tmpDF2 <- summaryBy(meanvalue~Variable+Trt, FUN=c(mean,sd),
@@ -397,8 +397,8 @@ plot_growth_and_nep_response <- function(scenario, eucDF) {
     plotDF1 <- rbind(plotDF1, tmpDF2)
     
     ### add multi-model mean
-    tmpDF <- plotDF2[plotDF2$Group%in%c("A_GDAYP", "B_ELMV1",
-                                        "C_CABLP", "D_LPJGP",
+    tmpDF <- plotDF2[plotDF2$Group%in%c("C_GDAYP", "A_ELMV1",
+                                        "B_CABLP", "D_LPJGP",
                                         "E_OCHDP", "F_QUINC",
                                         "G_OCHDX", "H_QUJSM"),]
     tmpDF2 <- summaryBy(meanvalue~Variable+Trt, FUN=c(mean,sd),
@@ -411,8 +411,8 @@ plot_growth_and_nep_response <- function(scenario, eucDF) {
     
     
     ### add multi-model mean
-    tmpDF <- plotDF3[plotDF3$Group%in%c("A_GDAYP", "B_ELMV1",
-                                        "C_CABLP", "D_LPJGP",
+    tmpDF <- plotDF3[plotDF3$Group%in%c("C_GDAYP", "A_ELMV1",
+                                        "B_CABLP", "D_LPJGP",
                                         "E_OCHDP", "F_QUINC",
                                         "G_OCHDX", "H_QUJSM"),]
     tmpDF2 <- summaryBy(meanvalue~Variable+Trt, FUN=c(mean,sd),
@@ -425,8 +425,8 @@ plot_growth_and_nep_response <- function(scenario, eucDF) {
     
     
     ### remove unwanted points
-    plotDF2$meanvalue[plotDF2$Group%in%c("A_GDAYP", "B_ELMV1",
-                                         "C_CABLP", "D_LPJGP",
+    plotDF2$meanvalue[plotDF2$Group%in%c("C_GDAYP", "A_ELMV1",
+                                         "B_CABLP", "D_LPJGP",
                                          "E_OCHDP", "F_QUINC",
                                          "G_OCHDX", "H_QUJSM")] <- NA
     
@@ -553,8 +553,8 @@ plot_growth_and_nep_response <- function(scenario, eucDF) {
     plotDF3 <- allocDF[allocDF$Trt=="pct_diff",]
     
     ### add multi-model mean
-    tmpDF <- plotDF1[plotDF1$Group%in%c("A_GDAYP", "B_ELMV1",
-                                        "C_CABLP", "D_LPJGP",
+    tmpDF <- plotDF1[plotDF1$Group%in%c("C_GDAYP", "A_ELMV1",
+                                        "B_CABLP", "D_LPJGP",
                                         "E_OCHDP", "F_QUINC",
                                         "G_OCHDX", "H_QUJSM"),]
     tmpDF2 <- summaryBy(meanvalue~Variable+Trt, FUN=c(mean,sd),
@@ -566,8 +566,8 @@ plot_growth_and_nep_response <- function(scenario, eucDF) {
     plotDF1 <- rbind(plotDF1, tmpDF2)
     
     ### add multi-model mean
-    tmpDF <- plotDF2[plotDF2$Group%in%c("A_GDAYP", "B_ELMV1",
-                                        "C_CABLP", "D_LPJGP",
+    tmpDF <- plotDF2[plotDF2$Group%in%c("C_GDAYP", "A_ELMV1",
+                                        "B_CABLP", "D_LPJGP",
                                         "E_OCHDP", "F_QUINC",
                                         "G_OCHDX", "H_QUJSM"),]
     tmpDF2 <- summaryBy(meanvalue~Variable+Trt, FUN=c(mean,sd),
@@ -692,8 +692,8 @@ plot_growth_and_nep_response <- function(scenario, eucDF) {
     
     
     ### add multi-model mean
-    tmpDF <- plotDF1[plotDF1$Group%in%c("A_GDAYP", "B_ELMV1",
-                                        "C_CABLP", "D_LPJGP",
+    tmpDF <- plotDF1[plotDF1$Group%in%c("C_GDAYP", "A_ELMV1",
+                                        "B_CABLP", "D_LPJGP",
                                         "E_OCHDP", "F_QUINC",
                                         "G_OCHDX", "H_QUJSM"),]
     tmpDF2 <- summaryBy(meanvalue~Variable+Trt, FUN=c(mean,sd),
@@ -706,8 +706,8 @@ plot_growth_and_nep_response <- function(scenario, eucDF) {
     
     
     ### add multi-model mean
-    tmpDF <- plotDF2[plotDF2$Group%in%c("A_GDAYP", "B_ELMV1",
-                                        "C_CABLP", "D_LPJGP",
+    tmpDF <- plotDF2[plotDF2$Group%in%c("C_GDAYP", "A_ELMV1",
+                                        "B_CABLP", "D_LPJGP",
                                         "E_OCHDP", "F_QUINC",
                                         "G_OCHDX", "H_QUJSM"),]
     tmpDF2 <- summaryBy(meanvalue~Variable+Trt, FUN=c(mean,sd),
@@ -720,8 +720,8 @@ plot_growth_and_nep_response <- function(scenario, eucDF) {
     
     
     ### add multi-model mean
-    tmpDF <- plotDF3[plotDF3$Group%in%c("A_GDAYP", "B_ELMV1",
-                                        "C_CABLP", "D_LPJGP",
+    tmpDF <- plotDF3[plotDF3$Group%in%c("C_GDAYP", "A_ELMV1",
+                                        "B_CABLP", "D_LPJGP",
                                         "E_OCHDP", "F_QUINC",
                                         "G_OCHDX", "H_QUJSM"),]
     tmpDF2 <- summaryBy(meanvalue~Variable+Trt, FUN=c(mean,sd),
@@ -734,13 +734,13 @@ plot_growth_and_nep_response <- function(scenario, eucDF) {
     
     
     ### delete unwanted points
-    plotDF2$meanvalue[plotDF2$Group%in%c("A_GDAYP", "B_ELMV1",
-                                         "C_CABLP", "D_LPJGP",
+    plotDF2$meanvalue[plotDF2$Group%in%c("C_GDAYP", "A_ELMV1",
+                                         "B_CABLP", "D_LPJGP",
                                          "E_OCHDP", "F_QUINC",
                                          "G_OCHDX", "H_QUJSM")] <- NA
     
-    plotDF4$meanvalue[plotDF4$Group%in%c("A_GDAYP", "B_ELMV1",
-                                         "C_CABLP", "D_LPJGP",
+    plotDF4$meanvalue[plotDF4$Group%in%c("C_GDAYP", "A_ELMV1",
+                                         "B_CABLP", "D_LPJGP",
                                          "E_OCHDP", "F_QUINC",
                                          "G_OCHDX", "H_QUJSM")] <- NA
     

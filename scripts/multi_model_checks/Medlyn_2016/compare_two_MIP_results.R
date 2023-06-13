@@ -23,15 +23,15 @@ compare_two_MIP_results <- function() {
     myDF2 <- merge_this_MIP_and_Medlyn_2016_individual_model(medDF=medDF2, thisDF=thisDF2)
     
     
-    col.values <- c("A_GDAYP" = SpectralPalette[1],
-                    "B_ELMV1" = SpectralPalette[2],
-                    "C_CABLP" = SpectralPalette[3],
+    col.values <- c("A_ELMV1" = SpectralPalette[1],
+                    "B_CABLP" = SpectralPalette[2],
+                    "C_GDAYP" = SpectralPalette[3],
                     "D_LPJGP" = SpectralPalette[4],
                     "E_OCHDP" = SpectralPalette[5],
                     "F_QUINC" = SpectralPalette[6],
                     "G_OCHDX" = SpectralPalette[7],
                     "H_QUJSM" = SpectralPalette[8],
-                    "I_GDAYN" = SpectralPalette[1],
+                    "I_GDAYN" = SpectralPalette[3],
                     "J_LPJGN" = SpectralPalette[4])
     
     ### compare the two with plotting
@@ -135,7 +135,7 @@ compare_two_MIP_results <- function() {
     
     
 
-    plot(p1_1)    
+    #plot(p1_1)    
 
     
     

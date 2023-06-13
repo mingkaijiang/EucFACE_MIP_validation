@@ -50,16 +50,16 @@ n.mod.list <- c("GDAYN", "LPJGN")
 ### 2.4. Compile both historic and future period together.
 ###      Use daily data to compute annual data, including delta pools,
 ###      so that we can calculate normalized responses in the next step.
-compile_all_dataset_across_models()
+#compile_all_dataset_across_models()
 
 
 ### 2.5. Normalize all the variables to year 2012 or 2019, 
 ###      so that we can compare cross models.
 ###      Note that just do it for the each CO2 treatment.
 ###      Also generated CO2 effect comparison.
-normalize_dataset_across_models(yr.to.normalize=2012)
+#normalize_dataset_across_models(yr.to.normalize=2012)
 
-normalize_dataset_across_models(yr.to.normalize=2019)
+#normalize_dataset_across_models(yr.to.normalize=2019)
 
 
 ##########################################################################
@@ -137,6 +137,7 @@ scenario="VAR"
 theoretical_analysis_of_leaf_nutrient_effect_on_leaf_physiology(scenario="VAR")
 
 ###      Photosynthesis and relationship with leaf nutrients
+scenario="VAR"
 #plot_photosynthesis_relationships(scenario="FIX")
 plot_photosynthesis_relationships(scenario="VAR", eucDF=eucDF)
 

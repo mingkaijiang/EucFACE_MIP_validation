@@ -299,8 +299,8 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
     ###############################################################################
 
     ### plot CO2 response ratios
-    subDF <- plotDF2[plotDF2$ModName%in%c("A_GDAYP", "B_ELMV1",
-                                          "C_CABLP", "D_LPJGP",
+    subDF <- plotDF2[plotDF2$ModName%in%c("C_GDAYP", "A_ELMV1",
+                                          "B_CABLP", "D_LPJGP",
                                           "E_OCHDP", "F_QUINC",
                                           "G_OCHDX", "H_QUJSM"),]
     
@@ -330,8 +330,8 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
     
     
     ### gpp
-    subDF <- plotDF3[plotDF3$ModName%in%c("A_GDAYP", "B_ELMV1",
-                                          "C_CABLP", "D_LPJGP",
+    subDF <- plotDF3[plotDF3$ModName%in%c("C_GDAYP", "A_ELMV1",
+                                          "B_CABLP", "D_LPJGP",
                                           "E_OCHDP", "F_QUINC",
                                           "G_OCHDX", "H_QUJSM"),]
     
@@ -447,8 +447,8 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
     gppDF.plot <- rbind(gppDF.plot, tmpDF1)
     
     
-    subDF2 <- gppDF.plot[gppDF.plot$ModName%in%c("A_GDAYP","B_ELMV1",
-                                                 "C_CABLP", "D_LPJGP",
+    subDF2 <- gppDF.plot[gppDF.plot$ModName%in%c("C_GDAYP","A_ELMV1",
+                                                 "B_CABLP", "D_LPJGP",
                                                  "E_OCHDP", "F_QUINC",
                                                  "G_OCHDX", "H_QUJSM"),]
     
@@ -504,8 +504,8 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
     
     
     #### plot CO2 response ratios
-    #subDF <- plotDF1[plotDF1$ModName%in%c("A_GDAYP", "B_ELMV1",
-    #                                      "C_CABLP", "D_LPJGP",
+    #subDF <- plotDF1[plotDF1$ModName%in%c("C_GDAYP", "A_ELMV1",
+    #                                      "B_CABLP", "D_LPJGP",
     #                                      "E_OCHDP", "F_QUINC",
     #                                      "G_OCHDX", "H_QUJSM"),]
     #
@@ -557,8 +557,8 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
     #                           "A.mean", "Ac.mean",
     #                           "Aj.mean", "A.obs")
     #
-    #subDF2 <- aleafDF.plot[aleafDF.plot$ModName%in%c("A_GDAYP","B_ELMV1",
-    #                                                 "C_CABLP", "D_LPJGP",
+    #subDF2 <- aleafDF.plot[aleafDF.plot$ModName%in%c("C_GDAYP","A_ELMV1",
+    #                                                 "B_CABLP", "D_LPJGP",
     #                                                 "E_OCHDP", "F_QUINC",
     #                                                 "G_OCHDX", "H_QUJSM"),]
     #
@@ -642,8 +642,8 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
     subDF1$diff <- subDF1$diff 
     subDF1$diff.sd <- subDF1$diff.sd 
     
-    subDF2 <- laiDF.plot[laiDF.plot$ModName%in%c("A_GDAYP", "B_ELMV1",
-                                                 "C_CABLP", "D_LPJGP",
+    subDF2 <- laiDF.plot[laiDF.plot$ModName%in%c("C_GDAYP", "A_ELMV1",
+                                                 "B_CABLP", "D_LPJGP",
                                                  "E_OCHDP", "F_QUINC",
                                                  "G_OCHDX", "H_QUJSM"),]
     subDF2$ModName2 <- "Multi-model"
@@ -697,8 +697,8 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
     
     
     subDF1 <- plotDF2[plotDF2$ModName%in%c("Multi-model", "OBS"),]
-    subDF2 <- plotDF2[plotDF2$ModName%in%c("A_GDAYP", "B_ELMV1",
-                                           "C_CABLP", "D_LPJGP",
+    subDF2 <- plotDF2[plotDF2$ModName%in%c("C_GDAYP", "A_ELMV1",
+                                           "B_CABLP", "D_LPJGP",
                                            "E_OCHDP", "F_QUINC",
                                            "G_OCHDX", "H_QUJSM"),]
     subDF2$ModName2 <- "Multi-model"
@@ -751,8 +751,8 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
     
     
     subDF1 <- plotDF3[plotDF3$ModName%in%c("Multi-model", "OBS"),]
-    subDF2 <- plotDF3[plotDF3$ModName%in%c("A_GDAYP", "B_ELMV1",
-                                           "C_CABLP", "D_LPJGP",
+    subDF2 <- plotDF3[plotDF3$ModName%in%c("C_GDAYP", "A_ELMV1",
+                                           "B_CABLP", "D_LPJGP",
                                            "E_OCHDP", "F_QUINC",
                                            "G_OCHDX", "H_QUJSM"),]
     subDF2$ModName2 <- "Multi-model"
@@ -837,8 +837,8 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
                          values=c(col.values,
                                   "Obs"="black"))+
       scale_shape_manual(name="Model",
-                         values=c("A_GDAYP"=19,"B_ELMV1"=19,
-                                  "C_CABLP"=19,"D_LPJGP"=19,
+                         values=c("C_GDAYP"=19,"A_ELMV1"=19,
+                                  "B_CABLP"=19,"D_LPJGP"=19,
                                   "E_OCHDP"=19,"F_QUINC"=19,
                                   "G_OCHDX"=19,"H_QUJSM"=19,
                                   "Multi-model"=19,"Obs"=15))+
@@ -896,18 +896,18 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
     eleDF[eleDF<=-999] <- NA
     
     ### remove two N only models
-    ambDF <- ambDF[ambDF$ModName%in%c("A_GDAYP",
-                                      "B_ELMV1",
-                                      "C_CABLP",
+    ambDF <- ambDF[ambDF$ModName%in%c("C_GDAYP",
+                                      "A_ELMV1",
+                                      "B_CABLP",
                                       "D_LPJGP",
                                       "E_OCHDP",
                                       "F_QUINC",
                                       "G_OCHDX",
                                       "H_QUJSM"),]
     
-    eleDF <- eleDF[eleDF$ModName%in%c("A_GDAYP",
-                                      "B_ELMV1",
-                                      "C_CABLP",
+    eleDF <- eleDF[eleDF$ModName%in%c("C_GDAYP",
+                                      "A_ELMV1",
+                                      "B_CABLP",
                                       "D_LPJGP",
                                       "E_OCHDP",
                                       "F_QUINC",
@@ -1343,8 +1343,8 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
     
     
     ### now prepare the plotting df
-    plotDF1 <- sumDF3[sumDF3$ModName%in%c("A_GDAYP", "B_ELMV1", 
-                                          "C_CABLP", "D_LPJGP",
+    plotDF1 <- sumDF3[sumDF3$ModName%in%c("C_GDAYP", "A_ELMV1", 
+                                          "B_CABLP", "D_LPJGP",
                                           "E_OCHDP", "F_QUINC",
                                           "G_OCHDX", "H_QUJSM"),]
     
@@ -1383,8 +1383,8 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
                          values=c(col.values, "I_MM"="grey", "OBS"="black"),
                          labels=c(model.labels, "I_MM"="M-M", "OBS"="OBS"))+
       scale_shape_manual(name="Model",
-                         values=c("A_GDAYP"=19,"B_ELMV1"=19,
-                                  "C_CABLP"=19,"D_LPJGP"=19,
+                         values=c("C_GDAYP"=19,"A_ELMV1"=19,
+                                  "B_CABLP"=19,"D_LPJGP"=19,
                                   "E_OCHDP"=19,"F_QUINC"=19,
                                   "G_OCHDX"=19,"H_QUJSM"=19,
                                   "I_MM"=19, "OBS"=15))+
@@ -1427,8 +1427,8 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
                          values=c(col.values, "I_MM"="grey", "OBS"="black"),
                          labels=c(model.labels, "I_MM"="M-M", "OBS"="OBS"))+
       scale_shape_manual(name="Model",
-                         values=c("A_GDAYP"=19,"B_ELMV1"=19,
-                                  "C_CABLP"=19,"D_LPJGP"=19,
+                         values=c("C_GDAYP"=19,"A_ELMV1"=19,
+                                  "B_CABLP"=19,"D_LPJGP"=19,
                                   "E_OCHDP"=19,"F_QUINC"=19,
                                   "G_OCHDX"=19,"H_QUJSM"=19,
                                   "I_MM"=19,"OBS"=15))+
@@ -1468,8 +1468,8 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
                          values=c(col.values, "I_MM"="grey", "OBS"="black"),
                          labels=c(model.labels, "I_MM"="M-M", "OBS"="OBS"))+
       scale_shape_manual(name="Model",
-                         values=c("A_GDAYP"=19,"B_ELMV1"=19,
-                                  "C_CABLP"=19,"D_LPJGP"=19,
+                         values=c("C_GDAYP"=19,"A_ELMV1"=19,
+                                  "B_CABLP"=19,"D_LPJGP"=19,
                                   "E_OCHDP"=19,"F_QUINC"=19,
                                   "G_OCHDX"=19,"H_QUJSM"=19,
                                   "I_MM"=19,"OBS"=15))+
@@ -1510,8 +1510,8 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
                          values=c(col.values, "I_MM"="grey", "OBS"="black"),
                          labels=c(model.labels, "I_MM"="M-M", "OBS"="OBS"))+
       scale_shape_manual(name="Model",
-                         values=c("A_GDAYP"=19,"B_ELMV1"=19,
-                                  "C_CABLP"=19,"D_LPJGP"=19,
+                         values=c("C_GDAYP"=19,"A_ELMV1"=19,
+                                  "B_CABLP"=19,"D_LPJGP"=19,
                                   "E_OCHDP"=19,"F_QUINC"=19,
                                   "G_OCHDX"=19,"H_QUJSM"=19,
                                   "I_MM"=19,"OBS"=15))+
@@ -1554,8 +1554,8 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
                          values=c(col.values, "I_MM"="grey", "OBS"="black"),
                          labels=c(model.labels, "I_MM"="M-M", "OBS"="OBS"))+
       scale_shape_manual(name="Model",
-                         values=c("A_GDAYP"=19,"B_ELMV1"=19,
-                                  "C_CABLP"=19,"D_LPJGP"=19,
+                         values=c("C_GDAYP"=19,"A_ELMV1"=19,
+                                  "B_CABLP"=19,"D_LPJGP"=19,
                                   "E_OCHDP"=19,"F_QUINC"=19,
                                   "G_OCHDX"=19,"H_QUJSM"=19,
                                   "I_MM"=19,"OBS"=15))+
