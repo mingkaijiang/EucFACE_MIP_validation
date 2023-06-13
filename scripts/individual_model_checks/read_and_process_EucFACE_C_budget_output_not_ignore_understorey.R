@@ -136,7 +136,7 @@ read_and_process_EucFACE_C_budget_output_not_ignore_understorey <- function() {
                     "NEP_inout", "NEP_npprh", "NEP_pool", "NEP",
                     "CL", "CW", "CFR", "CCR", "CFLITA", "CMIC", "CSOIL", "CMYC",
                     "deltaCL", "deltaCW", "deltaCFR", "deltaCCR", "deltaCFLIT", 
-                    "deltaCMIC", "deltaCSOIL", "deltaCMYC", "BP")
+                    "deltaCMIC", "deltaCSOIL", "deltaCMYC", "deltaCVEG", "BP")
         
     ### prepare storage DF
     outDF <- data.frame(c("mean", "mean", "sd", "sd", "mean", "sd", "mean", "sd"),
@@ -723,33 +723,79 @@ read_and_process_EucFACE_C_budget_output_not_ignore_understorey <- function() {
     outDF$LAI[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((laisumDF$lai.sd[laisumDF$Trt=="eCO2"]^2+laisumDF$lai.sd[laisumDF$Trt=="aCO2"]^2+laisumDF$lai.sd[laisumDF$Trt=="aCO2"]^2)/3)/laisumDF$lai.mean[laisumDF$Trt=="aCO2"]*100
     
     
-    ### BP
-    outDF$BP[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- outDF$deltaCL[outDF$Group=="mean"&outDF$Trt=="aCO2"]+
+    ### deltaCVEG
+    outDF$deltaCVEG[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- outDF$deltaCL[outDF$Group=="mean"&outDF$Trt=="aCO2"]+
         outDF$deltaCW[outDF$Group=="mean"&outDF$Trt=="aCO2"]+
         outDF$deltaCFR[outDF$Group=="mean"&outDF$Trt=="aCO2"]+
         outDF$deltaCCR[outDF$Group=="mean"&outDF$Trt=="aCO2"]
-        
-    outDF$BP[outDF$Group=="mean"&outDF$Trt=="eCO2"] <- outDF$deltaCL[outDF$Group=="mean"&outDF$Trt=="eCO2"]+
+    
+    outDF$deltaCVEG[outDF$Group=="mean"&outDF$Trt=="eCO2"] <- outDF$deltaCL[outDF$Group=="mean"&outDF$Trt=="eCO2"]+
         outDF$deltaCW[outDF$Group=="mean"&outDF$Trt=="eCO2"]+
         outDF$deltaCFR[outDF$Group=="mean"&outDF$Trt=="eCO2"]+
         outDF$deltaCCR[outDF$Group=="mean"&outDF$Trt=="eCO2"]
     
-    outDF$BP[outDF$Group=="sd"&outDF$Trt=="aCO2"] <- sqrt((outDF$deltaCL[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+
-                                                               outDF$deltaCW[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+
-                                                               outDF$deltaCFR[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+
-                                                               outDF$deltaCCR[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2)/4)
+    outDF$deltaCVEG[outDF$Group=="sd"&outDF$Trt=="aCO2"] <- sqrt((outDF$deltaCL[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+
+                                                                      outDF$deltaCW[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+
+                                                                      outDF$deltaCFR[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+
+                                                                      outDF$deltaCCR[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2)/2)
     
-    outDF$BP[outDF$Group=="sd"&outDF$Trt=="eCO2"] <- sqrt((outDF$deltaCL[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2+
-                                                               outDF$deltaCW[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2+
-                                                               outDF$deltaCFR[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2+
-                                                               outDF$deltaCCR[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2)/4)
+    outDF$deltaCVEG[outDF$Group=="sd"&outDF$Trt=="eCO2"] <- sqrt((outDF$deltaCL[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2+
+                                                                      outDF$deltaCW[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2+
+                                                                      outDF$deltaCFR[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2+
+                                                                      outDF$deltaCCR[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2)/2)
     
-    outDF$BP[outDF$Group=="mean"&outDF$Trt=="diff"] <- outDF$BP[outDF$Group=="mean"&outDF$Trt=="eCO2"]-outDF$BP[outDF$Group=="mean"&outDF$Trt=="aCO2"]
-    outDF$BP[outDF$Group=="sd"&outDF$Trt=="diff"] <- sqrt((outDF$BP[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+outDF$BP[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2)/2)
+    outDF$deltaCVEG[outDF$Group=="mean"&outDF$Trt=="diff"] <- outDF$deltaCVEG[outDF$Group=="mean"&outDF$Trt=="eCO2"]-outDF$deltaCVEG[outDF$Group=="mean"&outDF$Trt=="aCO2"]
+    outDF$deltaCVEG[outDF$Group=="sd"&outDF$Trt=="diff"] <- sqrt((outDF$deltaCVEG[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+outDF$deltaCVEG[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2)/2)
     
-    outDF$BP[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- (outDF$BP[outDF$Group=="mean"&outDF$Trt=="eCO2"]-outDF$BP[outDF$Group=="mean"&outDF$Trt=="aCO2"])/outDF$BP[outDF$Group=="mean"&outDF$Trt=="aCO2"]*100
-    outDF$BP[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((outDF$BP[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2+outDF$BP[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+outDF$BP[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2)/3)/outDF$BP[outDF$Group=="mean"&outDF$Trt=="aCO2"]*100
+    outDF$deltaCVEG[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- (outDF$deltaCVEG[outDF$Group=="mean"&outDF$Trt=="eCO2"]-outDF$deltaCVEG[outDF$Group=="mean"&outDF$Trt=="aCO2"])/outDF$deltaCVEG[outDF$Group=="mean"&outDF$Trt=="aCO2"]*100
+    outDF$deltaCVEG[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((outDF$deltaCVEG[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2+outDF$deltaCVEG[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+
+                                                                          outDF$deltaCVEG[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2)/3)/outDF$deltaCVEG[outDF$Group=="mean"&outDF$Trt=="aCO2"]*100
     
+    
+    
+    
+    ### BP
+    #outDF$BP[outDF$Group=="mean"&outDF$Trt=="aCO2"] <- sum(nppDF$aCO2[nppDF$term%in%c("Leaf NPP", 
+    #                                                                                  "Stem NPP",
+    #                                                                                  "Fine Root NPP",
+    #                                                                                  "Intermediate Root NPP",
+    #                                                                                  "Coarse Root NPP",
+    #                                                                                  "Other NPP", 
+    #                                                                                  "Understorey NPP")])
+    #
+    #
+    #outDF$BP[outDF$Group=="mean"&outDF$Trt=="eCO2"] <- sum(nppDF$eCO2[nppDF$term%in%c("Leaf NPP", 
+    #                                                                                  "Stem NPP",
+    #                                                                                  "Fine Root NPP",
+    #                                                                                  "Intermediate Root NPP",
+    #                                                                                  "Coarse Root NPP",
+    #                                                                                  "Other NPP", 
+    #                                                                                  "Understorey NPP")])
+    #
+    #
+    #outDF$BP[outDF$Group=="sd"&outDF$Trt=="aCO2"] <- sqrt((nppDF$aCO2_sd[nppDF$term=="Leaf NPP"]^2+
+    #                                                           nppDF$aCO2_sd[nppDF$term=="Stem NPP"]^2+
+    #                                                           nppDF$aCO2_sd[nppDF$term=="Fine Root NPP"]^2+
+    #                                                           nppDF$aCO2_sd[nppDF$term=="Intermediate Root NPP"]^2+
+    #                                                           nppDF$aCO2_sd[nppDF$term=="Coarse Root NPP"]^2+
+    #                                                           nppDF$aCO2_sd[nppDF$term=="Other NPP"]^2+
+    #                                                           nppDF$aCO2_sd[nppDF$term=="Understorey NPP"]^2)/7)
+    #
+    #outDF$BP[outDF$Group=="sd"&outDF$Trt=="eCO2"] <- sqrt((nppDF$eCO2_sd[nppDF$term=="Leaf NPP"]^2+
+    #                                                           nppDF$eCO2_sd[nppDF$term=="Stem NPP"]^2+
+    #                                                           nppDF$eCO2_sd[nppDF$term=="Fine Root NPP"]^2+
+    #                                                           nppDF$eCO2_sd[nppDF$term=="Intermediate Root NPP"]^2+
+    #                                                           nppDF$eCO2_sd[nppDF$term=="Coarse Root NPP"]^2+
+    #                                                           nppDF$eCO2_sd[nppDF$term=="Other NPP"]^2+
+    #                                                           nppDF$eCO2_sd[nppDF$term=="Understorey NPP"]^2)/7)
+    #
+    #
+    #outDF$BP[outDF$Group=="mean"&outDF$Trt=="diff"] <- outDF$BP[outDF$Group=="mean"&outDF$Trt=="eCO2"]-outDF$BP[outDF$Group=="mean"&outDF$Trt=="aCO2"]
+    #outDF$BP[outDF$Group=="sd"&outDF$Trt=="diff"] <- sqrt((outDF$BP[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+outDF$BP[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2)/2)
+    #
+    #outDF$BP[outDF$Group=="mean"&outDF$Trt=="pct_diff"] <- (outDF$BP[outDF$Group=="mean"&outDF$Trt=="eCO2"]-outDF$BP[outDF$Group=="mean"&outDF$Trt=="aCO2"])/outDF$BP[outDF$Group=="mean"&outDF$Trt=="aCO2"]*100
+    #outDF$BP[outDF$Group=="sd"&outDF$Trt=="pct_diff"] <- sqrt((outDF$BP[outDF$Group=="sd"&outDF$Trt=="eCO2"]^2+outDF$BP[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2+
+    #                                                               outDF$BP[outDF$Group=="sd"&outDF$Trt=="aCO2"]^2)/3)/outDF$BP[outDF$Group=="mean"&outDF$Trt=="aCO2"]*100
     
     
     

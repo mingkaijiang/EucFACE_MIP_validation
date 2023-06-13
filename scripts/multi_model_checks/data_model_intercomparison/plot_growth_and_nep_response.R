@@ -155,8 +155,8 @@ plot_growth_and_nep_response <- function(scenario, eucDF) {
               legend.background = element_rect(fill="grey",
                                                size=0.5, linetype="solid", 
                                                colour ="black"))+
-        #ylab(expression(paste(Delta * C[veg] * " (g C " * m^2 * " " * yr^-1 * ")")))+
-        ylab(expression(paste("Biomass production (g C " * m^2 * " " * yr^-1 * ")")))+
+        ylab(expression(paste(Delta * C[veg] * " (g C " * m^2 * " " * yr^-1 * ")")))+
+        #ylab(expression(paste("Biomass production (g C " * m^2 * " " * yr^-1 * ")")))+
         scale_x_discrete(limit=c(mod.list, "multi-model", "obs"),
                          label=c(model.labels, "multi-model"=expression(bold("M-M")),
                                  "obs" = expression(bold("OBS"))))+

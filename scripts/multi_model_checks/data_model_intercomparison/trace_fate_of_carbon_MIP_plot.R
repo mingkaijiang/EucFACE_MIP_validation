@@ -1513,8 +1513,8 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
             #                                 colour ="black"),
             plot.title = element_text(size=14, face="bold.italic", 
                                       hjust = 0.5))+
-      #ylab(expression(paste(Delta * C[veg] * " (g C " * m^2 * " " * yr^-1 * ")")))+
-      ylab(expression(paste("Biomass production (g C " * m^2 * " " * yr^-1 * ")")))+
+      ylab(expression(paste(Delta * C[veg] * " (g C " * m^2 * " " * yr^-1 * ")")))+
+      #ylab(expression(paste("Biomass production (g C " * m^2 * " " * yr^-1 * ")")))+
       scale_x_discrete(limit=c(mod.list, "multi-model", "obs"),
                        label=c(model.labels, "multi-model"=expression(bold("M-M")),
                                "obs" = expression(bold("OBS"))))+

@@ -481,7 +481,7 @@ compare_two_MIP_results <- function() {
                                                colour ="black"),
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
-        ylab(expression(paste("BP (g C " * m^2 * " " * yr^-1 * ")")))+
+        ylab(expression(paste(Delta * C[veg] * " (g C " * m^2 * " " * yr^-1 * ")")))+
         scale_fill_manual(name="Trt",
                           values=c("amb"="white", "ele"="grey"))+
         scale_color_manual(name="Model",

@@ -38,8 +38,8 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
     
     ### add more variables
     ## biomass production
-    ambDF$BP <- rowSums(ambDF[,c("deltaCL","deltaCW","deltaCFR","deltaCCR","deltaCSTOR")], na.rm=T)
-    eleDF$BP <- rowSums(eleDF[,c("deltaCL","deltaCW","deltaCFR","deltaCCR","deltaCSTOR")], na.rm=T)
+    ambDF$deltaCVEG <- rowSums(ambDF[,c("deltaCL","deltaCW","deltaCFR","deltaCCR","deltaCSTOR")], na.rm=T)
+    eleDF$deltaCVEG <- rowSums(eleDF[,c("deltaCL","deltaCW","deltaCFR","deltaCCR","deltaCSTOR")], na.rm=T)
     
     ## biomass production
     ambDF$deltaPVEG <- rowSums(ambDF[,c("deltaPL","deltaPW","deltaPFR","deltaPCR","deltaPSTOR")], na.rm=T)
@@ -130,23 +130,23 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
     eleDF$CPMIC <- with(eleDF, CMIC/PMIC)
     
     
-    #obsDF$BP <- NA
-    #obsDF$BP[obsDF$Group=="mean"&obsDF$Trt=="aCO2"] <- obsDF$deltaCL[obsDF$Group=="mean"&obsDF$Trt=="aCO2"] +
+    #obsDF$deltaCVEG <- NA
+    #obsDF$deltaCVEG[obsDF$Group=="mean"&obsDF$Trt=="aCO2"] <- obsDF$deltaCL[obsDF$Group=="mean"&obsDF$Trt=="aCO2"] +
     #    obsDF$deltaCW[obsDF$Group=="mean"&obsDF$Trt=="aCO2"] +
     #    obsDF$deltaCFR[obsDF$Group=="mean"&obsDF$Trt=="aCO2"] +
     #    obsDF$deltaCCR[obsDF$Group=="mean"&obsDF$Trt=="aCO2"] 
     #
-    #obsDF$BP[obsDF$Group=="mean"&obsDF$Trt=="eCO2"] <- obsDF$deltaCL[obsDF$Group=="mean"&obsDF$Trt=="eCO2"] +
+    #obsDF$deltaCVEG[obsDF$Group=="mean"&obsDF$Trt=="eCO2"] <- obsDF$deltaCL[obsDF$Group=="mean"&obsDF$Trt=="eCO2"] +
     #    obsDF$deltaCW[obsDF$Group=="mean"&obsDF$Trt=="eCO2"] +
     #    obsDF$deltaCFR[obsDF$Group=="mean"&obsDF$Trt=="eCO2"] +
     #    obsDF$deltaCCR[obsDF$Group=="mean"&obsDF$Trt=="eCO2"]
     #
-    #obsDF$BP[obsDF$Group=="sd"&obsDF$Trt=="aCO2"] <- obsDF$deltaCL[obsDF$Group=="mean"&obsDF$Trt=="aCO2"] +
+    #obsDF$deltaCVEG[obsDF$Group=="sd"&obsDF$Trt=="aCO2"] <- obsDF$deltaCL[obsDF$Group=="mean"&obsDF$Trt=="aCO2"] +
     #    obsDF$deltaCW[obsDF$Group=="sd"&obsDF$Trt=="aCO2"] +
     #    obsDF$deltaCFR[obsDF$Group=="sd"&obsDF$Trt=="aCO2"] +
     #    obsDF$deltaCCR[obsDF$Group=="sd"&obsDF$Trt=="aCO2"] 
     #
-    #obsDF$BP[obsDF$Group=="sd"&obsDF$Trt=="eCO2"] <- obsDF$deltaCL[obsDF$Group=="mean"&obsDF$Trt=="eCO2"] +
+    #obsDF$deltaCVEG[obsDF$Group=="sd"&obsDF$Trt=="eCO2"] <- obsDF$deltaCL[obsDF$Group=="mean"&obsDF$Trt=="eCO2"] +
     #    obsDF$deltaCW[obsDF$Group=="sd"&obsDF$Trt=="eCO2"] +
     #    obsDF$deltaCFR[obsDF$Group=="sd"&obsDF$Trt=="eCO2"] +
     #    obsDF$deltaCCR[obsDF$Group=="sd"&obsDF$Trt=="eCO2"]
@@ -296,7 +296,7 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
     
     ### prepare outDF
     data.variable.list <- c("GPP", "NPP", "NEP", "RHET", 
-                            "BP", 
+                            "deltaCVEG", 
                             "deltaCL", "deltaCW", "deltaCFR", "deltaCCR",
                             "deltaCFLITA", "deltaCMIC", 
                             "CGL", "CGW", "CGFR", "CGCR", 
@@ -356,11 +356,11 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
                        "CGCR", "CGFR", "CGW", "CGL", 
                        #"deltaCL", "deltaCW", "deltaCFR", "deltaCCR",
                        #"deltaCFLITA", "deltaCMIC", 
-                       "RHET", "NEP", "BP", "NPP", "GPP")
+                       "RHET", "NEP", "deltaCVEG", "NPP", "GPP")
 
     y.labels.list <- c("GPP"="GPP",
                       "NPP"="NPP", 
-                      "BP"="BP", 
+                      "deltaCVEG"=expression(Delta*C[veg]), 
                       "NEP"="NEP", 
                       "RHET"=expression(R[het]), 
                       #"deltaCL", "deltaCW", "deltaCFR", "deltaCCR",
@@ -448,7 +448,7 @@ check_data_model_agreement <- function (scenario, eucDF, rev.sd) {
                             "CFR", "CW", "CL", 
                             "LAI",
                             "CGFR", "CGW", "CGL", 
-                            "RHET", "BP", "NPP", "GPP", "NEP")
+                            "RHET", "deltaCVEG", "NPP", "GPP", "NEP")
     
     y.limits.sub.list3 <- c("deltaPVEG",
                             "PLEACH", 
