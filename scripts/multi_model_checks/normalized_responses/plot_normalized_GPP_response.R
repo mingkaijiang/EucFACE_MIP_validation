@@ -835,7 +835,8 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
       ylab(expression(paste(CO[2] * " response of LAI (%)")))+
       scale_color_manual(name="Model",
                          values=c(col.values,
-                                  "Obs"="black"))+
+                                  "Multi-model"="grey30",
+                                  "Obs"="grey"))+
       scale_shape_manual(name="Model",
                          values=c("C_GDAYP"=19,"A_ELMV1"=19,
                                   "B_CABLP"=19,"D_LPJGP"=19,
@@ -1380,7 +1381,7 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
             plot.title = element_text(size=14, face="bold.italic", 
                                       hjust = 0.5))+
       scale_color_manual(name="Model",
-                         values=c(col.values, "I_MM"="grey", "OBS"="black"),
+                         values=c(col.values, "I_MM"="grey30", "OBS"="grey"),
                          labels=c(model.labels, "I_MM"="M-M", "OBS"="OBS"))+
       scale_shape_manual(name="Model",
                          values=c("C_GDAYP"=19,"A_ELMV1"=19,
@@ -1424,7 +1425,7 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
             plot.title = element_text(size=14, face="bold.italic", 
                                       hjust = 0.5))+
       scale_color_manual(name="Model",
-                         values=c(col.values, "I_MM"="grey", "OBS"="black"),
+                         values=c(col.values, "I_MM"="grey30", "OBS"="grey"),
                          labels=c(model.labels, "I_MM"="M-M", "OBS"="OBS"))+
       scale_shape_manual(name="Model",
                          values=c("C_GDAYP"=19,"A_ELMV1"=19,
@@ -1465,7 +1466,7 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
             plot.title = element_text(size=14, face="bold.italic", 
                                       hjust = 0.5))+
       scale_color_manual(name="Model",
-                         values=c(col.values, "I_MM"="grey", "OBS"="black"),
+                         values=c(col.values, "I_MM"="grey30", "OBS"="grey"),
                          labels=c(model.labels, "I_MM"="M-M", "OBS"="OBS"))+
       scale_shape_manual(name="Model",
                          values=c("C_GDAYP"=19,"A_ELMV1"=19,
@@ -1507,7 +1508,7 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
             plot.title = element_text(size=14, face="bold.italic", 
                                       hjust = 0.5))+
       scale_color_manual(name="Model",
-                         values=c(col.values, "I_MM"="grey", "OBS"="black"),
+                         values=c(col.values, "I_MM"="grey30", "OBS"="grey"),
                          labels=c(model.labels, "I_MM"="M-M", "OBS"="OBS"))+
       scale_shape_manual(name="Model",
                          values=c("C_GDAYP"=19,"A_ELMV1"=19,
@@ -1551,7 +1552,7 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
             plot.title = element_text(size=14, face="bold.italic", 
                                       hjust = 0.5))+
       scale_color_manual(name="Model",
-                         values=c(col.values, "I_MM"="grey", "OBS"="black"),
+                         values=c(col.values, "I_MM"="grey30", "OBS"="grey"),
                          labels=c(model.labels, "I_MM"="M-M", "OBS"="OBS"))+
       scale_shape_manual(name="Model",
                          values=c("C_GDAYP"=19,"A_ELMV1"=19,

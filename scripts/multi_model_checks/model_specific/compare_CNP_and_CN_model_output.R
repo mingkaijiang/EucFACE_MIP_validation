@@ -220,7 +220,7 @@ compare_CNP_and_CN_model_output <- function(scenario) {
     ### Plotting C pools in CO2 pct response
     p2 <- ggplot(data=plotDF3, 
                  aes(Model, meanvalue)) +
-        geom_bar(stat = "identity", aes(fill=Model), 
+        geom_bar(stat = "identity", aes(alpha=Model), fill="#505050", 
                  position="stack", col="black") +
         #geom_errorbar(aes(x=Model, ymin=meanvalue-sdvalue, ymax=meanvalue+sdvalue), 
         #              position="dodge", width=0.2, col="black") +
@@ -249,17 +249,17 @@ compare_CNP_and_CN_model_output <- function(scenario) {
                          label=c("GDAYN","GDAYP", 
                                  "LPJGN","LPJGP"))+
         xlab("")+
-        #scale_alpha_manual(values=c("C_GDAYP" = 1.0, 
-        #                            "D_LPJGP" = 1.0,
-        #                            "I_GDAYN" = 0.3, 
-        #                            "J_LPJGN" = 0.3),
-        #                   label=c("GDAYP","LPJGP", 
-        #                           "GDAYN","LPJGN"))+
-        scale_fill_manual(values=c("C_GDAYP" = "grey", "D_LPJGP" = "grey",
-                                   "I_GDAYN" = "white", "J_LPJGN" = "white"),
-                          label=c("GDAYP","LPJGP", 
-                                  "GDAYN","LPJGN"))+
-        coord_cartesian(ylim=c(0,10)); p2
+        scale_alpha_manual(values=c("C_GDAYP" = 1.0, 
+                                    "D_LPJGP" = 1.0,
+                                    "I_GDAYN" = 0.3, 
+                                    "J_LPJGN" = 0.3),
+                           label=c("GDAYP","LPJGP", 
+                                   "GDAYN","LPJGN"))+
+        #scale_fill_manual(values=c("C_GDAYP" = "grey", "D_LPJGP" = "grey",
+        #                           "I_GDAYN" = "white", "J_LPJGN" = "white"),
+        #                  label=c("GDAYP","LPJGP", 
+        #                          "GDAYN","LPJGN"))+
+        coord_cartesian(ylim=c(0,5)); p2
     
     
     ##################################################################
@@ -416,7 +416,7 @@ compare_CNP_and_CN_model_output <- function(scenario) {
     ### Plotting C pools in CO2 pct response
     p4 <- ggplot(data=plotDF3, 
                  aes(Model, meanvalue)) +
-        geom_bar(stat = "identity", aes(fill=Model), 
+        geom_bar(stat = "identity", aes(alpha=Model), fill="#505050", 
                  position="stack", col="black") +
         #annotate("text", x=2, y=plotDF3$meanvalue[plotDF3$Model=="B_GDAYP"]*1.01, 
         #         label=(paste0(val1, "%")), size=10)+
@@ -447,16 +447,16 @@ compare_CNP_and_CN_model_output <- function(scenario) {
                          label=c("GDAYN","GDAYP", 
                                  "LPJGN","LPJGP"))+
         xlab("")+
-        #scale_alpha_manual(values=c("C_GDAYP" = 1.0, 
-        #                            "D_LPJGP" = 1.0,
-        #                            "I_GDAYN" = 0.3, 
-        #                            "J_LPJGN" = 0.3),
-        #                   label=c("GDAYP","LPJGP", 
-        #                           "GDAYN","LPJGN"))+
-        scale_fill_manual(values=c("C_GDAYP" = "grey", "D_LPJGP" = "grey",
-                                   "I_GDAYN" = "white", "J_LPJGN" = "white"),
-                          label=c("GDAYP","LPJGP", 
-                                  "GDAYN","LPJGN"));p4
+        scale_alpha_manual(values=c("C_GDAYP" = 1.0, 
+                                    "D_LPJGP" = 1.0,
+                                    "I_GDAYN" = 0.3, 
+                                    "J_LPJGN" = 0.3),
+                           label=c("GDAYP","LPJGP", 
+                                   "GDAYN","LPJGN"))#+
+        #scale_fill_manual(values=c("C_GDAYP" = "grey", "D_LPJGP" = "grey",
+        #                           "I_GDAYN" = "white", "J_LPJGN" = "white"),
+        #                  label=c("GDAYP","LPJGP", 
+        #                          "GDAYN","LPJGN"));p4
     
     
     
