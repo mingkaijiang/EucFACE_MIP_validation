@@ -165,6 +165,7 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
             legend.position="none",
             legend.box = 'horizontal',
             legend.box.just = 'left',
+            legend.spacing.y = unit(0, "pt"),
             plot.title = element_text(size=14, face="bold.italic", 
                                       hjust = 0.5))+
       ylab(expression(paste(A[leaf]* " (g C " * m^2 * " " * d^-1, ")")))+
@@ -201,9 +202,10 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
             legend.text=element_text(size=12),
             legend.title=element_text(size=14),
             panel.grid.major=element_blank(),
-            legend.position="none",
+            legend.position=c(0.95, 0.86),
             legend.box = 'horizontal',
             legend.box.just = 'left',
+            legend.spacing.y = unit(0, "pt"),
             plot.title = element_text(size=14, face="bold.italic", 
                                       hjust = 0.5))+
       ylab(expression(paste("LAI")))+
@@ -215,7 +217,7 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
                         values=c(col.values, "black", "black"),
                         labels=c(model.labels, "Multi-model" = "M-M",
                                  "OBS" = "Obs"))+
-      guides(alpha=guide_legend("Treatment"), fill = FALSE)+
+      guides(alpha=guide_legend(""), fill = FALSE)+
       scale_x_discrete(limit=c(mod.list, "Multi-model", "OBS"),
                        label=c(model.labels, 
                                "Multi-model" = expression(bold("M-M")),
@@ -239,7 +241,7 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
             legend.text=element_text(size=12),
             legend.title=element_text(size=14),
             panel.grid.major=element_blank(),
-            legend.position="none",
+            legend.position=c(0.95, 0.86),
             legend.box = 'horizontal',
             legend.box.just = 'left',
             plot.title = element_text(size=14, face="bold.italic", 
@@ -252,12 +254,14 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
       scale_fill_manual(name="Model",
                         values=c(col.values, "black", "black"),
                         labels=c(model.labels, "Multi-model" = "M-M",
-                                 "OBS"= "MAESPA"))+
-      guides(alpha=guide_legend("Treatment"), fill = FALSE)+
+                                 "OBS"= "SITE ESTIMATE"))+
+      guides(alpha=guide_legend(""), fill = FALSE)+
       scale_x_discrete(limit=c(mod.list, "Multi-model", "OBS"),
                        label=c(model.labels, 
                                "Multi-model" = expression(bold("M-M")),
-                               "OBS" = expression(bold("MAESPA"))))
+                               "OBS" = expression(bold("SITE ESTIMATE"))))
+    
+    #plot(p3_mm)
     
     
     #legend_top_row <- get_legend(p1 + theme(legend.position="bottom",
@@ -460,7 +464,7 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
     
     p3_co2 <- ggplot(data=gppDF.plot, 
                  aes(ModName2, diff)) +
-      geom_violin(fill="grey") +
+      geom_violin(fill="white") +
       stat_summary(fun.y="mean", geom="crossbar", width=0.5, color="black")+
       geom_errorbar(data=subDF1, aes(x=ModName2, ymin=diff-diff.sd, 
                                      ymax=diff+diff.sd), width=0.2,
@@ -500,8 +504,6 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
                                   "Aj"="black"))
     
     #plot(p3_co2)
-    
-    
     
     #### plot CO2 response ratios
     #subDF <- plotDF1[plotDF1$ModName%in%c("C_GDAYP", "A_ELMV1",
@@ -659,7 +661,7 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
     
     p2_co2 <- ggplot(data=subDF3, 
                  aes(ModName2, diff)) +
-      geom_violin(fill="grey") +
+      geom_violin(fill="white") +
       stat_summary(fun.y="mean", geom="crossbar", width=0.5, color="black")+
       geom_errorbar(data=subDF1, aes(x=ModName, ymin=diff-diff.sd, 
                                      ymax=diff+diff.sd), width=0.2,
@@ -690,8 +692,6 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
       scale_color_manual(name="Model",
                          values=c(col.values,
                                   "Obs"="black"))
-
-    #plot(p2)
 
     
     
@@ -791,11 +791,11 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
       scale_fill_manual(name="Model",
                         values=c("black", "black"),
                         labels=c("Multi-model" = "Multi-model",
-                                 "OBS" = "MAESPA"))+
+                                 "OBS" = "SITE ESTIMATE"))+
       guides(alpha=guide_legend("Treatment"), fill = FALSE)+
       scale_x_discrete(limit=c("Multi-model", "OBS"),
                        label=c("Multi-model" = expression(bold("M-M")),
-                               "OBS" = expression(bold("MAESPA"))))+
+                               "OBS" = expression(bold("SITE ESTIMATE"))))+
       scale_color_manual(name="Model",
                          values=c(col.values),
                          labels=c(model.labels))
@@ -835,20 +835,26 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
       ylab(expression(paste(CO[2] * " response of LAI (%)")))+
       scale_color_manual(name="Model",
                          values=c(col.values,
-                                  "Multi-model"="grey30",
-                                  "Obs"="grey"))+
+                                  "Multi-model"="black",
+                                  "Obs"="black"),
+                         labels=c(model.labels, 
+                                  "Multi-model"="M-M",
+                                  "Obs"="OBS"))+
       scale_shape_manual(name="Model",
                          values=c("C_GDAYP"=19,"A_ELMV1"=19,
                                   "B_CABLP"=19,"D_LPJGP"=19,
                                   "E_OCHDP"=19,"F_QUINC"=19,
                                   "G_OCHDX"=19,"H_QUJSM"=19,
-                                  "Multi-model"=19,"Obs"=15))+
+                                  "Multi-model"=19,"Obs"=15),
+                         labels=c(model.labels, 
+                                  "Multi-model"="M-M",
+                                  "Obs"="OBS"))+
       annotate("text", x = 5, y = -1, label = "OBS")+
       annotate("text", x = 17, y = 5, label = "M-M")
     
+    #plot(p7_co2)
     
-    
-    common.legend <- get_legend(p1_co2 + theme(legend.position="right"))
+    #common.legend <- get_legend(p1_co2 + theme(legend.position="right"))
     
     
     plots_lai_column <- plot_grid(p5_co2, p2_co2, 
@@ -1659,6 +1665,10 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
                                   label_size = 20)
     
     
+    legend_bottom_row <- get_legend(p7_co2 + theme(legend.position="bottom",
+                                                   legend.box = 'horizontal',
+                                                   legend.box.just = 'left'))
+    
     
     pdf(paste0(out.dir, "/MIP_normalized_photosynthesis_response_OBS_", 
                scenario, "_comparison_with_obs2.pdf"), 
@@ -1666,238 +1676,13 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
     
     plot_grid(plots_top_column, 
               plots_bottom_row,
-              ncol=1, rel_heights=c(1, 0.5),
+              legend_bottom_row,
+              ncol=1, rel_heights=c(1, 0.5, 0.1),
               align="vh", axis = "l",
               label_x=0.84, label_y=0.95,
               label_size = 20)
     
     dev.off()
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    #########################################################################
-    ##### time sequence
-#
-    #### Aleaf
-    #p1 <- ggplot() +
-    #  geom_point(data=ambDF2, aes(YEAR, Aleaf.mean, col=ModName))+
-    #  geom_line(data=ambDF2, aes(YEAR, Aleaf.mean, col=ModName, lty=ModName))+
-    #  theme_linedraw() +
-    #  theme(panel.grid.minor=element_blank(),
-    #        axis.text.x=element_text(size=12),
-    #        axis.title.x=element_blank(),
-    #        axis.text.y=element_text(size=12),
-    #        axis.title.y=element_text(size=14),
-    #        legend.text=element_text(size=12),
-    #        legend.title=element_text(size=14),
-    #        panel.grid.major=element_blank(),
-    #        legend.position="none",
-    #        legend.box = 'horizontal',
-    #        legend.box.just = 'left',
-    #        legend.key.width = unit(1.5,"cm"),
-    #        plot.title = element_text(size=14, face="bold.italic", 
-    #                                  hjust = 0.5))+
-    #  ylab(expression(paste(A[leaf]* " (g C " * m^2 * " " * d^-1, ")")))+
-    #  scale_color_manual(name="Model",
-    #                     values=col.values,
-    #                     labels=model.labels)+
-    #  scale_linetype_manual(name="Model", 
-    #                        values=linetype.values,
-    #                        labels=model.labels)+
-    #  guides(fill = guide_legend(override.aes = list(col = col.values,
-    #                                                 lty = linetype.values),
-    #                             nrow=2, byrow=F))+
-    #  xlab(expression(paste("Year")))+
-    #  ylim(c(1,5))
-    #
-    #
-    #p2 <- ggplot() +
-    #  geom_point(data=eleDF2, aes(YEAR, Aleaf.mean, col=ModName))+
-    #  geom_line(data=eleDF2, aes(YEAR, Aleaf.mean, col=ModName, lty=ModName))+
-    #  theme_linedraw() +
-    #  theme(panel.grid.minor=element_blank(),
-    #        axis.text.x=element_text(size=12),
-    #        axis.title.x=element_blank(),
-    #        axis.text.y=element_text(size=12),
-    #        axis.title.y=element_blank(),
-    #        legend.text=element_text(size=12),
-    #        legend.title=element_text(size=14),
-    #        panel.grid.major=element_blank(),
-    #        legend.position="none",
-    #        legend.box = 'horizontal',
-    #        legend.box.just = 'left',
-    #        legend.key.width = unit(1.5,"cm"),
-    #        plot.title = element_text(size=14, face="bold.italic", 
-    #                                  hjust = 0.5))+
-    #  ylab(expression(paste(A[leaf]* " (g C " * m^2 * " " * d^-1, ")")))+
-    #  scale_color_manual(name="Model",
-    #                     values=col.values,
-    #                     labels=model.labels)+
-    #  scale_linetype_manual(name="Model", 
-    #                        values=linetype.values,
-    #                        labels=model.labels)+
-    #  guides(fill = guide_legend(override.aes = list(col = col.values,
-    #                                                 lty = linetype.values),
-    #                             nrow=2, byrow=F))+
-    #  xlab(expression(paste("Year")))+
-    #  ylim(c(1,5))
-    #
-    #### LAI
-    #p3 <- ggplot() +
-    #  geom_point(data=ambDF2, aes(YEAR, LAI.mean, col=ModName))+
-    #  geom_line(data=ambDF2, aes(YEAR,LAI.mean, col=ModName, lty=ModName))+
-    #  theme_linedraw() +
-    #  theme(panel.grid.minor=element_blank(),
-    #        axis.text.x=element_text(size=12),
-    #        axis.title.x=element_blank(),
-    #        axis.text.y=element_text(size=12),
-    #        axis.title.y=element_text(size=14),
-    #        legend.text=element_text(size=12),
-    #        legend.title=element_text(size=14),
-    #        panel.grid.major=element_blank(),
-    #        legend.position="none",
-    #        legend.box = 'horizontal',
-    #        legend.box.just = 'left',
-    #        legend.key.width = unit(1.5,"cm"),
-    #        plot.title = element_text(size=14, face="bold.italic", 
-    #                                  hjust = 0.5))+
-    #  ylab(expression(paste("LAI")))+
-    #  scale_color_manual(name="Model",
-    #                     values=col.values,
-    #                     labels=model.labels)+
-    #  scale_linetype_manual(name="Model", 
-    #                        values=linetype.values,
-    #                        labels=model.labels)+
-    #  guides(fill = guide_legend(override.aes = list(col = col.values,
-    #                                                 lty = linetype.values),
-    #                             nrow=2, byrow=F))+
-    #  xlab(expression(paste("Year")))+
-    #  ylim(c(1,4.5))
-    #
-    #
-    #p4 <- ggplot() +
-    #  geom_point(data=eleDF2, aes(YEAR, LAI.mean, col=ModName))+
-    #  geom_line(data=eleDF2, aes(YEAR, LAI.mean, col=ModName, lty=ModName))+
-    #  theme_linedraw() +
-    #  theme(panel.grid.minor=element_blank(),
-    #        axis.text.x=element_text(size=12),
-    #        axis.title.x=element_blank(),
-    #        axis.text.y=element_text(size=12),
-    #        axis.title.y=element_blank(),
-    #        legend.text=element_text(size=12),
-    #        legend.title=element_text(size=14),
-    #        panel.grid.major=element_blank(),
-    #        legend.position="none",
-    #        legend.box = 'horizontal',
-    #        legend.box.just = 'left',
-    #        legend.key.width = unit(1.5,"cm"),
-    #        plot.title = element_text(size=14, face="bold.italic", 
-    #                                  hjust = 0.5))+
-    #  ylab(expression(paste("LAI")))+
-    #  scale_color_manual(name="Model",
-    #                     values=col.values,
-    #                     labels=model.labels)+
-    #  scale_linetype_manual(name="Model", 
-    #                        values=linetype.values,
-    #                        labels=model.labels)+
-    #  guides(fill = guide_legend(override.aes = list(col = col.values,
-    #                                                 lty = linetype.values),
-    #                             nrow=2, byrow=F))+
-    #  xlab(expression(paste("Year")))+
-    #  ylim(c(1,4.5))
-    #
-    #
-    #p5 <- ggplot() +
-    #  geom_point(data=ambDF3, aes(YEAR, GPP, col=ModName))+
-    #  geom_line(data=ambDF3, aes(YEAR, GPP, col=ModName, lty=ModName))+
-    #  theme_linedraw() +
-    #  theme(panel.grid.minor=element_blank(),
-    #        axis.text.x=element_text(size=12),
-    #        axis.title.x=element_blank(),
-    #        axis.text.y=element_text(size=12),
-    #        axis.title.y=element_text(size=14),
-    #        legend.text=element_text(size=12),
-    #        legend.title=element_text(size=14),
-    #        panel.grid.major=element_blank(),
-    #        legend.position="none",
-    #        legend.box = 'horizontal',
-    #        legend.box.just = 'left',
-    #        legend.key.width = unit(1.5,"cm"),
-    #        plot.title = element_text(size=14, face="bold.italic", 
-    #                                  hjust = 0.5))+
-    #  ylab(expression(paste(GPP* " (g C " * m^2 * " " * yr^-1, ")")))+
-    #  scale_color_manual(name="Model",
-    #                     values=col.values,
-    #                     labels=model.labels)+
-    #  scale_linetype_manual(name="Model", 
-    #                        values=linetype.values,
-    #                        labels=model.labels)+
-    #  guides(fill = guide_legend(override.aes = list(col = col.values,
-    #                                                 lty = linetype.values),
-    #                             nrow=2, byrow=F))+
-    #  xlab(expression(paste("Year")))+
-    #  ylim(c(1000,3500))
-    #
-    #
-    #p6 <- ggplot() +
-    #  geom_point(data=eleDF3, aes(YEAR, GPP, col=ModName))+
-    #  geom_line(data=eleDF3, aes(YEAR, GPP, col=ModName, lty=ModName))+
-    #  theme_linedraw() +
-    #  theme(panel.grid.minor=element_blank(),
-    #        axis.text.x=element_text(size=12),
-    #        axis.title.x=element_blank(),
-    #        axis.text.y=element_text(size=12),
-    #        axis.title.y=element_blank(),
-    #        legend.text=element_text(size=12),
-    #        legend.title=element_text(size=14),
-    #        panel.grid.major=element_blank(),
-    #        legend.position="none",
-    #        legend.box = 'horizontal',
-    #        legend.box.just = 'left',
-    #        legend.key.width = unit(1.5,"cm"),
-    #        plot.title = element_text(size=14, face="bold.italic", 
-    #                                  hjust = 0.5))+
-    #  ylab(expression(paste(GPP * " (g C " * m^2 * " " * yr^-1, ")")))+
-    #  scale_color_manual(name="Model",
-    #                     values=col.values,
-    #                     labels=model.labels)+
-    #  scale_linetype_manual(name="Model", 
-    #                        values=linetype.values,
-    #                        labels=model.labels)+
-    #  guides(fill = guide_legend(override.aes = list(col = col.values,
-    #                                                 lty = linetype.values),
-    #                             nrow=2, byrow=F))+
-    #  xlab(expression(paste("Year")))+
-    #  ylim(c(1000,3500))
-    #
-    #legend_top_row <- get_legend(p1 + theme(legend.position="bottom",
-    #                                        legend.box = 'horizontal',
-    #                                        legend.box.just = 'left'))
-    #
-    #plots_top_row <- plot_grid(p5, p6, 
-    #                           p1, p2, 
-    #                           p3, p4, 
-    #                           labels=c("(a)", "(b)", "(c)", "(d)",
-    #                                    "(e)", "(f)"),
-    #                           ncol=2, align="vh", axis = "l",
-    #                           label_x=0.86, label_y=0.95,
-    #                           label_size = 18)
-    #
-    #
-    ##pdf(paste0(out.dir, "/MIP_normalized_photosynthesis_response_OBS_", 
-    ##           scenario, "_AMB_comparison.pdf"), 
-    ##    width=12, height=16)
-    ##plot_grid(plots_top_row,
-    ##          legend_top_row,
-    ##          ncol=1, rel_heights=c(1,0.2))
-    ##
-    ##dev.off()
     
 }    
 

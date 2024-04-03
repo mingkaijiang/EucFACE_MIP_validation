@@ -296,14 +296,14 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
       #                           "deltaCSTOR"=expression(Delta * C[lab]),
       #                           "deltaCSOIL"=expression(Delta * C[soil])))+
       scale_fill_manual(name="Component",
-                        values=c("GPP"="#42A7F2",
+                        values=c(#"GPP"="#42A7F2",
                                  "NPP"="#47E3E9",
                                  "RAU"="#C9FA86",
                                  "RHET"="#F9F871",
                                  "deltaCVEG"="#8180D7",
                                  "deltaCSTOR"="#BEFCFE",
                                  "deltaCSOIL"="#FFE8D3"),
-                        labels=c("GPP"="GPP", 
+                        labels=c(#"GPP"="GPP", 
                                  "NPP"="NPP",
                                  "RAU"=expression(R[auto]),
                                  "RHET"=expression(R[het]),
@@ -364,6 +364,58 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
       guides(fill=guide_legend(nrow=2))
   
     
+    
+  test <- subset(plotDF4, variable!="GPP")
+    
+  legend_plot_only <- ggplot() +  
+      geom_hline(yintercept=0)+
+      geom_bar(test, stat = "identity", 
+               mapping=aes(Method, value.mean, fill=variable),
+               position="stack", col="black") +
+      #geom_errorbar(data=plotDF3, 
+      #              mapping=aes(x=Method, ymin=value.mean-value.sd, 
+      #                          ymax=value.mean+value.sd), 
+      #              width=0.1, size=0.6, color="black") + 
+      #geom_point(data=plotDF3, 
+      #           mapping=aes(x=Method, y=value.mean), 
+      #           size=2, shape=21, fill="white", col="black")+
+      xlab("") + 
+      ylab(expression(paste(CO[2] * " effect (g C ", m^-2, " ", yr^-1, ")"))) +
+    scale_fill_manual(name="Component",
+                      values=c(#"GPP"="#42A7F2",
+                        "NPP"="#47E3E9",
+                        "RAU"="#C9FA86",
+                        "RHET"="#F9F871",
+                        "deltaCVEG"="#8180D7",
+                        "deltaCSTOR"="#BEFCFE",
+                        "deltaCSOIL"="#FFE8D3"),
+                      labels=c(#"GPP"="GPP", 
+                        "NPP"="NPP",
+                        "RAU"=expression(R[auto]),
+                        "RHET"=expression(R[het]),
+                        "deltaCVEG"=expression(Delta * C[veg]),
+                        "deltaCSTOR"=expression(Delta * C[lab]),
+                        "deltaCSOIL"=expression(Delta * C[soil])))+
+      scale_x_discrete(breaks=c("GPP", "NPP+RAU", "R+deltaC"),
+                       labels=c("GPP"="GPP",
+                                "NPP+RAU"=expression("NPP+" * R[auto]),
+                                "R+deltaC"=expression("R+"*Delta*"C"))) +
+      theme_linedraw() +
+      theme(panel.grid.minor=element_blank(),
+            axis.title.x = element_text(size=14), 
+            axis.text.x = element_text(size=14),
+            axis.text.y=element_text(size=14),
+            axis.title.y=element_blank(),
+            legend.text=element_text(size=14),
+            legend.title=element_text(size=14),
+            panel.grid.major=element_blank(),
+            legend.position="none",
+            legend.text.align=0)+
+      scale_y_continuous(limits=c(-50, 800), 
+                         breaks=c(0, 100, 200, 400, 600, 800),
+                         labels=c(0, 100, 200, 400, 600, 800))+
+      annotate(geom="text", x=1, y=750, label="GDAYP", size=7) 
+  
     
     
     ################################################
@@ -1256,7 +1308,7 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
       #                  labels=c("NPP"="NPP",
       #                           "RAU"=expression(R[auto])))+
       scale_fill_manual(name="Component",
-                        values=c("GPP"="#42A7F2",
+                        values=c(#"GPP"="#42A7F2",
                                  "NPP"="#47E3E9",
                                  "RAU"="#C9FA86",
                                  "RHET"="#F9F871",
@@ -1293,7 +1345,7 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
                                       hjust = 0.5))+
       ylab(expression(paste("Normalized " * CO[2] * " response")))+
       scale_fill_manual(name="Component",
-                        values=c("GPP"="#42A7F2",
+                        values=c(#"GPP"="#42A7F2",
                                  "NPP"="#47E3E9",
                                  "RAU"="#C9FA86",
                                  "RHET"="#F9F871",
@@ -1309,9 +1361,6 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
                      label=c(model.labels, 
                              "I_MM"=expression(bold("M-M")),
                              "OBS"=expression(bold("OBS"))))
-    
-    plot(p2)
-    
 
     
     ####################################################################################################################################
@@ -1321,7 +1370,7 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
                                label_x=0.9, label_y=0.98,
                                label_size = 18)
     
-    plots_legend_row <-  get_legend(p_gdayp1 + theme(legend.position="bottom",
+    plots_legend_row <-  get_legend(legend_plot_only + theme(legend.position="bottom",
                                                      legend.box = 'horizontal',
                                                      legend.box.just = 'left')
                                     + guides(fill=guide_legend(nrow=1,byrow=TRUE)))
@@ -1529,7 +1578,7 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
       #                           "deltaCFR"=expression(Delta*C[froot]), 
       #                           "deltaCCR"=expression(Delta*C[croot]),
       #                           "deltaCSTOR"=expression(Delta*C[store])))+
-    scale_fill_manual(name=expression(Delta*C[veg]),
+    scale_fill_manual(name="Component",
                       values=c("deltaCL"="#FF6F91",
                                "deltaCW"="#FFC75F",
                                "deltaCFR"="#D65DB1",
@@ -1799,27 +1848,6 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
     
     
     
-    
-    #######################################################
-    
-    #plots_2_row <- plot_grid(p_gdayp1, p_elmv11, p_cablp1, p_lpjgp1, 
-    #                         p_ochdp1, p_quinc1, p_ochdx1, p_qujsm1, 
-    #                         labels=c("(c)", "(d)", "(e)", "(f)",
-    #                                  "(g)", "(h)", "(i)", "(j)"),
-    #                         ncol=8, align="h", axis = "l",
-    #                         label_x=0.86, label_y=0.98,
-    #                         label_size = 18)
-    #
-    #
-    #pdf(paste0(out.dir, "/MIP_normalized_fate_of_C_",  
-    #           scenario, "_comparison2.pdf"), 
-    #    width=16, height=8)
-    #plot_grid(plots_top_row,
-    #          plots_legend_row,
-    #          plots_2_row,
-    #          ncol=1, rel_heights=c(1, 0.2, 0.6))
-    #
-    #dev.off()
     
      #  end
 }
