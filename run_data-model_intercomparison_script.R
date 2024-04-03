@@ -91,7 +91,7 @@ eucDF <- prepare_EucFACE_observation_dataset(ignore.understorey=F)
 scenario="VAR"
 rev.sd=1.0
 
-check_data_model_agreement(scenario="VAR", eucDF, rev.sd=rev.sd)
+#check_data_model_agreement(scenario="VAR", eucDF, rev.sd=rev.sd)
 
 
 

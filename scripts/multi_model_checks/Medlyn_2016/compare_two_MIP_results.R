@@ -23,6 +23,27 @@ compare_two_MIP_results <- function() {
     myDF2 <- merge_this_MIP_and_Medlyn_2016_individual_model(medDF=medDF2, thisDF=thisDF2)
     
     
+    ### replace model names
+    myDF$ModName[myDF$MIP=="Medlyn_2016"&myDF$ModName=="CLM4"] <- "K_CLM4"
+    myDF$ModName[myDF$MIP=="Medlyn_2016"&myDF$ModName=="GDAY"] <- "L_GDAY"
+    myDF$ModName[myDF$MIP=="Medlyn_2016"&myDF$ModName=="LPJW"] <- "M_LPJW"
+    myDF$ModName[myDF$MIP=="Medlyn_2016"&myDF$ModName=="LPJX"] <- "N_LPJX"
+    myDF$ModName[myDF$MIP=="Medlyn_2016"&myDF$ModName=="OCNX"] <- "O_OCNX"
+    myDF$ModName[myDF$MIP=="Medlyn_2016"&myDF$ModName=="SDVM"] <- "P_SDVM"
+    myDF$ModName[myDF$MIP=="Medlyn_2016"&myDF$ModName=="CABL"] <- "Q_CABL"
+    myDF$ModName[myDF$MIP=="Medlyn_2016"&myDF$ModName=="CLMP"] <- "R_CLMP"
+
+    myDF2$ModName[myDF2$MIP=="Medlyn_2016"&myDF2$ModName=="CLM4"] <- "K_CLM4"
+    myDF2$ModName[myDF2$MIP=="Medlyn_2016"&myDF2$ModName=="GDAY"] <- "L_GDAY"
+    myDF2$ModName[myDF2$MIP=="Medlyn_2016"&myDF2$ModName=="LPJW"] <- "M_LPJW"
+    myDF2$ModName[myDF2$MIP=="Medlyn_2016"&myDF2$ModName=="LPJX"] <- "N_LPJX"
+    myDF2$ModName[myDF2$MIP=="Medlyn_2016"&myDF2$ModName=="OCNX"] <- "O_OCNX"
+    myDF2$ModName[myDF2$MIP=="Medlyn_2016"&myDF2$ModName=="SDVM"] <- "P_SDVM"
+    myDF2$ModName[myDF2$MIP=="Medlyn_2016"&myDF2$ModName=="CABL"] <- "Q_CABL"
+    myDF2$ModName[myDF2$MIP=="Medlyn_2016"&myDF2$ModName=="CLMP"] <- "R_CLMP"
+    
+
+    
     col.values <- c("A_ELMV1" = SpectralPalette[1],
                     "B_CABLP" = SpectralPalette[2],
                     "C_GDAYP" = SpectralPalette[3],
@@ -32,7 +53,55 @@ compare_two_MIP_results <- function() {
                     "G_OCHDX" = SpectralPalette[7],
                     "H_QUJSM" = SpectralPalette[8],
                     "I_GDAYN" = SpectralPalette[3],
-                    "J_LPJGN" = SpectralPalette[4])
+                    "J_LPJGN" = SpectralPalette[4],
+                    "K_CLM4"=Diverge_hsv_Palette[1],
+                    "L_GDAY"=Diverge_hsv_Palette[3],
+                    "M_LPJW"=Diverge_hsv_Palette[4],
+                    "N_LPJX"=Diverge_hsv_Palette[6],
+                    "O_OCNX"=Diverge_hsv_Palette[7],
+                    "P_SDVM"=Diverge_hsv_Palette[8],
+                    "Q_CABL"=Diverge_hsv_Palette[2],
+                    "R_CLMP"=Diverge_hsv_Palette[5])
+    
+    pch.values <- c("A_ELMV1" = 16,
+                    "B_CABLP" = 16,
+                    "C_GDAYP" = 16,
+                    "D_LPJGP" = 16,
+                    "E_OCHDP" = 16,
+                    "F_QUINC" = 16,
+                    "G_OCHDX" = 16,
+                    "H_QUJSM" = 16,
+                    "I_GDAYN" = 15,
+                    "J_LPJGN" = 15,
+                    "K_CLM4"=17,
+                    "L_GDAY"=17,
+                    "M_LPJW"=17,
+                    "N_LPJX"=17,
+                    "O_OCNX"=17,
+                    "P_SDVM"=17,
+                    "Q_CABL"=18,
+                    "R_CLMP"=18)
+    
+    
+    model.labels <- c("A_ELMV1" = "ELMV1",
+                      "B_CABLP" = "CABLP",
+                      "C_GDAYP" = "GDAYP",
+                      "D_LPJGP" = "LPJGP",
+                      "E_OCHDP" = "OCDHP",
+                      "F_QUINC" = "QUINC",
+                      "G_OCHDX" = "OCHDX",
+                      "H_QUJSM" = "QUJSM",
+                      "I_GDAYN" = "GDAYN",
+                      "J_LPJGN" = "LPJGN",
+                      "K_CLM4"="CLM4",
+                      "L_GDAY"="GDAY",
+                      "M_LPJW"="LPJW",
+                      "N_LPJX"="LPJX",
+                      "O_OCNX"="OCNX",
+                      "P_SDVM"="SDVM",
+                      "Q_CABL"="CABL",
+                      "R_CLMP"="CLMP")
+    
     
     ### compare the two with plotting
     plotDF1 <- myDF[myDF$variable=="GPP",]
@@ -46,7 +115,7 @@ compare_two_MIP_results <- function() {
         geom_bar(stat = "identity", aes(fill=Trt), 
                  position=position_dodge(), col="black") +
         geom_point(data=subDF1, aes(ModVersion, meanvalue, group=Trt,
-                                    col=ModName), 
+                                    col=ModName, pch=ModName), 
                    position=position_jitterdodge(jitter.width=0.2, dodge.width=0.9), size=4)+
         geom_errorbar(aes(x=ModVersion, ymin=meanvalue-sdvalue,
                           ymax=meanvalue+sdvalue), 
@@ -67,24 +136,21 @@ compare_two_MIP_results <- function() {
               legend.position="none",
               legend.box = 'horizontal',
               legend.box.just = 'left',
-              legend.background = element_rect(fill="grey",
+              legend.background = element_rect(fill="white",
                                                size=0.5, linetype="solid", 
                                                colour ="black"),
               plot.title = element_text(size=14, face="bold.italic", 
                                         hjust = 0.5))+
         ylab(expression(paste("GPP (g C " * m^2 * " " * yr^-1 * ")")))+
         scale_fill_manual(name="Trt",
-                          values=c("amb"="white", "ele"="grey"))+
+                          values=c("amb"="white", "ele"="grey"),
+                          labels=model.labels)+
         scale_color_manual(name="Model",
-                           values=c(col.values, 
-                                    "CLM4"=Diverge_hsv_Palette[1],
-                                    "CLMP"=Diverge_hsv_Palette[2],
-                                    "CABL"=Diverge_hsv_Palette[3],
-                                    "GDAY"=Diverge_hsv_Palette[4],
-                                    "LPJW"=Diverge_hsv_Palette[5],
-                                    "LPJX"=Diverge_hsv_Palette[6],
-                                    "OCNX"=Diverge_hsv_Palette[7],
-                                    "SDVM"=Diverge_hsv_Palette[8]))
+                           values=c(col.values),
+                           labels=model.labels)+
+        scale_shape_manual(name="Model",
+                           values=c(pch.values),
+                           labels=model.labels)
     
     
     
@@ -123,15 +189,9 @@ compare_two_MIP_results <- function() {
         scale_fill_manual(name="Trt",
                           values=c("amb"="white", "ele"="grey"))+
         scale_color_manual(name="Model",
-                           values=c(col.values, 
-                                    "CLM4"=Diverge_hsv_Palette[1],
-                                    "CLMP"=Diverge_hsv_Palette[2],
-                                    "CABL"=Diverge_hsv_Palette[3],
-                                    "GDAY"=Diverge_hsv_Palette[4],
-                                    "LPJW"=Diverge_hsv_Palette[5],
-                                    "LPJX"=Diverge_hsv_Palette[6],
-                                    "OCNX"=Diverge_hsv_Palette[7],
-                                    "SDVM"=Diverge_hsv_Palette[8]))
+                           values=c(col.values))+
+        scale_shape_manual(name="Model",
+                           values=c(pch.values))
     
     
 
@@ -152,7 +212,7 @@ compare_two_MIP_results <- function() {
         geom_bar(stat = "identity", aes(fill=Trt), 
                  position=position_dodge(), col="black") +
         geom_point(data=subDF2, aes(ModVersion, meanvalue, group=Trt,
-                                    col=ModName), 
+                                    col=ModName, pch=ModName), 
                    position=position_jitterdodge(jitter.width=0.2, dodge.width=0.9), size=4)+
         geom_errorbar(aes(x=ModVersion, ymin=meanvalue-sdvalue,
                          ymax=meanvalue+sdvalue), 
@@ -182,15 +242,9 @@ compare_two_MIP_results <- function() {
         scale_fill_manual(name="Trt",
                           values=c("amb"="white", "ele"="grey"))+
         scale_color_manual(name="Model",
-                           values=c(col.values, 
-                                    "CLM4"=Diverge_hsv_Palette[1],
-                                    "CLMP"=Diverge_hsv_Palette[2],
-                                    "CABL"=Diverge_hsv_Palette[3],
-                                    "GDAY"=Diverge_hsv_Palette[4],
-                                    "LPJW"=Diverge_hsv_Palette[5],
-                                    "LPJX"=Diverge_hsv_Palette[6],
-                                    "OCNX"=Diverge_hsv_Palette[7],
-                                    "SDVM"=Diverge_hsv_Palette[8]))
+                           values=c(col.values))+
+        scale_shape_manual(name="Model",
+                           values=c(pch.values))
     
     
     p2_1 <- ggplot(data=plotDF2, 
@@ -228,15 +282,9 @@ compare_two_MIP_results <- function() {
         scale_fill_manual(name="Trt",
                           values=c("amb"="white", "ele"="grey"))+
         scale_color_manual(name="Model",
-                           values=c(col.values, 
-                                    "CLM4"=Diverge_hsv_Palette[1],
-                                    "CLMP"=Diverge_hsv_Palette[2],
-                                    "CABL"=Diverge_hsv_Palette[3],
-                                    "GDAY"=Diverge_hsv_Palette[4],
-                                    "LPJW"=Diverge_hsv_Palette[5],
-                                    "LPJX"=Diverge_hsv_Palette[6],
-                                    "OCNX"=Diverge_hsv_Palette[7],
-                                    "SDVM"=Diverge_hsv_Palette[8]))
+                           values=c(col.values))+
+        scale_shape_manual(name="Model",
+                           values=c(pch.values))
     
     
     
@@ -254,7 +302,7 @@ compare_two_MIP_results <- function() {
         geom_bar(stat = "identity", aes(fill=Trt), 
                  position=position_dodge(), col="black") +
         geom_point(data=subDF3, aes(ModVersion, meanvalue, group=Trt,
-                                    col=ModName), 
+                                    col=ModName, pch=ModName), 
                    position=position_jitterdodge(jitter.width=0.2, dodge.width=0.9), size=4)+
         geom_errorbar(aes(x=ModVersion, ymin=meanvalue-sdvalue,
                           ymax=meanvalue+sdvalue), 
@@ -279,15 +327,9 @@ compare_two_MIP_results <- function() {
         scale_fill_manual(name="",
                           values=c("amb"="white", "ele"="grey"))+
         scale_color_manual(name="Model",
-                           values=c(col.values, 
-                                    "CLM4"=Diverge_hsv_Palette[1],
-                                    "CLMP"=Diverge_hsv_Palette[2],
-                                    "CABL"=Diverge_hsv_Palette[3],
-                                    "GDAY"=Diverge_hsv_Palette[4],
-                                    "LPJW"=Diverge_hsv_Palette[5],
-                                    "LPJX"=Diverge_hsv_Palette[6],
-                                    "OCNX"=Diverge_hsv_Palette[7],
-                                    "SDVM"=Diverge_hsv_Palette[8]))
+                           values=c(col.values))+
+        scale_shape_manual(name="Model",
+                           values=c(pch.values))
     
     
     
@@ -326,15 +368,9 @@ compare_two_MIP_results <- function() {
         scale_fill_manual(name="Trt",
                           values=c("amb"="white", "ele"="grey"))+
         scale_color_manual(name="Model",
-                           values=c(col.values, 
-                                    "CLM4"=Diverge_hsv_Palette[1],
-                                    "CLMP"=Diverge_hsv_Palette[2],
-                                    "CABL"=Diverge_hsv_Palette[3],
-                                    "GDAY"=Diverge_hsv_Palette[4],
-                                    "LPJW"=Diverge_hsv_Palette[5],
-                                    "LPJX"=Diverge_hsv_Palette[6],
-                                    "OCNX"=Diverge_hsv_Palette[7],
-                                    "SDVM"=Diverge_hsv_Palette[8]))
+                           values=c(col.values))+
+        scale_shape_manual(name="Model",
+                           values=c(pch.values))
     
     
     
@@ -352,7 +388,7 @@ compare_two_MIP_results <- function() {
         geom_bar(stat = "identity", aes(fill=Trt), 
                  position=position_dodge(), col="black") +
         geom_point(data=subDF4, aes(ModVersion, meanvalue, group=Trt,
-                                    col=ModName), 
+                                    col=ModName, pch=ModName), 
                    position=position_jitterdodge(jitter.width=0.2, dodge.width=0.9), size=4)+
         geom_errorbar(aes(x=ModVersion, ymin=meanvalue-sdvalue,
                           ymax=meanvalue+sdvalue), 
@@ -382,15 +418,9 @@ compare_two_MIP_results <- function() {
         scale_fill_manual(name="Trt",
                           values=c("amb"="white", "ele"="grey"))+
         scale_color_manual(name="Model",
-                           values=c(col.values, 
-                                    "CLM4"=Diverge_hsv_Palette[1],
-                                    "CLMP"=Diverge_hsv_Palette[2],
-                                    "CABL"=Diverge_hsv_Palette[3],
-                                    "GDAY"=Diverge_hsv_Palette[4],
-                                    "LPJW"=Diverge_hsv_Palette[5],
-                                    "LPJX"=Diverge_hsv_Palette[6],
-                                    "OCNX"=Diverge_hsv_Palette[7],
-                                    "SDVM"=Diverge_hsv_Palette[8]))
+                           values=c(col.values))+
+        scale_shape_manual(name="Model",
+                           values=c(pch.values))
     
     
     p4_1 <- ggplot(data=plotDF4, 
@@ -428,15 +458,9 @@ compare_two_MIP_results <- function() {
         scale_fill_manual(name="Trt",
                           values=c("amb"="white", "ele"="grey"))+
         scale_color_manual(name="Model",
-                           values=c(col.values, 
-                                    "CLM4"=Diverge_hsv_Palette[1],
-                                    "CLMP"=Diverge_hsv_Palette[2],
-                                    "CABL"=Diverge_hsv_Palette[3],
-                                    "GDAY"=Diverge_hsv_Palette[4],
-                                    "LPJW"=Diverge_hsv_Palette[5],
-                                    "LPJX"=Diverge_hsv_Palette[6],
-                                    "OCNX"=Diverge_hsv_Palette[7],
-                                    "SDVM"=Diverge_hsv_Palette[8]))
+                           values=c(col.values))+
+        scale_shape_manual(name="Model",
+                           values=c(pch.values))
     
     
     
@@ -455,7 +479,7 @@ compare_two_MIP_results <- function() {
         geom_bar(stat = "identity", aes(fill=Trt), 
                  position=position_dodge(), col="black") +
         geom_point(data=subDF5, aes(ModVersion, meanvalue, group=Trt,
-                                    col=ModName), 
+                                    col=ModName, pch=ModName), 
                    position=position_jitterdodge(jitter.width=0.2, dodge.width=0.9), size=4)+
         geom_errorbar(aes(x=ModVersion, ymin=meanvalue-sdvalue,
                           ymax=meanvalue+sdvalue), 
@@ -485,15 +509,9 @@ compare_two_MIP_results <- function() {
         scale_fill_manual(name="Trt",
                           values=c("amb"="white", "ele"="grey"))+
         scale_color_manual(name="Model",
-                           values=c(col.values, 
-                                    "CLM4"=Diverge_hsv_Palette[1],
-                                    "CLMP"=Diverge_hsv_Palette[2],
-                                    "CABL"=Diverge_hsv_Palette[3],
-                                    "GDAY"=Diverge_hsv_Palette[4],
-                                    "LPJW"=Diverge_hsv_Palette[5],
-                                    "LPJX"=Diverge_hsv_Palette[6],
-                                    "OCNX"=Diverge_hsv_Palette[7],
-                                    "SDVM"=Diverge_hsv_Palette[8]))
+                           values=c(col.values))+
+        scale_shape_manual(name="Model",
+                           values=c(pch.values))
     
     
     
@@ -532,15 +550,9 @@ compare_two_MIP_results <- function() {
         scale_fill_manual(name="Trt",
                           values=c("amb"="white", "ele"="grey"))+
         scale_color_manual(name="Model",
-                           values=c(col.values, 
-                                    "CLM4"=Diverge_hsv_Palette[1],
-                                    "CLMP"=Diverge_hsv_Palette[2],
-                                    "CABL"=Diverge_hsv_Palette[3],
-                                    "GDAY"=Diverge_hsv_Palette[4],
-                                    "LPJW"=Diverge_hsv_Palette[5],
-                                    "LPJX"=Diverge_hsv_Palette[6],
-                                    "OCNX"=Diverge_hsv_Palette[7],
-                                    "SDVM"=Diverge_hsv_Palette[8]))
+                           values=c(col.values))+
+        scale_shape_manual(name="Model",
+                           values=c(pch.values))
     
     
     legend_top_row <- get_legend(p1 + theme(legend.position="bottom",
