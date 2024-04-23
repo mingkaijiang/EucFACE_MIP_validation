@@ -1154,14 +1154,14 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
                                     + guides(fill=guide_legend(nrow=1,byrow=TRUE)))
     
     plots_2_row <- plot_grid(p_elmv11, p_cablp1, p_gdayp1, p_lpjgp1, 
-                             labels=c("(a)", "(b)", "(c)", "(d)"),
+                             labels=c("A", "B", "C", "D"),
                              ncol=4, align="vh", axis = "l",
                              label_x=0.85, label_y=0.98,
                              label_size = 18)
     
     
     plots_4_row <- plot_grid(p_ochdp1, p_quinc1, p_ochdx1, p_qujsm1, 
-                             labels=c("(e)", "(f)", "(g)", "(h)"),
+                             labels=c("E", "F", "G", "H"),
                              ncol=4, align="vh", axis = "l",
                              label_x=0.85, label_y=0.98,
                              label_size = 18)
@@ -1365,9 +1365,9 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
     
     ####################################################################################################################################
     plots_top_row <- plot_grid(p1, p2, 
-                               labels=c("(a)", "(b)"),
+                               labels=c("A", "B"),
                                ncol=2, align="vh", axis = "l",
-                               label_x=0.9, label_y=0.98,
+                               label_x=0.94, label_y=0.97,
                                label_size = 18)
     
     plots_legend_row <-  get_legend(legend_plot_only + theme(legend.position="bottom",
@@ -1810,7 +1810,7 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
     
     
     plots_mid_row <- plot_grid(p5, p6, # delta Cveg
-                               labels=c("(c)", "(d)"), label_x=0.9, label_y=0.97,
+                               labels=c("C", "D"), label_x=0.94, label_y=0.97,
                                label_size=20,
                                ncol=2)
     
@@ -1821,7 +1821,7 @@ trace_fate_of_carbon_MIP_plot <- function(scenario) {
     
     
     plots_bot_row <- plot_grid(p7, p8, # NEP
-                               labels=c("(e)", "(f)"), label_x=0.9, label_y=0.97,
+                               labels=c("E", "F"), label_x=0.94, label_y=0.97,
                                label_size=20,
                                ncol=2)
     

@@ -81,6 +81,14 @@ plot_photosynthesis_relationships <- function(scenario, eucDF) {
     
     require(gridExtra)
     
+    col.values <- c("A_ELMV1" = SpectralPalette[1],
+      "B_CABLP" = SpectralPalette[2],
+      "C_GDAYP" = SpectralPalette[3],
+      "D_LPJGP" = SpectralPalette[4],
+      "E_OCHDP" = SpectralPalette[5],
+      "F_QUINC" = SpectralPalette[6],
+      "G_OCHDX" = SpectralPalette[7],
+      "H_QUJSM" = SpectralPalette[8])
     
     
     ### calculate multi-model means and then plot a vector with arrow to show directional change under eCO2
@@ -93,28 +101,11 @@ plot_photosynthesis_relationships <- function(scenario, eucDF) {
     
     ### plot
     p1 <- ggplot() +
-      #geom_segment(aes(x=sumDF$PL_leaf.mean[sumDF$Trt=="amb"], xend = sumDF$PL_leaf.mean[sumDF$Trt=="amb"],
-      #                 y=sumDF$Aleaf.mean[sumDF$Trt=="amb"]+sumDF$Aleaf.sd[sumDF$Trt=="amb"], 
-      #                 yend=sumDF$Aleaf.mean[sumDF$Trt=="amb"]-sumDF$Aleaf.sd[sumDF$Trt=="amb"]),
-      #             lwd=0.5, color="grey")+
-      #geom_segment(aes(x=sumDF$PL_leaf.mean[sumDF$Trt=="ele"], xend = sumDF$PL_leaf.mean[sumDF$Trt=="ele"],
-      #                 y=sumDF$Aleaf.mean[sumDF$Trt=="ele"]+sumDF$Aleaf.sd[sumDF$Trt=="ele"], 
-      #                 yend=sumDF$Aleaf.mean[sumDF$Trt=="ele"]-sumDF$Aleaf.sd[sumDF$Trt=="ele"]), 
-      #             lwd=0.5, color="grey")+
-      #geom_segment(aes(x=sumDF$PL_leaf.mean[sumDF$Trt=="amb"]+sumDF$PL_leaf.sd[sumDF$Trt=="amb"], 
-      #                 xend = sumDF$PL_leaf.mean[sumDF$Trt=="amb"]-sumDF$PL_leaf.sd[sumDF$Trt=="amb"],
-      #                 y=sumDF$Aleaf.mean[sumDF$Trt=="amb"], 
-      #                 yend=sumDF$Aleaf.mean[sumDF$Trt=="amb"]), 
-      #             lwd=0.5, color="grey")+
-      #geom_segment(aes(x=sumDF$PL_leaf.mean[sumDF$Trt=="ele"]+sumDF$PL_leaf.sd[sumDF$Trt=="ele"], 
-      #                 xend = sumDF$PL_leaf.mean[sumDF$Trt=="ele"]-sumDF$PL_leaf.sd[sumDF$Trt=="ele"],
-      #                 y=sumDF$Aleaf.mean[sumDF$Trt=="ele"], 
-      #                 yend=sumDF$Aleaf.mean[sumDF$Trt=="ele"]), 
-      #             lwd=0.5, color="grey")+
       geom_segment(aes(x=sumDF$PL_leaf.mean[sumDF$Trt=="amb"], xend = sumDF$PL_leaf.mean[sumDF$Trt=="ele"],
                        y=sumDF$Aleaf.mean[sumDF$Trt=="amb"], yend=sumDF$Aleaf.mean[sumDF$Trt=="ele"]), 
                    lwd=1.0)+
-      geom_point(data=sumDF, aes(PL_leaf.mean, Aleaf.mean, fill=ModName, pch=Trt), color="black", size=4)+
+      geom_point(data=sumDF, 
+                 aes(PL_leaf.mean, Aleaf.mean, fill=ModName, pch=Trt), color="black", size=4)+
       theme_linedraw() +
       theme(panel.grid.minor=element_blank(),
             axis.text.x=element_text(size=12),
@@ -124,7 +115,7 @@ plot_photosynthesis_relationships <- function(scenario, eucDF) {
             legend.text=element_text(size=12),
             legend.title=element_text(size=14),
             panel.grid.major=element_blank(),
-            legend.position="none",
+            legend.position="bottom",
             legend.box = 'horizontal',
             legend.box.just = 'left',
             plot.title = element_text(size=14, face="bold.italic", 
@@ -134,14 +125,13 @@ plot_photosynthesis_relationships <- function(scenario, eucDF) {
                         labels=c(model.labels))+
       scale_shape_manual(name=expression(CO[2] * " treatment"),
                          values=c("amb"=21, "ele"=24),
-                         labels=c("amb", "ele"))+
+                         labels=c("amb"=expression(aCO[2]), "ele"=expression(eCO[2])))+
       ylab(expression(paste(A[leaf]* " (g C " * m^2 * " " * d^-1, ")")))+
-      guides(fill = guide_legend(override.aes = list(col = c(col.values))),
-             color = guide_legend(nrow=12, byrow=F))+
+      guides(fill = guide_legend(override.aes = list(col = c(col.values)),
+                                 nrow=1, byrow=TRUE))+
       xlab(expression("Leaf P content (g P " * m^-2 * " leaf)"))
     
-    
-    
+
     p2 <- ggplot() +
       #geom_segment(aes(x=sumDF$NL_leaf.mean[sumDF$Trt=="amb"], xend = sumDF$NL_leaf.mean[sumDF$Trt=="amb"],
       #                 y=sumDF$Aleaf.mean[sumDF$Trt=="amb"]+sumDF$Aleaf.sd[sumDF$Trt=="amb"], 
@@ -704,13 +694,12 @@ plot_photosynthesis_relationships <- function(scenario, eucDF) {
                                   "B_CABLP"=19,"D_LPJGP"=19,
                                   "E_OCHDP"=19,"F_QUINC"=19,
                                   "G_OCHDX"=19,"H_QUJSM"=19,
-                                  "I_MM"=19,"OBS"=15))+
+                                  "I_MM"=19,"OBS"=15),
+                         labels=c(model.labels, "I_MM"="M-M", "OBS"="OBS"))+
       ylab(expression(paste(CO[2] * " effect on " * A[leaf]* " (%)")))+
       #guides(fill = guide_legend(override.aes = list(col = c(col.values))),
       #       color = guide_legend(nrow=1, byrow=F))+
       xlab(expression(paste(CO[2] * " effect on leaf P content (%)")))
-    
-    
     
     
     
@@ -759,23 +748,22 @@ plot_photosynthesis_relationships <- function(scenario, eucDF) {
     
     
     plot_nutrient_row1 <- plot_grid(p1, p2, p3, p4, p5,
-                                    labels=c("(a)", "(b)", "(c)", "(d)", "(e)"),
+                                    labels=c("A", "B", "C", "D", "E"),
                                     ncol=5, align="vh", axis = "l",
-                                    label_x=0.82, label_y=0.95,
+                                    label_x=0.86, label_y=0.95,
                                     label_size = 20)
     
     
     legend_row1 <- get_legend(p1 + theme(legend.position="bottom",
                                          legend.box = 'horizontal',
-                                         legend.box.just = 'left')
-                              + guides(fill=guide_legend(nrow=1,byrow=TRUE)))
+                                         legend.box.just = 'left'))
     
     
     
     plot_nutrient_row2 <- plot_grid(p9, p10, p6, p7, p8,
-                                    labels=c("(f)", "(g)", "(h)", "(i)", "(j)"),
+                                    labels=c("F", "G", "H", "I", "J"),
                                     ncol=5, align="vh", axis = "l",
-                                    label_x=0.82, label_y=0.95,
+                                    label_x=0.86, label_y=0.95,
                                     label_size = 20)
     
     

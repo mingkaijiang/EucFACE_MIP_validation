@@ -1906,8 +1906,8 @@ plot_plant_p_cycle_responses <- function(eucDF,
               p3, p4,
               p1, p2, 
               p17, p18,
-              labels=c("(a)", "(b)", "(c)", "(d)",
-                       "(e)", "(f)", "(g)", "(h)"), label_x=0.1, label_y=0.95,
+              labels=c("A", "B", "C", "D",
+                       "E", "F", "G", "H"), label_x=0.1, label_y=0.95,
               label_size=24,
               ncol=2)
     dev.off()
@@ -2156,7 +2156,7 @@ plot_plant_p_cycle_responses <- function(eucDF,
             plot.title = element_text(size=14, face="bold.italic", 
                                       hjust = 0.5))+
       scale_color_manual(name="Model",
-                         values=c(col.values, "multi-model"="grey30", "obs"="grey"),
+                         values=c(col.values, "multi-model"="black", "obs"="black"),
                          labels=c(model.labels, "multi-model"="M-M", "obs"="OBS"))+
       scale_shape_manual(name="Model",
                          values=c("C_GDAYP"=19,"A_ELMV1"=19,
@@ -2196,14 +2196,15 @@ plot_plant_p_cycle_responses <- function(eucDF,
             plot.title = element_text(size=14, face="bold.italic", 
                                       hjust = 0.5))+
       scale_color_manual(name="Model",
-                         values=c(col.values, "multi-model"="grey30", "obs"="grey"),
+                         values=c(col.values, "multi-model"="black", "obs"="black"),
                          labels=c(model.labels, "multi-model"="M-M", "obs"="OBS"))+
       scale_shape_manual(name="Model",
                          values=c("C_GDAYP"=19,"A_ELMV1"=19,
                                   "B_CABLP"=19,"D_LPJGP"=19,
                                   "E_OCHDP"=19,"F_QUINC"=19,
                                   "G_OCHDX"=19,"H_QUJSM"=19,
-                                  "multi-model"=19, "obs"=15))+
+                                  "multi-model"=19, "obs"=15),
+                         labels=c(model.labels, "multi-model"="M-M", "obs"="OBS"))+
       xlab(expression(paste(CO[2] * " effect on BP (g C " * m^-2 * " " * yr^-1 * ")")))+
       ylab(expression(paste(CO[2] * " effect on " * P[dem] * " ( g P " * m^-2 * " " * yr^-1 * ")")))
     
@@ -2235,15 +2236,17 @@ plot_plant_p_cycle_responses <- function(eucDF,
             legend.box.just = 'left',
             plot.title = element_text(size=14, face="bold.italic", 
                                       hjust = 0.5))+
+      guides(color=guide_legend(nrow=1))+
       scale_color_manual(name="Model",
-                         values=c(col.values, "multi-model"="grey30", "obs"="grey"),
+                         values=c(col.values, "multi-model"="black", "obs"="black"),
                          labels=c(model.labels, "multi-model"="M-M", "obs"="OBS"))+
       scale_shape_manual(name="Model",
                          values=c("C_GDAYP"=19,"A_ELMV1"=19,
                                   "B_CABLP"=19,"D_LPJGP"=19,
                                   "E_OCHDP"=19,"F_QUINC"=19,
                                   "G_OCHDX"=19,"H_QUJSM"=19,
-                                  "multi-model"=19, "obs"=15))+
+                                  "multi-model"=19, "obs"=15),
+                         labels=c(model.labels, "multi-model"="M-M", "obs"="OBS"))+
       xlab(expression(paste(CO[2] * " effect on BP (g C " * m^-2 * " " * yr^-1 * ")")))+
       ylab(expression(paste(CO[2] * " effect on " * P[dem] * " (%)")))
     
@@ -2276,14 +2279,15 @@ plot_plant_p_cycle_responses <- function(eucDF,
             plot.title = element_text(size=14, face="bold.italic", 
                                       hjust = 0.5))+
       scale_color_manual(name="Model",
-                         values=c(col.values, "multi-model"="grey30", "obs"="grey"),
+                         values=c(col.values, "multi-model"="black", "obs"="black"),
                          labels=c(model.labels, "multi-model"="M-M", "obs"="OBS"))+
       scale_shape_manual(name="Model",
                          values=c("C_GDAYP"=19,"A_ELMV1"=19,
                                   "B_CABLP"=19,"D_LPJGP"=19,
                                   "E_OCHDP"=19,"F_QUINC"=19,
                                   "G_OCHDX"=19,"H_QUJSM"=19,
-                                  "multi-model"=19, "obs"=15))+
+                                  "multi-model"=19, "obs"=15),
+                         labels=c(model.labels, "multi-model"="M-M", "obs"="OBS"))+
       xlab(expression(paste(CO[2] * " effect on BP (g C " * m^-2 * " " * yr^-1 * ")")))+
       ylab(expression(paste(CO[2] * " effect on " * P[upt] * " ( g P " * m^-2 * " " * yr^-1 * ")")))
     
@@ -2316,14 +2320,15 @@ plot_plant_p_cycle_responses <- function(eucDF,
             plot.title = element_text(size=14, face="bold.italic", 
                                       hjust = 0.5))+
       scale_color_manual(name="Model",
-                         values=c(col.values, "multi-model"="grey30", "obs"="grey"),
+                         values=c(col.values, "multi-model"="black", "obs"="black"),
                          labels=c(model.labels, "multi-model"="M-M", "obs"="OBS"))+
       scale_shape_manual(name="Model",
                          values=c("C_GDAYP"=19,"A_ELMV1"=19,
                                   "B_CABLP"=19,"D_LPJGP"=19,
                                   "E_OCHDP"=19,"F_QUINC"=19,
                                   "G_OCHDX"=19,"H_QUJSM"=19,
-                                  "multi-model"=19, "obs"=15))+
+                                  "multi-model"=19, "obs"=15),
+                         labels=c(model.labels, "multi-model"="M-M", "obs"="OBS"))+
       xlab(expression(paste(CO[2] * " effect on BP (g C " * m^-2 * " " * yr^-1 * ")")))+
       ylab(expression(paste(CO[2] * " effect on " * P[upt] * " (%)")))
     
@@ -2355,14 +2360,15 @@ plot_plant_p_cycle_responses <- function(eucDF,
             plot.title = element_text(size=14, face="bold.italic", 
                                       hjust = 0.5))+
       scale_color_manual(name="Model",
-                         values=c(col.values, "multi-model"="grey30", "obs"="grey"),
+                         values=c(col.values, "multi-model"="black", "obs"="black"),
                          labels=c(model.labels, "multi-model"="M-M", "obs"="OBS"))+
       scale_shape_manual(name="Model",
                          values=c("C_GDAYP"=19,"A_ELMV1"=19,
                                   "B_CABLP"=19,"D_LPJGP"=19,
                                   "E_OCHDP"=19,"F_QUINC"=19,
                                   "G_OCHDX"=19,"H_QUJSM"=19,
-                                  "multi-model"=19, "obs"=15))+
+                                  "multi-model"=19, "obs"=15),
+                         labels=c(model.labels, "multi-model"="M-M", "obs"="OBS"))+
       xlab(expression(paste(CO[2] * " effect on " * P[res] * " ( g P " * m^-2 * " " * yr^-1 * ")")))+
       ylab(expression(paste(CO[2] * " effect on " * P[upt] * " ( g P " * m^-2 * " " * yr^-1 * ")")))
     
@@ -2396,14 +2402,15 @@ plot_plant_p_cycle_responses <- function(eucDF,
             plot.title = element_text(size=14, face="bold.italic", 
                                       hjust = 0.5))+
       scale_color_manual(name="Model",
-                         values=c(col.values, "multi-model"="grey30", "obs"="grey"),
+                         values=c(col.values, "multi-model"="black", "obs"="black"),
                          labels=c(model.labels, "multi-model"="M-M", "obs"="OBS"))+
       scale_shape_manual(name="Model",
                          values=c("C_GDAYP"=19,"A_ELMV1"=19,
                                   "B_CABLP"=19,"D_LPJGP"=19,
                                   "E_OCHDP"=19,"F_QUINC"=19,
                                   "G_OCHDX"=19,"H_QUJSM"=19,
-                                  "multi-model"=19, "obs"=15))+
+                                  "multi-model"=19, "obs"=15),
+                         labels=c(model.labels, "multi-model"="M-M", "obs"="OBS"))+
       xlab(expression(paste(CO[2] * " effect on " * P[res] * " (%)")))+
       ylab(expression(paste(CO[2] * " effect on " * P[upt] * " (%)")))
     
@@ -2439,14 +2446,15 @@ plot_plant_p_cycle_responses <- function(eucDF,
             plot.title = element_text(size=14, face="bold.italic", 
                                       hjust = 0.5))+
       scale_color_manual(name="Model",
-                         values=c(col.values, "multi-model"="grey30", "obs"="grey"),
+                         values=c(col.values, "multi-model"="black", "obs"="black"),
                          labels=c(model.labels, "multi-model"="M-M", "obs"="OBS"))+
       scale_shape_manual(name="Model",
                          values=c("C_GDAYP"=19,"A_ELMV1"=19,
                                   "B_CABLP"=19,"D_LPJGP"=19,
                                   "E_OCHDP"=19,"F_QUINC"=19,
                                   "G_OCHDX"=19,"H_QUJSM"=19,
-                                  "multi-model"=19, "obs"=15))+
+                                  "multi-model"=19, "obs"=15),
+                         labels=c(model.labels, "multi-model"="M-M", "obs"="OBS"))+
       xlab(expression(paste(CO[2] * " effect on " * P[upt] * " ( g P " * m^-2 * " " * yr^-1 * ")")))+
       ylab(expression(paste(CO[2] * " effect on " * P[net] * " ( g P " * m^-2 * " " * yr^-1 * ")")))
     
@@ -2478,14 +2486,15 @@ plot_plant_p_cycle_responses <- function(eucDF,
             plot.title = element_text(size=14, face="bold.italic", 
                                       hjust = 0.5))+
       scale_color_manual(name="Model",
-                         values=c(col.values, "multi-model"="grey30", "obs"="grey"),
+                         values=c(col.values, "multi-model"="black", "obs"="black"),
                          labels=c(model.labels, "multi-model"="M-M", "obs"="OBS"))+
       scale_shape_manual(name="Model",
                          values=c("C_GDAYP"=19,"A_ELMV1"=19,
                                   "B_CABLP"=19,"D_LPJGP"=19,
                                   "E_OCHDP"=19,"F_QUINC"=19,
                                   "G_OCHDX"=19,"H_QUJSM"=19,
-                                  "multi-model"=19, "obs"=15))+
+                                  "multi-model"=19, "obs"=15),
+                         labels=c(model.labels, "multi-model"="M-M", "obs"="OBS"))+
       xlab(expression(paste(CO[2] * " effect on " * P[upt] * " (%)")))+
       ylab(expression(paste(CO[2] * " effect on " * P[net] * " (%)")))
     
@@ -2519,14 +2528,15 @@ plot_plant_p_cycle_responses <- function(eucDF,
             plot.title = element_text(size=14, face="bold.italic", 
                                       hjust = 0.5))+
       scale_color_manual(name="Model",
-                         values=c(col.values, "multi-model"="grey30", "obs"="grey"),
+                         values=c(col.values, "multi-model"="black", "obs"="black"),
                          labels=c(model.labels, "multi-model"="M-M", "obs"="OBS"))+
       scale_shape_manual(name="Model",
                          values=c("C_GDAYP"=19,"A_ELMV1"=19,
                                   "B_CABLP"=19,"D_LPJGP"=19,
                                   "E_OCHDP"=19,"F_QUINC"=19,
                                   "G_OCHDX"=19,"H_QUJSM"=19,
-                                  "multi-model"=19, "obs"=15))+
+                                  "multi-model"=19, "obs"=15),
+                         labels=c(model.labels, "multi-model"="M-M", "obs"="OBS"))+
       xlab(expression(paste(CO[2] * " effect on " * PUE[GPP] * " ( g C " * g^-1 * " P)")))+
       ylab(expression(paste(CO[2] * " effect on " * PUE[NPP] * " ( g C " * g^-1 * " P)")))
     
@@ -2560,14 +2570,15 @@ plot_plant_p_cycle_responses <- function(eucDF,
             plot.title = element_text(size=14, face="bold.italic", 
                                       hjust = 0.5))+
       scale_color_manual(name="Model",
-                         values=c(col.values, "multi-model"="grey30", "obs"="grey"),
+                         values=c(col.values, "multi-model"="black", "obs"="black"),
                          labels=c(model.labels, "multi-model"="M-M", "obs"="OBS"))+
       scale_shape_manual(name="Model",
                          values=c("C_GDAYP"=19,"A_ELMV1"=19,
                                   "B_CABLP"=19,"D_LPJGP"=19,
                                   "E_OCHDP"=19,"F_QUINC"=19,
                                   "G_OCHDX"=19,"H_QUJSM"=19,
-                                  "multi-model"=19, "obs"=15))+
+                                  "multi-model"=19, "obs"=15),
+                         labels=c(model.labels, "multi-model"="M-M", "obs"="OBS"))+
       xlab(expression(paste(CO[2] * " effect on " * PUE[GPP] * " (%)")))+
       ylab(expression(paste(CO[2] * " effect on " * PUE[NPP] * " (%)")))
     
@@ -2601,14 +2612,15 @@ plot_plant_p_cycle_responses <- function(eucDF,
             plot.title = element_text(size=14, face="bold.italic", 
                                       hjust = 0.5))+
       scale_color_manual(name="Model",
-                         values=c(col.values, "multi-model"="grey30", "obs"="grey"),
+                         values=c(col.values, "multi-model"="black", "obs"="black"),
                          labels=c(model.labels, "multi-model"="M-M", "obs"="OBS"))+
       scale_shape_manual(name="Model",
                          values=c("C_GDAYP"=19,"A_ELMV1"=19,
                                   "B_CABLP"=19,"D_LPJGP"=19,
                                   "E_OCHDP"=19,"F_QUINC"=19,
                                   "G_OCHDX"=19,"H_QUJSM"=19,
-                                  "multi-model"=19, "obs"=15))+
+                                  "multi-model"=19, "obs"=15),
+                         labels=c(model.labels, "multi-model"="M-M", "obs"="OBS"))+
       xlab(expression(paste(CO[2] * " effect on leaf CP (ele - amb)")))+
       ylab(expression(paste(CO[2] * " effect on fineroot CP (ele - amb)")))
     
@@ -2642,14 +2654,15 @@ plot_plant_p_cycle_responses <- function(eucDF,
             plot.title = element_text(size=14, face="bold.italic", 
                                       hjust = 0.5))+
       scale_color_manual(name="Model",
-                         values=c(col.values, "multi-model"="grey30", "obs"="grey"),
+                         values=c(col.values, "multi-model"="black", "obs"="black"),
                          labels=c(model.labels, "multi-model"="M-M", "obs"="OBS"))+
       scale_shape_manual(name="Model",
                          values=c("C_GDAYP"=19,"A_ELMV1"=19,
                                   "B_CABLP"=19,"D_LPJGP"=19,
                                   "E_OCHDP"=19,"F_QUINC"=19,
                                   "G_OCHDX"=19,"H_QUJSM"=19,
-                                  "multi-model"=19, "obs"=15))+
+                                  "multi-model"=19, "obs"=15),
+                         labels=c(model.labels, "multi-model"="M-M", "obs"="OBS"))+
       xlab(expression(paste(CO[2] * " effect on leaf CP (%)")))+
       ylab(expression(paste(CO[2] * " effect on fineroot CP (%)")))
     
@@ -2685,14 +2698,15 @@ plot_plant_p_cycle_responses <- function(eucDF,
             plot.title = element_text(size=14, face="bold.italic", 
                                       hjust = 0.5))+
       scale_color_manual(name="Model",
-                         values=c(col.values, "multi-model"="grey30", "obs"="grey"),
+                         values=c(col.values, "multi-model"="black", "obs"="black"),
                          labels=c(model.labels, "multi-model"="M-M", "obs"="OBS"))+
       scale_shape_manual(name="Model",
                          values=c("C_GDAYP"=19,"A_ELMV1"=19,
                                   "B_CABLP"=19,"D_LPJGP"=19,
                                   "E_OCHDP"=19,"F_QUINC"=19,
                                   "G_OCHDX"=19,"H_QUJSM"=19,
-                                  "multi-model"=19, "obs"=15))+
+                                  "multi-model"=19, "obs"=15),
+                         labels=c(model.labels, "multi-model"="M-M", "obs"="OBS"))+
       xlab(expression(paste(CO[2] * " effect on BP (g C " * m^-2 * " " * yr^-1 * ")")))+
       ylab(expression(paste(CO[2] * " effect on wood CP ratio (%)")))
     
@@ -2726,14 +2740,15 @@ plot_plant_p_cycle_responses <- function(eucDF,
             plot.title = element_text(size=14, face="bold.italic", 
                                       hjust = 0.5))+
       scale_color_manual(name="Model",
-                         values=c(col.values, "multi-model"="grey30", "obs"="grey"),
+                         values=c(col.values, "multi-model"="black", "obs"="black"),
                          labels=c(model.labels, "multi-model"="M-M", "obs"="OBS"))+
       scale_shape_manual(name="Model",
                          values=c("C_GDAYP"=19,"A_ELMV1"=19,
                                   "B_CABLP"=19,"D_LPJGP"=19,
                                   "E_OCHDP"=19,"F_QUINC"=19,
                                   "G_OCHDX"=19,"H_QUJSM"=19,
-                                  "multi-model"=19, "obs"=15))+
+                                  "multi-model"=19, "obs"=15),
+                         labels=c(model.labels, "multi-model"="M-M", "obs"="OBS"))+
       xlab(expression(paste(CO[2] * " effect on " * Delta * P[veg] * " (g P " * m^-2 * " " * yr^-1 * ")")))+
       ylab(expression(paste(CO[2] * " effect on " * P[dem] * " (g P " * m^-2 * " " * yr^-1 * ")")))
     
@@ -2765,14 +2780,15 @@ plot_plant_p_cycle_responses <- function(eucDF,
             plot.title = element_text(size=14, face="bold.italic", 
                                       hjust = 0.5))+
       scale_color_manual(name="Model",
-                         values=c(col.values, "multi-model"="grey30", "obs"="grey"),
+                         values=c(col.values, "multi-model"="black", "obs"="black"),
                          labels=c(model.labels, "multi-model"="M-M", "obs"="OBS"))+
       scale_shape_manual(name="Model",
                          values=c("C_GDAYP"=19,"A_ELMV1"=19,
                                   "B_CABLP"=19,"D_LPJGP"=19,
                                   "E_OCHDP"=19,"F_QUINC"=19,
                                   "G_OCHDX"=19,"H_QUJSM"=19,
-                                  "multi-model"=19, "obs"=15))+
+                                  "multi-model"=19, "obs"=15),
+                         labels=c(model.labels, "multi-model"="M-M", "obs"="OBS"))+
       ylab(expression(paste(CO[2] * " effect on " * Delta * P[veg] * " (g P " * m^-2 * " " * yr^-1 * ")")))+
       xlab(expression(paste(CO[2] * " effect on " * P[dem] * " (%)")))
     
@@ -2806,14 +2822,15 @@ plot_plant_p_cycle_responses <- function(eucDF,
             plot.title = element_text(size=14, face="bold.italic", 
                                       hjust = 0.5))+
       scale_color_manual(name="Model",
-                         values=c(col.values, "multi-model"="grey30", "obs"="grey"),
+                         values=c(col.values, "multi-model"="black", "obs"="black"),
                          labels=c(model.labels, "multi-model"="M-M", "obs"="OBS"))+
       scale_shape_manual(name="Model",
                          values=c("C_GDAYP"=19,"A_ELMV1"=19,
                                   "B_CABLP"=19,"D_LPJGP"=19,
                                   "E_OCHDP"=19,"F_QUINC"=19,
                                   "G_OCHDX"=19,"H_QUJSM"=19,
-                                  "multi-model"=19, "obs"=15))+
+                                  "multi-model"=19, "obs"=15),
+                         labels=c(model.labels, "multi-model"="M-M", "obs"="OBS"))+
       ylab(expression(paste(CO[2] * " effect on " * P[dem] * " (%)")))+
       xlab(expression(paste(CO[2] * " effect on " * PUE[NPP] * " (%)")))
     
@@ -2914,12 +2931,6 @@ plot_plant_p_cycle_responses <- function(eucDF,
                                  rel_widths=c(2, 2, 1),
                                  ncol=3, nrow=1)
     
-    #plots_second_row <- plot_grid(p5, p6, p2_co2, 
-    #                              label_x=0.1, label_y=0.95,
-    #                              label_size=24,
-    #                              rel_widths=c(1.5, 1.5, 1),
-    #                              ncol=3, nrow=1)
-    #
     
     plots_second_row <- plot_grid(p5, p8, p15_co2, 
                                   label_x=0.1, label_y=0.95,
@@ -2943,14 +2954,14 @@ plot_plant_p_cycle_responses <- function(eucDF,
     
     
     
-    pdf(paste0(out.dir, "/MIP_time_averaged_", scenario, "_comparison_P_use_variables3.pdf"), 
-        width=20, height=16)
-    plot_grid(plots_first_row,
-              plots_second_row,
-              plots_third_row,
-              plots_fourth_row,
-              ncol=1, nrow=4)
-    dev.off()  
+    #pdf(paste0(out.dir, "/MIP_time_averaged_", scenario, "_comparison_P_use_variables3.pdf"), 
+    #    width=20, height=16)
+    #plot_grid(plots_first_row,
+    #          plots_second_row,
+    #          plots_third_row,
+    #          plots_fourth_row,
+    #          ncol=1, nrow=4)
+    #dev.off()  
     
     
     
@@ -2993,15 +3004,15 @@ plot_plant_p_cycle_responses <- function(eucDF,
                                      + guides(fill=guide_legend(nrow=1,byrow=TRUE)))
     
     
-    pdf(paste0(out.dir, "/MIP_time_averaged_", scenario, "_comparison_P_use_variables4.pdf"), 
-        width=16, height=12)
-    plot_grid(plots_first_row,
-              plots_legend_row1,
-              plots_second_row, 
-              plots_legend_row2,
-              rel_heights=c(1, 0.2, 1, 0.2),
-              nrow=4, ncol=1)
-    dev.off()
+    #pdf(paste0(out.dir, "/MIP_time_averaged_", scenario, "_comparison_P_use_variables4.pdf"), 
+    #    width=16, height=12)
+    #plot_grid(plots_first_row,
+    #          plots_legend_row1,
+    #          plots_second_row, 
+    #          plots_legend_row2,
+    #          rel_heights=c(1, 0.2, 1, 0.2),
+    #          nrow=4, ncol=1)
+    #dev.off()
     
     
     
@@ -3009,61 +3020,44 @@ plot_plant_p_cycle_responses <- function(eucDF,
     ###########################################################################
     
     plots_first_row <- plot_grid(p5, p6, 
-                                 label_x=0.07, label_y=0.95,
+                                 label_x=c(0.1, 0.09), label_y=0.95,
                                  label_size=24,
-                                 labels=c("(a)", "(b)"), 
+                                 labels=c("A", "B"), 
                                  rel_widths=c(1,1),
                                  ncol=2, nrow=1)
     
-    
-    #plots_second_row <- plot_grid(p7, p8, 
-    #                              label_x=0.07, label_y=0.95,
-    #                              label_size=24,
-    #                              labels=c("(c)", "(d)"), 
-    #                              rel_widths=c(1,1),
-    #                              ncol=2, nrow=1)
-    #
+
     
     plots_third_row <- plot_grid(p13, p14, 
-                                  label_x=0.07, label_y=0.95,
+                                  label_x=c(0.1, 0.08), label_y=0.95,
                                   label_size=24,
-                                  labels=c("(c)", "(d)"), 
+                                  labels=c("C", "D"), 
                                   rel_widths=c(1,1),
                                   ncol=2, nrow=1)
     
     
-    plots_fourth_row_left <- plot_grid(p3_co2, p5_co2, p13_co2, p14_co2,
-                                      label_x=0.82, label_y=0.95,
+    plots_fourth_row <- plot_grid(p3_co2, p5_co2, p13_co2, #p14_co2,
+                                      label_x=0.12, label_y=0.95,
                                       label_size=24,
-                                      labels=c("(e)", "(f)", "(g)", "(h)"), 
+                                      labels=c("E", "F", "G"), 
                                       rel_widths=c(1,1,1,1),
-                                      ncol=4, nrow=1)
+                                      ncol=3, nrow=1)
     
     
+    plots_legend_fourth_row_right <-  get_legend(p3_co2 + theme(legend.position="bottom",
+                                                                legend.box = 'horizontal',
+                                                                legend.box.just = 'left'))
     
-    plots_legend_fourth_row_right <-  get_legend(p1_co2 + theme(legend.position="right",
-                                                               legend.box = 'vertical',
-                                                               legend.box.just = 'left')
-                                                + guides(fill = guide_legend(override.aes = 
-                                                                               list(col = c(col.values, "multi-model"="grey30", "obs"="grey"),
-                                                                                    shape = c(rep(21, 9), 17)))))
-    
-    
-    plots_fourth_row <- plot_grid(plots_fourth_row_left,
-                                 plots_legend_fourth_row_right,
-                                 label_x=0.1, label_y=0.95,
-                                 label_size=24,
-                                 rel_widths=c(1, 0.2),
-                                 ncol=2, nrow=1)
     
     pdf(paste0(out.dir, "/MIP_time_averaged_", scenario, "_comparison_P_use_variables5.pdf"), 
         width=18, height=12)
     plot_grid(plots_first_row,
               #plots_second_row, 
               plots_third_row, 
-              plots_fourth_row_left,
-              rel_heights=c(1, 1, 1.2),
-              nrow=3, ncol=1)
+              plots_fourth_row,
+              plots_legend_fourth_row_right,
+              rel_heights=c(1, 1, 1.2, 0.2),
+              nrow=4, ncol=1)
     dev.off()
     
     

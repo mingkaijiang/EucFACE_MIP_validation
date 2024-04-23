@@ -204,7 +204,7 @@ compare_CNP_and_CN_model_output <- function(scenario) {
                                     "I_GDAYN" = 0.3, 
                                     "J_LPJGN" = 0.3),
                            label=c("GDAYP","LPJGP", 
-                                   "GDAYN","LPJGN")); p1
+                                   "GDAYN","LPJGN"))
     
     
     ### calculate CO2 pct response difference
@@ -259,7 +259,7 @@ compare_CNP_and_CN_model_output <- function(scenario) {
         #                           "I_GDAYN" = "white", "J_LPJGN" = "white"),
         #                  label=c("GDAYP","LPJGP", 
         #                          "GDAYN","LPJGN"))+
-        coord_cartesian(ylim=c(0,5)); p2
+        coord_cartesian(ylim=c(0,5))
     
     
     ##################################################################
@@ -630,22 +630,22 @@ compare_CNP_and_CN_model_output <- function(scenario) {
                                             legend.box.just = 'left'))
     
     plots_middle_row <- plot_grid(p1, p2, 
-                               labels=c("(c)", "(d)"),
+                               labels=c("C", "D"),
                                ncol=2, align="vh", axis = "l",
-                               label_x=c(0.86,0.16), label_y=0.95,
+                               label_x=0.92, label_y=0.95,
                                label_size = 18)
     
     plots_bottom_row <- plot_grid(p3, p4, 
-                                labels=c("(e)", "(f)"),
+                                labels=c("E", "F"),
                                 ncol=2, align="vh", axis = "l",
-                                label_x=c(0.86,0.16), label_y=0.95,
+                                label_x=0.92, label_y=0.95,
                                 label_size = 18)
     
     
     plots_top_row <- plot_grid(p5, p6, 
-                                labels=c("(a)", "(b)"),
+                                labels=c("A", "B"),
                                 ncol=2, align="vh", axis = "l",
-                                label_x=c(0.86,0.16), label_y=0.95,
+                                label_x=0.92, label_y=0.95,
                                 label_size = 18)
     
     
@@ -669,5 +669,5 @@ compare_CNP_and_CN_model_output <- function(scenario) {
     
     
     
-### end    
+ ### end    
 }

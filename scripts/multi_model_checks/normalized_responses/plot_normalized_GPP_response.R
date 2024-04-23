@@ -269,7 +269,7 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
     #                                        legend.box.just = 'left'))
     
     plots_left_column <- plot_grid(p3_mm, p1_mm, p2_mm, 
-                                   labels=c("a", "c", "e"),
+                                   labels=c("A", "C", "E"),
                                    ncol=1, align="vh", axis = "l",
                                    label_x=0.1, label_y=0.95,
                                    label_size = 20)
@@ -280,7 +280,7 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
                                          label_size = 20)
     
     plots_ed_figure <- plot_grid(p1_mm, p2_mm, 
-                                 labels=c("a", "b"),
+                                 labels=c("A", "B"),
                                  ncol=1, align="vh", axis = "l",
                                  label_x=0.1, label_y=0.95,
                                  label_size = 20)
@@ -1633,15 +1633,15 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
     ###############################################################################
 
     
-    pdf(paste0(out.dir, "/MIP_normalized_photosynthesis_response_OBS_", 
-               scenario, "_comparison_with_obs2.pdf"), 
-        width=16, height=12)
-    
-    plot_grid(plots_top_row, plots_mid_row,
-              plots_bot_row,
-              ncol=1, rel_heights=c(1,1,2))
-    
-    dev.off()
+    #pdf(paste0(out.dir, "/MIP_normalized_photosynthesis_response_OBS_", 
+    #           scenario, "_comparison_with_obs2.pdf"), 
+    #    width=16, height=12)
+    #
+    #plot_grid(plots_top_row, plots_mid_row,
+    #          plots_bot_row,
+    #          ncol=1, rel_heights=c(1,1,2))
+    #
+    #dev.off()
     
     
     
@@ -1650,18 +1650,20 @@ plot_normalized_GPP_response <- function(scenario, eucDF) {
     plots_top_column <- plot_grid(p3_mm, 
                                   p2_mm, 
                                   #p1_mm,
-                                  labels=c("(a)", "(b)"),
+                                  labels=c("A", "B"),
                                   ncol=1, #rel_widths=c(1, 1, 1),
                                   align="vh", axis = "l",
-                                  label_x=0.04, label_y=0.95,
+                                  label_x=0.06, label_y=0.95,
                                   label_size = 20)
     
     
     plots_bottom_row <- plot_grid(p3_co2, p2_co2, p7_co2, 
-                                  labels=c("(c)", "(d)", "(e)"),
+                                  labels=c("C", "D", "E"),
                                   ncol=3, rel_widths=c(1.2, 0.8, 1),
                                   align="vh", axis = "l",
-                                  label_x=c(0.86, 0.8, 0.83), label_y=0.95,
+                                  #label_x=c(0.86, 0.8, 0.83), 
+                                  label_x=c(0.12, 0.18, 0.15),
+                                  label_y=0.95,
                                   label_size = 20)
     
     

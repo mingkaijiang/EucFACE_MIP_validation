@@ -352,7 +352,7 @@ plot_growth_and_nep_response <- function(scenario, eucDF) {
                                    "obs"="grey"),
                           labels=c(model.labels, "obs"= "OBS"))+
         guides(fill = guide_legend(override.aes = list(col = c(col.values, "multi-model"="grey30", "obs"="grey"))),
-               color = guide_legend(nrow=12, byrow=F));p8
+               color = guide_legend(nrow=12, byrow=F))
     
     
     pdf(paste0(out.dir, "/MIP_", scenario, "_growth_and_nep_response.pdf"), 
@@ -659,7 +659,7 @@ plot_growth_and_nep_response <- function(scenario, eucDF) {
     plot_grid(
         p3, p4, # GPP
         p9, p10, # Allocation
-        labels="auto", label_x=0.1, label_y=0.95,
+        labels="AUTO", label_x=0.1, label_y=0.95,
         label_size=24,
         ncol=2)
     dev.off()

@@ -560,21 +560,21 @@ compare_two_MIP_results <- function() {
                                             legend.box.just = 'left'))
     
     plots_top_row <- plot_grid(p1, p1_1,
-                               labels=c("(a)", "(b)"),
+                               labels=c("A", "B"),
                                ncol=2, align="vh", axis = "l",
                                label_x=0.04, label_y=1.0,
                                label_size = 18)
     
     
     plots_second_row <- plot_grid(p5, p5_1,
-                               labels=c("(c)", "(d)"),
+                               labels=c("C", "D"),
                                ncol=2, align="vh", axis = "l",
                                label_x=0.04, label_y=1.0,
                                label_size = 18)
     
     
     plots_third_row <- plot_grid(p3, p3_1,
-                               labels=c("(e)", "(f)"),
+                               labels=c("E", "F"),
                                ncol=2, align="vh", axis = "l",
                                label_x=0.04, label_y=1.0,
                                label_size = 18)
