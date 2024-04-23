@@ -216,7 +216,8 @@ investigate_microbial_responses <- function (scenario, eucDF) {
         scale_fill_manual(name="Model",
                           values=c(col.values, "black"),
                           labels=c(model.labels, 
-                                   "OBS" = "OBS"))
+                                   "OBS" = "OBS"))+
+        ylim(0, 200)
         
     
     p1_2 <- ggplot(data=plotDF2, 
@@ -254,7 +255,8 @@ investigate_microbial_responses <- function (scenario, eucDF) {
         scale_fill_manual(name="Model",
                           values=c(col.values, "black"),
                           labels=c(model.labels, 
-                                   "OBS" = "OBS"))
+                                   "OBS" = "OBS"))+
+        ylim(-30, 10)
     
     
     p1_3 <- ggplot(data=plotDF3, 
@@ -499,7 +501,8 @@ investigate_microbial_responses <- function (scenario, eucDF) {
         scale_fill_manual(name="Model",
                           values=c(col.values, "black"),
                           labels=c(model.labels, 
-                                   "OBS" = "OBS"))
+                                   "OBS" = "OBS"))+
+        ylim(-40, 20)
     
     p3_3 <- ggplot(data=plotDF3, 
                    aes(ModName, meanvalue, group=Trt)) +
@@ -582,10 +585,16 @@ investigate_microbial_responses <- function (scenario, eucDF) {
     
     pdf(paste0(out.dir, "/two_microbial_model_microbial_pools.pdf"), 
         width=10, height=8)
-    grid.arrange(p1, p1_2, #p1_3, p1_4, 
-                 #p2, p2_2,
-                 p3, p3_2, #p3_3, p3_4, 
-                 nrow=2, ncol=2)
+    plot_grid(p1, p1_2,
+              p3, p3_2,
+              labels=c("A", "B", "C", "D"), label_x=0.18, label_y=0.97,
+              label_size=24,
+              ncol=2)
+    
+    #grid.arrange(p1, p1_2, #p1_3, p1_4, 
+    #             #p2, p2_2,
+    #             p3, p3_2, #p3_3, p3_4, 
+    #             nrow=2, ncol=2)
     dev.off()
     
     

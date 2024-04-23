@@ -178,7 +178,7 @@ plot_soil_p_cycle_responses <- function(eucDF,
                                    "multi-model"="grey30",
                                    "obs"="grey"),
                           labels=c(model.labels, "obs"= "OBS"))+
-        guides(fill=guide_legend(nrow=6));p1
+        guides(fill=guide_legend(nrow=6))
       
       
       
@@ -220,7 +220,7 @@ plot_soil_p_cycle_responses <- function(eucDF,
                                    "multi-model"="grey30",
                                    "obs"="grey"),
                           labels=c(model.labels, "obs"= "OBS"))+
-        guides(fill=guide_legend(nrow=6)); p2
+        guides(fill=guide_legend(nrow=6))
       
       
       
@@ -324,7 +324,7 @@ plot_soil_p_cycle_responses <- function(eucDF,
                                    "multi-model"="grey30",
                                    "obs"="grey"),
                           labels=c(model.labels, "obs"= "OBS"))+
-        guides(fill=guide_legend(nrow=6));p1
+        guides(fill=guide_legend(nrow=6))
       
       
       
@@ -366,7 +366,7 @@ plot_soil_p_cycle_responses <- function(eucDF,
                                    "multi-model"="grey30",
                                    "obs"="grey"),
                           labels=c(model.labels, "obs"= "OBS"))+
-        guides(fill=guide_legend(nrow=6)); p2
+        guides(fill=guide_legend(nrow=6))
       
       
       
@@ -530,7 +530,7 @@ plot_soil_p_cycle_responses <- function(eucDF,
                                    "multi-model"="grey30",
                                    "obs"="grey"),
                           labels=c(model.labels, "obs"= "OBS"))+
-        guides(fill=guide_legend(nrow=6));p3
+        guides(fill=guide_legend(nrow=6))
       
       
       
@@ -572,7 +572,7 @@ plot_soil_p_cycle_responses <- function(eucDF,
                                    "multi-model"="grey30",
                                    "obs"="grey"),
                           labels=c(model.labels, "obs"= "OBS"))+
-        guides(fill=guide_legend(nrow=6)); p4
+        guides(fill=guide_legend(nrow=6))
       
       
       #pdf(paste0(out.dir, "/MIP_time_averaged_", scenario, "_comparison_soil_P_variables.pdf"), 
@@ -629,7 +629,7 @@ plot_soil_p_cycle_responses <- function(eucDF,
                                    "PMIN"=cbbPalette[3]),
                           label=c("PUP"=expression(P[upt]),
                                   "PMIN"=expression(P[net])))+
-        guides(fill=guide_legend(nrow=6));p3_1
+        guides(fill=guide_legend(nrow=6))
       
       
       
@@ -671,7 +671,7 @@ plot_soil_p_cycle_responses <- function(eucDF,
                                    "PMIN"=cbbPalette[3]),
                           label=c("PUP"=expression(P[upt]),
                                   "PMIN"=expression(P[net])))+
-        guides(fill=guide_legend(nrow=6)); p4_1
+        guides(fill=guide_legend(nrow=6))
       
       
       
@@ -1284,7 +1284,7 @@ plot_soil_p_cycle_responses <- function(eucDF,
                 #p1_1, p2_1,
                 #p3_1, p4_1,
                 p9, p10,
-                labels=c("(a)", "(b)", "(c)", "(d)"), label_x=0.1, label_y=0.95,
+                labels=c("A", "B", "C", "D"), label_x=0.1, label_y=0.95,
                 label_size=24,
                 ncol=2)
       dev.off()
@@ -1295,8 +1295,8 @@ plot_soil_p_cycle_responses <- function(eucDF,
       pdf(paste0(out.dir, "/MIP_time_averaged_", scenario, "_comparison_soil_P_variables2.pdf"), 
           width=16, height=4)
       plot_grid(p5, p6,
-                labels=c("(a)", "(b)", "(c)", "(d)",
-                         "(e)", "(f)"), label_x=0.1, label_y=0.95,
+                labels=c("A", "B", "C", "D",
+                         "E", "F"), label_x=0.1, label_y=0.95,
                 label_size=24,
                 ncol=2)
       dev.off()
@@ -1307,7 +1307,7 @@ plot_soil_p_cycle_responses <- function(eucDF,
           width=8, height=8)
       plot_grid(p1_co2, p2_co2,
                 p3_co2, p4_co2,
-                labels=c("(a)", "(b)", "(c)", "(d)"), label_x=0.2, label_y=0.95,
+                labels=c("A", "B", "C", "D"), label_x=0.2, label_y=0.95,
                 label_size=24,
                 ncol=2)
       dev.off()
